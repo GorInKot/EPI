@@ -17,4 +17,16 @@
         android:label="Arrangement"
         tools:layout="@layout/fragment_arrangment" />
 
+    <fragment
+        android:id="@+id/controlFragment"
+        android:name="com.example.epi.Fragments.Control.ControlFragment"
+        android:label="Control"
+        tools:layout="@layout/fragment_control" />
+
+    <fragment
+        android:id="@+id/FixFragment"
+        android:name="com.example.epi.Fragments.FixingVolumes.FixingVolumesFragment"
+        android:label="Fix"
+        tools:layout="@layout/fragment_fixing_volumes" />
+
 </navigation>

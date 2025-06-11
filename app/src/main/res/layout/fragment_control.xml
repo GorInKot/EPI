@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.Control.ControlFragment"
+    android:background="@color/background_one">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mainLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Полевой контроль"
+        style="@style/LabelViewStyle"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/secondLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Отчетность"
+        style="@style/SecondViewStyle"
+        app:layout_constraintTop_toBottomOf="@id/mainLabel"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/CtrFr_BackToMainMenu_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Главное меню"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="25dp"
+        android:textSize="20sp"
+        app:cornerRadius="36dp"
+        android:backgroundTint="@color/black"
+        />
+
+    <LinearLayout
+        android:id="@+id/AttFr_LinTop"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="35dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/CtrFr_BackToMainMenu_btn">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/CtrFr_tvDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Дата: "
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:paddingEnd="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/first"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/secondLabel"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/LeftHorLinear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/CtrFr_tv_location"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:text="Местоположение"
+                android:layout_gravity="center"
+                android:textSize="24sp"
+                android:textAllCaps="false"
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:layout_marginStart="25dp"
+                android:fontFamily="sans-serif-medium"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_location"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:background="@color/white"
+                app:boxBackgroundMode="filled"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/RightHorLinear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/CtrFr_tv_equipmentName"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:text="Название прибора /\nоборудования"
+                android:layout_gravity="center"
+                android:textSize="22sp"
+                android:textAllCaps="false"
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:layout_marginStart="25dp"
+                android:fontFamily="sans-serif-medium"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_equipmentName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:background="@color/white"
+                app:boxBackgroundMode="filled"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_equipmentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/second"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/first"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/CtrFr_tv_type"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Вид работ"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:layout_marginStart="25dp"
+            android:fontFamily="sans-serif-medium"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_type"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:background="@color/white"
+            app:boxBackgroundMode="filled"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:inputType="textMultiLine"
+                android:singleLine="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/third"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/second"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/CtrFr_tv_operations"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Операции"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:layout_marginStart="25dp"
+            android:fontFamily="sans-serif-medium"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_operations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:background="@color/white"
+            app:boxBackgroundMode="filled"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_operations"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:inputType="textMultiLine"
+                android:singleLine="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fourth"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/third"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/CtrFr_tv_parameters"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Параметры контроля"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:textAllCaps="false"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:layout_marginStart="25dp"
+            android:fontFamily="sans-serif-medium"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_parameters"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:background="@color/white"
+            app:boxBackgroundMode="filled"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_parameters"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:inputType="textMultiLine"
+                android:singleLine="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_123"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fourth"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        android:weightSum="4"
+        >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey"
+            app:boxBackgroundMode="none"
+            app:hintEnabled="false"
+            android:layout_marginStart="25dp"
+            android:layout_weight="3"
+            android:layout_marginEnd="10dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_123"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Перед добавлением запрос, предписание необходимо ли..."
+                android:textColorHint="@color/light_grey"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:scrollbars="vertical"
+                android:background="@null"
+                android:gravity="top|start"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/CtrFr_issieOder_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Выдать предписание"
+            android:textSize="20sp"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            app:cornerRadius="36dp"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_workReport"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lin_123"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="25dp"
+        android:weightSum="5"
+        >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_workReport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey"
+            app:boxBackgroundMode="none"
+            app:hintEnabled="false"
+            android:layout_marginStart="25dp"
+            android:layout_weight="5"
+            android:layout_marginEnd="10dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_workReport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Указывается краткий отчет о проделанной работе..."
+                android:textColorHint="@color/light_grey"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:scrollbars="vertical"
+                android:background="@null"
+                android:gravity="top|start"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/CtrFr_addWork_btn"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:text="Добавить работы"
+            android:textSize="20sp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/black"
+            app:cornerRadius="36dp"
+            android:layout_weight="1"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/CtrFr_deleteWorks_btn"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:text="Удалить работу"
+            android:textSize="20sp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/holo_red_dark"
+            app:cornerRadius="36dp"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/CtrFr_LinBottomBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="25dp"
+        >
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/CtrFrr_back_btn"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:text="Назад"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@android:color/black"
+            app:cornerRadius="36dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/CtrFrr_signUp_btn"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:text="Записать"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@android:color/black"
+            app:cornerRadius="36dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomLeftLienar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="25dp"
+        >
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/CtrFr_AddPhotoBtn"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:text="Добавить фото"
+            android:textSize="18sp"
+            android:backgroundTint="@android:color/black"
+            app:cornerRadius="36dp"
+            />
+
+        <TextView
+            android:id="@+id/CtrFr_PhotoName_tv"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:text="Фотография нe выбрана"
+            android:textSize="20sp"
+            android:textColor="@color/dark_grey"
+            android:textStyle="normal"
+            android:textAllCaps="false"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

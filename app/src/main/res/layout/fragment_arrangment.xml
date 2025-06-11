@@ -5,24 +5,20 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Arrangement.ArrangementFragment"
-    android:background="@color/background_one"
+    android:background="@android:color/darker_gray"
     >
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/ArranFragment_MainLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Общие данные"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:layout_margin="25dp"
+        style="@style/LabelViewStyle"
         />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/AttFr_BackToMainMenu_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,55 +26,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="25dp"
-        android:textSize="30sp"
+        style="@style/UnusualButton"
         />
 
     <LinearLayout
         android:id="@+id/AttFr_LinTop"
-        android:layout_width="550dp"
+        android:layout_width="500dp"
         android:layout_height="60dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ArranFragment_MainLabel"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="40dp">
+        >
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/AttrFr_tvDate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Дата:"
-            android:textSize="28sp"
-            android:textColor="@color/black"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"/>
-
-        <EditText
-            android:layout_width="170dp"
-            android:layout_height="match_parent"
-            android:text="05.06.2025"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:text="Дата: "
             android:textColor="@color/black"
-            android:textSize="28sp"
-            android:layout_marginStart="15dp"
-            android:inputType="date"/>
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            />
 
-        <TextView
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/AttrFr_tvTime"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Время:"
-            android:textSize="28sp"
-            android:textColor="@color/black"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="5dp"/>
-
-        <EditText
-            android:layout_width="170dp"
-            android:layout_height="match_parent"
-            android:text="12:00"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:text="Время: "
             android:textColor="@color/black"
-            android:textSize="28sp"
-            android:layout_marginStart="15dp"
-            android:inputType="time"/>
-
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -90,9 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/AttFr_LinTop"
         app:layout_constraintBottom_toBottomOf="parent"
-
         >
-
 
         <!-- Левый Блок  -->
         <LinearLayout
@@ -101,7 +92,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-
             >
 
             <!-- Блок Заказчик -->
@@ -109,31 +99,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvCustomer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Заказчик:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    style="@style/usualTextViewStyle"
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edCustomer"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edCustomer"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="35dp"
-                    />
+                    android:layout_height="45dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
+                    >
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edCustomer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -144,33 +152,46 @@
                 android:layout_weight="1"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvSpecialist"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Специалист СК:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/AttFr_tvCustomer"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="30dp"/>
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    style="@style/usualTextViewStyle"
+                    />
 
-                <EditText
-                    android:id="@+id/AttFr_edSpecialist"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edSpecialist"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    app:layout_constraintStart_toEndOf="@id/AttFr_tvSpecialist"
-                    app:layout_constraintTop_toBottomOf="@id/AttFr_edCustomer"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="35dp"/>
+                    android:layout_height="45dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
+                    >
 
-
-
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edSpecialist"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <!-- Блок Объект -->
@@ -180,30 +201,46 @@
                 android:layout_weight="1"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvObject"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Объект:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/AttFr_tvSpecialist"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="30dp"/>
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    style="@style/usualTextViewStyle"
+                    />
 
-                <EditText
-                    android:id="@+id/AttFr_edObject"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edObject"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    app:layout_constraintStart_toEndOf="@id/AttFr_tvCustomer"
-                    app:layout_constraintTop_toBottomOf="@id/AttFr_edSpecialist"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="35dp"/>
+                    android:layout_height="45dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edObject"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -214,26 +251,53 @@
                 android:layout_weight="1"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvPlot"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Участок:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="30dp"/>
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    style="@style/usualTextViewStyle"
+                    />
 
-                <EditText
-                    android:id="@+id/AttFr_edPlot"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edPlot"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="35dp"/>
+                    android:layout_height="45dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edPlot"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
 
             </LinearLayout>
 
@@ -243,29 +307,36 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-
+                android:layout_marginStart="25dp"
                 >
-                <Button
-                    android:layout_width="150dp"
-                    android:layout_height="100dp"
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/AttrFr_btnCopy"
+                    android:layout_width="0dp"
+                    android:layout_height="85dp"
                     android:text="Копия предыдущего отчета"
-                    android:textSize="24dp"
                     android:layout_weight="1"
                     android:layout_margin="15dp"
                     android:layout_gravity="center"
+                    android:backgroundTint="@android:color/black"
+                    style="@style/UnusualButton"
                     />
 
-                <Button
-                    android:layout_width="150dp"
-                    android:layout_height="100dp"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/AttrFr_btnClear"
+                    android:layout_width="0dp"
+                    android:layout_height="85dp"
                     android:text="Очистить"
-                    android:textSize="24dp"
                     android:layout_weight="1"
                     android:layout_margin="15dp"
                     android:layout_gravity="center"
+                    style="@style/UnusualButton"
                     />
             </LinearLayout>
+
+
         </LinearLayout>
+
         <!-- Правый Блок -->
         <LinearLayout
             android:id="@+id/AttFr_LinMidRight"
@@ -279,109 +350,156 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvGenContractor"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Генподрядчик:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
+                    android:layout_weight="1"
+                    style="@style/usualTextViewStyle"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edGenContractor"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edGenConstractor"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginEnd="50dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    >
 
-
-                    />
-
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edGenConstractor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvRepGenContractor"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Представитель\nГенподрядчика:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
+                    style="@style/usualTextViewStyle"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edRepGenContractor"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edConstractor"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginEnd="50dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    >
 
-                    />
-
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edConstractor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 >
-                <TextView
+
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvRepSSK_Gp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Представитель\nССК ПО (ГП):"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
+                    style="@style/usualTextViewStyle"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edRepSSK_Gp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edRepSSK_Gp"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginEnd="50dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    >
 
-                    />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edRepSSK_Gp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -389,34 +507,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 >
-                <TextView
+
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvSubcontractor"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Субподрядчик:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
+                    style="@style/usualTextViewStyle"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edSubcontractor"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edSubcontractor"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginEnd="50dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    >
 
-                    />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edSubcontractor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
 
             </LinearLayout>
 
@@ -424,98 +562,123 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 >
-                <TextView
+
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvRepSubcontractor"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Представитель\nСубподрядчика:"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
+                    style="@style/usualTextViewStyle"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edRepSubcontractor"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edRepSubcontractor"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginEnd="50dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    />
+                    >
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edRepSubcontractor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 >
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/AttFr_tvRepSSK_Sub"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="Представитель\nССК ПО (суб):"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"
                     android:textStyle="normal"
                     android:layout_marginStart="25dp"
+                    style="@style/usualTextViewStyle"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/AttFr_edRepSSK_Sub"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_edRepSSK_Sub"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:textSize="48sp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_height="45dp"
                     android:layout_marginEnd="50dp"
+                    android:background="@color/white"
+                    app:boxBackgroundMode="filled"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    />
+                    >
 
-
-
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ed_edRepSSK_Sub"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text=""
+                        android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:inputType="textMultiLine"
+                        android:singleLine="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:hint="Подсказка"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:orientation="vertical"
                 >
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/AttrFr_btnNext"
+                    android:layout_width="120dp"
+                    android:layout_height="80dp"
+                    android:text="Далее"
+                    android:gravity="center"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="25dp"
+                    style="@style/UnusualButton"
+                    />
 
-                    <Button
-                        android:id="@+id/AttrFr_btnNext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Далее"
-                        android:textSize="30dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="5dp"
-                        android:layout_gravity="center"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_margin="25dp"
-                        />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

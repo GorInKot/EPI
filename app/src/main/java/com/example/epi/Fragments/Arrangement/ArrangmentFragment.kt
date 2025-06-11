@@ -1,19 +1,75 @@
 package com.example.epi.Fragments.Arrangement
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.epi.R
+import com.example.epi.databinding.FragmentArrangmentBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ArrangementFragment : Fragment() {
+    private var _binding: FragmentArrangmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_arrangment, container, false)
+        _binding = FragmentArrangmentBinding.inflate(inflater, container, false )
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Обработка даты и времени
+        val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
+        val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+        binding.AttrFrTvDate.text = "Дата: $currentDate"
+        binding.AttrFrTvTime.text = "Время: $currentTime"
+
+        // Кнопка "На главное меню"
+        binding.AttFrBackToMainMenuBtn.setOnClickListener { findNavController().navigate(R.id.StartFragment) }
+
+        // Левый блок
+
+        // Правый блок
+
+        // Кнопка "Копия предыдущего отчета"
+
+        // Кнопка "Очистить"
+        binding.AttrFrBtnClear.setOnClickListener {
+            binding.edEdCustomer.text!!.clear()
+            binding.edEdSpecialist.text!!.clear()
+            binding.edEdObject.text!!.clear()
+            binding.edEdPlot.text!!.clear()
+            binding.edEdGenConstractor.text!!.clear()
+            binding.edEdConstractor.text!!.clear()
+            binding.edEdRepSSKGp.text!!.clear()
+            binding.edEdSubcontractor.text!!.clear()
+            binding.edEdRepSubcontractor.text!!.clear()
+            binding.edEdRepSSKSub.text!!.clear()
+
+            Toast.makeText(requireContext(),
+                "Все поля очищены",
+                Toast.LENGTH_LONG).show()
+
+            Log.d("TAG","All editText cleared")
+
+        }
+
+        // Кнопка "Далее"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

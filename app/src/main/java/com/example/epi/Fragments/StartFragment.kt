@@ -34,15 +34,17 @@ class StartFragment : Fragment() {
         }
 
         binding.startFragmentBtnControl.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Нажата кнопка Инспекционный контроль",
-                Toast.LENGTH_LONG).show()
+//            Toast.makeText(requireContext(),
+//                "Нажата кнопка Инспекционный контроль",
+//                Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.controlFragment)
         }
 
         binding.startFragmentBtnFicsacia.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Нажата кнопка Фиксация объемов",
-                Toast.LENGTH_LONG).show()
+//            Toast.makeText(requireContext(),
+//                "Нажата кнопка Фиксация объемов",
+//                Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.FixFragment)
         }
     }
 
