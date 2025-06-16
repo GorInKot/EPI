@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.Arrangement.Transport.TransportFragment"
+    android:background="@color/background_one"
+    >
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/TraFr_MainLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Транспорт"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/LabelViewStyle"
+        />
+
+    <LinearLayout
+        android:id="@+id/TraFr_LinearSpecialist"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TraFr_MainLabel"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        >
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/TrFr_LinearTextViewSpecialist"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Специалист СК"
+            style="@style/usualTextViewStyle"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_edSpecialist"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            app:boxBackgroundMode="filled"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_edSpecialist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textStyle="normal"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:inputType="textMultiLine"
+                android:singleLine="true"
+                android:hint="ФИО Спец РНСК"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/TrFr_LinearCustomer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TraFr_LinearSpecialist"
+        android:weightSum="2"
+        >
+        <LinearLayout
+            android:id="@+id/customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp"
+            >
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvCustomer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Заказчик"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_edCustomer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                app:boxBackgroundMode="filled"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_edCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:hint="Заказчик"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contract"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="25dp"
+            >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvContract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Договор СК"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_edContract"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                app:boxBackgroundMode="filled"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_edContract"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:hint="Договор_заказчик"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/TrFr_LinearExecutive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TrFr_LinearCustomer"
+        android:weightSum="2"
+        >
+        <LinearLayout
+            android:id="@+id/Executor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp"
+            >
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvExecutor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Исполнитель по транспорту"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_edExecutor"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                app:boxBackgroundMode="filled"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_edExecutor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:hint='ООО "АвтоАльянс"'
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contractTransort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="25dp"
+            >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvContractTransort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Договор по транспорту"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_edContractTransort"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                app:boxBackgroundMode="filled"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_edContractTransort"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:hint="1234/654-25"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Дата и время начала поездки"
+        style="@style/usualTextViewStyle"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TrFr_LinearExecutive"
+        android:gravity="start"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSelectedDateTime"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Дата не выбрана"
+        style="@style/usualTextViewStyle"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvStart"
+        android:layout_marginStart="40dp"
+
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPickDate"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:cornerRadius="12dp"
+        android:textSize="18sp"
+        app:icon="@drawable/google_calendar_64"
+        android:background="@null"
+        android:text="Выбрать день"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectedDateTime"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="4dp"
+
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSelectedTime"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Время не выбрано"
+        style="@style/usualTextViewStyle"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/tvSelectedDateTime"
+        app:layout_constraintTop_toBottomOf="@id/tvStart"
+        android:layout_marginStart="75dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPickTime"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Выбрать время"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:cornerRadius="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="75dp"
+        app:layout_constraintStart_toEndOf="@id/btnPickDate"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectedTime"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvStateNumber"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Госномер"
+        style="@style/usualTextViewStyle"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/tvSelectedTime"
+        app:layout_constraintTop_toBottomOf="@id/tvStart"
+        android:layout_marginStart="75dp"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_StateNumber"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        app:boxBackgroundMode="filled"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toEndOf="@id/btnPickTime"
+        app:layout_constraintTop_toBottomOf="@id/tvStateNumber"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="4dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_StateNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:inputType="textMultiLine"
+            android:singleLine="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:hint="Р999МР777"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Дата и время завершения поездки"
+        style="@style/usualTextViewStyle"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPickDate"
+        android:gravity="start"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_EndDate"
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        app:boxBackgroundMode="filled"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEnd"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="4dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_EndDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:inputType="textMultiLine"
+            android:singleLine="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:hint="09.06.2025"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/imb_EndCalendar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toEndOf="@id/textInputLayout_EndDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvEnd"
+        android:src="@drawable/google_calendar_32"
+        android:background="@null"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_EndDateHours"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        app:boxBackgroundMode="filled"
+        android:layout_gravity="center"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/imb_EndCalendar"
+        app:layout_constraintTop_toBottomOf="@id/tvEnd"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="4dp"
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_EndDateHours"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="17:00"
+            android:inputType="time"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="normal"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,8 +29,8 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/CtrFr_BackToMainMenu_btn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
         android:text="Главное меню"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,10 @@
             android:text="Дата: "
             android:textColor="@color/black"
             android:textSize="24sp"
-            android:paddingEnd="5dp"/>
+            android:paddingEnd="5dp"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            />
 
     </LinearLayout>
 
@@ -348,7 +351,7 @@
             app:boxBackgroundMode="none"
             app:hintEnabled="false"
             android:layout_marginStart="25dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:layout_marginEnd="10dp"
             >
 
@@ -371,7 +374,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/CtrFr_issieOder_btn"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:text="Выдать предписание"
             android:textSize="20sp"
             android:layout_marginEnd="5dp"
@@ -425,8 +428,8 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/CtrFr_addWork_btn"
-            android:layout_width="200dp"
-            android:layout_height="80dp"
+            android:layout_width="220dp"
+            android:layout_height="60dp"
             android:text="Добавить работы"
             android:textSize="20sp"
             android:layout_marginStart="5dp"
@@ -442,7 +445,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/CtrFr_deleteWorks_btn"
             android:layout_width="200dp"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:text="Удалить работу"
             android:textSize="20sp"
             android:layout_marginStart="5dp"
@@ -459,7 +462,7 @@
     <LinearLayout
         android:id="@+id/CtrFr_LinBottomBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -470,32 +473,36 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/CtrFrr_back_btn"
             android:layout_width="140dp"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:text="Назад"
             android:textSize="18sp"
             android:layout_weight="1"
             android:layout_marginEnd="5dp"
             android:backgroundTint="@android:color/black"
             app:cornerRadius="36dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/CtrFrr_signUp_btn"
             android:layout_width="140dp"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:text="Записать"
             android:textSize="18sp"
             android:layout_weight="1"
             android:layout_marginStart="5dp"
             android:backgroundTint="@android:color/black"
             app:cornerRadius="36dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottomLeftLienar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -505,12 +512,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/CtrFr_AddPhotoBtn"
-            android:layout_width="150dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
             android:text="Добавить фото"
             android:textSize="18sp"
             android:backgroundTint="@android:color/black"
             app:cornerRadius="36dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             />
 
         <TextView

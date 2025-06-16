@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
@@ -40,18 +41,40 @@ class ArrangementFragment : Fragment() {
 
         // Левый блок
 
+        // Выпадающий список заказчиков
+        val customerList = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, customerList)
+        binding.autoCompleteCustomer.setAdapter(adapter)
+
+        // Обработка CheckBox-а
+        binding.checkBoxManualCustomer.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.textInputLayoutAutoCustomer.visibility = View.GONE
+                binding.textInputLayoutManualCustomer.visibility = View.VISIBLE
+            } else {
+                binding.textInputLayoutAutoCustomer.visibility = View.VISIBLE
+                binding.textInputLayoutManualCustomer.visibility = View.GONE
+            }
+        }
+
         // Правый блок
+        binding.AttrFrBtnTransport.setOnClickListener {
+            findNavController().navigate(R.id.transportFragment)
+        }
+        binding.AttrFrBtnVolume.setOnClickListener {
+            findNavController().navigate(R.id.volumeCMPFragment)
+        }
 
         // Кнопка "Копия предыдущего отчета"
 
         // Кнопка "Очистить"
         binding.AttrFrBtnClear.setOnClickListener {
-            binding.edEdCustomer.text!!.clear()
+//            binding.edEdCustomer.text!!.clear()
             binding.edEdSpecialist.text!!.clear()
-            binding.edEdObject.text!!.clear()
+//            binding.edEdObject.text!!.clear()
             binding.edEdPlot.text!!.clear()
-            binding.edEdGenConstractor.text!!.clear()
-            binding.edEdConstractor.text!!.clear()
+//            binding.edEdGenConstractor.text!!.clear()
+//            binding.edEdConstractor.text!!.clear()
             binding.edEdRepSSKGp.text!!.clear()
             binding.edEdSubcontractor.text!!.clear()
             binding.edEdRepSubcontractor.text!!.clear()

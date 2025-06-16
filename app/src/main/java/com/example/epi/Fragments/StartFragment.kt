@@ -44,7 +44,11 @@ class StartFragment : Fragment() {
 //            Toast.makeText(requireContext(),
 //                "Нажата кнопка Фиксация объемов",
 //                Toast.LENGTH_LONG).show()
-            findNavController().navigate(R.id.FixFragment)
+            findNavController().navigate(R.id.fixFragment)
+        }
+
+        binding.startFragmentBtnFReports.setOnClickListener {
+            findNavController().navigate(R.id.reportsFragment)
         }
     }
 

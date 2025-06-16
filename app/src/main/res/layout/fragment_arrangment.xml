@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Arrangement.ArrangementFragment"
-    android:background="@android:color/darker_gray"
+    android:background="@color/background_one"
     >
 
     <com.google.android.material.textview.MaterialTextView
@@ -97,53 +98,90 @@
             <!-- Блок Заказчик -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
                 >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/AttFr_tvCustomer"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Заказчик:"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:textAllCaps="false"
-                    android:textStyle="normal"
-                    android:layout_marginStart="25dp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    style="@style/usualTextViewStyle"
-                    />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_edCustomer"
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@color/white"
-                    app:boxBackgroundMode="filled"
-                    android:layout_gravity="center"
+                <!-- Первая строка: надпись + выпадающий список -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edCustomer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textStyle="normal"
-                        android:textColor="@color/black"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/AttFr_tvCustomer"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="Заказчик:"
                         android:textSize="22sp"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="Подсказка"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="25dp"
+                        android:gravity="center"
+                        style="@style/usualTextViewStyle"
                         />
-                </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Выпадающий список -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_autoCustomer"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteCustomer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:hint="Выберите заказчика"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Поле ручного ввода (по умолчанию скрыто) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_manualCustomer"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        android:visibility="gone"
+                        android:hint="Введите заказчика вручную"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edManualCustomer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:textColor="@color/black"
+                            android:singleLine="true"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Чекбокс -->
+                <CheckBox
+                    android:id="@+id/checkBoxManualCustomer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Указать вручную"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="240dp"
+                    />
             </LinearLayout>
+
 
             <!-- Блок Специалист СК -->
             <LinearLayout
@@ -197,51 +235,88 @@
             <!-- Блок Объект -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
                 >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/AttFr_tvObject"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Объект:"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:textAllCaps="false"
-                    android:textStyle="normal"
-                    android:layout_marginStart="25dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    style="@style/usualTextViewStyle"
-                    />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_edObject"
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@color/white"
-                    app:boxBackgroundMode="filled"
-                    android:layout_gravity="center"
+                <!-- Первая строка: надпись + выпадающий список -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edObject"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textStyle="normal"
-                        android:textColor="@color/black"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/AttFr_tvObject"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="Объект:"
                         android:textSize="22sp"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="Подсказка"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="25dp"
+                        android:gravity="center"
+                        style="@style/usualTextViewStyle"
                         />
-                </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Выпадающий список -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_autoObject"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteObject"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:hint="Выберите объект"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Поле ручного ввода (по умолчанию скрыто) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_manualObject"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        android:visibility="gone"
+                        android:hint="Введите объект вручную"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edManualObject"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:textColor="@color/black"
+                            android:singleLine="true"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Чекбокс -->
+                <CheckBox
+                    android:id="@+id/checkBoxManualObject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Указать вручную"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="240dp"
+                    />
             </LinearLayout>
 
             <!-- Блок Участок -->
@@ -292,13 +367,91 @@
                         />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
                 >
 
+                <!-- Первая строка: надпись + выпадающий список -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/AttFr_tvContractor"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="Генподрядчик:"
+                        android:textSize="22sp"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="25dp"
+                        android:gravity="center"
+                        style="@style/usualTextViewStyle"
+                        />
+
+                    <!-- Выпадающий список -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_autoContractor"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteContractor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:hint="Выберите генподрядчика"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Поле ручного ввода (по умолчанию скрыто) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_manualContractor"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        android:visibility="gone"
+                        android:hint="Введите генподрядчика вручную"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edManualContractor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:textColor="@color/black"
+                            android:singleLine="true"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Чекбокс -->
+                <CheckBox
+                    android:id="@+id/checkBoxManualContractor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Указать вручную"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="240dp"
+                    />
             </LinearLayout>
 
             <!-- Панель (нижняя) с кнопками -->
@@ -313,8 +466,8 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/AttrFr_btnCopy"
                     android:layout_width="0dp"
-                    android:layout_height="85dp"
-                    android:text="Копия предыдущего отчета"
+                    android:layout_height="60dp"
+                    android:text="Предыдущий отчет"
                     android:layout_weight="1"
                     android:layout_margin="15dp"
                     android:layout_gravity="center"
@@ -325,7 +478,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/AttrFr_btnClear"
                     android:layout_width="0dp"
-                    android:layout_height="85dp"
+                    android:layout_height="60dp"
                     android:text="Очистить"
                     android:layout_weight="1"
                     android:layout_margin="15dp"
@@ -348,106 +501,88 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
                 >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/AttFr_tvGenContractor"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Генподрядчик:"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:textAllCaps="false"
-                    android:textStyle="normal"
-                    android:layout_marginStart="25dp"
-                    android:layout_weight="1"
-                    style="@style/usualTextViewStyle"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_edGenConstractor"
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:layout_marginEnd="50dp"
-                    android:background="@color/white"
-                    app:boxBackgroundMode="filled"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
+                <!-- Первая строка: надпись + выпадающий список -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edGenConstractor"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textStyle="normal"
-                        android:textColor="@color/black"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/AttFr_tvSubContractor"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="Представитель\nГенподрядчика:"
                         android:textSize="22sp"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="Подсказка"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="25dp"
+                        android:gravity="center"
+                        style="@style/usualTextViewStyle"
                         />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:gravity="center_horizontal"
-                >
+                    <!-- Выпадающий список -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_autoSubContractor"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/AttFr_tvRepGenContractor"
-                    android:layout_width="200dp"
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteSubContractor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:hint="Выберите представителя"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Поле ручного ввода (по умолчанию скрыто) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_manualSybContractor"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        android:visibility="gone"
+                        android:hint="Введите представителя вручную"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edManualSubContractor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:textColor="@color/black"
+                            android:singleLine="true"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Чекбокс -->
+                <CheckBox
+                    android:id="@+id/checkBoxManualSubContractor"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Представитель\nГенподрядчика:"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:textAllCaps="false"
-                    android:textStyle="normal"
-                    android:layout_marginStart="25dp"
-                    style="@style/usualTextViewStyle"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
+                    android:text="Указать вручную"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="240dp"
                     />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_edConstractor"
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:layout_marginEnd="50dp"
-                    android:background="@color/white"
-                    app:boxBackgroundMode="filled"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edConstractor"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textStyle="normal"
-                        android:textColor="@color/black"
-                        android:textSize="22sp"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="Подсказка"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -661,6 +796,41 @@
                         />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/AttrFr_btnVolume"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:text="Объемы СМР"
+                    android:layout_weight="1"
+                    android:layout_margin="15dp"
+                    android:layout_gravity="center"
+                    style="@style/UnusualButton"
+                    app:icon="@drawable/measure_256"
+                    app:iconTint="@null"
+
+                    />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/AttrFr_btnTransport"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:text="Транспорт"
+                    android:layout_weight="1"
+                    android:layout_margin="15dp"
+                    android:layout_gravity="center"
+                    style="@style/UnusualButton"
+                    app:icon="@drawable/delivery_truck_256"
+                    app:iconTint="@null"
+                    />
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -671,7 +841,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/AttrFr_btnNext"
                     android:layout_width="120dp"
-                    android:layout_height="80dp"
+                    android:layout_height="60dp"
                     android:text="Далее"
                     android:gravity="center"
                     android:layout_gravity="end"

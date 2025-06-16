@@ -9,24 +9,48 @@
         android:id="@+id/StartFragment"
         android:name="com.example.epi.Fragments.StartFragment"
         android:label="Start Fragment"
-        tools:layout="@layout/fragment_start"/>
+        tools:layout="@layout/fragment_start"
+        />
 
     <fragment
         android:id="@+id/arrangementFragment"
         android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
         android:label="Arrangement"
-        tools:layout="@layout/fragment_arrangment" />
+        tools:layout="@layout/fragment_arrangment"
+        />
 
     <fragment
         android:id="@+id/controlFragment"
         android:name="com.example.epi.Fragments.Control.ControlFragment"
         android:label="Control"
-        tools:layout="@layout/fragment_control" />
+        tools:layout="@layout/fragment_control"
+        />
 
     <fragment
-        android:id="@+id/FixFragment"
+        android:id="@+id/fixFragment"
         android:name="com.example.epi.Fragments.FixingVolumes.FixingVolumesFragment"
         android:label="Fix"
-        tools:layout="@layout/fragment_fixing_volumes" />
+        tools:layout="@layout/fragment_fixing_volumes"
+        />
+
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.example.epi.Fragments.Reports.ReportsFragment"
+        tools:layout="@layout/fragment_reports"
+        />
+
+    <fragment
+        android:id="@+id/transportFragment"
+        android:name="com.example.epi.Fragments.Arrangement.Transport.TransportFragment"
+        android:label="Transport"
+        tools:layout="@layout/fragment_transport"
+        />
+
+    <fragment
+        android:id="@+id/volumeCMPFragment"
+        android:name="com.example.epi.Fragments.Arrangement.VolumeCMP.VolumeCMPFragment"
+        android:label="VolumeCMP"
+        tools:layout="@layout/fragment_volume_c_m_p"
+        />
 
 </navigation>
