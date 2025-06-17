@@ -36,9 +36,6 @@ class ArrangementFragment : Fragment() {
         binding.AttrFrTvDate.text = "Дата: $currentDate"
         binding.AttrFrTvTime.text = "Время: $currentTime"
 
-        // Кнопка "На главное меню"
-        binding.AttFrBackToMainMenuBtn.setOnClickListener { findNavController().navigate(R.id.StartFragment) }
-
         // Левый блок
 
         // Выпадающий список заказчиков
@@ -46,7 +43,7 @@ class ArrangementFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, customerList)
         binding.autoCompleteCustomer.setAdapter(adapter)
 
-        // Обработка CheckBox-а
+        // Заказчик: обработка CheckBox
         binding.checkBoxManualCustomer.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.textInputLayoutAutoCustomer.visibility = View.GONE
@@ -57,38 +54,76 @@ class ArrangementFragment : Fragment() {
             }
         }
 
-        // Правый блок
-        binding.AttrFrBtnTransport.setOnClickListener {
-            findNavController().navigate(R.id.transportFragment)
-        }
-        binding.AttrFrBtnVolume.setOnClickListener {
-            findNavController().navigate(R.id.volumeCMPFragment)
+        // Объект: обработка CheckBox
+        binding.checkBoxManualObject.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.textInputLayoutAutoObject.visibility = View.GONE
+                binding.textInputLayoutManualObject.visibility = View.VISIBLE
+            } else {
+                binding.textInputLayoutAutoObject.visibility = View.VISIBLE
+                binding.textInputLayoutManualObject.visibility = View.GONE
+            }
         }
 
+        // Генподрядчик: обработка CheckBox
+        binding.checkBoxManualObject.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.textInputLayoutAutoContractor.visibility = View.GONE
+                binding.textInputLayoutManualContractor.visibility = View.VISIBLE
+            } else {
+                binding.textInputLayoutAutoContractor.visibility = View.VISIBLE
+                binding.textInputLayoutManualContractor.visibility = View.GONE
+            }
+        }
+
+
         // Кнопка "Копия предыдущего отчета"
+        binding.AttrFrBtnCopy.setOnClickListener {
+            Toast.makeText(requireContext(),"Просто кнопка",Toast.LENGTH_SHORT).show()
+        }
 
         // Кнопка "Очистить"
         binding.AttrFrBtnClear.setOnClickListener {
-//            binding.edEdCustomer.text!!.clear()
-            binding.edEdSpecialist.text!!.clear()
-//            binding.edEdObject.text!!.clear()
-            binding.edEdPlot.text!!.clear()
-//            binding.edEdGenConstractor.text!!.clear()
-//            binding.edEdConstractor.text!!.clear()
-            binding.edEdRepSSKGp.text!!.clear()
-            binding.edEdSubcontractor.text!!.clear()
-            binding.edEdRepSubcontractor.text!!.clear()
-            binding.edEdRepSSKSub.text!!.clear()
+            // Заказчик
+            binding.autoCompleteCustomer.text!!.clear()
+            binding.edManualCustomer.text!!.clear()
 
-            Toast.makeText(requireContext(),
-                "Все поля очищены",
-                Toast.LENGTH_LONG).show()
+            // Объект
+            binding.autoCompleteObject.text!!.clear()
+            binding.edManualObject.text!!.clear()
 
-            Log.d("TAG","All editText cleared")
+            // Участок
+            binding.edPlot.text!!.clear()
 
+            // Генподрядчик
+            binding.autoCompleteContractor.text!!.clear()
+            binding.edManualContractor.text!!.clear()
+
+            // Представитель генподрядчика
+            binding.autoCompleteSubContractor.text!!.clear()
+            binding.edManualSubContractor.text!!.clear()
+
+            // Представитель ССК ПО (ГП)
+            binding.edRepSSKGp.text!!.clear()
+
+            // Субподрядчик
+            binding.edSubcontractor.text!!.clear()
+
+            // Представитель Субподрядчика
+            binding.edRepSubcontractor.text!!.clear()
+
+            // Представитель ССУ ПО (Суб)
+            binding.edRepSSKSub.text!!.clear()
         }
 
         // Кнопка "Далее"
+        binding.AttrFrBtnNext.setOnClickListener {
+            findNavController().navigate(R.id.transportFragment)
+        }
+
+        binding.AttrFrrBtnBack.setOnClickListener {
+            findNavController().navigate(R.id.StartFragment)
+        }
     }
 
     override fun onDestroyView() {

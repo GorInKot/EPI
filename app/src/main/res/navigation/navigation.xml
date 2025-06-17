@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/StartFragment"
-        android:name="com.example.epi.Fragments.StartFragment"
+        android:name="com.example.epi.Fragments.General.StartFragment"
         android:label="Start Fragment"
         tools:layout="@layout/fragment_start"
         />
@@ -47,10 +47,25 @@
         />
 
     <fragment
-        android:id="@+id/volumeCMPFragment"
-        android:name="com.example.epi.Fragments.Arrangement.VolumeCMP.VolumeCMPFragment"
-        android:label="VolumeCMP"
-        tools:layout="@layout/fragment_volume_c_m_p"
+        android:id="@+id/sendReportFragment"
+        android:name="com.example.epi.Fragments.Reports.SendReportFragment"
+        android:label="SendReport"
+        tools:layout="@layout/fragment_send_report"
         />
+
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.epi.Fragments.General.Registration.RegistrationFragment"
+        android:label="Registration"
+        tools:layout="@layout/fragment_registration"
+        />
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.epi.Fragments.General.Auth.AuthFragment"
+        android:label="Auth"
+        tools:layout="@layout/fragment_auth"
+        />
+
 
 </navigation>

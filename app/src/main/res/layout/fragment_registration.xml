@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/background_one"
+    >
+
+    <LinearLayout
+        android:layout_width="750dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        >
+
+        <!-- Заголовок -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvRegisterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Регистрация пользователя"
+            android:textColor="@color/black"
+            android:layout_marginBottom="24dp"
+            style="@style/LabelViewStyle"
+            />
+
+        <!-- Фамилия -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Фамилия"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Введите фамилию"
+
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Имя -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Имя"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Введите имя"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Отчество -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Отчество"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Введите отчество"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp"
+                app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusBottomEnd="24dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMiddleName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Табельный номер -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Табельный номер"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Введите номер"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp"
+                app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusBottomEnd="24dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPersonnelNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Телефон -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Телефон"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="+7 (___) ___-__-__"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp"
+                app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusBottomEnd="24dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Пароль -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Пароль"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Придумайте пароль"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp"
+                app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusBottomEnd="24dp"
+                app:passwordToggleEnabled="true"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Повтор пароля -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Повторите пароль"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                style="@style/usualTextViewStyle"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Повтор пароля"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp"
+                app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusBottomEnd="24dp"
+                app:passwordToggleEnabled="true"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxStrokeColor="@android:color/transparent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Кнопка регистрации -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Зарегистрироваться"
+            style="@style/UnusualButton"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAuth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Авторизоваться"
+            style="@style/UnusualButton"
+            android:layout_marginTop="8dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMainMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Главное меню"
+            style="@style/UnusualButton"
+            android:layout_marginTop="8dp"
+            />
+
+    </LinearLayout>
+</ScrollView>

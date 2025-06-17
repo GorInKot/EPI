@@ -26,7 +26,7 @@
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TraFr_MainLabel"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="25dp"
         >
         <com.google.android.material.textview.MaterialTextView
@@ -62,12 +62,26 @@
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
+    <!-- Чекбокс -->
+    <CheckBox
+        android:id="@+id/checkBoxManualCustomer"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="Транспорт отсутствует"
+        style="@style/usualTextViewStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TraFr_MainLabel"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+
+        />
+
     <LinearLayout
         android:id="@+id/TrFr_LinearCustomer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -165,7 +179,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -260,7 +274,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvStart"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:text="Дата и время начала поездки"
         style="@style/usualTextViewStyle"
@@ -269,71 +283,87 @@
         app:layout_constraintTop_toBottomOf="@+id/TrFr_LinearExecutive"
         android:gravity="start"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvSelectedDateTime"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:text="Дата не выбрана"
-        style="@style/usualTextViewStyle"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_StartDate"
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        app:boxBackgroundMode="filled"
         android:layout_gravity="center"
-        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvStart"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        >
 
-        />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_StartDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:inputType="textMultiLine"
+            android:singleLine="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:hint="09.06.2025"
+            android:gravity="center"
+            />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPickDate"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        app:cornerRadius="12dp"
-        android:textSize="18sp"
-        app:icon="@drawable/google_calendar_64"
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/imb_StartCalendar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toEndOf="@id/textInputLayout_StartDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvStart"
+        android:src="@drawable/google_calendar_32"
         android:background="@null"
-        android:text="Выбрать день"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectedDateTime"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="4dp"
-
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvSelectedTime"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:text="Время не выбрано"
-        style="@style/usualTextViewStyle"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_StartDateHours"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        app:boxBackgroundMode="filled"
         android:layout_gravity="center"
         android:gravity="center"
-        app:layout_constraintStart_toEndOf="@id/tvSelectedDateTime"
+        app:layout_constraintStart_toEndOf="@id/imb_StartCalendar"
         app:layout_constraintTop_toBottomOf="@id/tvStart"
-        android:layout_marginStart="75dp"
-        />
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPickTime"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Выбрать время"
-        app:iconGravity="textStart"
-        app:iconPadding="8dp"
-        app:cornerRadius="12dp"
-        android:layout_marginTop="4dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="75dp"
-        app:layout_constraintStart_toEndOf="@id/btnPickDate"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectedTime"
-        />
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText_StartDateHours"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="08:00"
+            android:inputType="time"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:gravity="center"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvStateNumber"
@@ -341,13 +371,13 @@
         android:layout_height="wrap_content"
         android:text="Госномер"
         style="@style/usualTextViewStyle"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_gravity="center"
         android:gravity="center"
-        app:layout_constraintStart_toEndOf="@id/tvSelectedTime"
-        app:layout_constraintTop_toBottomOf="@id/tvStart"
+        app:layout_constraintStart_toEndOf="@id/tvStart"
+        app:layout_constraintTop_toBottomOf="@id/TrFr_LinearExecutive"
         android:layout_marginStart="75dp"
+        android:layout_marginTop="24dp"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -357,7 +387,7 @@
         android:background="@color/white"
         app:boxBackgroundMode="filled"
         android:layout_gravity="center"
-        app:layout_constraintStart_toEndOf="@id/btnPickTime"
+        app:layout_constraintStart_toEndOf="@id/textInputLayout_StartDateHours"
         app:layout_constraintTop_toBottomOf="@id/tvStateNumber"
         android:layout_marginStart="75dp"
         android:layout_marginTop="4dp"
@@ -386,9 +416,8 @@
         android:layout_height="wrap_content"
         android:text="Дата и время завершения поездки"
         style="@style/usualTextViewStyle"
-        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnPickDate"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_StartDate"
         android:gravity="start"
         android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
@@ -404,7 +433,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEnd"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -420,6 +449,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:hint="09.06.2025"
+            android:gravity="center"
             />
 
 
@@ -434,7 +464,7 @@
         android:src="@drawable/google_calendar_32"
         android:background="@null"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -448,7 +478,7 @@
         app:layout_constraintStart_toEndOf="@id/imb_EndCalendar"
         app:layout_constraintTop_toBottomOf="@id/tvEnd"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
 
         >
 
@@ -465,8 +495,41 @@
             android:textColor="@color/black"
             android:textSize="22sp"
             android:textStyle="normal"
+            android:gravity="center"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/TraFr_back_btn"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:text="Назад"
+        android:textSize="20sp"
+        android:layout_marginEnd="25dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@android:color/holo_orange_dark"
+        app:cornerRadius="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/TraFr_next_btn"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="25dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/TraFr_next_btn"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:text="Сохранить"
+        android:textSize="20sp"
+        android:layout_marginEnd="25dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@android:color/background_dark"
+        app:cornerRadius="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="25dp"
+        android:layout_marginStart="25dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,10 @@
-package com.example.epi.Fragments
+package com.example.epi.Fragments.General
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentStartBinding
@@ -26,25 +25,12 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.startFragmentBtnRasstanovka.setOnClickListener {
-//            Toast.makeText(requireContext(),
-//                "Нажата кнопка Расстановки",
-//                Toast.LENGTH_LONG).show()
+        binding.startFragmentBtnArrangment.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }
 
-        binding.startFragmentBtnControl.setOnClickListener {
-//            Toast.makeText(requireContext(),
-//                "Нажата кнопка Инспекционный контроль",
-//                Toast.LENGTH_LONG).show()
-            findNavController().navigate(R.id.controlFragment)
-        }
-
-        binding.startFragmentBtnFicsacia.setOnClickListener {
-//            Toast.makeText(requireContext(),
-//                "Нажата кнопка Фиксация объемов",
-//                Toast.LENGTH_LONG).show()
-            findNavController().navigate(R.id.fixFragment)
+        binding.startFragmentBtnAuth.setOnClickListener {
+            findNavController().navigate(R.id.authFragment)
         }
 
         binding.startFragmentBtnFReports.setOnClickListener {

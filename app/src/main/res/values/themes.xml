@@ -46,7 +46,7 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
-        <item name="cornerRadius">36dp</item>
+        <item name="cornerRadius">32dp</item>
         <item name="backgroundTint">#000000</item>
     </style>
 

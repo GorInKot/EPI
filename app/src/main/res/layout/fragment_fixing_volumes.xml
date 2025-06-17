@@ -81,7 +81,7 @@
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:text="Название прибора/\nоборудования"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="50dp"
                 android:textSize="20sp"
                 android:textAllCaps="false"
                 android:textStyle="normal"
@@ -94,9 +94,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_equipmentName"
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 android:background="@color/white"
                 app:boxBackgroundMode="filled"
                 >
@@ -397,17 +398,25 @@
                 android:text="Удалить объём"
                 android:textAllCaps="true"
                 android:backgroundTint="#FF6655"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="60dp"
+                android:textSize="18sp"
+                android:layout_marginEnd="25dp"
+                android:layout_gravity="center"
+                app:cornerRadius="36dp"
+                android:gravity="center"
                 />
 
             <com.google.android.material.button.MaterialButton
                 android:text="Добавить объём"
                 android:textAllCaps="true"
-                android:layout_marginStart="12dp"
-                android:backgroundTint="#6666FF"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="60dp"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                app:cornerRadius="36dp"
+                android:layout_marginStart="25dp"
+                android:gravity="center"
                 />
         </LinearLayout>
 
@@ -456,43 +465,6 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <!-- Фото -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="25dp"
-            >
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="200dp"
-                android:layout_height="60dp"
-                android:text="Добавить фото"
-                android:textAllCaps="true"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:text="Фото не выбрано"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:textStyle="normal"
-                android:textColor="@color/dark_grey"
-                android:fontFamily="sans-serif-medium"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                />
-        </LinearLayout>
-
-
-
         <!-- Назад / Сохранить -->
         <LinearLayout
             android:orientation="horizontal"
@@ -506,15 +478,29 @@
             >
 
             <com.google.android.material.button.MaterialButton
-                android:text="НАЗАД"
-                android:layout_width="200dp"
+                android:id="@+id/FixFr_btn_Back"
+                android:layout_width="160dp"
                 android:layout_height="60dp"
-                android:layout_marginEnd="8dp"/>
+                android:text="Назад"
+                android:textSize="20sp"
+                android:layout_marginEnd="25dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@android:color/holo_orange_dark"
+                app:cornerRadius="36dp"
+                android:gravity="center"
+
+                />
 
             <com.google.android.material.button.MaterialButton
-                android:text="ЗАПИСАТЬ"
-                android:layout_width="200dp"
+                android:id="@+id/FixFr_btn_Next"
+                android:layout_width="160dp"
                 android:layout_height="60dp"
+                android:text="Записать"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:backgroundTint="@android:color/background_dark"
+                app:cornerRadius="36dp"
+                android:layout_marginStart="25dp"
                 />
         </LinearLayout>
     </LinearLayout>

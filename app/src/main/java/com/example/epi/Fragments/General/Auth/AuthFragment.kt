@@ -1,4 +1,4 @@
-package com.example.epi.Fragments.Reports
+package com.example.epi.Fragments.General.Auth
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
-import com.example.epi.databinding.FragmentReportsBinding
+import com.example.epi.databinding.FragmentAuthBinding
 
 
-class ReportsFragment : Fragment() {
-    private var _binding: FragmentReportsBinding? = null
+class AuthFragment : Fragment() {
+    private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -19,14 +19,17 @@ class ReportsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentReportsBinding.inflate(inflater, container, false)
+        _binding = FragmentAuthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnToRegister.setOnClickListener {
+            findNavController().navigate(R.id.registrationFragment)
+        }
 
-        binding.RepFrMainMenuBtn.setOnClickListener {
+        binding.btnBackToMenu.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
         }
     }
@@ -35,5 +38,6 @@ class ReportsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
 }

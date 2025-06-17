@@ -19,17 +19,6 @@
         style="@style/LabelViewStyle"
         />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/AttFr_BackToMainMenu_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="На главное меню"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="25dp"
-        style="@style/UnusualButton"
-        />
-
     <LinearLayout
         android:id="@+id/AttFr_LinTop"
         android:layout_width="500dp"
@@ -182,56 +171,6 @@
                     />
             </LinearLayout>
 
-
-            <!-- Блок Специалист СК -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                >
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/AttFr_tvSpecialist"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Специалист СК:"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:textAllCaps="false"
-                    android:textStyle="normal"
-                    android:layout_marginStart="25dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    style="@style/usualTextViewStyle"
-                    />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_edSpecialist"
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@color/white"
-                    app:boxBackgroundMode="filled"
-                    android:layout_gravity="center"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edSpecialist"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textStyle="normal"
-                        android:textColor="@color/black"
-                        android:textSize="22sp"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="Подсказка"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
             <!-- Блок Объект -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -352,7 +291,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edPlot"
+                        android:id="@+id/ed_Plot"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text=""
@@ -621,7 +560,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edRepSSK_Gp"
+                        android:id="@+id/ed_RepSSK_Gp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text=""
@@ -674,7 +613,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edSubcontractor"
+                        android:id="@+id/ed_Subcontractor"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text=""
@@ -729,7 +668,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edRepSubcontractor"
+                        android:id="@+id/ed_RepSubcontractor"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text=""
@@ -781,7 +720,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_edRepSSK_Sub"
+                        android:id="@+id/ed_RepSSK_Sub"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text=""
@@ -796,57 +735,39 @@
                         />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_weight="1">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/AttrFr_btnVolume"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:text="Объемы СМР"
-                    android:layout_weight="1"
-                    android:layout_margin="15dp"
-                    android:layout_gravity="center"
-                    style="@style/UnusualButton"
-                    app:icon="@drawable/measure_256"
-                    app:iconTint="@null"
-
-                    />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/AttrFr_btnTransport"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:text="Транспорт"
-                    android:layout_weight="1"
-                    android:layout_margin="15dp"
-                    android:layout_gravity="center"
-                    style="@style/UnusualButton"
-                    app:icon="@drawable/delivery_truck_256"
-                    app:iconTint="@null"
-                    />
-
-            </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:layout_marginEnd="25dp"
                 >
+
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/AttrFr_btnNext"
-                    android:layout_width="120dp"
+                    android:id="@+id/AttrFrr_btn_Back"
+                    android:layout_width="160dp"
                     android:layout_height="60dp"
-                    android:text="Далее"
-                    android:gravity="center"
-                    android:layout_gravity="end"
+                    android:text="Назад"
+                    android:textSize="20sp"
+                    android:backgroundTint="@android:color/holo_orange_dark"
+                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="25dp"
                     style="@style/UnusualButton"
+                    />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/AttrFr_btn_Next"
+                    android:layout_width="160dp"
+                    android:layout_height="60dp"
+                    android:text="Далее"
+                    android:layout_marginTop="25dp"
+                    style="@style/UnusualButton"
+
                     />
 
             </LinearLayout>

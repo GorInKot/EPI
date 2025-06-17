@@ -25,19 +25,7 @@
         android:text="Отчетность"
         style="@style/SecondViewStyle"
         app:layout_constraintTop_toBottomOf="@id/mainLabel"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/CtrFr_BackToMainMenu_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="Главное меню"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="25dp"
-        android:textSize="20sp"
-        app:cornerRadius="36dp"
-        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
     <LinearLayout
@@ -48,7 +36,7 @@
         android:layout_marginEnd="35dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/CtrFr_BackToMainMenu_btn">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/CtrFr_tvDate"
@@ -225,110 +213,6 @@
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/third"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/second"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="25dp"
-        >
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/CtrFr_tv_operations"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:text="Операции"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:textAllCaps="false"
-            android:textStyle="normal"
-            android:textColor="@color/black"
-            android:layout_marginStart="25dp"
-            android:fontFamily="sans-serif-medium"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_operations"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
-            android:background="@color/white"
-            app:boxBackgroundMode="filled"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ed_operations"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textStyle="normal"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:inputType="textMultiLine"
-                android:singleLine="true"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/fourth"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/third"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="25dp"
-        >
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/CtrFr_tv_parameters"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:text="Параметры контроля"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:textAllCaps="false"
-            android:textStyle="normal"
-            android:textColor="@color/black"
-            android:layout_marginStart="25dp"
-            android:fontFamily="sans-serif-medium"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_parameters"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
-            android:background="@color/white"
-            app:boxBackgroundMode="filled"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ed_parameters"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=""
-                android:textStyle="normal"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:inputType="textMultiLine"
-                android:singleLine="true"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/lin_123"
@@ -337,7 +221,7 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fourth"
+        app:layout_constraintTop_toBottomOf="@id/second"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="25dp"
         android:weightSum="4"
@@ -471,71 +355,30 @@
         >
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/CtrFrr_back_btn"
-            android:layout_width="140dp"
+            android:id="@+id/CtrFrr_btn_Back"
+            android:layout_width="160dp"
             android:layout_height="60dp"
             android:text="Назад"
-            android:textSize="18sp"
-            android:layout_weight="1"
-            android:layout_marginEnd="5dp"
-            android:backgroundTint="@android:color/black"
-            app:cornerRadius="36dp"
+            android:textSize="20sp"
+            android:layout_marginEnd="25dp"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            app:cornerRadius="36dp"
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/CtrFrr_signUp_btn"
-            android:layout_width="140dp"
+            android:id="@+id/CtrFrr_btn_Next"
+            android:layout_width="160dp"
             android:layout_height="60dp"
             android:text="Записать"
-            android:textSize="18sp"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
-            android:backgroundTint="@android:color/black"
-            app:cornerRadius="36dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bottomLeftLienar"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="25dp"
-        >
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/CtrFr_AddPhotoBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="Добавить фото"
-            android:textSize="18sp"
-            android:backgroundTint="@android:color/black"
-            app:cornerRadius="36dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            />
-
-        <TextView
-            android:id="@+id/CtrFr_PhotoName_tv"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:text="Фотография нe выбрана"
             android:textSize="20sp"
-            android:textColor="@color/dark_grey"
-            android:textStyle="normal"
-            android:textAllCaps="false"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginStart="25dp"
+            android:backgroundTint="@android:color/black"
+            app:cornerRadius="36dp"
+            android:layout_gravity="center"
             android:gravity="center"
+
             />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

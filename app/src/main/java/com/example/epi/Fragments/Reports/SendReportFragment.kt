@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
-import com.example.epi.databinding.FragmentReportsBinding
+import com.example.epi.databinding.FragmentSendReportBinding
 
 
-class ReportsFragment : Fragment() {
-    private var _binding: FragmentReportsBinding? = null
+class SendReportFragment : Fragment() {
+
+    private var _binding : FragmentSendReportBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -19,15 +20,19 @@ class ReportsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentReportsBinding.inflate(inflater, container, false)
+        _binding = FragmentSendReportBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.RepFrMainMenuBtn.setOnClickListener {
-            findNavController().navigate(R.id.StartFragment)
+        binding.SeRFrBtnNext.setOnClickListener {
+            findNavController().navigate(R.id.reportsFragment)
+        }
+
+        binding.SeRFrBtnBack.setOnClickListener {
+            findNavController().navigate(R.id.fixFragment)
         }
     }
 
