@@ -43,52 +43,12 @@ class ControlFragment : Fragment() {
             findNavController().navigate(R.id.transportFragment)
         }
 
-        binding.edLocation.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: местоположение",
-                Toast.LENGTH_LONG).show()
+        binding.CtrFrBtnReport.setOnClickListener {
+            findNavController().navigate(R.id.inspectionReportFragment)
         }
 
-        binding.edEquipmentName.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: наименование прибора / оборудования",
-                Toast.LENGTH_LONG).show()
-        }
-
-        binding.edType.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: виды работ",
-                Toast.LENGTH_LONG).show()
-        }
-
-        binding.et123.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: какое-то странное поле))",
-                Toast.LENGTH_LONG).show()
-        }
-
-        binding.etWorkReport.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: краткий отчет о работе",
-                Toast.LENGTH_LONG).show()
-        }
-
-        binding.CtrFrIssieOderBtn.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: выдать предписание",
-                Toast.LENGTH_LONG).show()
-        }
-
-        binding.CtrFrAddWorkBtn.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: добавить работы",
-                Toast.LENGTH_LONG).show()
-        }
-
-        binding.CtrFrDeleteWorksBtn.setOnClickListener {
-            Toast.makeText(requireContext(),
-                "Выбрано: удалить работы",
-                Toast.LENGTH_LONG).show()
+        binding.CtrFrBtnDocsReport.setOnClickListener {
+            findNavController().navigate(R.id.commentsDocsFragment)
         }
 
         binding.CtrFrrBtnNext.setOnClickListener {

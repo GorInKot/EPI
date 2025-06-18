@@ -1,6 +1,9 @@
 plugins {
+//    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
+
 }
 
 android {
@@ -40,6 +43,20 @@ android {
 }
 
 dependencies {
+
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "com.intellij" && requested.name == "annotations") {
+                useTarget("org.jetbrains:annotations:23.0.0")
+            }
+        }
+    }
+
+
+
+    implementation("androidx.room:room-ktx:2.7.1")
+    kapt("androidx.room:room-compiler:2.7.1")
+    implementation("androidx.room:room-compiler:2.7.1")
 
     implementation("com.google.android.material:material:1.11.0")
 

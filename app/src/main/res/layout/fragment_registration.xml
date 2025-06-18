@@ -243,7 +243,7 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Пароль -->
+        <!-- Локация -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -255,7 +255,7 @@
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Пароль"
+                android:text="Локация"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="center"
@@ -266,23 +266,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Придумайте пароль"
+                android:hint="Выберите локацию"
                 app:boxBackgroundMode="filled"
                 app:boxCornerRadiusTopStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"
                 app:boxCornerRadiusBottomStart="24dp"
                 app:boxCornerRadiusBottomEnd="24dp"
-                app:passwordToggleEnabled="true"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:boxStrokeColor="@android:color/transparent"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPassword"
+                    android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
+                    android:inputType="text"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -299,7 +298,7 @@
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Повторите пароль"
+                android:text="ПУ"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="center"
@@ -310,23 +309,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Повтор пароля"
+                android:hint="Выберите ПУ"
                 app:boxBackgroundMode="filled"
                 app:boxCornerRadiusTopStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"
                 app:boxCornerRadiusBottomStart="24dp"
                 app:boxCornerRadiusBottomEnd="24dp"
-                app:passwordToggleEnabled="true"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:boxStrokeColor="@android:color/transparent"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etConfirmPassword"
+                    android:id="@+id/etPU"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
+                    android:inputType="text"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>

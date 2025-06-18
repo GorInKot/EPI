@@ -41,7 +41,7 @@
 
     <fragment
         android:id="@+id/transportFragment"
-        android:name="com.example.epi.Fragments.Arrangement.Transport.TransportFragment"
+        android:name="com.example.epi.Fragments.Transport.TransportFragment"
         android:label="Transport"
         tools:layout="@layout/fragment_transport"
         />
@@ -66,6 +66,18 @@
         android:label="Auth"
         tools:layout="@layout/fragment_auth"
         />
+
+    <fragment
+        android:id="@+id/inspectionReportFragment"
+        android:name="com.example.epi.Fragments.Control.InspectionReport.InspectionReportFragment"
+        android:label="InspectionReport"
+        tools:layout="@layout/fragment_inspection_report"/>
+
+    <fragment
+        android:id="@+id/commentsDocsFragment"
+        android:name="com.example.epi.Fragments.Control.CommentsDocs.CommentsDocsFragment"
+        android:label="CommentsDocs"
+        tools:layout="@layout/fragment_comments_docs"/>
 
 
 </navigation>

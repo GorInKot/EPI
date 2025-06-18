@@ -6,14 +6,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Arrangement.ArrangementFragment"
-    android:background="@color/background_one"
-    >
-
+    android:background="@color/background_one">
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/ArranFragment_MainLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Общие данные"
+        android:text="Расстановка"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/LabelViewStyle"
@@ -27,9 +25,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ArranFragment_MainLabel"
-        >
-
+        app:layout_constraintTop_toBottomOf="@id/ArranFragment_MainLabel">
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/AttrFr_tvDate"
             android:layout_width="wrap_content"
@@ -43,10 +39,7 @@
             android:textStyle="normal"
             android:textAllCaps="false"
             android:layout_gravity="center"
-            android:gravity="center|left"
-            />
-
-
+            android:gravity="center|left"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/AttrFr_tvTime"
             android:layout_width="wrap_content"
@@ -60,8 +53,7 @@
             android:textStyle="normal"
             android:textAllCaps="false"
             android:layout_gravity="center"
-            android:gravity="center|left"
-            />
+            android:gravity="center|left"/>
     </LinearLayout>
 
     <LinearLayout
@@ -74,8 +66,6 @@
         app:layout_constraintTop_toBottomOf="@id/AttFr_LinTop"
         app:layout_constraintBottom_toBottomOf="parent"
         >
-
-        <!-- Левый Блок  -->
         <LinearLayout
             android:id="@+id/AttFr_LinMidLeft"
             android:layout_width="match_parent"
@@ -84,22 +74,67 @@
             android:orientation="vertical"
             >
 
-            <!-- Блок Заказчик -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
                 >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/AttFr_tv_WorkType"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="Режим работы:"
+                        android:textSize="22sp"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="25dp"
+                        android:gravity="center"
+                        style="@style/usualTextViewStyle"
+                        />
 
-                <!-- Первая строка: надпись + выпадающий список -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_autoWorkType"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteWorkType"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="22sp"
+                            android:hint="Режим работы"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:inputType="text"
+                            android:textColor="@color/black"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     >
-
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/AttFr_tvCustomer"
                         android:layout_width="200dp"
@@ -111,8 +146,6 @@
                         android:gravity="center"
                         style="@style/usualTextViewStyle"
                         />
-
-                    <!-- Выпадающий список -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_autoCustomer"
                         android:layout_width="300dp"
@@ -121,7 +154,6 @@
                         app:boxBackgroundMode="filled"
                         android:background="@color/white"
                         >
-
                         <AutoCompleteTextView
                             android:id="@+id/autoCompleteCustomer"
                             android:layout_width="match_parent"
@@ -135,7 +167,6 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Поле ручного ввода (по умолчанию скрыто) -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_manualCustomer"
                         android:layout_width="300dp"
@@ -146,7 +177,6 @@
                         app:boxBackgroundMode="filled"
                         android:background="@color/white"
                         >
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edManualCustomer"
                             android:layout_width="match_parent"
@@ -159,8 +189,6 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
-                <!-- Чекбокс -->
                 <CheckBox
                     android:id="@+id/checkBoxManualCustomer"
                     android:layout_width="wrap_content"
@@ -170,23 +198,18 @@
                     android:layout_marginStart="240dp"
                     />
             </LinearLayout>
-
-            <!-- Блок Объект -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
                 >
-
-                <!-- Первая строка: надпись + выпадающий список -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     >
-
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/AttFr_tvObject"
                         android:layout_width="200dp"
@@ -198,8 +221,6 @@
                         android:gravity="center"
                         style="@style/usualTextViewStyle"
                         />
-
-                    <!-- Выпадающий список -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_autoObject"
                         android:layout_width="300dp"
@@ -208,7 +229,6 @@
                         app:boxBackgroundMode="filled"
                         android:background="@color/white"
                         >
-
                         <AutoCompleteTextView
                             android:id="@+id/autoCompleteObject"
                             android:layout_width="match_parent"
@@ -222,7 +242,6 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Поле ручного ввода (по умолчанию скрыто) -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_manualObject"
                         android:layout_width="300dp"
@@ -258,6 +277,8 @@
                     />
             </LinearLayout>
 
+
+
             <!-- Блок Участок -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -265,46 +286,59 @@
                 android:layout_weight="1"
                 >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/AttFr_tvPlot"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Участок:"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:textAllCaps="false"
-                    android:textStyle="normal"
-                    android:layout_marginStart="25dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    style="@style/usualTextViewStyle"
-                    />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_edPlot"
-                    android:layout_width="300dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@color/white"
-                    app:boxBackgroundMode="filled"
-                    android:layout_gravity="center"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
                     >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ed_Plot"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textStyle="normal"
-                        android:textColor="@color/black"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/AttFr_tvPlot"
+                        android:layout_width="200dp"
+                        android:layout_height="60dp"
+                        android:text="Участок:"
                         android:textSize="22sp"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:hint="Подсказка"
+                        android:textColor="@color/black"
+                        android:textAllCaps="false"
+                        android:textStyle="normal"
+                        android:layout_marginStart="25dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        style="@style/usualTextViewStyle"
                         />
-                </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_edPlot"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="15dp"
+                        app:boxBackgroundMode="filled"
+                        android:background="@color/white"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ed_Plot"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text=""
+                            android:textStyle="normal"
+                            android:textColor="@color/black"
+                            android:textSize="22sp"
+                            android:inputType="textMultiLine"
+                            android:singleLine="true"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:hint="Подсказка"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -696,7 +730,7 @@
                     android:id="@+id/AttFr_tvRepSSK_Sub"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="Представитель\nССК ПО (суб):"
+                    android:text="Представитель\nССК ПО (Суб):"
                     android:textSize="22sp"
                     android:textColor="@color/black"
                     android:textAllCaps="false"

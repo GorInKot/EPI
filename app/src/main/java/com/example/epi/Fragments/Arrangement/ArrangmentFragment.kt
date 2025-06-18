@@ -1,6 +1,7 @@
 package com.example.epi.Fragments.Arrangement
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,12 +37,41 @@ class ArrangementFragment : Fragment() {
         binding.AttrFrTvDate.text = "Дата: $currentDate"
         binding.AttrFrTvTime.text = "Время: $currentTime"
 
-        // Левый блок
+        // <!-- Левый блок -->
 
-        // Выпадающий список заказчиков
-        val customerList = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, customerList)
-        binding.autoCompleteCustomer.setAdapter(adapter)
+        // Режим работы
+        val workTypesList = listOf("Вахта", "Стандартный", "Суммированный")
+        val workTypeAdapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, workTypesList)
+
+        binding.autoCompleteWorkType.setAdapter(workTypeAdapter)
+
+        binding.autoCompleteWorkType.inputType = InputType.TYPE_NULL
+        binding.autoCompleteWorkType.keyListener = null
+        binding.autoCompleteWorkType.setOnTouchListener { v, event ->
+            binding.autoCompleteWorkType.showDropDown()
+            false
+        }
+        binding.autoCompleteWorkType.setOnItemClickListener { parent, view, position, id ->
+            val selectedWorkType = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+        }
+
+        // Заказчик
+        val customerList = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
+        val customerListAdapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, customerList)
+
+        binding.autoCompleteCustomer.setAdapter(customerListAdapter)
+
+        binding.autoCompleteCustomer.setOnTouchListener { v, event ->
+            binding.autoCompleteCustomer.showDropDown()
+            false
+        }
+        binding.autoCompleteCustomer.setOnItemClickListener { parent, view, position, id ->
+            val selectedWorkType = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+        }
 
         // Заказчик: обработка CheckBox
         binding.checkBoxManualCustomer.setOnCheckedChangeListener { _, isChecked ->
@@ -52,6 +82,22 @@ class ArrangementFragment : Fragment() {
                 binding.textInputLayoutAutoCustomer.visibility = View.VISIBLE
                 binding.textInputLayoutManualCustomer.visibility = View.GONE
             }
+        }
+
+        // Объект
+        val objectList = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
+        val objectListAdapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, objectList)
+
+        binding.autoCompleteObject.setAdapter(objectListAdapter)
+
+        binding.autoCompleteObject.setOnTouchListener { v, event ->
+            binding.autoCompleteObject.showDropDown()
+            false
+        }
+        binding.autoCompleteObject.setOnItemClickListener { parent, view, position, id ->
+            val selectedWorkType = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
         }
 
         // Объект: обработка CheckBox
@@ -65,8 +111,30 @@ class ArrangementFragment : Fragment() {
             }
         }
 
+        // TODO - Участок
+        val inputTextPlot = binding.edPlot.text!!.toString().trim()
+        if (inputTextPlot.isNotEmpty()) {
+            Log.d("TextUnput", "Введено: $inputTextPlot")
+        }
+
+        // Генподрядчик
+        val contractorList = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
+        val contractorListAdapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, contractorList)
+
+        binding.autoCompleteContractor.setAdapter(contractorListAdapter)
+
+        binding.autoCompleteContractor.setOnTouchListener { v, event ->
+            binding.autoCompleteContractor.showDropDown()
+            false
+        }
+        binding.autoCompleteContractor.setOnItemClickListener { parent, view, position, id ->
+            val selectedWorkType = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+        }
+
         // Генподрядчик: обработка CheckBox
-        binding.checkBoxManualObject.setOnCheckedChangeListener { _, isChecked ->
+        binding.checkBoxManualContractor.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.textInputLayoutAutoContractor.visibility = View.GONE
                 binding.textInputLayoutManualContractor.visibility = View.VISIBLE
@@ -76,14 +144,16 @@ class ArrangementFragment : Fragment() {
             }
         }
 
-
         // Кнопка "Копия предыдущего отчета"
         binding.AttrFrBtnCopy.setOnClickListener {
-            Toast.makeText(requireContext(),"Просто кнопка",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"Пока ничего не происходит",Toast.LENGTH_SHORT).show()
         }
 
         // Кнопка "Очистить"
         binding.AttrFrBtnClear.setOnClickListener {
+            // Режим работы
+            binding.autoCompleteWorkType.text!!.clear()
+
             // Заказчик
             binding.autoCompleteCustomer.text!!.clear()
             binding.edManualCustomer.text!!.clear()
@@ -114,13 +184,75 @@ class ArrangementFragment : Fragment() {
 
             // Представитель ССУ ПО (Суб)
             binding.edRepSSKSub.text!!.clear()
+
+            binding.checkBoxManualCustomer.isChecked = false
+            binding.checkBoxManualObject.isChecked = false
+            binding.checkBoxManualContractor.isChecked = false
+            binding.checkBoxManualSubContractor.isChecked = false
+        }
+
+        // <!-- Правый блок -->
+
+        // Представитель Генподрядчика
+        val subContractorList = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2", "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
+        val subContractorListAdapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, subContractorList)
+
+        binding.autoCompleteSubContractor.setAdapter(subContractorListAdapter)
+
+        binding.autoCompleteSubContractor.setOnTouchListener { v, event ->
+            binding.autoCompleteSubContractor.showDropDown()
+            false
+        }
+        binding.autoCompleteSubContractor.setOnItemClickListener { parent, view, position, id ->
+            val selectedWorkType = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+        }
+
+        // Генподрядчик: обработка CheckBox
+        binding.checkBoxManualSubContractor.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.textInputLayoutAutoSubContractor.visibility = View.GONE
+                binding.textInputLayoutManualSybContractor.visibility = View.VISIBLE
+            } else {
+                binding.textInputLayoutAutoSubContractor.visibility = View.VISIBLE
+                binding.textInputLayoutManualSybContractor.visibility = View.GONE
+            }
+        }
+
+        // Представитель ССК ПО (ГП)
+        // TODO - Представитель ССК ПО (ГП)
+        val inputTextRepSSKGp = binding.edRepSSKGp.text!!.toString().trim()
+        if (inputTextRepSSKGp.isNotEmpty()) {
+            Log.d("TextUnput", "Введено: $inputTextRepSSKGp")
+        }
+
+        // Субподрядчик
+        // TODO - Субподрядчик
+        val inputTextSubConstractor = binding.edSubcontractor.text!!.toString().trim()
+        if (inputTextSubConstractor.isNotEmpty()) {
+            Log.d("TextUnput", "Введено: $inputTextSubConstractor")
+        }
+
+        // Представитель Субподрядчика
+        // TODO - Представитель Субподрядчика
+        val inputTextRepSubConstractor = binding.edRepSubcontractor.text!!.toString().trim()
+        if (inputTextRepSubConstractor.isNotEmpty()) {
+            Log.d("TextUnput", "Введено: $inputTextRepSubConstractor")
+        }
+
+        // Представитель ССК ПО (Суб)
+        // TODO - Представитель ССК ПО (Суб)
+        val inputTextRepSSKSub = binding.edRepSSKSub.text!!.toString().trim()
+        if (inputTextRepSSKSub.isNotEmpty()) {
+            Log.d("TextUnput", "Введено: $inputTextRepSSKSub")
         }
 
         // Кнопка "Далее"
         binding.AttrFrBtnNext.setOnClickListener {
             findNavController().navigate(R.id.transportFragment)
         }
-
+        // Кнопка "Назад"
         binding.AttrFrrBtnBack.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
         }

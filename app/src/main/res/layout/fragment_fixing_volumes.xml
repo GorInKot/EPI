@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Фиксация объемов"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             style="@style/LabelViewStyle"
             />
 
@@ -34,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             >
 
             <com.google.android.material.textview.MaterialTextView
@@ -57,7 +57,7 @@
                 android:id="@+id/textInputLayout_location"
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="16dp"
                 android:background="@color/white"
                 app:boxBackgroundMode="filled"
                 >
@@ -72,8 +72,8 @@
                     android:textSize="22sp"
                     android:inputType="textMultiLine"
                     android:singleLine="true"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,13 +81,13 @@
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:text="Название прибора/\nоборудования"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="48dp"
                 android:textSize="20sp"
                 android:textAllCaps="false"
                 android:textStyle="normal"
                 android:textColor="@color/black"
                 android:fontFamily="sans-serif-medium"
-                android:paddingStart="5dp"
+                android:paddingStart="8dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 />
@@ -96,8 +96,8 @@
                 android:id="@+id/textInputLayout_equipmentName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:background="@color/white"
                 app:boxBackgroundMode="filled"
                 >
@@ -112,8 +112,8 @@
                     android:textSize="22sp"
                     android:inputType="textMultiLine"
                     android:singleLine="true"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,8 +127,8 @@
             android:layout_height="130dp"
             android:orientation="horizontal"
             android:layout_marginTop="15dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             >
 
             <com.google.android.material.textview.MaterialTextView
@@ -149,7 +149,7 @@
                 android:id="@+id/a123"
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="16dp"
                 android:background="@color/white"
                 app:boxBackgroundMode="filled"
                 >
@@ -165,7 +165,7 @@
                     android:inputType="textMultiLine"
                     android:singleLine="true"
                     android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
+                    android:paddingEnd="8dp"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -178,7 +178,7 @@
                 android:textStyle="normal"
                 android:textColor="@color/black"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="16dp"
                 android:paddingStart="5dp"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -391,7 +391,7 @@
             android:layout_marginTop="20dp"
             android:gravity="end"
             android:layout_gravity="end"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="24dp"
             >
 
             <com.google.android.material.button.MaterialButton
@@ -401,7 +401,7 @@
                 android:layout_width="160dp"
                 android:layout_height="60dp"
                 android:textSize="18sp"
-                android:layout_marginEnd="25dp"
+                android:layout_marginEnd="24dp"
                 android:layout_gravity="center"
                 app:cornerRadius="36dp"
                 android:gravity="center"
@@ -415,7 +415,7 @@
                 android:textSize="18sp"
                 android:layout_gravity="center"
                 app:cornerRadius="36dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="24dp"
                 android:gravity="center"
                 />
         </LinearLayout>
@@ -430,8 +430,8 @@
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:fontFamily="sans-serif-medium"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -445,8 +445,8 @@
             android:layout_marginTop="4dp"
             android:hint="Объем работ"
             app:hintTextColor="@color/light_grey"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:scrollbars="vertical"
             >
 
@@ -471,7 +471,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="16dp"
             android:gravity="end"
             android:layout_gravity="end"
@@ -483,7 +483,6 @@
                 android:layout_height="60dp"
                 android:text="Назад"
                 android:textSize="20sp"
-                android:layout_marginEnd="25dp"
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/holo_orange_dark"
                 app:cornerRadius="36dp"
@@ -500,7 +499,7 @@
                 android:layout_gravity="center"
                 android:backgroundTint="@android:color/background_dark"
                 app:cornerRadius="36dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="24dp"
                 />
         </LinearLayout>
     </LinearLayout>
