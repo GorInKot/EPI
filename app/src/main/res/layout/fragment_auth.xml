@@ -24,6 +24,8 @@
             android:textColor="@color/black"
             android:layout_marginBottom="24dp"
             style="@style/LabelViewStyle"
+            android:gravity="center"
+            android:layout_gravity="center"
             />
 
         <!-- Табельный номер -->
@@ -33,6 +35,8 @@
             android:orientation="horizontal"
             android:layout_marginBottom="16dp"
             android:gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             >
 
             <TextView
@@ -76,6 +80,8 @@
             android:orientation="horizontal"
             android:layout_marginBottom="24dp"
             android:gravity="center_vertical"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             >
 
             <TextView
@@ -116,30 +122,36 @@
         <!-- Кнопка входа -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Войти"
             style="@style/UnusualButton"
+            android:gravity="center"
+            android:layout_gravity="center"
             />
 
         <!-- Кнопка на регистрацию -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnToRegister"
-            android:layout_width="match_parent"
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
             style="@style/UnusualButton"
             android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:layout_gravity="center"
             />
 
         <!-- Кнопка возврата -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBackToMenu"
-            android:layout_width="match_parent"
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Главное меню"
             style="@style/UnusualButton"
             android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:layout_gravity="center"
             />
     </LinearLayout>
 </ScrollView>

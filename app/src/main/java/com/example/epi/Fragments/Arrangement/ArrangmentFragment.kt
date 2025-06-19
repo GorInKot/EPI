@@ -1,51 +1,64 @@
 package com.example.epi.Fragments.Arrangement
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
-import android.util.Log
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentArrangmentBinding
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ArrangementFragment : Fragment() {
     private var _binding: FragmentArrangmentBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: ArrangementViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentArrangmentBinding.inflate(inflater, container, false )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity())[ArrangementViewModel::class.java]
 
+        setupDateTime()
+        setupLeftBlock()
+        setupRightBlock()
+        setupButtons()
+        setupViewModelObservers()
+    }
+
+    private fun setupDateTime() {
         // Обработка даты и времени
-        val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-        val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-        binding.AttrFrTvDate.text = "Дата: $currentDate"
-        binding.AttrFrTvTime.text = "Время: $currentTime"
+        viewModel.currentDate.observe(viewLifecycleOwner) {
+            binding.AttrFrTvDate.text = "Дата: $it"
+        }
+        viewModel.currentTime.observe(viewLifecycleOwner) {
+            binding.AttrFrTvTime.text = "Время: $it"
+        }
+    }
 
-        // <!-- Левый блок -->
-
+    private fun setupLeftBlock() {
         // Режим работы
-        val workTypesList = listOf("Вахта", "Стандартный", "Суммированный")
-        val workTypeAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item, workTypesList)
-
+        val workTypeAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            viewModel.workTypes
+        )
         binding.autoCompleteWorkType.setAdapter(workTypeAdapter)
-
         binding.autoCompleteWorkType.inputType = InputType.TYPE_NULL
         binding.autoCompleteWorkType.keyListener = null
         binding.autoCompleteWorkType.setOnTouchListener { v, event ->
@@ -58,196 +71,143 @@ class ArrangementFragment : Fragment() {
         }
 
         // Заказчик
-        val customerList = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
-        val customerListAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item, customerList)
-
+        val customerListAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            viewModel.customers)
         binding.autoCompleteCustomer.setAdapter(customerListAdapter)
-
         binding.autoCompleteCustomer.setOnTouchListener { v, event ->
             binding.autoCompleteCustomer.showDropDown()
             false
         }
         binding.autoCompleteCustomer.setOnItemClickListener { parent, view, position, id ->
-            val selectedWorkType = parent.getItemAtPosition(position).toString()
-            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+            val selectedCustomer = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedCustomer", Toast.LENGTH_SHORT).show()
         }
 
         // Заказчик: обработка CheckBox
-        binding.checkBoxManualCustomer.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.textInputLayoutAutoCustomer.visibility = View.GONE
-                binding.textInputLayoutManualCustomer.visibility = View.VISIBLE
-            } else {
-                binding.textInputLayoutAutoCustomer.visibility = View.VISIBLE
-                binding.textInputLayoutManualCustomer.visibility = View.GONE
-            }
-        }
+        setupToggleCheckbox(
+            binding.checkBoxManualCustomer,
+            binding.textInputLayoutAutoCustomer,
+            binding.textInputLayoutManualCustomer
+        )
 
         // Объект
-        val objectList = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
-        val objectListAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item, objectList)
-
+        val objectListAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            viewModel.objects
+        )
         binding.autoCompleteObject.setAdapter(objectListAdapter)
-
         binding.autoCompleteObject.setOnTouchListener { v, event ->
             binding.autoCompleteObject.showDropDown()
             false
         }
         binding.autoCompleteObject.setOnItemClickListener { parent, view, position, id ->
-            val selectedWorkType = parent.getItemAtPosition(position).toString()
-            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+            val selectedObject = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedObject", Toast.LENGTH_SHORT).show()
         }
 
         // Объект: обработка CheckBox
-        binding.checkBoxManualObject.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.textInputLayoutAutoObject.visibility = View.GONE
-                binding.textInputLayoutManualObject.visibility = View.VISIBLE
-            } else {
-                binding.textInputLayoutAutoObject.visibility = View.VISIBLE
-                binding.textInputLayoutManualObject.visibility = View.GONE
-            }
-        }
+        setupToggleCheckbox(
+            binding.checkBoxManualObject,
+            binding.textInputLayoutAutoObject,
+            binding.textInputLayoutManualObject
+        )
 
-        // TODO - Участок
-        val inputTextPlot = binding.edPlot.text!!.toString().trim()
-        if (inputTextPlot.isNotEmpty()) {
-            Log.d("TextUnput", "Введено: $inputTextPlot")
-        }
+        binding.edPlot.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onPlotChanged(s.toString())
+            }
+        })
 
         // Генподрядчик
-        val contractorList = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
-        val contractorListAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item, contractorList)
-
+        val contractorListAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            viewModel.contractors
+        )
         binding.autoCompleteContractor.setAdapter(contractorListAdapter)
-
         binding.autoCompleteContractor.setOnTouchListener { v, event ->
             binding.autoCompleteContractor.showDropDown()
             false
         }
         binding.autoCompleteContractor.setOnItemClickListener { parent, view, position, id ->
-            val selectedWorkType = parent.getItemAtPosition(position).toString()
-            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+            val selectedContractor = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedContractor", Toast.LENGTH_SHORT).show()
         }
-
         // Генподрядчик: обработка CheckBox
-        binding.checkBoxManualContractor.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.textInputLayoutAutoContractor.visibility = View.GONE
-                binding.textInputLayoutManualContractor.visibility = View.VISIBLE
-            } else {
-                binding.textInputLayoutAutoContractor.visibility = View.VISIBLE
-                binding.textInputLayoutManualContractor.visibility = View.GONE
-            }
-        }
+        setupToggleCheckbox(
+            binding.checkBoxManualContractor,
+            binding.textInputLayoutAutoContractor,
+            binding.textInputLayoutManualContractor
+        )
+    }
 
-        // Кнопка "Копия предыдущего отчета"
-        binding.AttrFrBtnCopy.setOnClickListener {
-            Toast.makeText(requireContext(),"Пока ничего не происходит",Toast.LENGTH_SHORT).show()
-        }
-
-        // Кнопка "Очистить"
-        binding.AttrFrBtnClear.setOnClickListener {
-            // Режим работы
-            binding.autoCompleteWorkType.text!!.clear()
-
-            // Заказчик
-            binding.autoCompleteCustomer.text!!.clear()
-            binding.edManualCustomer.text!!.clear()
-
-            // Объект
-            binding.autoCompleteObject.text!!.clear()
-            binding.edManualObject.text!!.clear()
-
-            // Участок
-            binding.edPlot.text!!.clear()
-
-            // Генподрядчик
-            binding.autoCompleteContractor.text!!.clear()
-            binding.edManualContractor.text!!.clear()
-
-            // Представитель генподрядчика
-            binding.autoCompleteSubContractor.text!!.clear()
-            binding.edManualSubContractor.text!!.clear()
-
-            // Представитель ССК ПО (ГП)
-            binding.edRepSSKGp.text!!.clear()
-
-            // Субподрядчик
-            binding.edSubcontractor.text!!.clear()
-
-            // Представитель Субподрядчика
-            binding.edRepSubcontractor.text!!.clear()
-
-            // Представитель ССУ ПО (Суб)
-            binding.edRepSSKSub.text!!.clear()
-
-            binding.checkBoxManualCustomer.isChecked = false
-            binding.checkBoxManualObject.isChecked = false
-            binding.checkBoxManualContractor.isChecked = false
-            binding.checkBoxManualSubContractor.isChecked = false
-        }
-
-        // <!-- Правый блок -->
-
+    private fun setupRightBlock() {
         // Представитель Генподрядчика
-        val subContractorList = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2", "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
-        val subContractorListAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item, subContractorList)
-
+        val subContractorListAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            viewModel.subContractors
+        )
         binding.autoCompleteSubContractor.setAdapter(subContractorListAdapter)
-
         binding.autoCompleteSubContractor.setOnTouchListener { v, event ->
             binding.autoCompleteSubContractor.showDropDown()
             false
         }
         binding.autoCompleteSubContractor.setOnItemClickListener { parent, view, position, id ->
-            val selectedWorkType = parent.getItemAtPosition(position).toString()
-            Toast.makeText(requireContext(),  "Вы выбрали: $selectedWorkType", Toast.LENGTH_SHORT).show()
+            val selectedSubContractor = parent.getItemAtPosition(position).toString()
+            Toast.makeText(requireContext(),  "Вы выбрали: $selectedSubContractor", Toast.LENGTH_SHORT).show()
         }
 
         // Генподрядчик: обработка CheckBox
-        binding.checkBoxManualSubContractor.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.textInputLayoutAutoSubContractor.visibility = View.GONE
-                binding.textInputLayoutManualSybContractor.visibility = View.VISIBLE
-            } else {
-                binding.textInputLayoutAutoSubContractor.visibility = View.VISIBLE
-                binding.textInputLayoutManualSybContractor.visibility = View.GONE
-            }
-        }
+        setupToggleCheckbox(
+            binding.checkBoxManualSubContractor,
+            binding.textInputLayoutAutoSubContractor,
+            binding.textInputLayoutManualSubContractor
+        )
 
         // Представитель ССК ПО (ГП)
-        // TODO - Представитель ССК ПО (ГП)
-        val inputTextRepSSKGp = binding.edRepSSKGp.text!!.toString().trim()
-        if (inputTextRepSSKGp.isNotEmpty()) {
-            Log.d("TextUnput", "Введено: $inputTextRepSSKGp")
-        }
+        binding.edRepSSKGp.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onRepSSKGpChanged(s.toString())
+            }
+        })
 
         // Субподрядчик
-        // TODO - Субподрядчик
-        val inputTextSubConstractor = binding.edSubcontractor.text!!.toString().trim()
-        if (inputTextSubConstractor.isNotEmpty()) {
-            Log.d("TextUnput", "Введено: $inputTextSubConstractor")
-        }
+        binding.edSubcontractor.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onSubContractorChanged(s.toString())
+            }
+        })
 
         // Представитель Субподрядчика
-        // TODO - Представитель Субподрядчика
-        val inputTextRepSubConstractor = binding.edRepSubcontractor.text!!.toString().trim()
-        if (inputTextRepSubConstractor.isNotEmpty()) {
-            Log.d("TextUnput", "Введено: $inputTextRepSubConstractor")
-        }
+        binding.edRepSubcontractor.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onRepSubcontractorChanged(s.toString())
+            }
+        })
 
         // Представитель ССК ПО (Суб)
-        // TODO - Представитель ССК ПО (Суб)
-        val inputTextRepSSKSub = binding.edRepSSKSub.text!!.toString().trim()
-        if (inputTextRepSSKSub.isNotEmpty()) {
-            Log.d("TextUnput", "Введено: $inputTextRepSSKSub")
-        }
+        binding.edRepSSKSub.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onRepSSKSubChanged(s.toString())
+            }
+        })
+    }
 
+    private fun setupButtons() {
         // Кнопка "Далее"
         binding.AttrFrBtnNext.setOnClickListener {
             findNavController().navigate(R.id.transportFragment)
@@ -255,6 +215,67 @@ class ArrangementFragment : Fragment() {
         // Кнопка "Назад"
         binding.AttrFrrBtnBack.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
+        }
+        // Кнопка "Копия предыдущего отчета"
+        binding.AttrFrBtnCopy.setOnClickListener {
+            Toast.makeText(requireContext(),"Пока ничего не происходит",Toast.LENGTH_SHORT).show()
+        }
+
+        // Кнопка "Очистить"
+        binding.AttrFrBtnClear.setOnClickListener {
+            viewModel.clearAll()
+            binding.checkBoxManualCustomer.isChecked = false
+            binding.checkBoxManualObject.isChecked = false
+            binding.checkBoxManualContractor.isChecked = false
+            binding.checkBoxManualSubContractor.isChecked = false
+        }
+    }
+
+    private fun setupViewModelObservers() {
+        // Участок
+        viewModel.plotText.observe(viewLifecycleOwner) {text ->
+            if (binding.edPlot.text.toString() != text) { binding.edPlot.setText(text) }
+        }
+
+        // Представитель ССК ПО (ГП)
+        viewModel.repSSKGpText.observe(viewLifecycleOwner) {text ->
+            if (binding.edRepSSKGp.text.toString() != text) { binding.edRepSSKGp.setText(text) }
+        }
+
+        // Субподрядчик
+        viewModel.subContractorText.observe(viewLifecycleOwner) { text ->
+            if (binding.edSubcontractor.text.toString() != text) {
+                binding.edSubcontractor.setText(text) }
+        }
+
+        // Представитель Субподрядчика
+        viewModel.repSubcontractorText.observe(viewLifecycleOwner) { text ->
+            if (binding.edRepSubcontractor.text.toString() != text) {
+                binding.edRepSubcontractor.setText(text)
+            }
+        }
+
+        // Представитель ССК ПО (Суб)
+        viewModel.repSSKSubText.observe(viewLifecycleOwner) { text ->
+            if (binding.edRepSSKSub.text.toString() != text) {
+                binding.edRepSSKSub.setText(text)
+            }
+        }
+    }
+
+    private fun setupToggleCheckbox(
+        checkbox: CheckBox,
+        autoInputLayout: View,
+        manualInputLayout: View
+    ) {
+        checkbox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                autoInputLayout.visibility = View.GONE
+                manualInputLayout.visibility = View.VISIBLE
+            } else {
+                autoInputLayout.visibility = View.VISIBLE
+                manualInputLayout.visibility = View.GONE
+            }
         }
     }
 

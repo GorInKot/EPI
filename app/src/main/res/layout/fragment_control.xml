@@ -403,7 +403,6 @@
             android:layout_height="60dp"
             android:text="Записать"
             android:textSize="20sp"
-            android:layout_marginStart="25dp"
             android:backgroundTint="@android:color/black"
             app:cornerRadius="36dp"
             android:layout_gravity="center"
