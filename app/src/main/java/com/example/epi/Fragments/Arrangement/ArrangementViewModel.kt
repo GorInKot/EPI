@@ -8,7 +8,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ArrangementViewModel : ViewModel() {
+class ArrangementViewModel: ViewModel() {
+
+    val isClearing = MutableLiveData(false)
+
+    private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    private fun now(): Date = Date()
 
     // --------------------------
     // Дата и время
@@ -18,6 +24,23 @@ class ArrangementViewModel : ViewModel() {
 
     private val _currentTime = MutableLiveData<String>()
     val currentTime: LiveData<String> = _currentTime
+
+    // --------------------------
+    // Состояния чекбоксов
+    // --------------------------
+    val isManualCustomer = MutableLiveData(false)
+    val isManualObject = MutableLiveData(false)
+    val isManualContractor = MutableLiveData(false)
+    val isManualSubContractor = MutableLiveData(false)
+
+    // --------------------------
+    // Ручной ввод
+    // --------------------------
+    val manualCustomer = MutableLiveData<String>()
+    val manualObject =  MutableLiveData<String>()
+    val manualContractor =  MutableLiveData<String>()
+    val manualSubContractor =  MutableLiveData<String>()
+
 
     // --------------------------
     // Списки для выбора
@@ -63,17 +86,21 @@ class ArrangementViewModel : ViewModel() {
     // Инициализация даты и времени
     // --------------------------
     init {
-        val now = Date()
-        _currentDate.value = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(now)
-        _currentTime.value = SimpleDateFormat("HH:mm", Locale.getDefault()).format(now)
+        val current = now()
+        _currentDate.value = dateFormat.format(current)
+        _currentTime.value = timeFormat.format(current)
     }
 
+    fun updateDateTime() {
+        val current = now()
+        _currentDate.value = dateFormat.format(current)
+        _currentTime.value = timeFormat.format(current)
+    }
     // --------------------------
     // Обновление текстов
     // --------------------------
     fun onPlotChanged(newText: String) {
         _plotText.value = newText
-        Log.d("ViewModel", "plotText изменилось: $newText")
     }
 
     fun onRepSSKGpChanged(newText: String) {
@@ -92,21 +119,37 @@ class ArrangementViewModel : ViewModel() {
         _repSSKSubText.value = newText
     }
 
-
     // --------------------------
     //  Полная очистка формы
     // --------------------------
     fun clearAll() {
+        Log.d("ViewModel", "Start clearing")
+        isClearing.value = true
+
         selectedWorkType.value = ""
         selectedCustomer.value = ""
         selectedObject.value = ""
         selectedContractor.value = ""
         selectedSubContractor.value = ""
 
+        manualCustomer.value = ""
+        manualObject.value = ""
+        manualContractor.value = ""
+        manualSubContractor.value = ""
+
+        isManualCustomer.value = false
+        isManualObject.value = false
+        isManualContractor.value = false
+        isManualSubContractor.value = false
+
         _plotText.value = ""
         _repSSKGpText.value = ""
         _subContractorText.value = ""
         _repSubcontractorText.value = ""
         _repSSKSubText.value = ""
+
+        isClearing.value = false
+        Log.d("ViewModel", "End clearing")
     }
+
 }
