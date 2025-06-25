@@ -87,7 +87,7 @@ class TransportFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.arrangementFragment)
         }
     }
 

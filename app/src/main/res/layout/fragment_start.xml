@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background_one"
+    android:background="@color/background"
     >
 
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/startFragment_MainLabel"
+        android:id="@+id/tv_mainLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Основное меню"
@@ -18,69 +18,69 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center|top"
-        style="@style/LabelViewStyle"
+        style="@style/mainLabel"
         android:layout_marginTop="70dp"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/startFragment_SecondLabel"
+        android:id="@+id/tv_SecondLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ежедневная отчетность"
-        app:layout_constraintTop_toBottomOf="@id/startFragment_MainLabel"
+        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center|top"
         android:layout_marginTop="20dp"
-        style="@style/SecondViewStyle"
+        style="@style/secondLabel"
         />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/startFragment_btn_Arrangment"
+        android:id="@+id/btn_Arrangement"
         android:layout_width="250dp"
         android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/startFragment_SecondLabel"
+        app:layout_constraintTop_toBottomOf="@id/tv_SecondLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"
         android:text="Расстановка"
-        style="@style/UnusualButton"
+        style="@style/MainsButton"
         />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/startFragment_btn_FReports"
+        android:id="@+id/btn_Reports"
         android:layout_width="250dp"
         android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/startFragment_btn_Arrangment"
+        app:layout_constraintTop_toBottomOf="@id/btn_Arrangement"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"
         android:text="Отчеты"
-        style="@style/UnusualButton"
+        style="@style/MainsButton"
         />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/startFragment_btn_Auth"
+        android:id="@+id/btn_Auth"
         android:layout_width="250dp"
         android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/startFragment_btn_FReports"
+        app:layout_constraintTop_toBottomOf="@id/btn_Reports"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"
         android:text="Авторизоваться"
-        style="@style/UnusualButton"
+        style="@style/MainsButton"
         />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/startFragment_btn_LogOut"
+        android:id="@+id/btn_LogOut"
         android:layout_width="250dp"
         android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/startFragment_btn_Auth"
+        app:layout_constraintTop_toBottomOf="@id/btn_Auth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"
         android:text="Выход"
-        style="@style/UnusualButton"
+        style="@style/MainsButton"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

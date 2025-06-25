@@ -183,13 +183,14 @@ class ControlFragment : Fragment() {
             binding.table.addView(tableRow)
         }
 
-        // Кнопка "Назад"
-        binding.btnBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
         // Кнопка "Далее"
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.fixFragment)
+        }
+
+        // Кнопка "Назад"
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.transportFragment)
         }
 
     }

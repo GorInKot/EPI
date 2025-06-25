@@ -9,6 +9,7 @@
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
     android:padding="24dp"
+    android:backgroundTint="@color/color_one"
     >
 
     <LinearLayout
@@ -43,6 +44,8 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
             style="@style/usualTextViewStyle"
+            app:boxBackgroundColor="@color/color_two"
+            android:textColorHint="@color/color_one"
 
             >
 
@@ -65,6 +68,8 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
             style="@style/usualTextViewStyle"
+            app:boxBackgroundColor="@color/color_two"
+            android:textColorHint="@color/color_one"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -86,6 +91,8 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
             style="@style/usualTextViewStyle"
+            app:boxBackgroundColor="@color/color_two"
+            android:textColorHint="@color/color_one"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -107,6 +114,8 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
             style="@style/usualTextViewStyle"
+            app:boxBackgroundColor="@color/color_two"
+            android:textColorHint="@color/color_one"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -128,6 +137,8 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
             style="@style/usualTextViewStyle"
+            app:boxBackgroundColor="@color/color_two"
+            android:textColorHint="@color/color_one"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -149,8 +160,9 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:text="Отмена"
-                style="@style/UnusualButton"
+                style="@style/ButtonBack"
                 android:layout_marginBottom="8dp"
+                android:textSize="20sp"
                 />
 
             <com.google.android.material.button.MaterialButton
@@ -161,7 +173,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                style="@style/UnusualButton"
+                style="@style/MainsButton"
                 />
         </LinearLayout>
     </LinearLayout>

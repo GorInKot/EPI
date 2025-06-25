@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Transport.TransportFragment"
-    android:background="@color/background_one"
+    android:background="@color/background"
     >
 
     <com.google.android.material.textview.MaterialTextView
@@ -16,7 +16,7 @@
         android:text="Транспорт"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/LabelViewStyle"
+        style="@style/mainLabel"
         />
 
     <LinearLayout
@@ -34,7 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Специалист СК"
-            style="@style/usualTextViewStyle"
+            style="@style/ArrangementText"
+
             />
         
     </LinearLayout>
@@ -45,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:text="Транспорт отсутствует"
-        style="@style/usualTextViewStyle"
+        style="@style/checkBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
         android:layout_marginEnd="24dp"
@@ -78,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Заказчик"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
                 android:paddingStart="8dp"
                 />
 
@@ -87,17 +88,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="8dp"
+                style="@style/TextInputLayout"
 
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -130,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Договор СК"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
                 android:paddingStart="8dp"
                 />
 
@@ -139,16 +133,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="8dp"
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -192,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Исполнитель по транспорту"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
                 android:paddingStart="8dp"
                 />
 
@@ -201,16 +188,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="8dp"
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -242,7 +223,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Договор по транспорту"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
                 android:paddingStart="8dp"
                 />
 
@@ -251,16 +232,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="8dp"
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -282,37 +256,25 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_StartDateTime"
-        android:layout_width="350dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:text="Дата и время начала поездки"
-        style="@style/usualTextViewStyle"
+        style="@style/ArrangementText"
         android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_ExecutiveContractTransport"
-        android:gravity="center"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInput_Layout_StartDate"
-        android:layout_width="180dp"
+        android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_StartDateTime"
-        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:boxStrokeColor="@android:color/transparent"
-
+        style="@style/TextInputLayout"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -336,22 +298,11 @@
         android:id="@+id/textInput_Layout_StartDateHours"
         android:layout_width="120dp"
         android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/textInput_Layout_StartDate"
         app:layout_constraintTop_toBottomOf="@id/tv_StartDateTime"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="8dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:boxStrokeColor="@android:color/transparent"
-
+        style="@style/TextInputLayout"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -376,17 +327,14 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_StateNumber"
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Госномер"
-        style="@style/usualTextViewStyle"
+        style="@style/ArrangementText"
         android:layout_marginBottom="8dp"
-        android:layout_gravity="center"
-        android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/tv_StartDateTime"
         app:layout_constraintTop_toBottomOf="@id/linear_ExecutiveContractTransport"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="74dp"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -396,16 +344,7 @@
         app:layout_constraintStart_toEndOf="@id/textInput_Layout_StartDateHours"
         app:layout_constraintTop_toBottomOf="@id/tv_StateNumber"
         android:layout_marginStart="75dp"
-        android:layout_marginTop="4dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:boxStrokeColor="@android:color/transparent"
+        style="@style/TextInputLayout"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -431,32 +370,22 @@
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:text="Дата и время завершения поездки"
-        style="@style/usualTextViewStyle"
+        style="@style/ArrangementText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_StartDate"
-        android:gravity="center"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInput_Layout_EndDate"
-        android:layout_width="180dp"
+        android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_End"
-        android:layout_marginStart="25dp"
         android:layout_marginTop="8dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:boxStrokeColor="@android:color/transparent"
+        style="@style/TextInputLayout"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -485,17 +414,9 @@
         android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/textInput_Layout_EndDate"
         app:layout_constraintTop_toBottomOf="@id/tv_End"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="8dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@color/white"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:boxStrokeColor="@android:color/transparent"
+        style="@style/TextInputLayout"
 
         >
 
@@ -522,15 +443,13 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Назад"
-        android:textSize="20sp"
         android:layout_marginEnd="25dp"
         android:layout_gravity="center"
-        android:backgroundTint="@android:color/holo_orange_dark"
-        app:cornerRadius="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_Next"
         android:layout_marginBottom="25dp"
         android:layout_marginStart="25dp"
+        style="@style/ButtonBack"
         />
 
     <com.google.android.material.button.MaterialButton

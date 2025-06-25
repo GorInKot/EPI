@@ -284,26 +284,19 @@ class ArrangementFragment : Fragment() {
 
         // Кнопка "Очистить"
         binding.btnClear.setOnClickListener {
-
-//            Log.d("ArrangmentFragment", "Нажата кнопка Очистить")
-
             viewModel.isClearing.value = true
 
             // Чистим ViewModel, лучше если там операции быстрые
             viewModel.clearAll()
 
             removeAllTextWatchers()
-
             clearUiFields()
-
             addAllTextWatchers()
-
             Handler(Looper.getMainLooper()).postDelayed({
                 viewModel.isClearing.value = false
             }, 100)
 
-//            Log.d("ArrangmentFragment", "Все поля очищены")
-//            Toast.makeText(requireContext(), "Все поля очищены", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Все поля очищены", Toast.LENGTH_SHORT).show()
         }
 
     }

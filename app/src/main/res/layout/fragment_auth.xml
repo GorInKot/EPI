@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="@color/background_one"
+    android:background="@color/background"
     >
 
     <LinearLayout
@@ -21,9 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Авторизация"
-            android:textColor="@color/black"
             android:layout_marginBottom="24dp"
-            style="@style/LabelViewStyle"
+            style="@style/mainLabel"
             android:gravity="center"
             android:layout_gravity="center"
             />
@@ -44,9 +43,8 @@
                 android:layout_height="wrap_content"
                 android:text="Табельный номер"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -54,14 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите номер"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -89,9 +82,8 @@
                 android:layout_height="wrap_content"
                 android:text="Пароль"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -99,14 +91,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите пароль"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 app:passwordToggleEnabled="true"
                 >
 
@@ -125,7 +112,7 @@
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Войти"
-            style="@style/UnusualButton"
+            style="@style/MainsButton"
             android:gravity="center"
             android:layout_gravity="center"
             />
@@ -136,7 +123,7 @@
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
-            style="@style/UnusualButton"
+            style="@style/MainsButton"
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:layout_gravity="center"
@@ -148,7 +135,7 @@
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Главное меню"
-            style="@style/UnusualButton"
+            style="@style/MainsButton"
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:layout_gravity="center"

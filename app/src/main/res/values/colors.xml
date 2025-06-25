@@ -11,4 +11,13 @@
     <color name="blue">#238FFF</color>
     <color name="green">#25FF0B</color>
     <color name="background_one">#BFBFBF</color>
+
+        <!-- Основные цвета   -->
+    <color name="main">#FF560E</color>
+    <color name="background">#434343</color>
+    <color name="color_one">#D9D8D8</color>
+    <color name="color_two">#8B817E</color>
+
+    <color name="color">#E9E7E7</color>
+
 </resources>

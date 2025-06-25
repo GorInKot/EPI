@@ -25,15 +25,15 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.startFragmentBtnArrangment.setOnClickListener {
+        binding.btnArrangement.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }
 
-        binding.startFragmentBtnAuth.setOnClickListener {
+        binding.btnAuth.setOnClickListener {
             findNavController().navigate(R.id.authFragment)
         }
 
-        binding.startFragmentBtnFReports.setOnClickListener {
+        binding.btnReports.setOnClickListener {
             findNavController().navigate(R.id.reportsFragment)
         }
     }

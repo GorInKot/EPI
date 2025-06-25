@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Reports.ReportsFragment"
-    android:background="@color/background_one">
+    android:background="@color/background"
+    >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Список отчетов\nСкоро здесь будут отображаться отчеты..."
-        style="@style/usualTextViewStyle"
+        style="@style/ArrangementText"
         android:layout_gravity="center"
         android:gravity="center"
         />

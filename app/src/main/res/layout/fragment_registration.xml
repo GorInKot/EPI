@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="@color/background_one"
+    android:background="@color/background"
     >
 
     <LinearLayout
@@ -21,9 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Регистрация"
-            android:textColor="@color/black"
             android:layout_marginBottom="24dp"
-            style="@style/LabelViewStyle"
+            style="@style/mainLabel"
             />
 
         <!-- Фамилия -->
@@ -43,9 +42,8 @@
                 android:layout_height="wrap_content"
                 android:text="Фамилия"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -54,14 +52,9 @@
                 android:layout_weight="1"
                 android:hint="Введите фамилию"
 
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -90,9 +83,8 @@
                 android:layout_height="wrap_content"
                 android:text="Имя"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -100,14 +92,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите имя"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -135,9 +122,8 @@
                 android:layout_height="wrap_content"
                 android:text="Отчество"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -145,14 +131,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите отчество"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="24dp"
-                app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusBottomStart="24dp"
-                app:boxCornerRadiusBottomEnd="24dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -180,9 +161,8 @@
                 android:layout_height="wrap_content"
                 android:text="Табельный номер"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -190,14 +170,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите номер"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="24dp"
-                app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusBottomStart="24dp"
-                app:boxCornerRadiusBottomEnd="24dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -225,9 +200,8 @@
                 android:layout_height="wrap_content"
                 android:text="Телефон"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -235,14 +209,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="+7 (___) ___-__-__"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="24dp"
-                app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusBottomStart="24dp"
-                app:boxCornerRadiusBottomEnd="24dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -270,9 +239,8 @@
                 android:layout_height="wrap_content"
                 android:text="Филиал"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -280,14 +248,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Выберите филиал"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="24dp"
-                app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusBottomStart="24dp"
-                app:boxCornerRadiusBottomEnd="24dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -315,9 +278,8 @@
                 android:layout_height="wrap_content"
                 android:text="ПУ"
                 android:textSize="18sp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                style="@style/usualTextViewStyle"
+                style="@style/ArrangementText"
+                android:layout_marginTop="0dp"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -325,14 +287,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Выберите ПУ"
-                app:boxBackgroundMode="filled"
-                app:boxCornerRadiusTopStart="24dp"
-                app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusBottomStart="24dp"
-                app:boxCornerRadiusBottomEnd="24dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:boxStrokeColor="@android:color/transparent"
+                style="@style/TextInputLayout"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -350,7 +307,7 @@
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
-            style="@style/UnusualButton"
+            style="@style/MainsButton"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -358,7 +315,7 @@
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Авторизоваться"
-            style="@style/UnusualButton"
+            style="@style/MainsButton"
             android:layout_marginTop="8dp"
             />
 
@@ -367,7 +324,7 @@
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Главное меню"
-            style="@style/UnusualButton"
+            style="@style/MainsButton"
             android:layout_marginTop="8dp"
             />
 
