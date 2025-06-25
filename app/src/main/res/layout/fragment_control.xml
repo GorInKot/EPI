@@ -15,7 +15,7 @@
         android:paddingBottom="36dp"
         >
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/mainLabel"
+            android:id="@+id/tv_mainLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Полевой контроль"
@@ -31,12 +31,12 @@
             android:layout_height="wrap_content"
             android:text="Отчетность"
             style="@style/SecondViewStyle"
-            app:layout_constraintTop_toBottomOf="@id/mainLabel"
+            app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
             app:layout_constraintStart_toStartOf="parent"
             />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/CtrFr_tvDate"
+            android:id="@+id/tv_Date"
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="40dp"
@@ -44,7 +44,7 @@
             android:layout_marginStart="5dp"
             android:text="Дата: "
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:paddingEnd="5dp"
             android:layout_gravity="center"
             android:gravity="center|left"
@@ -92,7 +92,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/InputEditText_equipmentName"
+                android:id="@+id/textInputEditText_equipmentName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text=""
@@ -111,7 +111,7 @@
             android:layout_height="60dp"
             android:text="Вид работ"
             android:layout_gravity="center"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textAllCaps="false"
             android:textStyle="normal"
             android:textColor="@color/black"
@@ -145,7 +145,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/InputEditText_Type"
+                android:id="@+id/textInputEditText_Type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text=""
@@ -158,18 +158,30 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox
+            android:id="@+id/checkBoxManualType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Нет нарушения"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toEndOf="@id/tv_Type"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Type"
+            />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_orderNumber"
             android:layout_width="250dp"
             android:layout_height="80dp"
             android:text="Получить номер предписания"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_gravity="center"
             android:backgroundTint="@android:color/black"
             style="@style/UnusualButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_Type"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -178,15 +190,15 @@
             android:layout_height="80dp"
             android:text=""
             android:layout_gravity="center"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textAllCaps="false"
             android:textStyle="normal"
             android:textColor="@color/black"
-            android:layout_marginStart="24dp"
             android:fontFamily="sans-serif-medium"
             app:layout_constraintStart_toEndOf="@id/btn_orderNumber"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Type"
-            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"
             android:gravity="center"
             />
 
@@ -196,7 +208,7 @@
             android:layout_height="60dp"
             android:text="Отчет о результатах инспекции"
             android:layout_gravity="center"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textAllCaps="false"
             android:textStyle="normal"
             android:textColor="@color/black"
@@ -250,7 +262,7 @@
             android:layout_height="60dp"
             android:text="Замечания к документации"
             android:layout_gravity="center"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textAllCaps="false"
             android:textStyle="normal"
             android:textColor="@color/black"
@@ -298,19 +310,7 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_addData"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="Записать результаты в реестр"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@android:color/black"
-            style="@style/UnusualButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_Remarks"
-            />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_addRow"
@@ -332,7 +332,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_addData"
+            app:layout_constraintTop_toBottomOf="@id/btn_addRow"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
@@ -396,6 +396,17 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edit_32"
+                    android:background="#EEEEEE"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_gravity="center"
                     />
 
             </TableRow>

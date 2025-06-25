@@ -268,7 +268,7 @@
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Локация"
+                android:text="Филиал"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:gravity="center"
@@ -279,7 +279,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Выберите локацию"
+                android:hint="Выберите филиал"
                 app:boxBackgroundMode="filled"
                 app:boxCornerRadiusTopStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"

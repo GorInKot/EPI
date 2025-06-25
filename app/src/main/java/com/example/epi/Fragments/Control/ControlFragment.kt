@@ -1,15 +1,21 @@
 package com.example.epi.Fragments.Control
 
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.Intent.ACTION_OPEN_DOCUMENT
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -18,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentControlBinding
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -40,7 +47,7 @@ class ControlFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-        binding.CtrFrTvDate.text = "Дата: $currentDate"
+        binding.tvDate.text = "Дата: $currentDate"
 
         // Получить номер предписания
         var counter = 1
@@ -53,8 +60,8 @@ class ControlFragment : Fragment() {
 
         // Добавить вид работ
         binding.btnAddRow.setOnClickListener {
-            val inputEquipmentName = binding.InputEditTextEquipmentName.text.toString().trim()
-            val inputType = binding.InputEditTextType.text.toString().trim()
+            val inputEquipmentName = binding.textInputEditTextEquipmentName.text.toString().trim()
+            val inputType = binding.textInputEditTextType.text.toString().trim()
             val inputReport = binding.InputEditTextReport.text.toString().trim()
             val inputRemarks = binding.InputEditTextRemarks.text.toString().trim()
             val tvOrderNumber = binding.tvOrderNumber.text.toString().trim()
@@ -80,16 +87,79 @@ class ControlFragment : Fragment() {
                     layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
                 }
             }
-            Log.d(
-                "TransportFragment",
-                "Прибор: '$inputEquipmentName', " +
-                        "Вид работ: '$inputType'," +
-                        "Номер предписания: '$tvOrderNumber'," +
-                        "Отчет о результатах: '$inputReport'," +
-                        "Замечания: '$inputRemarks'"
-            )
 
-//            Toast.makeText(requireContext(), "input1: $inputEquipmentName", Toast.LENGTH_SHORT).show()
+            val buttonContainer = LinearLayout(requireContext()).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 0.5f).apply {
+                    gravity = Gravity.CENTER
+                }
+            }
+
+            val deleteButton = ImageButton(requireContext()).apply {
+                setImageResource(R.drawable.delete_24)
+                setBackgroundColor(Color.TRANSPARENT)
+                setPadding(8, 8, 8, 8)
+                setOnClickListener {
+                    binding.table.removeView(tableRow)
+                    Toast.makeText(requireContext(), "Строка удалена", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            val editButton = ImageButton(requireContext()).apply {
+                setImageResource(R.drawable.edit_24)
+                setBackgroundColor(Color.TRANSPARENT)
+                setPadding(8, 8, 8, 8)
+                setOnClickListener {
+
+                    // Кастомный AlertDialog
+                    val dialogView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.dialog_edit_row, null)
+
+                    val editEquipment = dialogView.findViewById<EditText>(R.id.editEquipment)
+                    val editType = dialogView.findViewById<EditText>(R.id.editType)
+                    val editOrder = dialogView.findViewById<EditText>(R.id.editOrderNumber)
+                    val editReport = dialogView.findViewById<EditText>(R.id.editReport)
+                    val editRemarks = dialogView.findViewById<EditText>(R.id.editRemarks)
+
+                    val cells = (0 until tableRow.childCount - 1).map { index ->
+                        tableRow.getChildAt(index) as TextView
+                    }
+
+                    editEquipment.setText(cells[0].text)
+                    editType.setText(cells[1].text)
+                    editOrder.setText(cells[2].text)
+                    editReport.setText(cells[3].text)
+                    editRemarks.setText(cells[4].text)
+
+                    val dialog = AlertDialog.Builder(requireContext())
+                        .setView(dialogView)
+                        .create()
+
+                    // Устанавливаем фон для CustomAlertDialog
+                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                    dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+                        dialog.dismiss()
+                    }
+
+                    dialogView.findViewById<Button>(R.id.btnSave).setOnClickListener {
+                        cells[0].text = editEquipment.text.toString()
+                        cells[1].text = editType.text.toString()
+                        cells[2].text = editOrder.text.toString()
+                        cells[3].text = editReport.text.toString()
+                        cells[4].text = editRemarks.text.toString()
+
+                        Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                }
+
+            }
+
+            // Добавляем кнопки в контейнер
+            buttonContainer.addView(editButton)
+            buttonContainer.addView(deleteButton)
 
             // Добавляем ячейки в строку
             tableRow.addView(createCell(inputEquipmentName))
@@ -98,12 +168,14 @@ class ControlFragment : Fragment() {
             tableRow.addView(createCell(inputReport))
             tableRow.addView(createCell(inputRemarks))
 
+            // Добавление контейнера с кнопками в ячейку строки
+            tableRow.addView(buttonContainer)
 
             Log.d("Table", "Добавление данных в таблицу")
 
             // Очищаем поля ввода
-            binding.InputEditTextEquipmentName.setText("")
-            binding.InputEditTextType.setText("")
+            binding.textInputEditTextEquipmentName.setText("")
+            binding.textInputEditTextType.setText("")
             binding.InputEditTextReport.setText("")
             binding.InputEditTextRemarks.setText("")
 

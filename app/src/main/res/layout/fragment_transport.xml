@@ -10,7 +10,7 @@
     >
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/mainLabel"
+        android:id="@+id/tv_mainLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Транспорт"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mainLabel"
+        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
         android:layout_marginTop="24dp"
         android:layout_marginStart="25dp"
         >
@@ -47,7 +47,7 @@
         android:text="Транспорт отсутствует"
         style="@style/usualTextViewStyle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mainLabel"
+        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
 
