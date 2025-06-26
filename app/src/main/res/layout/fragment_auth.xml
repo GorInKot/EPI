@@ -55,6 +55,8 @@
                 style="@style/TextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
+                app:boxBackgroundColor="@color/color_one"
+                android:textColorHint="@color/black"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -95,6 +97,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 app:passwordToggleEnabled="true"
+                android:textColorHint="@color/black"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText

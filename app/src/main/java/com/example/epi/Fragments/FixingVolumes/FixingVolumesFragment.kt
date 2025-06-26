@@ -66,15 +66,15 @@ class FixingVolumesFragment : Fragment() {
 
             val planValue = plan.toDoubleOrNull()
             val factValue = fact.toDoubleOrNull()
-            Log.d("FixingVolumesFragment","planValue: '$planValue', " )
-            Log.d("FixingVolumesFragment","volumeValue: '$factValue', " )
+//            Log.d("FixingVolumesFragment","planValue: '$planValue', " )
+//            Log.d("FixingVolumesFragment","volumeValue: '$factValue', " )
 
             if (factValue == null || planValue == null) {
                 Toast.makeText(requireContext(), "Некорректные значения для расчёта", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val result = planValue - factValue
-            Log.d("FixingVolumesFragment","result: '$result', " )
+//            Log.d("FixingVolumesFragment","result: '$result', " )
 
             val tableRow = TableRow(requireContext())
             tableRow.layoutParams = TableLayout.LayoutParams(

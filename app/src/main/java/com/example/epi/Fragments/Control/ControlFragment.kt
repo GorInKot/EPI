@@ -1,9 +1,6 @@
 package com.example.epi.Fragments.Control
 
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.Intent
-import android.content.Intent.ACTION_OPEN_DOCUMENT
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,6 +9,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -24,7 +23,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentControlBinding
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,6 +47,29 @@ class ControlFragment : Fragment() {
         val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
         binding.tvDate.text = "Дата: $currentDate"
 
+        // Выпадающий список для Наименовение прибора
+        val equipmentNameItems = listOf("Прибор 1", "Прибор 2", "Прибор 3", "Прибор 4", "Прибор 5")
+        val adapterEquipmentName = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentNameItems)
+        val autoCompleteTextViewEquipmentName = view.findViewById<AutoCompleteTextView>(R.id.AutoCompleteTextView_equipmentName)
+        autoCompleteTextViewEquipmentName.setAdapter(adapterEquipmentName)
+
+        // Открытие списка по нажатии, а не при вводе текста
+        autoCompleteTextViewEquipmentName.setOnClickListener {
+            autoCompleteTextViewEquipmentName.showDropDown()
+        }
+
+        // Выпадающий список для Вид работ
+        val workTypeItems = listOf("Вид работ 1", "Вид работ 2", "Вид работ 3", "Вид работ 4", "Вид работ 5")
+        val adapterType = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeItems)
+        val autoCompleteTextViewType = view.findViewById<AutoCompleteTextView>(R.id.AutoCompleteTextView_Type)
+        autoCompleteTextViewType.setAdapter(adapterType)
+
+        // Открытие списка по нажатии, а не при вводе текста
+        autoCompleteTextViewType.setOnClickListener {
+            autoCompleteTextViewType.showDropDown()
+        }
+
+
         // Получить номер предписания
         var counter = 1
         binding.btnOrderNumber.setOnClickListener {
@@ -60,8 +81,8 @@ class ControlFragment : Fragment() {
 
         // Добавить вид работ
         binding.btnAddRow.setOnClickListener {
-            val inputEquipmentName = binding.textInputEditTextEquipmentName.text.toString().trim()
-            val inputType = binding.textInputEditTextType.text.toString().trim()
+            val inputEquipmentName = binding.AutoCompleteTextViewEquipmentName.text.toString().trim()
+            val inputType = binding.AutoCompleteTextViewType.text.toString().trim()
             val inputReport = binding.InputEditTextReport.text.toString().trim()
             val inputRemarks = binding.InputEditTextRemarks.text.toString().trim()
             val tvOrderNumber = binding.tvOrderNumber.text.toString().trim()
@@ -99,6 +120,12 @@ class ControlFragment : Fragment() {
                 setImageResource(R.drawable.delete_24)
                 setBackgroundColor(Color.TRANSPARENT)
                 setPadding(8, 8, 8, 8)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    marginStart = 32
+                }
                 setOnClickListener {
                     binding.table.removeView(tableRow)
                     Toast.makeText(requireContext(), "Строка удалена", Toast.LENGTH_SHORT).show()
@@ -109,14 +136,18 @@ class ControlFragment : Fragment() {
                 setImageResource(R.drawable.edit_24)
                 setBackgroundColor(Color.TRANSPARENT)
                 setPadding(8, 8, 8, 8)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
                 setOnClickListener {
 
                     // Кастомный AlertDialog
                     val dialogView = LayoutInflater.from(requireContext())
                         .inflate(R.layout.dialog_edit_row, null)
 
-                    val editEquipment = dialogView.findViewById<EditText>(R.id.editEquipment)
-                    val editType = dialogView.findViewById<EditText>(R.id.editType)
+                    val editEquipment = dialogView.findViewById<EditText>(R.id.edEquipment)
+                    val editType = dialogView.findViewById<EditText>(R.id.textInputType)
                     val editOrder = dialogView.findViewById<EditText>(R.id.editOrderNumber)
                     val editReport = dialogView.findViewById<EditText>(R.id.editReport)
                     val editRemarks = dialogView.findViewById<EditText>(R.id.editRemarks)
@@ -174,8 +205,8 @@ class ControlFragment : Fragment() {
             Log.d("Table", "Добавление данных в таблицу")
 
             // Очищаем поля ввода
-            binding.textInputEditTextEquipmentName.setText("")
-            binding.textInputEditTextType.setText("")
+            binding.AutoCompleteTextViewEquipmentName.setText("")
+            binding.AutoCompleteTextViewType.setText("")
             binding.InputEditTextReport.setText("")
             binding.InputEditTextRemarks.setText("")
 

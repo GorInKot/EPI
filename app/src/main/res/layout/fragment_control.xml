@@ -68,10 +68,11 @@
             app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
+            app:endIconMode="dropdown_menu"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText_equipmentName"
+            <AutoCompleteTextView
+                android:id="@+id/AutoCompleteTextView_equipmentName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text=""
@@ -105,17 +106,17 @@
             app:layout_constraintStart_toEndOf="@id/tv_Type"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
+            app:endIconMode="dropdown_menu"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText_Type"
+            <AutoCompleteTextView
+                android:id="@+id/AutoCompleteTextView_Type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""
                 android:textStyle="normal"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:inputType="text"
+                android:inputType="none"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 />
@@ -148,7 +149,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_orderNumber"
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="80dp"
             android:text=""
             app:layout_constraintStart_toEndOf="@id/btn_orderNumber"
@@ -244,7 +245,6 @@
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
             android:layout_gravity="center"
-            android:backgroundTint="@android:color/black"
             style="@style/MainsButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
@@ -280,6 +280,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Вид работ"
@@ -290,6 +291,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Номер предписания"
@@ -300,6 +302,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Отчет о результатах\nинспекции"
@@ -310,6 +313,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Замечания"
@@ -320,6 +324,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <ImageView
                     android:gravity="center"
@@ -332,9 +337,7 @@
                     android:layout_marginEnd="4dp"
                     android:layout_gravity="center"
                     />
-
             </TableRow>
-
         </TableLayout>
 
 
@@ -359,7 +362,7 @@
             android:layout_height="60dp"
             android:text="Сохранить"
             android:textSize="20sp"
-            android:backgroundTint="@android:color/black"
+            style="@style/MainsButton"
             app:cornerRadius="36dp"
             android:layout_gravity="center"
             android:gravity="center"

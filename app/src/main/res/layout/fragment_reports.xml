@@ -25,7 +25,7 @@
         android:textSize="20sp"
         android:layout_marginEnd="25dp"
         android:layout_gravity="center"
-        android:backgroundTint="@android:color/background_dark"
+        style="@style/UsualButton"
         app:cornerRadius="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -67,6 +67,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_Date"
             android:layout_marginTop="24dp"
             android:layout_marginStart="24dp"
+            app:endIconMode="dropdown_menu"
 
             >
             <AutoCompleteTextView
@@ -101,6 +102,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoWorkType"
             android:layout_marginTop="24dp"
             android:layout_marginStart="24dp"
+            app:endIconMode="dropdown_menu"
             >
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteCustomer"
@@ -176,6 +178,7 @@
             app:layout_constraintStart_toEndOf="@id/tv_Object"
             android:layout_marginTop="24dp"
             android:layout_marginStart="24dp"
+            app:endIconMode="dropdown_menu"
             >
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteObject"
@@ -290,6 +293,7 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Plot"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            app:endIconMode="dropdown_menu"
             >
 
             <AutoCompleteTextView
@@ -352,7 +356,6 @@
             android:text="Предыдущий отчет"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:backgroundTint="@android:color/black"
             style="@style/MainsButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualContractor"
@@ -398,6 +401,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_Date"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            app:endIconMode="dropdown_menu"
             >
 
             <AutoCompleteTextView

@@ -25,12 +25,12 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Назад"
-        android:layout_marginEnd="25dp"
+        style="@style/ButtonBack"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/SeRFr_btn_Next"
+        android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
-        style="@style/ButtonBack"
 
         />
 
@@ -40,12 +40,12 @@
         android:layout_height="60dp"
         android:text="Записать"
         android:textSize="20sp"
+        style="@style/UsualButton"
         android:layout_gravity="center"
-        android:backgroundTint="@android:color/background_dark"
         app:cornerRadius="36dp"
-        android:layout_marginStart="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="25dp"
         android:layout_margin="25dp"
         />
 

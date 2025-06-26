@@ -194,6 +194,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Вид работ из проекта"
@@ -204,6 +205,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Единицы измерения"
@@ -214,6 +216,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Объем работ\nпо проекту"
@@ -224,6 +227,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Выполненный объем работ"
@@ -234,6 +238,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
                 <TextView
                     android:text="Остаток"
@@ -244,6 +249,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     />
 
             </TableRow>
@@ -273,6 +279,7 @@
             android:text="Сохранить"
             android:textSize="20sp"
             android:backgroundTint="@android:color/black"
+            style="@style/MainsButton"
             app:cornerRadius="36dp"
             android:layout_gravity="center"
             android:gravity="center"
