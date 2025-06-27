@@ -26,8 +26,6 @@ class TransportFragment : Fragment() {
 
     private lateinit var viewModel: TransportViewModel
 
-    private var isFromatting = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -99,54 +97,16 @@ class TransportFragment : Fragment() {
 
     private fun setupButtons() {
         binding.btnNext.setOnClickListener {
-            // Если транспорт отсутствует — просто переходим дальше без валидации
-            if (viewModel.isTransportAbsent.value == true) {
-                findNavController().navigate(R.id.controlFragment)
-                return@setOnClickListener
-            }
-            // Валидация полей (если транспорт есть)
-            val validationError = viewModel.validateInputs()
-            if (validationError != null) {
-                Snackbar.make(binding.root, validationError, Snackbar.LENGTH_LONG)
+            val error = viewModel.validateInputs()
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
                     .setBackgroundTint(Color.RED)
                     .setTextColor(Color.WHITE)
                     .show()
                 return@setOnClickListener
             }
-
-            // Проверка даты и времени
-            val startDate = binding.textInputEditTextStartDate.text?.toString()
-            val endDate = binding.textInputEditTextEndDate.text?.toString()
-            val startTime = binding.textInputEditTextStartDateHours.text?.toString()
-            val endTime = binding.textInputEditTextEndDateHours.text?.toString()
-
-            if (!startDate.isNullOrBlank() && !endDate.isNullOrBlank()
-                && !startTime.isNullOrBlank() && !endTime.isNullOrBlank()
-                ) {
-                try {
-                    val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-                    val start = format.parse("$startDate $startTime")
-                    val end = format.parse("$endDate $endTime")
-
-                    if (start != null && end != null && start.after(end)) {
-                        Snackbar.make(binding.root, "Время окончания не может быть раньше времени начала", Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(Color.RED)
-                            .setTextColor(Color.WHITE)
-                            .show()
-                        return@setOnClickListener
-                    }
-                } catch (e:Exception) {
-                    Snackbar.make(binding.root, "Ошибка формата дата/время", Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(Color.RED)
-                        .setTextColor(Color.WHITE)
-                        .show()
-                    return@setOnClickListener
-                }
-                // Если всё ок — переходим дальше
             findNavController().navigate(R.id.controlFragment)
-            }
         }
-
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }
@@ -154,22 +114,15 @@ class TransportFragment : Fragment() {
 
     private fun setupDateInput(editText: androidx.appcompat.widget.AppCompatEditText) {
         var isFormatting = false
-
         editText.addTextChangedListener(object : android.text.TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: android.text.Editable?) {
                 if (isFormatting) return
-
                 val clean = s?.toString()?.replace("[^\\d]".toRegex(), "") ?: return
                 val formatted = StringBuilder()
-
                 if (clean.length > 8) return  // Ограничиваем максимум до ддММгггг
-
                 var cursorPosition = 0
-
                 if (clean.length >= 2) {
                     formatted.append(clean.substring(0, 2)).append(".")
                     cursorPosition = 3
@@ -177,7 +130,6 @@ class TransportFragment : Fragment() {
                     formatted.append(clean)
                     cursorPosition = clean.length
                 }
-
                 if (clean.length >= 4) {
                     formatted.append(clean.substring(2, 4)).append(".")
                     cursorPosition = 6
@@ -185,20 +137,17 @@ class TransportFragment : Fragment() {
                     formatted.append(clean.substring(2))
                     cursorPosition = clean.length + 1
                 }
-
                 if (clean.length > 4) {
                     formatted.append(clean.substring(4))
                     cursorPosition = formatted.length
                 }
-
                 isFormatting = true
                 editText.setText(formatted.toString())
                 editText.setSelection(cursorPosition.coerceAtMost(formatted.length))
                 isFormatting = false
-
                 // Проверка Валидности даты
-                if(formatted.length == 10) {
-                    if(!isValidDate(formatted.toString())) {
+                if (formatted.length == 10) {
+                    if (!isValidDate(formatted.toString())) {
                         val parent = editText.parent?.parent
                         if (parent is com.google.android.material.textfield.TextInputLayout) {
                             parent.error = "Неверная дата"
@@ -298,8 +247,6 @@ class TransportFragment : Fragment() {
         }
     }
 
-
-
     private fun setFieldsEnabled(enabled: Boolean) {
         binding.textInputEditTextCustomer.isEnabled = enabled
         binding.TextInputEditTextContract.isEnabled = enabled
@@ -311,7 +258,6 @@ class TransportFragment : Fragment() {
         binding.textInputEditTextStartDate.isEnabled = enabled
         binding.textInputEditTextEndDate.isEnabled = enabled
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

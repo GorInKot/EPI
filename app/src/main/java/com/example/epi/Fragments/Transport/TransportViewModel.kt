@@ -3,7 +3,9 @@ package com.example.epi.Fragments.Transport
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class TransportViewModel : ViewModel() {
 
@@ -30,17 +32,41 @@ class TransportViewModel : ViewModel() {
     fun validateInputs(): String? {
         if (_isTransportAbsent.value == true) return null
 
-        return when {
-            customerName.value.isNullOrBlank() -> "Введите заказчика"
-            contractCustomer.value.isNullOrBlank() -> "Введите договор СК"
-            executorName.value.isNullOrBlank() -> "Введите исполнителя по транспорту"
-            contractTransport.value.isNullOrBlank() -> "Введите договор по транспорту"
-            startDate.value.isNullOrBlank() -> "Введите дату начала"
-            startTime.value.isNullOrBlank() -> "Введите время начала"
-            stateNumber.value.isNullOrBlank() -> "Введите гос. номер"
-            endDate.value.isNullOrBlank() -> "Введите дату окончания"
-            endTime.value.isNullOrBlank() -> "Введите время окончания"
-            else -> null
+        val fields = listOf(
+            customerName.value,
+            contractCustomer.value,
+            executorName.value,
+            contractTransport.value,
+            stateNumber.value,
+            startDate.value,
+            startTime.value,
+            endDate.value,
+            endTime.value
+        )
+
+        if (fields.any { it.isNullOrBlank() }) {
+            return "Заполните все поля"
+        }
+
+        return validateStartBeforeEnd()
+    }
+
+
+    fun validateStartBeforeEnd(): String? {
+        val start = startDate.value.orEmpty() + " " + startTime.value.orEmpty()
+        val end = endDate.value.orEmpty() + " " + endTime.value.orEmpty()
+
+        return try {
+            val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+            val startDateTime = format.parse(start)
+            val endDateTime = format.parse(end)
+
+            if (startDateTime != null && endDateTime != null && startDateTime.after(endDateTime)) {
+                "Время окончания не может быть раньше времени начала"
+            } else null
+        } catch (e: Exception) {
+            "Ошибка формата даты/времени"
         }
     }
+
 }
