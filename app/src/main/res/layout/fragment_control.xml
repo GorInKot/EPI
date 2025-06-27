@@ -82,6 +82,7 @@
                 android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,6 +120,7 @@
                 android:inputType="none"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -194,6 +196,7 @@
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -232,6 +235,7 @@
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -262,7 +266,7 @@
             android:layout_marginTop="24dp"
             android:showDividers="middle"
             android:gravity="center"
-            android:background="@color/light_grey"
+            android:background="@color/color_three"
             android:stretchColumns="*"
             >
 

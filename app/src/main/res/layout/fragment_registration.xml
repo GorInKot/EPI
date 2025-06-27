@@ -36,7 +36,6 @@
             android:gravity="center_vertical"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-
             >
 
             <TextView
@@ -64,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -105,6 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -145,6 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -185,6 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -225,6 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -265,6 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -305,6 +309,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>

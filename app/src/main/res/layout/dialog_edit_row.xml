@@ -48,6 +48,7 @@
             app:boxBackgroundColor="@color/color_one"
             android:textColorHint="@color/black"
 
+
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -56,6 +57,8 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,6 +84,8 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,6 +111,8 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,6 +138,8 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,6 +165,8 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

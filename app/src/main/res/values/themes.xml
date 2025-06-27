@@ -3,10 +3,18 @@
     <style name="Base.Theme.EPI" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-<!--        <item name="colorPrimary">@</item>-->
+        <!--        <item name="colorPrimary">@</item>-->
     </style>
 
-    <style name="Theme.EPI" parent="Base.Theme.EPI" />
+    <style name="Theme.EPI" parent="Base.Theme.EPI">
+        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
+    </style>
+
+    <style name="CursorTheme" parent="">
+        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
+    </style>
+
+
 
     <!-- Стиль для заголовка -->
     <style name="mainLabel">

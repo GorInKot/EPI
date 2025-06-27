@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.EPI" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+    <style name="Theme.EPI" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Тёмная тема: переопределения -->
+        <item name="colorPrimary">@color/main</item>
+        <item name="colorOnPrimary">@color/color_one</item>
+
+        <item name="colorSurface">@color/background</item>
+        <item name="colorOnSurface">@color/color</item>
+
+        <item name="backgroundColor">@color/background</item>
+        <item name="colorOnBackground">@color/color_one</item>
+
+        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
     </style>
+
 </resources>
