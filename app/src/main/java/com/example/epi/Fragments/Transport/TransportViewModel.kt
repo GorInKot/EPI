@@ -27,19 +27,20 @@ class TransportViewModel : ViewModel() {
     val endTime = MutableLiveData("")
 
     // Валидация
-    fun validateInputs(): Boolean {
-        if(_isTransportAbsent.value == true) return true
+    fun validateInputs(): String? {
+        if (_isTransportAbsent.value == true) return null
 
-        return listOf(
-            customerName.value,
-            contractCustomer.value,
-            executorName.value,
-            contractTransport.value,
-            stateNumber.value,
-            startDate.value,
-            startTime.value,
-            endDate.value,
-            endTime.value
-        ).all { !it.isNullOrBlank() }
+        return when {
+            customerName.value.isNullOrBlank() -> "Введите заказчика"
+            contractCustomer.value.isNullOrBlank() -> "Введите договор СК"
+            executorName.value.isNullOrBlank() -> "Введите исполнителя по транспорту"
+            contractTransport.value.isNullOrBlank() -> "Введите договор по транспорту"
+            startDate.value.isNullOrBlank() -> "Введите дату начала"
+            startTime.value.isNullOrBlank() -> "Введите время начала"
+            stateNumber.value.isNullOrBlank() -> "Введите гос. номер"
+            endDate.value.isNullOrBlank() -> "Введите дату окончания"
+            endTime.value.isNullOrBlank() -> "Введите время окончания"
+            else -> null
+        }
     }
 }
