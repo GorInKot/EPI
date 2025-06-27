@@ -66,12 +66,11 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:paddingStart="10dp"
                 android:paddingEnd="8dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -106,12 +105,11 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:paddingStart="10dp"
                 android:paddingEnd="8dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/background"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -146,12 +144,11 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:paddingStart="10dp"
                 android:paddingEnd="8dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/background"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>

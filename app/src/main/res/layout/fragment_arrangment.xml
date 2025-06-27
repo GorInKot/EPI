@@ -78,8 +78,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:inputType="text"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/background"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,8 +112,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:inputType="text"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/background"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,7 +122,7 @@
             android:layout_height="60dp"
             android:visibility="gone"
             android:hint="Введите заказчика вручную"
-            android:textColorHint="@color/black"
+            android:textColor="@color/background"
             app:boxBackgroundMode="filled"
             app:boxBackgroundColor="@color/color_one"
             app:boxCornerRadiusTopStart="16dp"
@@ -145,7 +143,7 @@
                 android:textSize="22sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:singleLine="true"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -191,8 +189,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:inputType="text"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/background"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,7 +220,7 @@
                 android:textSize="22sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:singleLine="true"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -267,13 +264,12 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -309,8 +305,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:inputType="text"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/background"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -341,7 +336,7 @@
                 android:textSize="22sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:singleLine="true"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -418,9 +413,8 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:inputType="text"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textStyle="normal"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -430,7 +424,7 @@
             android:layout_height="60dp"
             android:visibility="gone"
             android:hint="Введите представителя вручную"
-            android:textColorHint="@color/black"
+            android:textColor="@color/background"
             app:boxBackgroundMode="filled"
             app:boxBackgroundColor="@color/color_one"
             app:boxCornerRadiusTopStart="16dp"
@@ -451,8 +445,7 @@
                 android:textSize="22sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
+                android:textColor="@color/background"
                 android:singleLine="true"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -495,7 +488,7 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:singleLine="true"
@@ -533,13 +526,12 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -571,13 +563,13 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -609,13 +601,12 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

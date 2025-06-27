@@ -100,11 +100,10 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/black"
+                    android:textColor="@color/background"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
             
@@ -145,11 +144,10 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/black"
+                    android:textColor="@color/background"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,11 +200,10 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/black"
+                    android:textColor="@color/background"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -246,11 +243,10 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/black"
+                    android:textColor="@color/background"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
 
                     />
             </com.google.android.material.textfield.TextInputLayout>
@@ -286,14 +282,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textStyle="normal"
-            android:textColor="@color/black"
+            android:textColor="@color/background"
+            android:hint="день.месяц.год"
             android:textSize="22sp"
             android:inputType="date"
             android:maxLength="10"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:gravity="center"
-            android:textCursorDrawable="@drawable/drawable_cursor"
             />
 
 
@@ -317,8 +313,8 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:text=""
-            android:textColor="@color/black"
+            android:hint="час:мин"
+            android:textColor="@color/background"
             android:textSize="22sp"
             android:textStyle="normal"
             android:gravity="center"
@@ -357,15 +353,15 @@
             android:id="@+id/textInput_EditText_StateNumber"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text=""
+            android:hint="A001aa01"
             android:textStyle="normal"
-            android:textColor="@color/black"
+            android:textColor="@color/background"
             android:textSize="22sp"
             android:inputType="text"
             android:singleLine="true"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textCursorDrawable="@drawable/drawable_cursor"
+            android:gravity="center"
 
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -401,7 +397,8 @@
             android:layout_height="match_parent"
             android:text=""
             android:textStyle="normal"
-            android:textColor="@color/black"
+            android:textColor="@color/background"
+            android:hint="день.месяц.год"
             android:textSize="22sp"
             android:inputType="date"
             android:singleLine="true"
@@ -435,8 +432,8 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:text=""
-            android:textColor="@color/black"
+            android:hint="час:мин"
+            android:textColor="@color/background"
             android:textSize="22sp"
             android:textStyle="normal"
             android:gravity="center"

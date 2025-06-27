@@ -9,7 +9,7 @@
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
     android:padding="24dp"
-    android:backgroundTint="@color/color_two"
+    android:backgroundTint="@color/background"
     >
 
     <LinearLayout
@@ -44,11 +44,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            style="@style/usualTextViewStyle"
-            app:boxBackgroundColor="@color/color_one"
-            android:textColorHint="@color/black"
-
-
+            style="@style/CustomAlertDialogTextView"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -57,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
-                android:textColor="@color/black"
+                android:textColor="@color/background"
                 android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -73,9 +69,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            style="@style/usualTextViewStyle"
-            app:boxBackgroundColor="@color/color_one"
-            android:textColorHint="@color/black"
+            style="@style/CustomAlertDialogTextView"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -84,8 +78,6 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,9 +92,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            style="@style/usualTextViewStyle"
-            app:boxBackgroundColor="@color/color_one"
-            android:textColorHint="@color/black"
+            style="@style/CustomAlertDialogTextView"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -111,8 +101,6 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,9 +115,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            style="@style/usualTextViewStyle"
-            app:boxBackgroundColor="@color/color_one"
-            android:textColorHint="@color/black"
+            style="@style/CustomAlertDialogTextView"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -138,8 +124,6 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,9 +138,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusBottomEnd="16dp"
-            style="@style/usualTextViewStyle"
-            app:boxBackgroundColor="@color/color_one"
-            android:textColorHint="@color/black"
+            style="@style/CustomAlertDialogTextView"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -165,8 +147,6 @@
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:paddingStart="16dp"
-                android:textColor="@color/black"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 

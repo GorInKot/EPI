@@ -39,7 +39,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="Фамилия"
                 android:textSize="18sp"
@@ -52,8 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите фамилию"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
@@ -63,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
+
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -80,7 +79,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="Имя"
                 android:textSize="18sp"
@@ -93,8 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите имя"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
@@ -104,7 +102,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -121,7 +118,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="Отчество"
                 android:textSize="18sp"
@@ -134,8 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите отчество"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
@@ -145,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
+                    style="@style/RegistrationTextInputLayout"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -162,7 +158,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="Табельный номер"
                 android:textSize="18sp"
@@ -175,8 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Введите номер"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
@@ -203,7 +198,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="Телефон"
                 android:textSize="18sp"
@@ -216,8 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="+7 (___) ___-__-__"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
@@ -244,7 +238,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="Филиал"
                 android:textSize="18sp"
@@ -257,8 +251,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Выберите филиал"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
@@ -285,7 +278,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="ПУ"
                 android:textSize="18sp"
@@ -298,8 +291,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Выберите ПУ"
-                android:textColorHint="@color/black"
-                style="@style/TextInputLayout"
+                style="@style/RegistrationTextInputLayout"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 >
