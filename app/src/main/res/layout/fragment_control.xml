@@ -267,7 +267,6 @@
             >
 
             <TableRow
-                android:background="#EEEEEE"
                 android:layout_gravity="center"
                 android:gravity="center"
                 >

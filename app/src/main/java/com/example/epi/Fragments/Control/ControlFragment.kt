@@ -4,13 +4,11 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -19,12 +17,11 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.epi.Fragments.Control.Model.ControlRow
-import com.example.epi.Fragments.Transport.TransportViewModel
 import com.example.epi.R
 import com.example.epi.databinding.FragmentControlBinding
 import java.text.SimpleDateFormat
@@ -84,6 +81,16 @@ class ControlFragment : Fragment() {
             viewModel.generateOrderNumber()
         }
 
+        // Добавление заголовка таблицы
+        viewModel.rows.observe(viewLifecycleOwner) { rows ->
+            binding.table.removeAllViews()
+            addTableHeader() // добавьте шапку перед строками
+            rows.forEach { row ->
+                addRowToTable(row)
+            }
+        }
+
+
         // Добавить строки (вид работ)
         binding.btnAddRow.setOnClickListener {
             val inputEquipmentName = binding.AutoCompleteTextViewEquipmentName.text.toString().trim()
@@ -108,7 +115,7 @@ class ControlFragment : Fragment() {
             )
             viewModel.addRow(newRow)
 
-            clearInputFiels()
+            clearInputFields()
         }
 
         // Кнопка "Далее"
@@ -123,8 +130,36 @@ class ControlFragment : Fragment() {
 
     }
 
+    private fun addTableHeader() {
+        val headerRow = TableRow(requireContext())
+        headerRow.layoutParams = TableLayout.LayoutParams(
+            TableLayout.LayoutParams.MATCH_PARENT,
+            TableLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        val headers = listOf("Оборудование", "Вид работ", "№ предписания", "Отчёт", "Примечание", "Действия")
+
+        headers.forEach { title ->
+            val textView = TextView(requireContext()).apply {
+                text = title
+                setPadding(8, 8, 8, 8)
+                textSize = 18f
+                setTextColor(Color.BLACK)
+                gravity = Gravity.CENTER
+                setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                setTextColor(ContextCompat.getColor(context, R.color.background))
+
+                layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            }
+            headerRow.addView(textView)
+        }
+
+        binding.table.addView(headerRow)
+    }
+
+
     // Очищаем поля ввода
-    private fun clearInputFiels() {
+    private fun clearInputFields() {
         binding.AutoCompleteTextViewEquipmentName.setText("")
         binding.AutoCompleteTextViewType.setText("")
         binding.InputEditTextReport.setText("")
@@ -151,7 +186,7 @@ class ControlFragment : Fragment() {
 
         val buttonContainer = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
-            layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 0.5f).apply {
+            layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f).apply {
                 gravity = Gravity.CENTER
             }
         }
@@ -164,7 +199,7 @@ class ControlFragment : Fragment() {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                marginStart = 32
+                marginEnd = 32
             }
             setOnClickListener {
                 viewModel.removeRow(row)
@@ -180,7 +215,10 @@ class ControlFragment : Fragment() {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+            ).apply {
+                marginStart = 132
+                marginEnd = 32
+            }
             setOnClickListener {
                 val cells = (0 until tableRow.childCount - 1).map { index ->
                     tableRow.getChildAt(index) as TextView
