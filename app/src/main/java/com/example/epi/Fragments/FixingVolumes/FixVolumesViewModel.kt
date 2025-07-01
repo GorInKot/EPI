@@ -3,7 +3,7 @@ package com.example.epi.Fragments.FixingVolumes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.epi.Fragments.Control.Model.ControlRow
+import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 
 class FixVolumesViewModel:ViewModel() {
 

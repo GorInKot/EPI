@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -23,18 +22,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentFixingVolumesBinding
 import android.net.Uri
-import android.view.ViewGroup.LayoutParams
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.InputStream
-
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 
 class FixingVolumesFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.example.epi.Fragments.FixingVolumes
+package com.example.epi.Fragments.FixingVolumes.Model
 
 data class FixVolumesRow(
     val ID_object: String,

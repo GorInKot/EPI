@@ -25,7 +25,7 @@ class AuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnToRegister.setOnClickListener {
+        binding.tvRegister.setOnClickListener {
             findNavController().navigate(R.id.registrationFragment)
         }
 

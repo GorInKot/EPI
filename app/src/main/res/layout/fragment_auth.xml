@@ -7,139 +7,153 @@
     android:background="@color/background"
     >
 
-    <LinearLayout
-        android:layout_width="750dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center_horizontal"
-        >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
-        <!-- Заголовок -->
+        >
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvAuthTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Авторизация"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
             style="@style/mainLabel"
-            android:gravity="center"
-            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
-        <!-- Табельный номер -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuideline"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="160dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="160dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_Number"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Табельный номер"
+            android:textSize="18sp"
+            style="@style/ArrangementText"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvAuthTitle"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="4dp"
+            android:gravity="center"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_Number"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:hint="Введите номер"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_Number"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tvAuthTitle"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="24dp"
+            android:gravity="center"
             >
 
-            <TextView
-                android:layout_width="150dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_Number"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Табельный номер"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="number"
                 />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите номер"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLoginPersonnelNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Пароль -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp"
-            android:gravity="center_vertical"
+        <TextView
+            android:id="@+id/tv_Password"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Пароль"
+            android:textSize="18sp"
+            style="@style/ArrangementText"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_Number"
             android:layout_marginStart="24dp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_Password"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:hint="Введите пароль"
+            style="@style/RegistrationTextInputLayout"
+            app:passwordToggleEnabled="true"
+            app:layout_constraintStart_toEndOf="@id/tv_Password"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="24dp"
+            android:gravity="center"
             >
 
-            <TextView
-                android:layout_width="150dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_Password"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Пароль"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="textPassword"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите пароль"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                app:passwordToggleEnabled="true"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLoginPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Кнопка входа -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogin"
+            android:id="@+id/btn_Login"
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Войти"
             style="@style/MainsButton"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Password"
             />
 
         <!-- Кнопка на регистрацию -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnToRegister"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_Register"
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
-            style="@style/MainsButton"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/color_three"
+            style="@style/ArrangementText"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/btn_Login"
             />
 
         <!-- Кнопка возврата -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBackToMenu"
-            android:layout_width="390dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Главное меню"
             style="@style/MainsButton"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
