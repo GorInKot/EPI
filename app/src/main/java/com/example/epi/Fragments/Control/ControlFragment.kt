@@ -66,7 +66,6 @@ class ControlFragment : Fragment() {
             rows.forEach { row ->
                 addRowToTable(row)
             }
-
         }
 
         binding.tvDate.text = "Дата: ${getCurrentFormattedDate()}"
@@ -84,12 +83,11 @@ class ControlFragment : Fragment() {
         // Добавление заголовка таблицы
         viewModel.rows.observe(viewLifecycleOwner) { rows ->
             binding.table.removeAllViews()
-            addTableHeader() // добавьте шапку перед строками
+            addTableHeader()
             rows.forEach { row ->
                 addRowToTable(row)
             }
         }
-
 
         // Добавить строки (вид работ)
         binding.btnAddRow.setOnClickListener {
@@ -127,7 +125,6 @@ class ControlFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.transportFragment)
         }
-
     }
 
     private fun addTableHeader() {
@@ -156,7 +153,6 @@ class ControlFragment : Fragment() {
 
         binding.table.addView(headerRow)
     }
-
 
     // Очищаем поля ввода
     private fun clearInputFields() {
