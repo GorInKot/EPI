@@ -7,13 +7,26 @@
     android:background="@color/background"
     >
 
-    <LinearLayout
-        android:layout_width="750dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center|top"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="160dp"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="160dp"
+            />
 
         <!-- Заголовок -->
         <com.google.android.material.textview.MaterialTextView
@@ -23,309 +36,222 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Регистрация"
-            android:gravity="center"
-            android:layout_gravity="center"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="24dp"
             />
 
         <!-- Фамилия -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <TextView
+            android:id="@+id/tv_secondName"
+            android:text="Фамилия"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_secondName"
+            android:hint="Введите фамилию"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_secondName"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_LastName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Фамилия"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="textPersonName"
+
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите фамилию"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Имя -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <TextView
+            android:id="@+id/tv_Name"
+            android:text="Имя"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_secondName"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_Name"
+            android:hint="Введите имя"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_Name"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_secondName"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_FirstName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Имя"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="textPersonName"
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите имя"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etFirstName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Отчество -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <TextView
+            android:id="@+id/tv_thirdName"
+            android:text="Отчество"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_Name"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_thirdName"
+            android:hint="Введите отчество"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_thirdName"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Name"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_thirdName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Отчество"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="textPersonName"
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите отчество"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMiddleName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    style="@style/RegistrationTextInputLayout"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Табельный номер -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <TextView
+            android:id="@+id/tv_Number"
+            android:text="Табельный номер"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toStartOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_thirdName"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_Number"
+            android:hint="Введите номер"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_Number"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_thirdName"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_PersonnelNumber"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Табельный номер"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="number"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите номер"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPersonnelNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Телефон -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <TextView
+            android:id="@+id/tv_Phone"
+            android:text="Телефон"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_Number"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_Phone"
+            android:hint="+7 (___) ___-__-__"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_Phone"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_Phone"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Телефон"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="phone"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="+7 (___) ___-__-__"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
+        <!-- Филиал -->
+        <TextView
+            android:id="@+id/tv_Branch"
+            android:text="Филиал"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_Phone"
+            />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Локация -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_Branch"
+            android:hint="Выберите филиал"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@+id/tv_Branch"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Phone"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_Branch"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Филиал"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Выберите филиал"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
+        </com.google.android.material.textfield.TextInputLayout>
+        
         <!-- Повтор пароля -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp"
-            android:gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+        <TextView
+            android:id="@+id/tv_PU"
+            android:text="ПУ"
+            style="@style/RegistratonText"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_Branch"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_PU"
+            android:hint="Выберите ПУ"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintStart_toEndOf="@id/tv_PU"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Branch"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             >
 
-            <TextView
-                android:layout_width="140dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPU"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ПУ"
-                android:textSize="18sp"
-                style="@style/ArrangementText"
-                android:layout_marginTop="0dp"
+                android:inputType="text"
+                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Выберите ПУ"
-                style="@style/RegistrationTextInputLayout"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPU"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textCursorDrawable="@drawable/drawable_cursor"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
+        </com.google.android.material.textfield.TextInputLayout>
+        
         <!-- Кнопка регистрации -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegister"
+            android:id="@+id/btn_Register"
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
             style="@style/MainsButton"
-            android:gravity="center"
-            android:layout_gravity="center"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_PU"
+            android:layout_marginTop="24dp"
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAuth"
+            android:id="@+id/btn_Auth"
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:text="Авторизоваться"
             style="@style/MainsButton"
             android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/btn_Register"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -335,11 +261,10 @@
             android:text="Главное меню"
             style="@style/MainsButton"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@id/btn_Auth"
             />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

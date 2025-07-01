@@ -19,8 +19,8 @@
             android:text="Авторизация"
             android:layout_marginTop="24dp"
             style="@style/mainLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             app:layout_constraintTop_toTopOf="parent"
             />
 
