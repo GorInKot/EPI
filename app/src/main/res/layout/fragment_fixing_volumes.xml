@@ -59,9 +59,10 @@
             android:gravity="center"
             android:layout_gravity="center"
             style="@style/TextInputLayout"
+            app:endIconMode="dropdown_menu"
             >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/TextInputEditText_workType"
+            <AutoCompleteTextView
+                android:id="@+id/AutoCompleteTextView_workType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text=""

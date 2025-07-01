@@ -65,17 +65,17 @@ class FixingVolumesFragment : Fragment() {
             }
         }
 
-        // Наименование приборы/оборудования
-
-
-        // Вид работ
-        val workTypeOptions = listOf("Монтаж", "Демонтаж", "Профилактика", "Тестирование")
-
-        val workTypeAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            workTypeOptions
-        )
+        viewModel.workType.observe(viewLifecycleOwner) { workTypeList ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                workTypeList
+            )
+            binding.AutoCompleteTextViewWorkType.setAdapter(adapter)
+            binding.AutoCompleteTextViewWorkType.setOnClickListener {
+                binding.AutoCompleteTextViewWorkType.showDropDown()
+            }
+        }
 
         binding.btnOpen.setOnClickListener {
             openExcelFilePicker()
@@ -83,7 +83,7 @@ class FixingVolumesFragment : Fragment() {
 
         // Добавить запись
         binding.btnAdd.setOnClickListener {
-            val workType = binding.TextInputEditTextWorkType.text.toString().trim()
+            val workType = binding.AutoCompleteTextViewWorkType.text.toString().trim()
             val measures = binding.TextInputEditTextMeasureUnits.text.toString().trim()
             val plan = binding.TextInputEditTextPlan.text.toString().trim()
             val fact = binding.TextInputEditTextFact.text.toString().trim()
@@ -291,7 +291,7 @@ class FixingVolumesFragment : Fragment() {
             Toast.makeText(requireContext(),"0 столбец: '$workType'", Toast.LENGTH_LONG).show()
 
 
-            binding.TextInputEditTextWorkType.setText(workType)
+            binding.AutoCompleteTextViewWorkType.setText(workType)
             binding.TextInputEditTextMeasureUnits.setText(measure)
             binding.TextInputEditTextPlan.setText(plan)
             binding.TextInputEditTextFact.setText(fact)

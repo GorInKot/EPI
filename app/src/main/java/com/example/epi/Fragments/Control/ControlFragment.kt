@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.epi.Fragments.Control.Model.ControlRow
+import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.R
 import com.example.epi.databinding.FragmentControlBinding
 import java.text.SimpleDateFormat
@@ -42,7 +43,6 @@ class ControlFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentControlBinding.inflate(inflater, container, false)
 
-        setupDropdownMenu()
 
         return binding.root
     }
@@ -55,6 +55,7 @@ class ControlFragment : Fragment() {
         viewModel.orderNumber.observe(viewLifecycleOwner) {
             binding.tvOrderNumber.text = it
         }
+
         // Подписка на чекбокс
         viewModel.isViolation.observe(viewLifecycleOwner) { isChecked ->
             binding.btnOrderNumber.isEnabled = !isChecked
@@ -68,7 +69,10 @@ class ControlFragment : Fragment() {
             }
         }
 
-        binding.tvDate.text = "Дата: ${getCurrentFormattedDate()}"
+        // Подписка на Дату и время
+        viewModel.currentDate.observe(viewLifecycleOwner) {
+            binding.tvDate.text = "Дата: $it"
+        }
 
         // Чек бокс
         binding.checkBoxManualType.setOnCheckedChangeListener { _ , isChecked ->
@@ -89,31 +93,55 @@ class ControlFragment : Fragment() {
             }
         }
 
+        viewModel.equipmentNames.observe(viewLifecycleOwner) { equipmentList ->
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentList)
+            binding.AutoCompleteTextViewEquipmentName.setAdapter(adapter)
+            binding.AutoCompleteTextViewEquipmentName.setOnClickListener {
+                binding.AutoCompleteTextViewEquipmentName.showDropDown()
+            }
+        }
+
+        viewModel.workTypes.observe(viewLifecycleOwner) { workTypesList ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                workTypesList
+            )
+            binding.AutoCompleteTextViewType.setAdapter(adapter)
+            binding.AutoCompleteTextViewType.setOnClickListener {
+                binding.AutoCompleteTextViewType.showDropDown()
+            }
+        }
+
+
         // Добавить строки (вид работ)
         binding.btnAddRow.setOnClickListener {
-            val inputEquipmentName = binding.AutoCompleteTextViewEquipmentName.text.toString().trim()
-            val inputType = binding.AutoCompleteTextViewType.text.toString().trim()
-            val inputReport = binding.InputEditTextReport.text.toString().trim()
-            val inputRemarks = binding.InputEditTextRemarks.text.toString().trim()
-            val tvOrderNumber = binding.tvOrderNumber.text.toString().trim()
-
-            val isViolationChecked = binding.checkBoxManualType.isChecked
-
-            if (inputEquipmentName.isBlank() || inputType.isBlank() || inputReport.isBlank() || inputRemarks.isBlank() || (!isViolationChecked && tvOrderNumber.isBlank())) {
-                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val newRow = ControlRow(
-                inputEquipmentName,
-                inputType,
-                tvOrderNumber,
-                inputReport,
-                inputRemarks
+            val input = RowInput(
+                equipmentName = binding.AutoCompleteTextViewEquipmentName.text.toString().trim(),
+                workType = binding.AutoCompleteTextViewType.text.toString().trim(),
+                orderNumber = binding.tvOrderNumber.text.toString().trim(),
+                report = binding.InputEditTextReport.text.toString().trim(),
+                remarks = binding.InputEditTextRemarks.text.toString().trim(),
+                isViolationChecked = binding.checkBoxManualType.isChecked
             )
-            viewModel.addRow(newRow)
 
-            clearInputFields()
+            when (val result = viewModel.validateRowInput(input)) {
+                is RowValidationResult.Valid -> {
+                    viewModel.addRow(
+                        ControlRow(
+                            input.equipmentName,
+                            input.workType,
+                            input.orderNumber,
+                            input.report,
+                            input.remarks
+                        )
+                    )
+                    clearInputFields()
+                }
+                is RowValidationResult.Invalid -> {
+                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         // Кнопка "Далее"
@@ -241,25 +269,6 @@ class ControlFragment : Fragment() {
         binding.table.addView(tableRow)
     }
 
-    private fun setupDropdownMenu() {
-
-        val equipmentNameItems = listOf("Прибор 1", "Прибор 2", "Прибор 3", "Прибор 4", "Прибор 5")
-        val workTypeItems = listOf("Вид работ 1", "Вид работ 2", "Вид работ 3", "Вид работ 4", "Вид работ 5")
-
-        binding.AutoCompleteTextViewEquipmentName.apply {
-            setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentNameItems))
-            setOnClickListener {
-                showDropDown()
-            }
-        }
-
-        binding.AutoCompleteTextViewType.apply {
-            setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeItems))
-            setOnClickListener {
-                showDropDown()
-            }
-        }
-    }
 
     private fun showEditDialog(row: ControlRow, cells: List<TextView>) {
         val dialogView = LayoutInflater.from(requireContext())
@@ -304,9 +313,9 @@ class ControlFragment : Fragment() {
         dialog.show()
     }
 
-    private fun getCurrentFormattedDate(): String {
-        return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-    }
+//    private fun getCurrentFormattedDate(): String {
+//        return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
+//    }
 
 
     override fun onDestroyView() {
