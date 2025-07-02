@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentRegistrationBinding
@@ -18,8 +21,29 @@ class RegistrationFragment : Fragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var viewModel: ViewModel
+
     private val countryCodePrefix = "+7"
     private val maxLength = 18
+
+    private val branchesWithPu = mapOf(
+        "Тюмень" to listOf(
+            "ПУ ЮНГ", "ПУ Нижневартовск",
+            "ПУ Тюмень", "ПУ Новый Уренгой", "ПУ Губкинский"
+        ),
+
+        "Красноярск" to listOf(
+            "ПУ Восток", "ПУ Томск", "ПУ Ачинск", "ПУ Ванкор", "ПУ Славнефть",
+            "ПУ Иркутск", "ПУ Таас-Юрях", "ПУ Ангарск", "ПУ Комсомольск-на-Амуре"
+        ),
+
+        "Уфа" to listOf(
+            "ПУ Рязань", "ПУ Краснодар", "ПУ Туапсе",
+            "ПУ Новокуйбышевск", "ПУ Самара", "ПУ Сызрань",
+            "ПУ Саратов", "ПУ Бузулук", "ПУ Уфа",
+            "ПУ БН-Добыча", "ПУ Ижевск"
+        )
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,11 +51,33 @@ class RegistrationFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+
+        viewModel = ViewModelProvider(requireActivity())[RegistrationViewModel::class.java]
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val autoCompleteBranch = binding.autoCompleteTextViewBranch
+        val autoCompletePu = binding.autoCompleteTextViewPU
+
+        val branches = branchesWithPu.keys.toList()
+
+        // Адаптер для филиала
+        val branchAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, branches)
+        autoCompleteBranch.setAdapter(branchAdapter)
+
+        autoCompleteBranch.setOnItemClickListener { parent, view, position, id ->
+            val selectedBranch = branches[position]
+            val cars = branchesWithPu[selectedBranch] ?: emptyList()
+
+            val puAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, cars)
+            autoCompletePu.setAdapter(puAdapter)
+            autoCompletePu.text?.clear() // очистим выбор ПУ при смене филиала
+        }
+
 
         binding.btnMainMenu.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
