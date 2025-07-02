@@ -113,6 +113,11 @@ class FixingVolumesFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            if (factValue > planValue) {
+                Toast.makeText(requireContext(), "Значение Факт не может превышать значение План", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val result = planValue - factValue
 
             val newRow = FixVolumesRow(
@@ -243,7 +248,6 @@ class FixingVolumesFragment : Fragment() {
         buttonContainer.addView(editButton)
         buttonContainer.addView(deleteButton)
 
-//        tableRow.addView(createCell(row.ID_object))
         tableRow.addView(createCell(viewModel.selectedObject.value.toString()))
         tableRow.addView(createCell(row.projectWorkType))
         tableRow.addView(createCell(row.measure))
@@ -347,7 +351,18 @@ class FixingVolumesFragment : Fragment() {
             val planValue = editPlan.text.toString().toDoubleOrNull()
             val factValue = editFact.text.toString().toDoubleOrNull()
 
-            val remainder = if (planValue != null && factValue != null) {
+            if (planValue == null || factValue == null) {
+                Toast.makeText(requireContext(), "Некорректные значения", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (factValue > planValue) {
+                Toast.makeText(requireContext(), "Факт не может превышать План", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            val result = if (planValue != null && factValue != null) {
                 (planValue - factValue).toString()
             } else {
                 "0.0"
@@ -359,7 +374,7 @@ class FixingVolumesFragment : Fragment() {
                 measure = editMeasures.text.toString(),
                 plan = editPlan.text.toString(),
                 fact = editFact.text.toString(),
-                result = remainder
+                result = result
             )
 
             viewModel.updateFixRow(oldRow = row, newRow = updateFixRow)

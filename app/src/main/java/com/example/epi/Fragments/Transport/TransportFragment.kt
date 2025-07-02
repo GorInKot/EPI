@@ -9,9 +9,11 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
+import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentTransportBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -24,7 +26,7 @@ class TransportFragment : Fragment() {
     private var _binding: FragmentTransportBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: TransportViewModel
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +38,6 @@ class TransportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[TransportViewModel::class.java]
 
         setupObservers()
         setupInputListeners()
@@ -53,6 +54,7 @@ class TransportFragment : Fragment() {
     private fun setupInputListeners() {
         // Чекбокс
         binding.chBoxMCustomer.setOnCheckedChangeListener { _, isChecked ->
+            viewModel
             viewModel.setTransportAbsent(isChecked)
         }
 
@@ -97,7 +99,7 @@ class TransportFragment : Fragment() {
 
     private fun setupButtons() {
         binding.btnNext.setOnClickListener {
-            val error = viewModel.validateInputs()
+            val error = viewModel.validateTransportInputs()
             if (error != null) {
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
                     .setBackgroundTint(Color.RED)

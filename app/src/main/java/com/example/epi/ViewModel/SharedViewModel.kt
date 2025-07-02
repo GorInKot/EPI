@@ -240,6 +240,7 @@ class SharedViewModel : ViewModel() {
 
     // Валидация транспорта
     fun validateTransportInputs(): String? {
+        Log.d("TransportCheck", "isTransportAbsent = ${_isTransportAbsent.value}")
         if (_isTransportAbsent.value == true) return null
 
         val fields = listOf(

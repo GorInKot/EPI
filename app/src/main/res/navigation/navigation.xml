@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/reportsFragment"
-        android:name="com.example.epi.Fragments.Reports.ReportsFragment"
+        android:name="com.example.epi.Fragments.Reports.Reports.ReportsFragment"
         tools:layout="@layout/fragment_reports"
         />
 
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/sendReportFragment"
-        android:name="com.example.epi.Fragments.Reports.SendReportFragment"
+        android:name="com.example.epi.Fragments.Reports.SendReport.SendReportFragment"
         android:label="SendReport"
         tools:layout="@layout/fragment_send_report"
         />
