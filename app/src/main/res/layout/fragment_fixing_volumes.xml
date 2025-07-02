@@ -51,7 +51,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtInpLay_workType"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_MeasureUnits"
+            app:layout_constraintTop_toBottomOf="@id/tv_workType"
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
@@ -99,9 +99,10 @@
             android:gravity="center"
             android:layout_gravity="center"
             style="@style/TextInputLayout"
+            app:endIconMode="dropdown_menu"
             >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/TextInputEditText_MeasureUnits"
+            <AutoCompleteTextView
+                android:id="@+id/AutoCompleteTextView_MeasureUnits"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text=""
@@ -193,20 +194,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_Open"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="Получить план"
-            android:backgroundTint="@android:color/black"
-            style="@style/MainsButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btn_Open"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:text="Получить план"-->
+<!--            android:backgroundTint="@android:color/black"-->
+<!--            style="@style/MainsButton"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_marginEnd="24dp"-->
+<!--            android:gravity="center"-->
+<!--            android:layout_gravity="center"-->
+<!--            />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Add"
@@ -216,7 +217,7 @@
             android:backgroundTint="@android:color/black"
             style="@style/MainsButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_Open"
+            app:layout_constraintTop_toBottomOf="@id/tv_Fact"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:gravity="center"

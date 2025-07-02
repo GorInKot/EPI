@@ -16,16 +16,17 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
+import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentArrangmentBinding
 
 class ArrangementFragment : Fragment() {
 
     private var _binding: FragmentArrangmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: ArrangementViewModel
+    private val viewModel: SharedViewModel by activityViewModels()
 
     private lateinit var plotTextWatcher: TextWatcher
     private lateinit var repSSKGpTextWatcher: TextWatcher
@@ -43,7 +44,6 @@ class ArrangementFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[ArrangementViewModel::class.java]
 
         setupDateTime()
         setupLeftBlock()
@@ -284,7 +284,7 @@ class ArrangementFragment : Fragment() {
 
         // Кнопка "Очистить"
         binding.btnClear.setOnClickListener {
-            viewModel.isClearing.value = true
+            viewModel.arrangementIsClearing.value = true
 
             // Чистим ViewModel, лучше если там операции быстрые
             viewModel.clearAll()
@@ -293,7 +293,7 @@ class ArrangementFragment : Fragment() {
             clearUiFields()
             addAllTextWatchers()
             Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.isClearing.value = false
+                viewModel.arrangementIsClearing.value = false
             }, 100)
 
             Toast.makeText(requireContext(), "Все поля очищены", Toast.LENGTH_SHORT).show()
@@ -487,6 +487,7 @@ class ArrangementFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        removeAllTextWatchers()
         _binding = null
     }
 }

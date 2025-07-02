@@ -19,22 +19,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.R
+import com.example.epi.ViewModel.RowValidationResult
+import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentControlBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class ControlFragment : Fragment() {
 
     private var _binding: FragmentControlBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: ControlViewModel
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +48,6 @@ class ControlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[ControlViewModel::class.java]
 
         // Подписка на номер предписания
         viewModel.orderNumber.observe(viewLifecycleOwner) {
@@ -62,7 +60,7 @@ class ControlFragment : Fragment() {
         }
 
         // Подписка на строки
-        viewModel.rows.observe(viewLifecycleOwner) { rows ->
+        viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
             binding.table.removeAllViews()
             rows.forEach { row ->
                 addRowToTable(row)
@@ -85,7 +83,7 @@ class ControlFragment : Fragment() {
         }
 
         // Добавление заголовка таблицы
-        viewModel.rows.observe(viewLifecycleOwner) { rows ->
+        viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
             binding.table.removeAllViews()
             addTableHeader()
             rows.forEach { row ->
@@ -101,7 +99,7 @@ class ControlFragment : Fragment() {
             }
         }
 
-        viewModel.workTypes.observe(viewLifecycleOwner) { workTypesList ->
+        viewModel.controlWorkTypes.observe(viewLifecycleOwner) { workTypesList ->
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -112,7 +110,6 @@ class ControlFragment : Fragment() {
                 binding.AutoCompleteTextViewType.showDropDown()
             }
         }
-
 
         // Добавить строки (вид работ)
         binding.btnAddRow.setOnClickListener {
@@ -312,11 +309,6 @@ class ControlFragment : Fragment() {
         }
         dialog.show()
     }
-
-//    private fun getCurrentFormattedDate(): String {
-//        return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-//    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
