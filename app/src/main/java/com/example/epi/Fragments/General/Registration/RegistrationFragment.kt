@@ -9,9 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
+import com.example.epi.ViewModel.GeneralViewModel
 import com.example.epi.databinding.FragmentRegistrationBinding
 
 
@@ -20,7 +21,7 @@ class RegistrationFragment : Fragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: RegistrationViewModel
+    private val viewModel: GeneralViewModel by viewModels()
 
     private val countryCodePrefix = "+7"
     private val maxPhoneLength = 18
@@ -51,8 +52,6 @@ class RegistrationFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
-
-        viewModel = ViewModelProvider(requireActivity())[RegistrationViewModel::class.java]
 
         buttons()
 
@@ -144,8 +143,10 @@ class RegistrationFragment : Fragment() {
                 if (formatted.length > maxPhoneLength) { formatted.setLength(maxPhoneLength) }
                 val newText = formatted.toString()
                 if (newText != text) {
+                    phoneEditText.removeTextChangedListener(this)
                     phoneEditText.setText(newText)
                     phoneEditText.setSelection(minOf(newText.length, phoneEditText.text!!.length))
+                    phoneEditText.addTextChangedListener(this)
                 }
 
                 isFormatting = false
@@ -189,7 +190,7 @@ class RegistrationFragment : Fragment() {
         // Обработка кнопки "Зарегистрироваться"
         binding.btnRegister.setOnClickListener {
             if (validateInputs()) {
-                Toast.makeText(requireContext(), "Здесь скоро будет регистрация", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Еще работаем над этим", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -197,69 +198,47 @@ class RegistrationFragment : Fragment() {
     // Валидация полей
     private fun validateInputs(): Boolean {
 
-        var isValidate = true
-
-        // Фамилия
         val secondName = binding.textInputEditTextSecondName.text?.toString()?.trim()
-        if (secondName.isNullOrBlank()) {
-            binding.textInputLayoutSecondName.error = "Введите фамилию"
-            isValidate = false
-        } else {
-            binding.textInputLayoutSecondName.error = null
-        }
-
-        // Имя
         val firstName = binding.textInputEditTextFirstName.text?.toString()?.trim()
-        if (firstName.isNullOrBlank()) {
-            binding.textInputLayoutFirstName.error = "Введите имя"
-            isValidate = false
-        } else {
-            binding.textInputLayoutFirstName.error = null
-        }
-        // Отчетство
         val thirdName = binding.textInputEditTextThirdName.text?.toString()?.trim()
-        if (thirdName.isNullOrBlank()) {
-            binding.textInputLayoutThirdName.error = "Введите отчество"
-            isValidate = false
-        } else {
-            binding.textInputLayoutThirdName.error = null
-        }
-
-        // Табельный номер
         val number = binding.textInputEditTextNumber.text?.toString()?.trim()
-        if (number.isNullOrBlank()) {
-            binding.textInputLayoutNumber.error = "Введите табельный номер"
-            isValidate = false
-        } else {
-            binding.textInputLayoutNumber.error = null
-        }
-
-        // Телефон
         val phone = binding.textInputEditTextPhone.text?.toString()?.trim()
-        val phoneDigits = phone?.filter { it.isDigit() }
-
-        if (phoneDigits.isNullOrBlank() || phoneDigits.length != 11) {
-            binding.textInputLayoutPhone.error = "Введите корректный номер телефона"
-            isValidate = false
-        } else {
-            binding.textInputLayoutPhone.error = null
-        }
-
-        // Филиал
         val branch = binding.autoCompleteTextViewBranch.text?.toString()?.trim()
-        if (branch.isNullOrBlank()) {
-            binding.textInputLayoutBranch.error = "Выберите филиал"
-            isValidate = false
-        }
-
-        // ПУ
         val pu = binding.autoCompleteTextViewPU.text?.toString()?.trim()
-        if (pu.isNullOrBlank()) {
-            binding.textInputLayoutPU.error = "Выберите ПУ"
-            isValidate = false
-        }
 
-        return isValidate
+
+        val errors = viewModel.validateRegistrationInputs(
+            secondName,
+            firstName,
+            thirdName,
+            number,
+            phone,
+            branch,
+            pu
+        )
+
+        binding.textInputLayoutSecondName.isErrorEnabled = !errors["secondName"].isNullOrBlank()
+        binding.textInputLayoutSecondName.error = errors["secondName"]
+
+        binding.textInputLayoutFirstName.isErrorEnabled = !errors["firstName"].isNullOrBlank()
+        binding.textInputLayoutFirstName.error = errors["firstName"]
+
+        binding.textInputLayoutThirdName.isErrorEnabled = !errors["thirdName"].isNullOrBlank()
+        binding.textInputLayoutThirdName.error = errors["thirdName"]
+
+        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
+        binding.textInputLayoutNumber.error = errors["number"]
+
+        binding.textInputLayoutPhone.isErrorEnabled = !errors["phone"].isNullOrBlank()
+        binding.textInputLayoutPhone.error = errors["phone"]
+
+        binding.textInputLayoutBranch.isErrorEnabled = !errors["branch"].isNullOrBlank()
+        binding.textInputLayoutBranch.error = errors["branch"]
+
+        binding.textInputLayoutPU.isErrorEnabled = !errors["pu"].isNullOrBlank()
+        binding.textInputLayoutPU.error = errors["pu"]
+
+        return errors.isEmpty()
     }
 
     override fun onDestroyView() {

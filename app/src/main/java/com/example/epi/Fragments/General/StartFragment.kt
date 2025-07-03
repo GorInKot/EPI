@@ -36,6 +36,10 @@ class StartFragment : Fragment() {
         binding.btnReports.setOnClickListener {
             findNavController().navigate(R.id.reportsFragment)
         }
+
+        binding.btnLogOut.setOnClickListener {
+            activity?.finish()
+        }
     }
 
     override fun onDestroyView() {

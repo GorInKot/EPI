@@ -47,12 +47,15 @@
             android:id="@+id/tv_secondName"
             android:text="Фамилия"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout_secondName"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_secondName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_secondName"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
@@ -74,12 +77,15 @@
             android:id="@+id/tv_firstName"
             android:text="Имя"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_secondName"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout_firstName"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_firstName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_firstName"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
@@ -101,12 +107,15 @@
             android:id="@+id/tv_thirdName"
             android:text="Отчество"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_firstName"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout_thirdName"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_thirdName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_thirdName"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
@@ -126,13 +135,16 @@
             android:id="@+id/tv_Number"
             android:text="Табельный номер"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_thirdName"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout_Number"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Number"
             style="@style/RegistrationTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/tv_Number"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_thirdName"
@@ -153,12 +165,15 @@
             android:id="@+id/tv_Phone"
             android:text="Телефон"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_Number"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout_Phone"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_Phone"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
@@ -180,12 +195,15 @@
             android:id="@+id/tv_Branch"
             android:text="Филиал"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/tv_Phone"
+            app:layout_constraintTop_toTopOf="@+id/textInputLayout_Branch"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Branch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:hint="Выберите филиал из списка"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@+id/tv_Branch"
@@ -211,12 +229,15 @@
             android:id="@+id/tv_PU"
             android:text="ПУ"
             style="@style/RegistratonText"
+            android:layout_marginTop="0dp"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_Branch"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout_PU"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_PU"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:hint="Выберите ПУ из списка"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_PU"
