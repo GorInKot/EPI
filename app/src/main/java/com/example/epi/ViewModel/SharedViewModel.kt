@@ -8,6 +8,9 @@ import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -178,9 +181,36 @@ class SharedViewModel : ViewModel() {
         }
     }
 
+    // ---------- Получение даты и времени начала поездки -------
+    // ---------- для генерации номера предписания -------
+
+    private var extraOrderNumber = 1
     fun generateOrderNumber() {
-        _orderNumber.value = "1234_${orderCounter++}"
+        try {
+            val dateStr = startDate.value ?: return
+            val timeStr = startTime.value ?: return
+
+            val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            val formatterInputTime = DateTimeFormatter.ofPattern("HH:mm")
+
+            val date = LocalDate.parse(dateStr, formatterInputDate)
+            val time = LocalTime.parse(timeStr, formatterInputTime)
+
+            val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+            val formattedTime = time.format(DateTimeFormatter.ofPattern("HHmm"))
+
+            val personNumber = "0000" // пока хардкод
+
+
+            val generatedNumber = "$personNumber.$formattedDate.$formattedTime.${extraOrderNumber++}"
+
+            _orderNumber.value = generatedNumber
+        } catch (e: Exception) {
+            _orderNumber.value = "Ошибка генерации номера"
+            e.printStackTrace()
+        }
     }
+
 
     fun setViolation(checked: Boolean) {
         _isViolation.value = checked
@@ -360,6 +390,7 @@ class SharedViewModel : ViewModel() {
         arrangementIsClearing.value = false
         Log.d("ViewModel", "End clearing")
     }
+
 }
 
 sealed class RowValidationResult {

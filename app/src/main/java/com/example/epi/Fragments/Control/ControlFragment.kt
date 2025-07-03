@@ -79,7 +79,11 @@ class ControlFragment : Fragment() {
 
         // Получить номер предписания
         binding.btnOrderNumber.setOnClickListener {
-            viewModel.generateOrderNumber()
+            if (!viewModel.startDate.value.isNullOrBlank() && !viewModel.startTime.value.isNullOrBlank()) {
+                viewModel.generateOrderNumber()
+            } else {
+                Toast.makeText(requireContext(), "Дата в время начала поездки не заданы", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Добавление заголовка таблицы

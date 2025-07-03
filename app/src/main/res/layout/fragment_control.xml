@@ -149,7 +149,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_orderNumber"
-            android:layout_width="200dp"
+            android:layout_width="300dp"
             android:layout_height="80dp"
             android:text=""
             app:layout_constraintStart_toEndOf="@id/btn_orderNumber"
