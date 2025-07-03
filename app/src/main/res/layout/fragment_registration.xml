@@ -53,7 +53,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_secondName"
-            android:hint="Введите фамилию"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_secondName"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
@@ -61,16 +60,18 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText_LastName"
+                android:id="@+id/textInputEditText_secondName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Имя -->
         <TextView
-            android:id="@+id/tv_Name"
+            android:id="@+id/tv_firstName"
             android:text="Имя"
             style="@style/RegistratonText"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
@@ -78,10 +79,9 @@
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_Name"
-            android:hint="Введите имя"
+            android:id="@+id/textInputLayout_firstName"
             style="@style/RegistrationTextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/tv_Name"
+            app:layout_constraintStart_toEndOf="@id/tv_firstName"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_secondName"
             >
@@ -91,6 +91,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,16 +102,15 @@
             android:text="Отчество"
             style="@style/RegistratonText"
             app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_Name"
+            app:layout_constraintTop_toBottomOf="@id/tv_firstName"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_thirdName"
-            android:hint="Введите отчество"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_thirdName"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Name"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_firstName"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -131,7 +132,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Number"
-            android:hint="Введите номер"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_Number"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
@@ -139,10 +139,12 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText_PersonnelNumber"
+                android:id="@+id/textInputEditText_Number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -157,7 +159,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Phone"
-            android:hint="+7 (___) ___-__-__"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_Phone"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
@@ -169,6 +170,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -183,7 +186,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Branch"
-            android:hint="Выберите филиал"
+            android:hint="Выберите филиал из списка"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@+id/tv_Branch"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Phone"
@@ -214,7 +217,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_PU"
-            android:hint="Выберите ПУ"
+            android:hint="Выберите ПУ из списка"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintStart_toEndOf="@id/tv_PU"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Branch"
