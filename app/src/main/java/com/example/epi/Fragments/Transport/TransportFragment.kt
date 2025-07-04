@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -54,7 +55,6 @@ class TransportFragment : Fragment() {
     private fun setupInputListeners() {
         // Чекбокс
         binding.chBoxMCustomer.setOnCheckedChangeListener { _, isChecked ->
-            viewModel
             viewModel.setTransportAbsent(isChecked)
         }
 
@@ -70,10 +70,10 @@ class TransportFragment : Fragment() {
         binding.textInputEditTextCustomer.doAfterTextChanged {
             viewModel.customerName.value = it.toString()
         }
-        binding.TextInputEditTextContract.doAfterTextChanged {
+        binding.textInputEditTextContract.doAfterTextChanged {
             viewModel.contractCustomer.value = it.toString()
         }
-        binding.TextInputEditTextExecutor.doAfterTextChanged {
+        binding.textInputEditTextExecutor.doAfterTextChanged {
             viewModel.executorName.value = it.toString()
         }
         binding.textInputEditTextContractTransport.doAfterTextChanged {
@@ -99,15 +99,9 @@ class TransportFragment : Fragment() {
 
     private fun setupButtons() {
         binding.btnNext.setOnClickListener {
-            val error = viewModel.validateTransportInputs()
-            if (error != null) {
-                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(Color.RED)
-                    .setTextColor(Color.WHITE)
-                    .show()
-                return@setOnClickListener
+            if (validateInputs()) {
+                findNavController().navigate(R.id.controlFragment)
             }
-            findNavController().navigate(R.id.controlFragment)
         }
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
@@ -214,45 +208,94 @@ class TransportFragment : Fragment() {
                 inputLayout.error = "Неверный формат: чч:мм"
             } else {
                 inputLayout.error = null
-                validateStartAndEndTime()
             }
         }
     }
 
+    private fun validateInputs(): Boolean {
+
+        val isTransportAbsent = binding.chBoxMCustomer.isChecked
+
+        val customer = binding.textInputEditTextCustomer.text?.toString()?.trim()
+        val contract = binding.textInputEditTextContract.text?.toString()?.trim()
+        val executor = binding.textInputEditTextExecutor.text?.toString()?.trim()
+        val contractTransport = binding.textInputEditTextContractTransport.text?.toString()?.trim()
+        val dateStart = binding.textInputEditTextStartDate.text?.toString()?.trim()
+        val timeStart = binding.textInputEditTextStartDateHours.text?.toString()?.trim()
+        val number = binding.textInputEditTextStateNumber.text?.toString()?.trim()
+        val dateEnd = binding.textInputEditTextEndDate.text?.toString()?.trim()
+        val endTime = binding.textInputEditTextEndDateHours.text?.toString()?.trim()
+
+        val errors = viewModel.validateTransportInputs(
+            _isTransportAbsent=isTransportAbsent,
+            customerName=customer,
+            contractCustomer=contract,
+            executorName=executor,
+            contractTransport=contractTransport,
+            stateNumber=number,
+            startDate=dateStart,
+            startTime=timeStart,
+            endDate=dateEnd,
+            endTime=endTime
+        )
+
+        // Показать Snackbar при наличии ошибок
+        if (errors.isNotEmpty()) {
+            Snackbar
+                .make(binding.root, "Не все поля заполнены", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark))
+                .setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+                .show()
+        }
+
+        // ---------- Очистка ошибок ----------
+        clearErrors(
+            binding.textInputLayoutCustomer,
+            binding.textInputLayoutContract,
+            binding.textInputLayoutExecutor,
+            binding.textInputLayoutContractTransport,
+            binding.textInputLayoutStartDate,
+            binding.textInputLayoutStartDateHours,
+            binding.textInputLayoutStateNumber,
+            binding.textInputLayoutEndDate,
+            binding.textInputLayoutEndDateHours
+        )
+
+        // ---------- Установка ошибок ----------
+        setError(binding.textInputLayoutCustomer, errors["customerName"])
+        setError(binding.textInputLayoutContract, errors["contractCustomer"])
+        setError(binding.textInputLayoutExecutor, errors["executorName"])
+        setError(binding.textInputLayoutContractTransport, errors["contractTransport"])
+
+        setError(binding.textInputLayoutStartDate, errors["startDate"])
+        setError(binding.textInputLayoutStartDateHours, errors["startTime"])
+        setError(binding.textInputLayoutStateNumber, errors["stateNumber"])
+        setError(binding.textInputLayoutEndDate, errors["endDate"])
+        setError(binding.textInputLayoutEndDateHours, errors["endTime"])
+
+        return errors.isEmpty()
+    }
+
+    private fun clearErrors(vararg layouts: TextInputLayout) {
+        layouts.forEach {
+            it.isErrorEnabled = false
+            it.error = null
+        }
+    }
+
+    private fun setError(layout: TextInputLayout, errorMessage: String?) {
+        layout.isErrorEnabled = !errorMessage.isNullOrBlank()
+        layout.error = errorMessage
+    }
 
     private fun isValidTimeFormat(time: String): Boolean {
         return time.matches(Regex("^([01]\\d|2[0-3]):[0-5]\\d\$"))
     }
 
-    private fun validateStartAndEndTime() {
-        val startDate = binding.textInputEditTextStartDate.text?.toString()
-        val endDate = binding.textInputEditTextEndDate.text?.toString()
-        val startTime = binding.textInputEditTextStartDateHours.text?.toString()
-        val endTime = binding.textInputEditTextEndDateHours.text?.toString()
-
-        if (!startDate.isNullOrBlank() && !endDate.isNullOrBlank()
-            && !startTime.isNullOrBlank() && !endTime.isNullOrBlank()
-        ) {
-            try {
-                val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-                val start = format.parse("$startDate $startTime")
-                val end = format.parse("$endDate $endTime")
-
-                if (start != null && end != null && start.after(end)) {
-                    binding.textInputLayoutEndDateHours.error = "Время окончания не может быть раньше начала"
-                } else {
-                    binding.textInputLayoutEndDateHours.error = null
-                }
-            } catch (e: Exception) {
-                // ignore, формат неправильный
-            }
-        }
-    }
-
     private fun setFieldsEnabled(enabled: Boolean) {
         binding.textInputEditTextCustomer.isEnabled = enabled
-        binding.TextInputEditTextContract.isEnabled = enabled
-        binding.TextInputEditTextExecutor.isEnabled = enabled
+        binding.textInputEditTextContract.isEnabled = enabled
+        binding.textInputEditTextExecutor.isEnabled = enabled
         binding.textInputEditTextContractTransport.isEnabled = enabled
         binding.textInputEditTextStateNumber.isEnabled = enabled
         binding.textInputEditTextStartDateHours.isEnabled = enabled

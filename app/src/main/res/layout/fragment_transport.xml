@@ -139,7 +139,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TextInput_EditText_Contract"
+                    android:id="@+id/textInput_EditText_Contract"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text=""
@@ -195,7 +195,7 @@
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TextInput_EditText_Executor"
+                    android:id="@+id/textInput_EditText_Executor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text=""

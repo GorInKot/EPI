@@ -342,27 +342,71 @@ class SharedViewModel : ViewModel() {
     val endTime = MutableLiveData("")
 
     // Валидация транспорта
-    fun validateTransportInputs(): String? {
-        Log.d("TransportCheck", "isTransportAbsent = ${_isTransportAbsent.value}")
-        if (_isTransportAbsent.value == true) return null
+    fun validateTransportInputs(
+        _isTransportAbsent: Boolean,
+        customerName: String?,
+        contractCustomer: String?,
+        executorName: String?,
+        contractTransport: String?,
+        stateNumber: String?,
+        startDate: String?,
+        startTime: String?,
+        endDate: String?,
+        endTime: String?,
+    ): Map<String, String?> {
 
-        val fields = listOf(
-            customerName.value,
-            contractCustomer.value,
-            executorName.value,
-            contractTransport.value,
-            stateNumber.value,
-            startDate.value,
-            startTime.value,
-            endDate.value,
-            endTime.value
-        )
+        val errors = mutableMapOf<String, String?>()
 
-        if (fields.any { it.isNullOrBlank() }) {
-            return "Заполните все поля"
+        if (_isTransportAbsent) return errors
+
+        if (customerName.isNullOrBlank()) {
+            errors["customerName"] = "Укажите Заказчика"
+        }
+        if (contractCustomer.isNullOrBlank()) {
+            errors["contractCustomer"] = "Укажите договор СК"
+        }
+        if (executorName.isNullOrBlank()) {
+            errors["executorName"] = "Укажите исполнителя по транспорту"
+        }
+        if (contractTransport.isNullOrBlank()) {
+            errors["contractTransport"] = "Укажите договор по транспорту"
+        }
+        if (stateNumber.isNullOrBlank()) {
+            errors["stateNumber"] = "Укажите госномер"
+        }
+        if (startDate.isNullOrBlank()) {
+            errors["startDate"] = "Укажите дату начала поездки"
+        }
+        if (startTime.isNullOrBlank()) {
+            errors["startTime"] = "Укажите время начала поездки"
+        }
+        if (endDate.isNullOrBlank()) {
+            errors["endDate"] = "кажите дату завершения поездки"
+        }
+        if (endTime.isNullOrBlank()) {
+            errors["endTime"] = "Укажите время завершения поездки"
+        }
+        if (!startDate.isNullOrBlank() && !startTime.isNullOrBlank()
+            && !endDate.isNullOrBlank() && !endTime.isNullOrBlank()) {
+
+            val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+            val start = "${startDate.trim()} ${startTime.trim()}"
+            val end = "${endDate.trim()} ${endTime.trim()}"
+
+            try {
+                val startParsed = format.parse(start)
+                val endParsed = format.parse(end)
+
+                if (startParsed != null && endParsed != null && startParsed.after(endParsed)) {
+                    errors["endTime"] = "Окончание не может быть раньше начала"
+                }
+            } catch (e: Exception) {
+                errors["startDate"] = "Ошибка формата даты/времени"
+                errors["endDate"] = "Ошибка формата даты/времени"
+            }
         }
 
-        return validateTransportStartBeforeEnd()
+        return errors
     }
 
     fun validateTransportStartBeforeEnd(): String? {
