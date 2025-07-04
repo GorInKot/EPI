@@ -16,12 +16,14 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentArrangmentBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
 class ArrangementFragment : Fragment() {
@@ -342,6 +344,15 @@ class ArrangementFragment : Fragment() {
             repSSKGpText, subContractorText,
             repSubcontractorText, repSSKSubText
         )
+
+        // Показать Snackbar при наличии ошибок
+        if (errors.isNotEmpty()) {
+            Snackbar
+                .make(binding.root, "Не все поля заполнены", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark))
+                .setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+                .show()
+        }
 
         // ---------- Очистка ошибок ----------
         clearErrors(
