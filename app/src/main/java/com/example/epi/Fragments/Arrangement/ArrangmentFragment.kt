@@ -7,6 +7,7 @@ import android.os.Looper
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -271,8 +272,15 @@ class ArrangementFragment : Fragment() {
     private fun setupButtons() {
         // Кнопка "Далее"
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.transportFragment)
+            if (validateInputs()) {
+                Log.d("Tagg", "Валидация прошла")
+                Toast.makeText(requireContext(), "Успешная валидация", Toast.LENGTH_SHORT).show()
+               findNavController().navigate(R.id.transportFragment)
+            } else {
+                Log.d("Tagg", "Валидация НЕ прошла")
+            }
         }
+
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
@@ -299,6 +307,129 @@ class ArrangementFragment : Fragment() {
             Toast.makeText(requireContext(), "Все поля очищены", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    private fun validateInputs(): Boolean {
+        val workTypes = binding.autoCompleteWorkType.text?.toString()?.trim()
+
+        val customers = binding.autoCompleteCustomer.text?.toString()?.trim()
+        val manualCustomer = binding.hiddenTextInputEditTextManualCustomer.text?.toString()?.trim()
+
+        val objects = binding.autoCompleteObject.text?.toString()?.trim()
+        val manualObject = binding.hiddenTextInputEditTextManualObject.text?.toString()?.trim()
+
+        val plotText = binding.textInputEditTextPlot.text?.toString()?.trim()
+
+        val contractors = binding.autoCompleteContractor.text?.toString()?.trim()
+        val manualContractor = binding.hiddenTextInputEditTextManualContractor.text?.toString()?.trim()
+
+        val subContractors = binding.autoCompleteSubContractor.text?.toString()?.trim()
+        val manualSubContractor = binding.hiddenTextInputEditTextManualSubContractor.text?.toString()?.trim()
+
+        val repSSKGpText = binding.textInputEditTextRepSSKGp.text?.toString()?.trim()
+        val subContractorText = binding.textInputEditTextSubcontractor.text?.toString()?.trim()
+        val repSubcontractorText = binding.textInputEditTextRepSubContractor.text?.toString()?.trim()
+        val repSSKSubText = binding.textInputEditTextRepSSKSub.text?.toString()?.trim()
+
+
+        val errors = viewModel.validateArrangementInputs(
+            workTypes,
+            customers, manualCustomer,
+            objects,manualObject,
+            plotText,
+            contractors, manualContractor,
+            subContractors, manualSubContractor,
+
+            repSSKGpText, subContractorText,
+            repSubcontractorText, repSSKSubText
+        )
+        // -------- Сброс старых ошибок --------
+
+        // Режим работы
+        binding.textInputLayoutAutoWorkType.error = null
+
+        // Заказчик
+        binding.textInputLayoutAutoCustomer.error = null
+        binding.hiddenTextInputEditTextManualCustomer.error = null //
+
+        // Объект
+        binding.textInputLayoutAutoObject.error = null
+        binding.hiddenTextInputEditTextManualObject.error = null //
+
+        // Участок
+        binding.textInputLayoutPlot.error = null
+
+        // Генподрядчик
+        binding.textInputLayoutAutoContractor.error = null
+        binding.hiddenTextInputEditTextManualContractor.error = null
+
+        // Представитель Генподрядчика
+        binding.textInputLayoutAutoSubContractor.error = null
+        binding.hiddenTextInputEditTextManualSubContractor.error = null
+
+        // Представитель ССК ПО (ГП)
+        binding.textInputLayoutRepSSKGp.error = null
+
+        // Субподрядчик
+        binding.textInputLayoutSubContractor.error = null
+        binding.hiddenTextInputEditTextManualSubContractor.error = null
+
+        // Представитель Субподрядчика
+        binding.textInputLayoutRepSubContractor.error = null
+
+        // Представитель ССК ПО (Суб)
+        binding.textInputLayoutRepSSKSub.error = null
+
+        // -------- Установка новых ошибок --------
+        // Режим работы
+        binding.textInputLayoutAutoWorkType.isErrorEnabled = !errors["workTypes"].isNullOrBlank()
+        binding.textInputLayoutAutoWorkType.error = errors["workTypes"]
+
+        // Заказчик
+        binding.textInputLayoutAutoCustomer.isErrorEnabled = !errors["customers"].isNullOrBlank()
+        binding.hiddenTextInputLayoutManualCustomer.isErrorEnabled = !errors["customers"].isNullOrBlank()
+        binding.textInputLayoutAutoCustomer.error = errors["customers"]
+        binding.hiddenTextInputLayoutManualCustomer.error = errors["customers"]
+
+        // Объект
+        binding.textInputLayoutAutoObject.isErrorEnabled = !errors["objects"].isNullOrBlank()
+        binding.hiddenTextInputLayoutManualObject.isErrorEnabled = !errors["objects"].isNullOrBlank()
+        binding.textInputLayoutAutoObject.error = errors["objects"]
+        binding.hiddenTextInputLayoutManualObject.error = errors["objects"]
+
+        // Участок
+        binding.textInputLayoutPlot.isErrorEnabled = !errors["plotText"].isNullOrBlank()
+        binding.textInputLayoutPlot.error = errors["plotText"]
+
+        // Генподрядчик
+        binding.textInputLayoutAutoContractor.isErrorEnabled = !errors["contractors"].isNullOrBlank()
+        binding.textInputLayoutAutoContractor.error = errors["contractors"]
+
+        // Представитель Генподрядчика
+        binding.textInputLayoutAutoSubContractor.isErrorEnabled = !errors["subContractors"].isNullOrBlank()
+        binding.hiddenTextInputLayoutManualContractor.isErrorEnabled = !errors["subContractors"].isNullOrBlank()
+        binding.textInputLayoutAutoSubContractor.error = errors["subContractors"]
+        binding.hiddenTextInputLayoutManualContractor.error = errors["subContractors"]
+
+        // Представитель ССК ПО (ГП)
+        binding.textInputLayoutRepSSKGp.isErrorEnabled = !errors["repSSKGpText"].isNullOrBlank()
+        binding.textInputLayoutRepSSKGp.error = errors["repSSKGpText"]
+
+        // Субподрядчик
+        binding.textInputLayoutSubContractor.isErrorEnabled = !errors["subContractorText"].isNullOrBlank()
+        binding.textInputLayoutSubContractor.error = errors["subContractorText"]
+
+        // Представитель субподрядчика
+        binding.textInputLayoutRepSubContractor.isErrorEnabled = !errors["repSubcontractorText"].isNullOrBlank()
+        binding.hiddenTextInputLayoutManualSubContractor.isErrorEnabled = !errors["repSubcontractorText"].isNullOrBlank()
+        binding.textInputLayoutRepSubContractor.error = errors["repSubcontractorText"]
+        binding.hiddenTextInputLayoutManualSubContractor.error = errors["repSubcontractorText"]
+
+        // Представитель ССК ПО (Суб)
+        binding.textInputLayoutRepSSKSub.isErrorEnabled = !errors["repSSKSubText"].isNullOrBlank()
+        binding.textInputLayoutRepSSKSub.error = errors["repSSKSubText"]
+
+        return errors.isEmpty()
     }
 
     private fun removeAllTextWatchers() {
@@ -338,7 +469,6 @@ class ArrangementFragment : Fragment() {
         binding.textInputEditTextRepSubContractor.addTextChangedListener(repSubContractorTextWatcher)
         binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
     }
-
 
     private fun setupViewModelObservers() {
         // Участок
@@ -483,7 +613,6 @@ class ArrangementFragment : Fragment() {
 
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

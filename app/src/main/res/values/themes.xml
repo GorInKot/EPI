@@ -141,7 +141,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginTop">12dp</item>
         <item name="android:layout_marginStart">24dp</item>
         <item name="buttonTint">@color/main</item>
 
@@ -163,6 +163,9 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxStrokeColor">@android:color/transparent</item>
+
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 

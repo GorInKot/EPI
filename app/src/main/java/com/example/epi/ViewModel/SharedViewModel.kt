@@ -76,6 +76,78 @@ class SharedViewModel : ViewModel() {
     val selectedContractor = MutableLiveData<String>()
     val selectedSubContractor = MutableLiveData<String>()
 
+    // ---------- Arrangement  ----------
+    fun validateArrangementInputs(
+
+        workTypes: String?,
+
+        customers: String?,
+        manualCustomer: String?,
+
+        objects: String?,
+        manualObject: String?,
+
+        plotText: String?,
+
+        contractors: String?,
+        manualContractor: String?,
+
+        subContractors: String?,
+        manualSubContractor: String?,
+
+        repSSKGpText: String?,
+        subContractorText: String?,
+        repSubcontractorText: String?,
+        repSSKSubText: String?
+
+    ): Map<String, String?> {
+        val errors = mutableMapOf<String, String?>()
+
+        // Режим работы
+        if (workTypes.isNullOrBlank()) {
+            errors["workTypes"] = "Укажите режим работы"
+        }
+        // Заказчик
+        if (customers.isNullOrBlank() && manualCustomer.isNullOrBlank()) {
+            errors["customers"] = "Укажите заказчика"
+        }
+        // Объект
+        if (objects.isNullOrBlank() && manualObject.isNullOrBlank()) {
+            errors["objects"] = "Укажите Объект"
+        }
+        // Участок
+        if (plotText.isNullOrBlank()) {
+            errors["plotText"] = "Укажите Участок"
+        }
+        // Генподрядчика
+        if (contractors.isNullOrBlank() && manualContractor.isNullOrBlank()) {
+            errors["contractors"] = "Укажите Генподрядчика"
+        }
+        // Представитель Генподрядчика
+        if (subContractors.isNullOrBlank() && manualSubContractor.isNullOrBlank()) {
+            errors["subContractors"] = "Укажите Представитель Генподрядчика"
+        }
+        // Представитель ССК ПО (ГП)
+        if (repSSKGpText.isNullOrBlank()) {
+            errors["repSSKGpText"] = "Укажите Представителя ССК ПО (ГП)"
+        }
+        // Субподрядчик
+        if (subContractorText.isNullOrBlank()) {
+            errors["subContractorText"] = "Укажите Субподрядчика"
+        }
+        // Представитель Субподрядчика
+        if (repSubcontractorText.isNullOrBlank()) {
+            errors["repSubcontractorText"] = "Укажите Представителя Субподрядчика"
+        }
+        // Представитель ССК ПО (ГП)
+        if (repSSKSubText.isNullOrBlank()) {
+            errors["repSSKSubText"] = "Укажите Представителя ССК ПО (Суб)"
+        }
+
+        return errors
+    }
+
+
     // ---------- ControlViewModel перенос ----------
     private var orderCounter = 1
 
@@ -186,6 +258,7 @@ class SharedViewModel : ViewModel() {
 
     private var extraOrderNumber = 1
     fun generateOrderNumber() {
+
         try {
             val dateStr = startDate.value ?: return
             val timeStr = startTime.value ?: return
@@ -199,8 +272,8 @@ class SharedViewModel : ViewModel() {
             val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
             val formattedTime = time.format(DateTimeFormatter.ofPattern("HHmm"))
 
+            // TODO - получение табельного номера
             val personNumber = "0000" // пока хардкод
-
 
             val generatedNumber = "$personNumber.$formattedDate.$formattedTime.${extraOrderNumber++}"
 

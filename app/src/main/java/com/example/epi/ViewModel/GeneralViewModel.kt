@@ -31,8 +31,6 @@ class GeneralViewModel: ViewModel() {
         if (pu.isNullOrBlank()) errors["pu"] = "Выберите ПУ"
 
         return errors
-
-
     }
 
     fun validateAuthInputs(

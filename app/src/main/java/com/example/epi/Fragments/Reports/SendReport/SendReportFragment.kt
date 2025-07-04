@@ -97,17 +97,6 @@ class SendReportFragment : Fragment() {
                 appendLine("Начало: ${viewModel.startDate.value} ${viewModel.startTime.value}")
                 appendLine("Окончание: ${viewModel.endDate.value} ${viewModel.endTime.value}")
             }
-//            if (viewModel.isTransportAbsent.value == false) {
-//                appendLine("Транспорт отсутствует")
-//            } else {
-//                appendLine("Заказчик транспорта: ${viewModel.customerName.value}")
-//                appendLine("Договор заказчика: ${viewModel.contractCustomer.value}")
-//                appendLine("Исполнитель: ${viewModel.executorName.value}")
-//                appendLine("Договор исполнителя: ${viewModel.contractTransport.value}")
-//                appendLine("Гос. номер: ${viewModel.stateNumber.value}")
-//                appendLine("Начало: ${viewModel.startDate.value} ${viewModel.startTime.value}")
-//                appendLine("Окончание: ${viewModel.endDate.value} ${viewModel.endTime.value}")
-//            }
 
             // Нарушения
             appendLine("\n\nНарушение:")
