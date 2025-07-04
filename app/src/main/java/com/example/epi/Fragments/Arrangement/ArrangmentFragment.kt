@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentArrangmentBinding
+import com.google.android.material.textfield.TextInputLayout
 
 class ArrangementFragment : Fragment() {
 
@@ -331,106 +332,108 @@ class ArrangementFragment : Fragment() {
         val repSubcontractorText = binding.textInputEditTextRepSubContractor.text?.toString()?.trim()
         val repSSKSubText = binding.textInputEditTextRepSSKSub.text?.toString()?.trim()
 
-
         val errors = viewModel.validateArrangementInputs(
             workTypes,
             customers, manualCustomer,
-            objects,manualObject,
+            objects, manualObject,
             plotText,
             contractors, manualContractor,
             subContractors, manualSubContractor,
-
             repSSKGpText, subContractorText,
             repSubcontractorText, repSSKSubText
         )
-        // -------- Сброс старых ошибок --------
 
-        // Режим работы
-        binding.textInputLayoutAutoWorkType.error = null
+        // ---------- Очистка ошибок ----------
+        clearErrors(
+            binding.textInputLayoutAutoWorkType,
+            binding.textInputLayoutAutoCustomer,
+            binding.hiddenTextInputLayoutManualCustomer,
+            binding.textInputLayoutAutoObject,
+            binding.hiddenTextInputLayoutManualObject,
+            binding.textInputLayoutPlot,
+            binding.textInputLayoutAutoContractor,
+            binding.hiddenTextInputLayoutManualContractor,
+            binding.textInputLayoutAutoSubContractor,
+            binding.hiddenTextInputLayoutManualSubContractor,
+            binding.textInputLayoutRepSSKGp,
+            binding.textInputLayoutSubContractor,
+            binding.textInputLayoutRepSubContractor,
+            binding.textInputLayoutRepSSKSub
+        )
 
-        // Заказчик
-        binding.textInputLayoutAutoCustomer.error = null
-        binding.hiddenTextInputEditTextManualCustomer.error = null //
+        // ---------- Установка ошибок ----------
+        setError(binding.textInputLayoutAutoWorkType, errors["workTypes"])
 
-        // Объект
-        binding.textInputLayoutAutoObject.error = null
-        binding.hiddenTextInputEditTextManualObject.error = null //
+        setConditionalDualError(
+            autoFieldVisible = binding.autoCompleteCustomer.isShown,
+            autoLayout = binding.textInputLayoutAutoCustomer,
+            manualLayout = binding.hiddenTextInputLayoutManualCustomer,
+            errorMessage = errors["customers"]
+        )
 
-        // Участок
-        binding.textInputLayoutPlot.error = null
+        setConditionalDualError(
+            autoFieldVisible = binding.autoCompleteObject.isShown,
+            autoLayout = binding.textInputLayoutAutoObject,
+            manualLayout = binding.hiddenTextInputLayoutManualObject,
+            errorMessage = errors["objects"]
+        )
 
-        // Генподрядчик
-        binding.textInputLayoutAutoContractor.error = null
-        binding.hiddenTextInputEditTextManualContractor.error = null
+        setError(binding.textInputLayoutPlot, errors["plotText"])
 
-        // Представитель Генподрядчика
-        binding.textInputLayoutAutoSubContractor.error = null
-        binding.hiddenTextInputEditTextManualSubContractor.error = null
+        setConditionalDualError(
+            autoFieldVisible = binding.autoCompleteContractor.isShown,
+            autoLayout = binding.textInputLayoutAutoContractor,
+            manualLayout = binding.hiddenTextInputLayoutManualContractor,
+            errorMessage = errors["contractors"]
+        )
 
-        // Представитель ССК ПО (ГП)
-        binding.textInputLayoutRepSSKGp.error = null
+        setConditionalDualError(
+            autoFieldVisible = binding.autoCompleteSubContractor.isShown,
+            autoLayout = binding.textInputLayoutAutoSubContractor,
+            manualLayout = binding.hiddenTextInputLayoutManualSubContractor,
+            errorMessage = errors["subContractors"]
+        )
 
-        // Субподрядчик
-        binding.textInputLayoutSubContractor.error = null
-        binding.hiddenTextInputEditTextManualSubContractor.error = null
+        setError(binding.textInputLayoutRepSSKGp, errors["repSSKGpText"])
+        setError(binding.textInputLayoutSubContractor, errors["subContractorText"])
 
-        // Представитель Субподрядчика
-        binding.textInputLayoutRepSubContractor.error = null
+        setConditionalDualError(
+            autoFieldVisible = binding.textInputEditTextRepSubContractor.isShown,
+            autoLayout = binding.textInputLayoutRepSubContractor,
+            manualLayout = binding.hiddenTextInputLayoutManualSubContractor,
+            errorMessage = errors["repSubcontractorText"]
+        )
 
-        // Представитель ССК ПО (Суб)
-        binding.textInputLayoutRepSSKSub.error = null
-
-        // -------- Установка новых ошибок --------
-        // Режим работы
-        binding.textInputLayoutAutoWorkType.isErrorEnabled = !errors["workTypes"].isNullOrBlank()
-        binding.textInputLayoutAutoWorkType.error = errors["workTypes"]
-
-        // Заказчик
-        binding.textInputLayoutAutoCustomer.isErrorEnabled = !errors["customers"].isNullOrBlank()
-        binding.hiddenTextInputLayoutManualCustomer.isErrorEnabled = !errors["customers"].isNullOrBlank()
-        binding.textInputLayoutAutoCustomer.error = errors["customers"]
-        binding.hiddenTextInputLayoutManualCustomer.error = errors["customers"]
-
-        // Объект
-        binding.textInputLayoutAutoObject.isErrorEnabled = !errors["objects"].isNullOrBlank()
-        binding.hiddenTextInputLayoutManualObject.isErrorEnabled = !errors["objects"].isNullOrBlank()
-        binding.textInputLayoutAutoObject.error = errors["objects"]
-        binding.hiddenTextInputLayoutManualObject.error = errors["objects"]
-
-        // Участок
-        binding.textInputLayoutPlot.isErrorEnabled = !errors["plotText"].isNullOrBlank()
-        binding.textInputLayoutPlot.error = errors["plotText"]
-
-        // Генподрядчик
-        binding.textInputLayoutAutoContractor.isErrorEnabled = !errors["contractors"].isNullOrBlank()
-        binding.textInputLayoutAutoContractor.error = errors["contractors"]
-
-        // Представитель Генподрядчика
-        binding.textInputLayoutAutoSubContractor.isErrorEnabled = !errors["subContractors"].isNullOrBlank()
-        binding.hiddenTextInputLayoutManualContractor.isErrorEnabled = !errors["subContractors"].isNullOrBlank()
-        binding.textInputLayoutAutoSubContractor.error = errors["subContractors"]
-        binding.hiddenTextInputLayoutManualContractor.error = errors["subContractors"]
-
-        // Представитель ССК ПО (ГП)
-        binding.textInputLayoutRepSSKGp.isErrorEnabled = !errors["repSSKGpText"].isNullOrBlank()
-        binding.textInputLayoutRepSSKGp.error = errors["repSSKGpText"]
-
-        // Субподрядчик
-        binding.textInputLayoutSubContractor.isErrorEnabled = !errors["subContractorText"].isNullOrBlank()
-        binding.textInputLayoutSubContractor.error = errors["subContractorText"]
-
-        // Представитель субподрядчика
-        binding.textInputLayoutRepSubContractor.isErrorEnabled = !errors["repSubcontractorText"].isNullOrBlank()
-        binding.hiddenTextInputLayoutManualSubContractor.isErrorEnabled = !errors["repSubcontractorText"].isNullOrBlank()
-        binding.textInputLayoutRepSubContractor.error = errors["repSubcontractorText"]
-        binding.hiddenTextInputLayoutManualSubContractor.error = errors["repSubcontractorText"]
-
-        // Представитель ССК ПО (Суб)
-        binding.textInputLayoutRepSSKSub.isErrorEnabled = !errors["repSSKSubText"].isNullOrBlank()
-        binding.textInputLayoutRepSSKSub.error = errors["repSSKSubText"]
+        setError(binding.textInputLayoutRepSSKSub, errors["repSSKSubText"])
 
         return errors.isEmpty()
     }
+
+    private fun clearErrors(vararg layouts: TextInputLayout) {
+        layouts.forEach {
+            it.isErrorEnabled = false
+            it.error = null
+        }
+    }
+
+    private fun setError(layout: TextInputLayout, errorMessage: String?) {
+        layout.isErrorEnabled = !errorMessage.isNullOrBlank()
+        layout.error = errorMessage
+    }
+
+    private fun setConditionalDualError(
+        autoFieldVisible: Boolean,
+        autoLayout: TextInputLayout,
+        manualLayout: TextInputLayout,
+        errorMessage: String?
+    ) {
+        if (autoFieldVisible) {
+            setError(autoLayout, errorMessage)
+        } else {
+            setError(manualLayout, errorMessage)
+        }
+    }
+
 
     private fun removeAllTextWatchers() {
         // Отключаем все TextWatcher перед очисткой
