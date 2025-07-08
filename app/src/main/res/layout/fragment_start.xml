@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
+    android:background="@color/color_black"
     >
 
 
@@ -20,6 +20,7 @@
         android:gravity="center|top"
         style="@style/mainLabel"
         android:layout_marginTop="70dp"
+        android:textSize="36dp"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -33,33 +34,48 @@
         android:gravity="center|top"
         android:layout_marginTop="20dp"
         style="@style/secondLabel"
+        android:textSize="32dp"
         />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_Arrangement"
-        android:layout_width="250dp"
-        android:layout_height="80dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
         app:layout_constraintTop_toBottomOf="@id/tv_SecondLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginStart="96dp"
         android:text="Расстановка"
+        android:textSize="26sp"
+        android:textColor="@color/color_orange"
         style="@style/MainsButton"
+        app:strokeColor="@color/color_orange"
+        app:strokeWidth="5dp"
+        app:rippleColor="@color/color_black_light"
+        android:elevation="8dp"
+        android:stateListAnimator="@animator/lift_on_touch"
         />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_Reports"
-        android:layout_width="250dp"
-        android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_Arrangement"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_SecondLabel"
+        app:layout_constraintStart_toEndOf="@id/btn_Arrangement"
+        app:layout_constraintEnd_toStartOf="@id/btn_LogOut"
+        android:layout_marginTop="76dp"
         android:text="Отчеты"
+        android:textSize="26sp"
+        android:textColor="@color/color_orange"
         style="@style/MainsButton"
+        app:strokeColor="@color/color_orange"
+        app:strokeWidth="5dp"
+        app:rippleColor="@color/color_black_light"
+        android:elevation="8dp"
+        android:stateListAnimator="@animator/lift_on_touch"
         />
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/btn_Auth"
         android:layout_width="250dp"
         android:layout_height="80dp"
@@ -68,19 +84,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"
         android:text="Авторизоваться"
-        style="@style/MainsButton"
+        android:textColor="@color/color_orange"
+        android:textSize="22sp"
+        style="@style/ArrangementText"
         />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_LogOut"
-        android:layout_width="250dp"
-        android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_Auth"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_SecondLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="96dp"
         android:text="Выход"
+        android:textSize="26sp"
+        android:textColor="@color/color_orange"
         style="@style/MainsButton"
+        app:strokeColor="@color/color_orange"
+        app:strokeWidth="5dp"
+        app:rippleColor="@color/color_black"
+        android:elevation="8dp"
+        android:stateListAnimator="@animator/lift_on_touch"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

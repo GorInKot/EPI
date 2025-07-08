@@ -178,7 +178,7 @@ class SharedViewModel : ViewModel() {
         )
     )
 
-    // ---------- FixVolumesViewModel перенос ----------
+    // ---------- FixVolumesFragment ----------
     private val _fixRows = MutableLiveData<List<FixVolumesRow>>(emptyList())
     val fixRows: LiveData<List<FixVolumesRow>> get() = _fixRows
 
@@ -253,29 +253,26 @@ class SharedViewModel : ViewModel() {
         }
     }
 
-    // ---------- Получение даты и времени начала поездки -------
-    // ---------- для генерации номера предписания -------
+    // ---- Получение даты и времени начала поездки ----
+    // ---- для генерации номера предписания ----
 
     private var extraOrderNumber = 1
     fun generateOrderNumber() {
 
         try {
             val dateStr = startDate.value ?: return
-            val timeStr = startTime.value ?: return
 
             val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-            val formatterInputTime = DateTimeFormatter.ofPattern("HH:mm")
 
             val date = LocalDate.parse(dateStr, formatterInputDate)
-            val time = LocalTime.parse(timeStr, formatterInputTime)
 
-            val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-            val formattedTime = time.format(DateTimeFormatter.ofPattern("HHmm"))
+
+            val formattedDate = date.format(DateTimeFormatter.ofPattern("MMdd"))
 
             // TODO - получение табельного номера
             val personNumber = "0000" // пока хардкод
 
-            val generatedNumber = "$personNumber.$formattedDate.$formattedTime.${extraOrderNumber++}"
+            val generatedNumber = "$personNumber.$formattedDate.${extraOrderNumber++}"
 
             _orderNumber.value = generatedNumber
         } catch (e: Exception) {
@@ -283,7 +280,6 @@ class SharedViewModel : ViewModel() {
             e.printStackTrace()
         }
     }
-
 
     fun setViolation(checked: Boolean) {
         _isViolation.value = checked
@@ -340,6 +336,25 @@ class SharedViewModel : ViewModel() {
     val startTime = MutableLiveData("") // формат: HH:mm
     val endDate = MutableLiveData("")
     val endTime = MutableLiveData("")
+
+    val transportInClearing = MutableLiveData(false)
+
+    fun clearTransport() {
+
+        transportInClearing.value = true
+
+        customerName.value = ""
+        contractCustomer.value = ""
+        executorName.value = ""
+        contractTransport.value = ""
+        stateNumber.value = ""
+        startDate.value = ""
+        startTime.value = ""
+        endTime.value = ""
+        endDate.value = ""
+
+        transportInClearing.value = false
+    }
 
     // Валидация транспорта
     fun validateTransportInputs(

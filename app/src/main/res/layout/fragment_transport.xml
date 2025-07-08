@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Transport.TransportFragment"
-    android:background="@color/background"
+    android:background="@color/color_black_dark"
     >
 
     <com.google.android.material.textview.MaterialTextView
@@ -47,6 +47,7 @@
         android:layout_height="60dp"
         android:text="Транспорт отсутствует"
         style="@style/checkBox"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
         android:layout_marginEnd="24dp"
@@ -92,6 +93,7 @@
                 android:layout_marginTop="8dp"
                 style="@style/TextInputLayout"
 
+
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -100,7 +102,7 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/background"
+                    android:textColor="@color/color_input_text"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
@@ -144,7 +146,7 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/background"
+                    android:textColor="@color/color_input_text"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
@@ -200,7 +202,7 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/background"
+                    android:textColor="@color/color_input_text"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
@@ -243,7 +245,7 @@
                     android:layout_height="match_parent"
                     android:text=""
                     android:textStyle="normal"
-                    android:textColor="@color/background"
+                    android:textColor="@color/color_input_text"
                     android:textSize="22sp"
                     android:inputType="text"
                     android:singleLine="true"
@@ -282,7 +284,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textStyle="normal"
-            android:textColor="@color/background"
+            android:textColor="@color/color_input_text"
             android:hint="ДД.ММ.ГГГГ"
             android:inputType="date"
             android:textSize="22sp"
@@ -315,7 +317,7 @@
             android:singleLine="true"
             android:hint="ЧЧ:ММ"
             android:inputType="time"
-            android:textColor="@color/background"
+            android:textColor="@color/color_input_text"
             android:textSize="22sp"
             android:textStyle="normal"
             android:gravity="center"
@@ -355,7 +357,7 @@
             android:layout_height="match_parent"
             android:hint="A001aa01"
             android:textStyle="normal"
-            android:textColor="@color/background"
+            android:textColor="@color/color_input_text"
             android:textSize="22sp"
             android:inputType="text"
             android:singleLine="true"
@@ -397,7 +399,7 @@
             android:layout_height="match_parent"
             android:text=""
             android:textStyle="normal"
-            android:textColor="@color/background"
+            android:textColor="@color/color_input_text"
             android:hint="ДД.ММ.ГГГГ"
             android:inputType="date"
             android:textSize="22sp"
@@ -434,7 +436,7 @@
             android:singleLine="true"
             android:hint="ЧЧ:ММ"
             android:inputType="time"
-            android:textColor="@color/background"
+            android:textColor="@color/color_input_text"
             android:textSize="22sp"
             android:textStyle="normal"
             android:gravity="center"
@@ -449,13 +451,10 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Назад"
-        android:layout_marginEnd="25dp"
-        android:layout_gravity="center"
+        style="@style/SimpleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_Next"
-        android:layout_marginBottom="25dp"
-        android:layout_marginStart="25dp"
-        style="@style/ButtonBack"
+        android:layout_marginTop="0dp"
         />
 
     <com.google.android.material.button.MaterialButton
@@ -463,15 +462,11 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Сохранить"
-        android:textSize="20sp"
-        android:layout_marginEnd="25dp"
-        android:layout_gravity="center"
-        style="@style/MainsButton"
-        app:cornerRadius="36dp"
+        style="@style/ExtraButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="25dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginTop="0dp"
+
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

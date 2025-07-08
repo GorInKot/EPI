@@ -9,7 +9,7 @@
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
     android:padding="24dp"
-    android:backgroundTint="@color/background"
+    android:backgroundTint="@color/color_black_dark"
     >
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
             android:layout_gravity="center"
-            android:textColor="@color/color_one"
+            style="@style/mainLabel"
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -54,7 +54,6 @@
                 android:textSize="18sp"
                 android:paddingStart="16dp"
                 android:textColor="@color/background"
-                android:textCursorDrawable="@drawable/drawable_cursor"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -162,20 +161,23 @@
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:text="Отмена"
-                style="@style/ButtonBack"
+                style="@style/SimpleButton"
                 android:layout_marginBottom="8dp"
-                android:textSize="20sp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
                 />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFixSave"
+                style="@style/ExtraButton"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:text="Сохранить"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                style="@style/MainsButton"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="0dp"
+                android:text="Сохранить"
                 />
         </LinearLayout>
     </LinearLayout>

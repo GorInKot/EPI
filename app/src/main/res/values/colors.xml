@@ -12,5 +12,13 @@
 
     <color name="color">#FBBB2F</color>
 
-
+    <!-- Новые цвета   -->
+    <color name="color_black">#1A1A1A</color>
+    <color name="color_black_light">#3A3A3A</color>
+    <color name="color_black_dark">#E7090808</color>
+    <color name="color_input_text">#E7090808</color>
+    <color name="color_blue">#14213d</color>
+    <color name="color_orange">#fca311</color>
+    <color name="color_grey">#e5e5e5</color>
+    <color name="color_white">#ffffff</color>
 </resources>

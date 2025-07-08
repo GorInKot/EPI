@@ -43,6 +43,7 @@ class TransportFragment : Fragment() {
         setupObservers()
         setupInputListeners()
         setupButtons()
+        restoreInputs()
     }
 
     private fun setupObservers() {
@@ -56,6 +57,9 @@ class TransportFragment : Fragment() {
         // Чекбокс
         binding.chBoxMCustomer.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setTransportAbsent(isChecked)
+            viewModel.clearTransport()
+
+
         }
 
         // Дата начала поездки
@@ -164,6 +168,19 @@ class TransportFragment : Fragment() {
             }
         })
     }
+
+    private fun restoreInputs() {
+        binding.textInputEditTextCustomer.setText(viewModel.customerName.value)
+        binding.textInputEditTextContract.setText(viewModel.contractCustomer.value)
+        binding.textInputEditTextExecutor.setText(viewModel.executorName.value)
+        binding.textInputEditTextContractTransport.setText(viewModel.contractTransport.value)
+        binding.textInputEditTextStateNumber.setText(viewModel.stateNumber.value)
+        binding.textInputEditTextStartDate.setText(viewModel.startDate.value)
+        binding.textInputEditTextStartDateHours.setText(viewModel.startTime.value)
+        binding.textInputEditTextEndDate.setText(viewModel.endDate.value)
+        binding.textInputEditTextEndDateHours.setText(viewModel.endTime.value)
+    }
+
 
     private fun isValidDate(date: String):Boolean {
         return try {

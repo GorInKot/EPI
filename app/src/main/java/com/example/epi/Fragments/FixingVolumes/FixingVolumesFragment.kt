@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentFixingVolumesBinding
 import android.net.Uri
+import android.text.InputType
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -72,6 +73,8 @@ class FixingVolumesFragment : Fragment() {
                 workTypeList
             )
             binding.AutoCompleteTextViewWorkType.setAdapter(adapter)
+            binding.AutoCompleteTextViewWorkType.inputType = InputType.TYPE_NULL
+            binding.AutoCompleteTextViewWorkType.keyListener = null
             binding.AutoCompleteTextViewWorkType.setOnClickListener {
                 binding.AutoCompleteTextViewWorkType.showDropDown()
             }
@@ -84,14 +87,12 @@ class FixingVolumesFragment : Fragment() {
                 measuresList
             )
             binding.AutoCompleteTextViewMeasureUnits.setAdapter(adapter)
+            binding.AutoCompleteTextViewMeasureUnits.inputType = InputType.TYPE_NULL
+            binding.AutoCompleteTextViewMeasureUnits.keyListener = null
             binding.AutoCompleteTextViewMeasureUnits.setOnClickListener {
                 binding.AutoCompleteTextViewMeasureUnits.showDropDown()
             }
         }
-
-//        binding.btnOpen.setOnClickListener {
-//            openExcelFilePicker()
-//        }
 
         // Добавить запись
         binding.btnAdd.setOnClickListener {

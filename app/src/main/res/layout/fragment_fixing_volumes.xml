@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.FixingVolumes.FixingVolumesFragment"
-    android:background="@color/background"
+    android:background="@color/color_black_dark"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/background"
+                android:textColor="@color/color_input_text"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:paddingStart="10dp"
@@ -107,7 +107,7 @@
                 android:layout_height="match_parent"
                 android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/background"
+                android:textColor="@color/color_input_text"
                 android:textSize="22sp"
                 android:inputType="textMultiLine"
                 android:paddingStart="10dp"
@@ -147,10 +147,10 @@
                 android:text=""
                 android:textStyle="normal"
                 android:textSize="22sp"
-                android:inputType="textMultiLine"
+                android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="8dp"
-                android:textColor="@color/background"
+                android:textColor="@color/color_input_text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -186,42 +186,26 @@
                 android:text=""
                 android:textStyle="normal"
                 android:textSize="22sp"
-                android:inputType="textMultiLine"
+                android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="8dp"
-                android:textColor="@color/background"
+                android:textColor="@color/color_input_text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/btn_Open"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:text="Получить план"-->
-<!--            android:backgroundTint="@android:color/black"-->
-<!--            style="@style/MainsButton"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginEnd="24dp"-->
-<!--            android:gravity="center"-->
-<!--            android:layout_gravity="center"-->
-<!--            />-->
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Add"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_width="250dp"
+            android:layout_height="80dp"
             android:text="Добавить запись"
-            android:backgroundTint="@android:color/black"
-            style="@style/MainsButton"
+            style="@style/SimpleButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_Fact"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="24dp"
-            android:gravity="center"
-            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="0dp"
             />
 
         <TableLayout
@@ -330,14 +314,12 @@
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:text="Назад"
-            android:layout_gravity="center"
             app:layout_constraintTop_toBottomOf="@id/table"
             app:layout_constraintEnd_toStartOf="@id/btn_Next"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="24dp"
             android:layout_marginBottom="48dp"
-            android:layout_marginTop="24dp"
-            style="@style/ButtonBack"
+            android:layout_marginStart="0dp"
+            style="@style/SimpleButton"
             />
 
         <com.google.android.material.button.MaterialButton
@@ -345,18 +327,12 @@
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:text="Сохранить"
-            android:textSize="20sp"
-            android:backgroundTint="@android:color/black"
-            style="@style/MainsButton"
-            app:cornerRadius="36dp"
-            android:layout_gravity="center"
-            android:gravity="center"
+            style="@style/ExtraButton"
             app:layout_constraintTop_toBottomOf="@id/table"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="24dp"
             android:layout_marginBottom="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="0dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

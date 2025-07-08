@@ -17,7 +17,7 @@
     <!-- Стиль для заголовка -->
     <style name="mainLabel">
         <item name="android:textSize">26sp</item>
-        <item name="android:textColor">@color/main</item>
+        <item name="android:textColor">@color/color_orange</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginStart">24dp</item>
@@ -27,7 +27,7 @@
     <!-- Стиль для подзаголовка -->
     <style name="secondLabel">
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/main</item>
+        <item name="android:textColor">@color/color_orange</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_marginStart">25dp</item>
@@ -39,15 +39,28 @@
     <!--    Используется в CustomAlertDialog  -->
     <style name="CustomAlertDialogTextView">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/background</item>
+        <item name="android:textColor">@color/color_white</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
-        <item name="boxBackgroundColor">@color/color_one</item>
+
+        <item name="android:textColorHint">@color/color_black_dark</item>
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundColor">@color/color_grey</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingStart">16dp</item>
+
     </style>
 
     <!--    Используется в TextInputLayout для Регистрации  -->
     <style name="RegistrationTextInputLayout">
-        <item name="android:textColor">@color/background</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
 
@@ -55,9 +68,9 @@
         <item name="android:layout_marginStart">24dp</item>
         <item name="android:layout_marginEnd">24dp</item>
 
-        <item name="android:textColorHint">@color/background</item>
+        <item name="android:textColorHint">@color/color_black_dark</item>
         <item name="boxBackgroundMode">filled</item>
-        <item name="boxBackgroundColor">@color/color_one</item>
+        <item name="boxBackgroundColor">@color/color_grey</item>
         <item name="boxCornerRadiusTopStart">16dp</item>
         <item name="boxCornerRadiusTopEnd">16dp</item>
         <item name="boxCornerRadiusBottomStart">16dp</item>
@@ -72,7 +85,7 @@
     <!-- Стиль для текста в InputTextFieled -->
     <style name="RegistratonText">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/color_one</item>
+        <item name="android:textColor">@color/color_orange</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_gravity">center</item>
@@ -89,7 +102,7 @@
 
     <style name="usualTextViewStyle">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/background</item>
+        <item name="android:textColor">@color/color_white</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
     </style>
@@ -98,8 +111,8 @@
         <item name="cornerRadius">32dp</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:backgroundTint">@color/main</item>
+        <item name="android:textColor">@color/color_black_dark</item>
+        <item name="android:backgroundTint">@color/color_orange</item>
         <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
@@ -114,7 +127,6 @@
         <item name="backgroundTint">@color/black</item>
     </style>
 
-    <!-- Все кнопки -->
     <style name="UsualButton">
         <item name="cornerRadius">32dp</item>
         <item name="android:textSize">20sp</item>
@@ -124,10 +136,53 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <!-- Все кнопки -->
+    <style name="SimpleButton">
+        <item name="cornerRadius">32dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/color_orange</item>
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="elevation">8dp</item>
+        <item name="strokeColor">@color/color_orange</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="backgroundTint">@color/color_black_dark</item>
+        <item name="rippleColor">@color/color_orange</item>
+        <item name="android:stateListAnimator">@animator/lift_on_touch</item>
+
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+    </style>
+
+    <!-- Особенные  кнопки -->
+    <style name="ExtraButton">
+        <item name="cornerRadius">32dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/color_black_dark</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="elevation">8dp</item>
+        <item name="strokeColor">@color/color_black_dark</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="backgroundTint">@color/color_orange</item>
+        <item name="rippleColor">@color/color_black_light</item>
+        <item name="android:stateListAnimator">@animator/lift_on_touch</item>
+
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">24dp</item>
+
+
+    </style>
+
     <!-- Стиль для текста в InputTextFieled -->
     <style name="ArrangementText">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/color_one</item>
+        <item name="android:textColor">@color/color_white</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_gravity">center</item>
@@ -138,24 +193,25 @@
 
     <style name="checkBox">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/color_white</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:layout_marginStart">24dp</item>
-        <item name="buttonTint">@color/main</item>
+        <item name="buttonTint">@color/color_orange</item>
 
     </style>
 
     <style name="TextInputLayout">
-        <item name="android:textColor">@color/background</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginStart">24dp</item>
 
+        <item name="android:textColorHint">@color/color_black_dark</item>
         <item name="boxBackgroundMode">filled</item>
-        <item name="boxBackgroundColor">@color/color_one</item>
+        <item name="boxBackgroundColor">@color/color_grey</item>
         <item name="boxCornerRadiusTopStart">16dp</item>
         <item name="boxCornerRadiusTopEnd">16dp</item>
         <item name="boxCornerRadiusBottomStart">16dp</item>

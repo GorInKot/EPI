@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="@color/background"
+    android:background="@color/color_black"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,43 +29,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="160dp" />
+            app:layout_constraintGuide_begin="260dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/rightGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="160dp"
+            app:layout_constraintGuide_end="260dp"
             />
 
-        <TextView
-            android:id="@+id/tv_Number"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:text="Табельный номер"
-            android:textSize="18sp"
-            style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toTopOf="@+id/textInputLayout_Number"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Number"
-            android:layout_width="0dp"
+            android:layout_width="460dp"
             android:layout_height="wrap_content"
-            android:hint="Введите номер"
+            android:hint="Табельный номер"
             style="@style/RegistrationTextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/tv_Number"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/tvAuthTitle"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginStart="100dp"
             android:gravity="center"
             >
 
@@ -77,32 +64,20 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/tv_Password"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:text="Пароль"
-            android:textSize="18sp"
-            style="@style/ArrangementText"
-            android:layout_marginTop="0dp"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintTop_toTopOf="@id/textInputLayout_Password"
-            android:layout_marginStart="24dp"
-            />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Password"
-            android:layout_width="0dp"
+            android:layout_width="460dp"
             android:layout_height="wrap_content"
             android:hint="Введите пароль"
             style="@style/RegistrationTextInputLayout"
             app:passwordToggleEnabled="true"
-            app:layout_constraintStart_toEndOf="@id/tv_Password"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center"
             >
 
@@ -118,14 +93,16 @@
         <!-- Кнопка входа -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Login"
-            android:layout_width="390dp"
-            android:layout_height="wrap_content"
+            android:layout_width="260dp"
+            android:layout_height="60dp"
             android:text="Войти"
-            style="@style/MainsButton"
-            android:layout_marginTop="24dp"
+            style="@style/SimpleButton"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
             app:layout_constraintEnd_toEndOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Password"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
             />
 
         <!-- Кнопка на регистрацию -->
@@ -135,7 +112,7 @@
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
             android:textSize="18sp"
-            android:textColor="@color/color_three"
+            android:textColor="@color/color_grey"
             style="@style/ArrangementText"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
@@ -149,9 +126,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Главное меню"
-            style="@style/MainsButton"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
+            style="@style/SimpleButton"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />

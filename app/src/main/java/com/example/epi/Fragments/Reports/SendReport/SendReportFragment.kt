@@ -1,16 +1,23 @@
 package com.example.epi.Fragments.Reports.SendReport
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.epi.DataBase.AppDatabase
+import com.example.epi.DataBase.ReportEntity
 import com.example.epi.R
 import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentSendReportBinding
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 
 class SendReportFragment : Fragment() {
@@ -18,8 +25,13 @@ class SendReportFragment : Fragment() {
     private var _binding : FragmentSendReportBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var adapter: ExpandableAdapter
+
     private val viewModel: SharedViewModel by activityViewModels()
 
+    companion object {
+        private const val TAG = "SendReportFragment"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +41,9 @@ class SendReportFragment : Fragment() {
         _binding = FragmentSendReportBinding.inflate(inflater, container, false)
 
         binding.SeRFrBtnInfo.setOnClickListener {
+            Log.d(TAG, "Info-кнопка нажата")
             showAllEnteredData()
+            Log.d(TAG, "Показали AlertDialog с информацией")
         }
 
         return binding.root
@@ -39,16 +53,100 @@ class SendReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.SeRFrBtnNext.setOnClickListener {
+            Log.d(TAG, "Next-кнопка нажата")
+            lifecycleScope.launch {
+                try {
+                    Log.d(TAG, "запускаем поток и загружаем данные в Room")
+                    saveReportToDatabase()
+                    Log.d(TAG, "Закончили загружать данные в Room")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Ошибка загрузки данные в Room: ${e.message}", e)
+                }
+
+            }
             findNavController().navigate(R.id.reportsFragment)
+
         }
 
         binding.SeRFrBtnBack.setOnClickListener {
             findNavController().navigate(R.id.fixFragment)
         }
+
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        // Здесь можно подготовить данные из viewModel
+        val data = prepareExpandableData()
+
+        adapter = ExpandableAdapter(data)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun prepareExpandableData(): MutableList<Any> {
+        val parentItem = ParentItem(
+            date = viewModel.currentDate.value ?: "не указано",
+            obj = viewModel.selectedObject.value ?: "не указано",
+            children = listOf(
+                ChildItem(
+                    workType = viewModel.selectedWorkType.value ?: "—",
+                    customer = viewModel.selectedCustomer.value ?: "—",
+                    contractor = viewModel.selectedContractor.value ?: "—",
+                    transportCustomer = viewModel.customerName.value ?: "—"
+                )
+            )
+        )
+
+        val list = mutableListOf<Any>()
+        list.add(parentItem)
+        return list
+    }
+
+
+    suspend fun saveReportToDatabase(){
+        Log.d(TAG, "Вызвали функцию saveReportToDatabase")
+        val db = AppDatabase.getDatabase(requireContext())
+        val report = ReportEntity(
+            date = viewModel.currentDate.value ?: "",
+            time = viewModel.currentTime.value ?: "",
+            workType = viewModel.selectedWorkType.value,
+            customer = viewModel.selectedCustomer.value,
+            obj = viewModel.selectedObject.value,
+            plot = viewModel.plotText.value,
+            contractor = viewModel.selectedContractor.value,
+            repContractor = viewModel.selectedSubContractor.value,
+            repSSKGp = viewModel.repSSKGpText.value,
+            subContractor = viewModel.subContractorText.value,
+            repSubContractor = viewModel.repSubcontractorText.value,
+            repSskSub = viewModel.repSSKSubText.value,
+            isTransportAbsent = viewModel.isTransportAbsent.value ?: false,
+            transportCustomer = viewModel.customerName.value,
+            transportContract = viewModel.contractCustomer.value,
+            transportExecutor = viewModel.executorName.value,
+            transportContractNumber = viewModel.contractTransport.value,
+            stateNumber = viewModel.stateNumber.value,
+            startDate = viewModel.startDate.value,
+            startTime = viewModel.startTime.value,
+            endDate = viewModel.endDate.value,
+            endTime = viewModel.endTime.value,
+            isViolation = viewModel.isViolation.value ?: false,
+            control = Gson().toJson(viewModel.controlRow.value),
+            fixVolumes = Gson().toJson(viewModel.fixRows.value)
+
+        )
+
+        Log.d(TAG, "Report object created: $report")
+
+        db.reportDao().insertReport(report)
+
+        Log.d(TAG, "insertReport completed")
     }
 
     private fun showAllEnteredData() {
         val info = buildString {
+
+            // -------- Расстановка --------
             appendLine("Дата: ${viewModel.currentDate.value}")
             appendLine("Время: ${viewModel.currentTime.value}")
             appendLine("Тип работ: ${viewModel.selectedWorkType.value ?: ""}")
@@ -65,6 +163,8 @@ class SendReportFragment : Fragment() {
                 "Объект (выбран): ${viewModel.selectedObject.value}"
             appendLine(obj)
 
+            appendLine("Участок: ${viewModel.plotText.value}")
+
             val contractor = if (viewModel.isManualContractor.value == true)
                 "Генподрядчик (вручную): ${viewModel.manualContractor.value}"
             else
@@ -77,42 +177,58 @@ class SendReportFragment : Fragment() {
                 "Представитель генподрядчика (выбран): ${viewModel.selectedSubContractor.value}"
             appendLine(subContractor)
 
-            appendLine("\n\nУчасток: ${viewModel.plotText.value}")
             appendLine("Представитель ССК (ГП): ${viewModel.repSSKGpText.value}")
-            appendLine("Подрядчик: ${viewModel.subContractorText.value}")
-            appendLine("Представитель подрядчика: ${viewModel.repSubcontractorText.value}")
-            appendLine("Представитель ССК (Подрядчик): ${viewModel.repSSKSubText.value}")
+            appendLine("(Суб)Подрядчик: ${viewModel.subContractorText.value}")
+            appendLine("Представитель (суб)подрядчика: ${viewModel.repSubcontractorText.value}")
+            appendLine("Представитель ССК ПО (Суб): ${viewModel.repSSKSubText.value}")
 
-            // Transport data
+            // -------- Транспорт --------
             appendLine("\n\nТранспорт:")
             val isAbsent = viewModel.isTransportAbsent.value ?: false
             if (isAbsent) {
                 appendLine("Транспорт отсутствует")
             } else {
-                appendLine("Заказчик транспорта: ${viewModel.customerName.value}")
-                appendLine("Договор заказчика: ${viewModel.contractCustomer.value}")
-                appendLine("Исполнитель: ${viewModel.executorName.value}")
-                appendLine("Договор исполнителя: ${viewModel.contractTransport.value}")
+                appendLine("Заказчик: ${viewModel.customerName.value}")
+                appendLine("Договор СК: ${viewModel.contractCustomer.value}")
+                appendLine("Исполнитель по транспорту: ${viewModel.executorName.value}")
+                appendLine("Договор по транспорту: ${viewModel.contractTransport.value}")
                 appendLine("Гос. номер: ${viewModel.stateNumber.value}")
-                appendLine("Начало: ${viewModel.startDate.value} ${viewModel.startTime.value}")
-                appendLine("Окончание: ${viewModel.endDate.value} ${viewModel.endTime.value}")
+                appendLine("Начало поездки: ${viewModel.startDate.value} ${viewModel.startTime.value}")
+                appendLine("Завершение поездки: ${viewModel.endDate.value} ${viewModel.endTime.value}")
             }
 
-            // Нарушения
+            // -------- ??? --------
             appendLine("\n\nНарушение:")
-            appendLine("Нарушение есть: ${viewModel.isViolation.value}")
-            appendLine("Номер предписания: ${viewModel.orderNumber.value}")
-
-            // Контрольные строки
-            appendLine("\n\nКонтроль:")
-            viewModel.controlRow.value?.forEachIndexed { i, row ->
-                appendLine("[$i] ${row}")
+            val isViolation = viewModel.isViolation.value ?: false
+            if (isViolation) {
+                appendLine("Нарушение есть: ${viewModel.isViolation.value}")
+            }
+            else {
+                appendLine("Нарушений нет")
             }
 
-            // Зафиксированные объемы
+            appendLine("Номер предписания: ${viewModel.orderNumber.value?.get(0)}")
+
+            // -------- Контроль --------
+            appendLine("\n\nКонтроль:")
+            viewModel.controlRow.value?.forEach { row ->
+                appendLine("— Прибор: ${row.equipmentName}")
+                appendLine("  Вид работ: ${row.workType}")
+                appendLine("  Номер предписания: ${row.orderNumber}")
+                appendLine("  Отчет: ${row.report}")
+                appendLine("  Замечания: ${row.remarks}")
+                appendLine()
+            }
+
+            // -------- Объемы --------
             appendLine("\n\nЗафиксированные объемы:")
-            viewModel.fixRows.value?.forEachIndexed { i, row ->
-                appendLine("[$i] ${row}")
+            viewModel.fixRows.value?.forEach { row ->
+                appendLine("— ID Объекта: ${row.ID_object}")
+                appendLine(" Вид работ из проекта: ${row.projectWorkType}")
+                appendLine(" Единицы измерения: ${row.measure}")
+                appendLine(" Объем работ по проекту: ${row.plan}")
+                appendLine(" Выполненный объем работ: ${row.fact}")
+                appendLine(" Остаток по объему: ${row.result}")
             }
         }
 
@@ -122,6 +238,7 @@ class SendReportFragment : Fragment() {
             .setMessage(info)
             .setPositiveButton("ОК", null)
             .show()
+
     }
 
     override fun onDestroyView() {

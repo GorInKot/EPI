@@ -6,31 +6,27 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Reports.SendReport.SendReportFragment"
-    android:background="@color/background"
+    android:background="@color/color_black_dark"
     >
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Отправка отчетов\nСкоро здесь будет больше информации"
-        style="@style/ArrangementText"
-        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        tools:listitem="@layout/item_parent_send_report"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/SeRFr_btn_Back"
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Назад"
-        style="@style/ButtonBack"
-        android:layout_gravity="center"
+        style="@style/SimpleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/SeRFr_btn_Next"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
 
         />
 
@@ -39,12 +35,9 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Info"
-        style="@style/ButtonBack"
-        android:layout_gravity="center"
+        style="@style/SimpleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/SeRFr_btn_Back"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
 
         />
 
@@ -53,14 +46,9 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:text="Записать"
-        android:textSize="20sp"
-        style="@style/UsualButton"
-        android:layout_gravity="center"
-        app:cornerRadius="36dp"
+        style="@style/ExtraButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="25dp"
-        android:layout_margin="25dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -97,6 +97,8 @@ class ArrangementFragment : Fragment() {
             android.R.layout.simple_spinner_dropdown_item,
             viewModel.customers)
         binding.autoCompleteCustomer.setAdapter(customerListAdapter)
+        binding.autoCompleteCustomer.inputType = InputType.TYPE_NULL
+        binding.autoCompleteCustomer.keyListener = null
         binding.autoCompleteCustomer.setOnTouchListener { v, event ->
             binding.autoCompleteCustomer.showDropDown()
             false
@@ -130,6 +132,8 @@ class ArrangementFragment : Fragment() {
             viewModel.objects
         )
         binding.autoCompleteObject.setAdapter(objectListAdapter)
+        binding.autoCompleteObject.inputType = InputType.TYPE_NULL
+        binding.autoCompleteObject.keyListener = null
         binding.autoCompleteObject.setOnTouchListener { v, event ->
             binding.autoCompleteObject.showDropDown()
             false
@@ -173,6 +177,8 @@ class ArrangementFragment : Fragment() {
             viewModel.contractors
         )
         binding.autoCompleteContractor.setAdapter(contractorListAdapter)
+        binding.autoCompleteContractor.inputType = InputType.TYPE_NULL
+        binding.autoCompleteContractor.keyListener = null
         binding.autoCompleteContractor.setOnTouchListener { v, event ->
             binding.autoCompleteContractor.showDropDown()
             false
@@ -209,6 +215,8 @@ class ArrangementFragment : Fragment() {
             viewModel.subContractors
         )
         binding.autoCompleteSubContractor.setAdapter(subContractorListAdapter)
+        binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
+        binding.autoCompleteSubContractor.keyListener = null
         binding.autoCompleteSubContractor.setOnTouchListener { v, event ->
             binding.autoCompleteSubContractor.showDropDown()
             false
