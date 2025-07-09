@@ -27,9 +27,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 import com.example.epi.ViewModel.SharedViewModel
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -174,10 +172,9 @@ class FixingVolumesFragment : Fragment() {
                 text = title
                 setPadding(8, 0, 8, 32)
                 textSize = 18f
-                setTextColor(Color.BLACK)
                 gravity = Gravity.CENTER
-                setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                setTextColor(ContextCompat.getColor(context, R.color.background))
+                setTextColor(Color.BLACK)
+                setBackgroundColor(Color.LTGRAY)
 
                 layoutParams = TableRow.LayoutParams(0, 120, 1f)
             }
@@ -199,15 +196,19 @@ class FixingVolumesFragment : Fragment() {
                 this.text = text
                 setPadding(8, 8, 8, 8)
                 textSize = 18f
-                setTextColor(Color.BLACK)
                 gravity = Gravity.CENTER
+                setTextColor(Color.BLACK)
+                setBackgroundColor(Color.GRAY)
                 layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
             }
         }
 
         val buttonContainer = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
-            layoutParams = TableRow.LayoutParams(0, 150, 1f)
+            setBackgroundColor(Color.GRAY)
+            layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f).apply {
+                gravity = Gravity.CENTER
+            }
         }
 
         val deleteButton = ImageButton(requireContext()).apply {

@@ -1,6 +1,8 @@
 package com.example.epi.Fragments.Reports.SendReport
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,11 +15,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epi.DataBase.AppDatabase
 import com.example.epi.DataBase.ReportEntity
+import com.example.epi.Fragments.Reports.Reports.ChildItem
+import com.example.epi.Fragments.Reports.Reports.ExpandableAdapter
+import com.example.epi.Fragments.Reports.Reports.ParentItem
 import com.example.epi.R
 import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentSendReportBinding
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 
 class SendReportFragment : Fragment() {
@@ -25,7 +33,7 @@ class SendReportFragment : Fragment() {
     private var _binding : FragmentSendReportBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: ExpandableAdapter
+
 
     private val viewModel: SharedViewModel by activityViewModels()
 
@@ -43,6 +51,7 @@ class SendReportFragment : Fragment() {
         binding.SeRFrBtnInfo.setOnClickListener {
             Log.d(TAG, "Info-кнопка нажата")
             showAllEnteredData()
+            exportDatabase(requireContext())
             Log.d(TAG, "Показали AlertDialog с информацией")
         }
 
@@ -71,38 +80,27 @@ class SendReportFragment : Fragment() {
         binding.SeRFrBtnBack.setOnClickListener {
             findNavController().navigate(R.id.fixFragment)
         }
-
-        setupRecyclerView()
     }
 
-    private fun setupRecyclerView() {
-        // Здесь можно подготовить данные из viewModel
-        val data = prepareExpandableData()
+    fun exportDatabase(context: Context) {
+        val dbName = "app_database"
+        val dbPath = context.getDatabasePath(dbName)
 
-        adapter = ExpandableAdapter(data)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val exportDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "")
+        if (!exportDir.exists()) exportDir.mkdirs()
+
+        val outFile = File(exportDir, dbName)
+        try {
+            FileInputStream(dbPath).use { input ->
+                FileOutputStream(outFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+            Log.d("ExportDB", "БД экспортирована в: ${outFile.absolutePath}")
+        } catch (e: Exception) {
+            Log.e("ExportDB", "Ошибка экспорта: ${e.message}")
+        }
     }
-
-    private fun prepareExpandableData(): MutableList<Any> {
-        val parentItem = ParentItem(
-            date = viewModel.currentDate.value ?: "не указано",
-            obj = viewModel.selectedObject.value ?: "не указано",
-            children = listOf(
-                ChildItem(
-                    workType = viewModel.selectedWorkType.value ?: "—",
-                    customer = viewModel.selectedCustomer.value ?: "—",
-                    contractor = viewModel.selectedContractor.value ?: "—",
-                    transportCustomer = viewModel.customerName.value ?: "—"
-                )
-            )
-        )
-
-        val list = mutableListOf<Any>()
-        list.add(parentItem)
-        return list
-    }
-
 
     suspend fun saveReportToDatabase(){
         Log.d(TAG, "Вызвали функцию saveReportToDatabase")

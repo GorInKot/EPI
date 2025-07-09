@@ -183,14 +183,6 @@ class ControlFragment : Fragment() {
         binding.table.addView(headerRow)
     }
 
-    // Очищаем поля ввода
-    private fun clearInputFields() {
-        binding.AutoCompleteTextViewEquipmentName.setText("")
-        binding.AutoCompleteTextViewType.setText("")
-        binding.InputEditTextReport.setText("")
-        binding.InputEditTextRemarks.setText("")
-    }
-
     private fun addRowToTable(row: ControlRow) {
         val tableRow = TableRow(requireContext())
         tableRow.layoutParams = TableLayout.LayoutParams(
@@ -205,12 +197,14 @@ class ControlFragment : Fragment() {
                 textSize = 18f
                 setTextColor(Color.BLACK)
                 gravity = Gravity.CENTER
+                setBackgroundColor(Color.GRAY)
                 layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
             }
         }
 
         val buttonContainer = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
+            setBackgroundColor(Color.GRAY)
             layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f).apply {
                 gravity = Gravity.CENTER
             }
@@ -270,7 +264,6 @@ class ControlFragment : Fragment() {
         binding.table.addView(tableRow)
     }
 
-
     private fun showEditDialog(row: ControlRow, cells: List<TextView>) {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_edit_row, null)
@@ -312,6 +305,14 @@ class ControlFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    // Очищаем поля ввода
+    private fun clearInputFields() {
+        binding.AutoCompleteTextViewEquipmentName.setText("")
+        binding.AutoCompleteTextViewType.setText("")
+        binding.InputEditTextReport.setText("")
+        binding.InputEditTextRemarks.setText("")
     }
 
     override fun onDestroyView() {

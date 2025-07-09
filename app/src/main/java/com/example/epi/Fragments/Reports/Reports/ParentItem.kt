@@ -1,4 +1,4 @@
-package com.example.epi.Fragments.Reports.SendReport
+package com.example.epi.Fragments.Reports.Reports
 
 data class ParentItem(
     val date: String,

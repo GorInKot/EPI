@@ -5,28 +5,38 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Reports.Reports.ReportsFragment"
-    android:background="@color/background"
+    android:background="@color/color_black_dark"
     >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Список отчетов\nСкоро здесь будут отображаться отчеты..."
-        style="@style/ArrangementText"
-        android:layout_gravity="center"
-        android:gravity="center"
+    <!--  Заголовок -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_mainLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Мои отчеты"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/mainLabel"
         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="48dp"
+        tools:listitem="@layout/item_parent_send_report"
+        />
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/RepFr_MainMenu_btn"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:text="Главное меню"
-        android:textSize="20sp"
-        android:layout_marginEnd="25dp"
-        android:layout_gravity="center"
-        style="@style/UsualButton"
-        app:cornerRadius="36dp"
+        style="@style/SimpleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="25dp"

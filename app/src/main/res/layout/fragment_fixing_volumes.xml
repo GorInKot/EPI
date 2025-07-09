@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.FixingVolumes.FixingVolumesFragment"
-    android:background="@color/color_black_dark"
+    android:background="@color/color_black"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -218,10 +218,13 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
+            android:background="@color/color_three"
+            android:showDividers="middle"
+            android:gravity="center"
+            android:stretchColumns="*"
             >
 
             <TableRow
-                android:background="#EEEEEE"
                 android:layout_gravity="center"
                 android:gravity="center"
                 >

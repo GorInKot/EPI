@@ -20,5 +20,6 @@
     <color name="color_blue">#14213d</color>
     <color name="color_orange">#fca311</color>
     <color name="color_grey">#e5e5e5</color>
+    <color name="color_grey_dark">#6A6A6A</color>
     <color name="color_white">#ffffff</color>
 </resources>

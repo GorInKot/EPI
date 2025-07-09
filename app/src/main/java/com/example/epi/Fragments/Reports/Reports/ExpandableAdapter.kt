@@ -1,4 +1,4 @@
-package com.example.epi.Fragments.Reports.SendReport
+package com.example.epi.Fragments.Reports.Reports
 
 import android.view.LayoutInflater
 import android.view.View
