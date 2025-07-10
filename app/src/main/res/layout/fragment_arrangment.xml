@@ -328,6 +328,9 @@
                 android:id="@+id/hidden_textInputEditText_ManualObject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
+                android:inputType="text"
+
                 android:textSize="18sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"

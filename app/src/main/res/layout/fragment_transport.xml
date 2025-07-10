@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="24dp"
+            app:layout_constraintGuide_begin="16dp"
             />
 
         <!--  Правая граница  -->
@@ -28,8 +28,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="24dp"
+            app:layout_constraintGuide_end="16dp"
             />
+
+        <!--  Центральная граница  -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            />
+
 
 
         <!-- Нижняя граница  -->
@@ -44,14 +54,16 @@
         <!-- Заголовок   -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_mainLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Транспорт"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/mainLabel"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="12dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginStart="0dp"
             />
 
         <!--  Специалист СК  -->
@@ -63,33 +75,32 @@
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="12dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginStart="0dp"
             />
 
         <!-- Чекбокс -->
         <CheckBox
             android:id="@+id/chBoxM_Customer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Транспорт отсутствует"
             style="@style/checkBox"
-            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-            android:layout_marginEnd="12dp"
             android:layout_marginTop="12dp"
             />
 
         <!--  Заголовок: Заказчик  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Customer"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Заказчик"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_Customer"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_Customer"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
@@ -100,58 +111,74 @@
         <!--  Текстовое поле: Заказчик  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_Customer"
-            android:layout_width="450dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="65dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
+
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginBottom="0dp"
+
             android:layout_marginTop="8dp"
             style="@style/TextInputLayout"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/tv_Customer"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInput_EditText_Customer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/color_input_text"
-                android:textSize="22sp"
                 android:inputType="text"
+
+                android:textSize="18sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:singleLine="true"
+
+                android:textColor="@color/color_black"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Заголовок: Договор  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Contract"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Договор СК"
             style="@style/ArrangementText"
-            android:paddingStart="8dp"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_Contract"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_Contract"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"
-            app:layout_constraintTop_toTopOf="@id/tv_Customer"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="12dp"
 
             />
 
         <!--  Текстовое поле: Договор  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_Contract"
-            android:layout_width="450dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="65dp"
-            android:layout_marginTop="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
+
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginBottom="0dp"
+
+            android:layout_marginTop="8dp"
             style="@style/TextInputLayout"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             app:layout_constraintTop_toTopOf="@id/textInput_Layout_Customer"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -174,62 +201,89 @@
             android:layout_height="wrap_content"
             android:text="Исполнитель по транспорту"
             style="@style/ArrangementText"
-            android:paddingStart="8dp"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_Executor"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_Executor"
-            app:layout_constraintBottom_toTopOf="@id/textInput_Layout_Executor"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
+
+            app:layout_constraintBottom_toTopOf="@id/textInput_Layout_Executor"
             />
 
         <!--  Текстовое поле: Исполнитель по транспорту  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_Executor"
-            android:layout_width="450dp"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
+
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginBottom="0dp"
+
+            android:layout_marginTop="58dp"
             style="@style/TextInputLayout"
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Customer"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="65dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInput_EditText_Executor"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""
                 android:textStyle="normal"
-                android:textColor="@color/color_input_text"
-                android:textSize="22sp"
                 android:inputType="text"
+
+                android:textSize="18sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:singleLine="true"
+
+                android:textColor="@color/color_black"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Заголовок: Договор по транспорту  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_ContractTransport"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Договор по транспорту"
             style="@style/ArrangementText"
-            android:paddingStart="8dp"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_ContractTransport"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_ContractTransport"
-            app:layout_constraintBottom_toTopOf="@id/textInput_Layout_ContractTransport"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintBottom_toTopOf="@id/textInput_Layout_ContractTransport"
             />
 
         <!--  Текстовое поле: Договор по транспорту  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_ContractTransport"
-            android:layout_width="450dp"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
+
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginBottom="0dp"
+
+            android:layout_marginTop="58dp"
             style="@style/TextInputLayout"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Contract"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="65dp"
+
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -249,27 +303,35 @@
         <!--  Заголовок: Дата начала поездки  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_StartDate"
-            android:layout_width="450dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Дата начала поездки"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_Executor"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_Executor"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_Executor"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="16dp"
+
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
             />
 
         <!--  Текстовое поле: Дата начала поездки  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_StartDate"
-            android:layout_width="200dp"
-            android:layout_height="56dp"
-            app:layout_constraintStart_toStartOf="@id/tv_StartDate"
-            app:layout_constraintTop_toBottomOf="@id/tv_StartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="23dp"
             style="@style/TextInputLayout"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/btn_startDate"
+            app:layout_constraintTop_toBottomOf="@id/tv_StartDate"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -292,43 +354,52 @@
         <!-- Кнопка: Дата начала поездки   -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_startDate"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Выбрать день"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toEndOf="@id/tv_StartDate"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintStart_toEndOf="@id/textInput_Layout_StartDate"
             app:layout_constraintTop_toBottomOf="@id/tv_StartDate"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="23dp"
             />
 
         <!--  Заголовок: Дата начала поездки  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_StartTime"
-            android:layout_width="450dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Время начала поездки"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toStartOf="@id/tv_StartDate"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_StartDate"
-            app:layout_constraintEnd_toEndOf="@id/tv_StartDate"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
+
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
             />
 
         <!--  Текстовое поле: Дата начала поездки  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_StartDateHours"
-            android:layout_width="200dp"
-            android:layout_height="56dp"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_StartDate"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_StartDate"
-            app:layout_constraintTop_toBottomOf="@id/tv_StartTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="23dp"
             style="@style/TextInputLayout"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/btn_startTime"
+            app:layout_constraintTop_toBottomOf="@id/tv_StartTime"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -353,43 +424,51 @@
         <!-- Кнопка: Дата начала поездки   -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_startTime"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Выбрать время"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toEndOf="@id/btn_startDate"
-            app:layout_constraintStart_toStartOf="@id/btn_startDate"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintStart_toEndOf="@id/textInput_Layout_StartDateHours"
             app:layout_constraintTop_toBottomOf="@id/tv_StartTime"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="23dp"
             />
 
         <!-- Заголовок: дата завершения поездки   -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_EndDate"
-            android:layout_width="450dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Дата завершения поездки"
             style="@style/ArrangementText"
-            app:layout_constraintEnd_toEndOf="@id/textInput_Layout_ContractTransport"
-            app:layout_constraintStart_toStartOf="@id/textInput_Layout_ContractTransport"
-            app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_ContractTransport"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_ContractTransport"
             />
 
         <!-- Текстовое поле: дата завершения поездки   -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_EndDate"
-            android:layout_width="200dp"
-            android:layout_height="56dp"
-            app:layout_constraintStart_toStartOf="@id/tv_EndDate"
-            app:layout_constraintTop_toBottomOf="@id/tv_EndDate"
-            style="@style/TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="23dp"
+            style="@style/TextInputLayout"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/btn_endDate"
+            app:layout_constraintTop_toBottomOf="@id/tv_EndDate"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -414,43 +493,52 @@
         <!-- Кнопка: Дата завершения поездки   -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_endDate"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Выбрать день"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toEndOf="@id/tv_EndDate"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@id/textInput_Layout_EndDate"
             app:layout_constraintTop_toBottomOf="@id/tv_EndDate"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="23dp"
             />
 
         <!-- Заголовок: время завершения поездки   -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_EndTime"
-            android:layout_marginBottom="16dp"
-            android:layout_width="450dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Время завершения поездки"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toStartOf="@id/tv_EndDate"
-            app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_EndDate"
-            app:layout_constraintEnd_toEndOf="@id/tv_EndDate"
             android:layout_marginStart="0dp"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_EndDate"
             />
 
         <!-- Текстовое поле: время завершения поездки   -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_EndDateHours"
-            android:layout_width="200dp"
-            android:layout_height="56dp"
-            app:layout_constraintStart_toStartOf="@id/tv_EndTime"
-            app:layout_constraintTop_toBottomOf="@id/tv_EndTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="23dp"
             style="@style/TextInputLayout"
+
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/btn_endTime"
+            app:layout_constraintTop_toBottomOf="@id/tv_EndTime"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -475,43 +563,49 @@
         <!-- Кнопка: время завершения поездки   -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_endTime"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Выбрать день"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toEndOf="@id/btn_endDate"
-            app:layout_constraintStart_toStartOf="@id/btn_endDate"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@id/textInput_Layout_EndDateHours"
             app:layout_constraintTop_toBottomOf="@id/tv_EndTime"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginStart="23dp"
             />
 
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_StateNumber"
-            android:layout_width="450dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Госномер"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toStartOf="@id/tv_StartTime"
-            app:layout_constraintEnd_toEndOf="@id/tv_StartTime"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_StartDateHours"
+
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_StateNumber"
-            android:layout_width="300dp"
-            android:layout_height="56dp"
-            app:layout_constraintStart_toStartOf="@id/tv_StateNumber"
-            app:layout_constraintEnd_toEndOf="@id/tv_StateNumber"
-            app:layout_constraintTop_toBottomOf="@id/tv_StateNumber"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="56dp"
+            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintTop_toBottomOf="@id/tv_StateNumber"
             style="@style/TextInputLayout"
             >
 
@@ -532,27 +626,44 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!--   Барьер     -->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="textInput_Layout_StateNumber"
+            />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Back"
             android:layout_width="160dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Назад"
             style="@style/SimpleButton"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier_bottom"
             app:layout_constraintEnd_toStartOf="@id/btn_Next"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
             android:layout_marginEnd="24dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Next"
             android:layout_width="160dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Сохранить"
             style="@style/ExtraButton"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier_bottom"
             app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            android:layout_marginEnd="65dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
