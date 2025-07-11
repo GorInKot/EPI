@@ -3,105 +3,120 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
     android:background="@color/color_black"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
+            android:id="@+id/guideline_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="260dp"
+            app:layout_constraintGuide_percent="0.3"
             />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
+            android:id="@+id/guideline_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="260dp"
+            app:layout_constraintGuide_percent="0.7"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1"
             />
 
         <!-- Заголовок -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvRegisterTitle"
-            style="@style/mainLabel"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
             android:text="Регистрация"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintBottom_toTopOf="@id/guideline_top"
+            style="@style/mainLabel"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_secondName"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/guideline_top"
             android:hint="Фамилия"
             android:textColorHint="@color/color_black_dark"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_secondName"
+                android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_firstName"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_secondName"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:hint="Имя"
             android:textColorHint="@color/color_black_dark"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_FirstName"
+                android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_thirdName"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/RegistrationTextInputLayout"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_firstName"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:hint="Отчество"
             android:textColorHint="@color/color_black_dark"
             >
@@ -110,22 +125,29 @@
                 android:id="@+id/textInputEditText_thirdName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
                 android:inputType="textPersonName"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Number"
-            style="@style/RegistrationTextInputLayout"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_thirdName"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
             android:hint="Укажите табельный номер:"
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_thirdName"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:textColorHint="@color/color_black_dark"
             >
 
@@ -133,24 +155,29 @@
                 android:id="@+id/textInputEditText_Number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
                 android:inputType="number"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Phone"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/RegistrationTextInputLayout"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
             android:hint="Номер телефона: +7 "
+            style="@style/RegistrationTextInputLayout"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
             android:textColorHint="@color/color_black_dark"
             >
 
@@ -158,63 +185,80 @@
                 android:id="@+id/textInputEditText_Phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
                 android:inputType="phone"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Branch"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Выберите филиал из списка"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Phone"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:endIconMode="dropdown_menu"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:textColorHint="@color/color_black_dark"
+            app:endIconMode="dropdown_menu"
             >
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/autoCompleteTextView_Branch"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
                 android:importantForAutofill="no"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="none"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_PU"
-            android:layout_width="460dp"
+            android:layout_width="00dp"
             android:layout_height="wrap_content"
             android:hint="Выберите ПУ из списка"
             style="@style/RegistrationTextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Branch"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:endIconMode="dropdown_menu"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:textColorHint="@color/color_black_dark"
+            app:endIconMode="dropdown_menu"
             >
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/autoCompleteTextView_PU"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
                 android:importantForAutofill="no"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="none"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -222,31 +266,31 @@
         <!-- Кнопка регистрации -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Register"
-            android:layout_width="260dp"
+            android:layout_width="00dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
             style="@style/SimpleButton"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_PU"
             android:layout_marginTop="24dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="0dp"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Auth"
-            android:layout_width="260dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Авторизоваться"
             style="@style/SimpleButton"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/btn_Register"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="0dp"
 
             />
@@ -254,15 +298,15 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMainMenu"
             style="@style/SimpleButton"
-            android:layout_width="260dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Главное меню"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/btn_Auth"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="0dp"
             />
 

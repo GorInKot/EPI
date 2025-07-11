@@ -1,58 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
     android:background="@color/color_black"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
+        android:layout_height="wrap_content"
+        android:paddingBottom="36dp"
         >
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvAuthTitle"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Авторизация"
-            android:layout_marginTop="24dp"
-            style="@style/mainLabel"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
-            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7"
             />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
+            android:id="@+id/guideline_rightMiddle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="260dp" />
+            app:layout_constraintGuide_percent="0.85"
+            />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
+            android:id="@+id/guideline_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="260dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvAuthTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Авторизация"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            style="@style/mainLabel"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/guideline_top"
             />
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Number"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Табельный номер"
             style="@style/RegistrationTextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tvAuthTitle"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp"
             android:gravity="center"
             >
 
@@ -60,24 +85,30 @@
                 android:id="@+id/textInputEditText_Number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Password"
-            android:layout_width="460dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Введите пароль"
             style="@style/RegistrationTextInputLayout"
             app:passwordToggleEnabled="true"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            android:layout_marginTop="32dp"
             android:gravity="center"
             >
 
@@ -85,51 +116,58 @@
                 android:id="@+id/textInputEditText_Password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
                 android:inputType="textPassword"
-                android:textCursorDrawable="@drawable/drawable_cursor"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Кнопка входа -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Login"
-            android:layout_width="260dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:text="Войти"
             style="@style/SimpleButton"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Password"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/guideline_bottom"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             />
 
         <!-- Кнопка на регистрацию -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Register"
-            android:layout_width="390dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
-            android:textSize="18sp"
             android:textColor="@color/color_grey"
             style="@style/ArrangementText"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/btn_Login"
             />
 
         <!-- Кнопка возврата -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBackToMenu"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Главное меню"
             style="@style/SimpleButton"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_rightMiddle"
             app:layout_constraintBottom_toBottomOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

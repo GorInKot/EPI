@@ -18,7 +18,7 @@
 
         <!--  Левая граница  -->
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/leftGuideline"
+            android:id="@+id/guideline_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -27,7 +27,7 @@
 
         <!--  Правая граница  -->
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/rightGuideline"
+            android:id="@+id/guideline_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -58,7 +58,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_mainLabel"
             android:text="Транспорт"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/mainLabel"
             android:maxLines="1"
@@ -69,7 +69,7 @@
             android:id="@+id/tv_Specialist"
             android:text="Специалист СК:"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
             />
 
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:text="Транспорт отсутствует"
             style="@style/checkBox"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
             android:layout_marginTop="12dp"
             />
@@ -89,7 +89,7 @@
             android:id="@+id/tv_Customer"
             android:text="Заказчик"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"
             android:layout_marginTop="24dp"
@@ -106,7 +106,7 @@
             android:layout_marginTop="16dp"
 
             style="@style/TextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/tv_Customer"
             >
@@ -133,7 +133,7 @@
             android:text="Договор СК"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"
             android:layout_marginTop="24dp"
             />
@@ -150,7 +150,7 @@
             style="@style/TextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/tv_Contract"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -174,7 +174,7 @@
             android:id="@+id/tv_Executor"
             android:text="Исполнитель по транспорту"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Customer"
             app:layout_constraintBottom_toTopOf="@id/textInput_Layout_Executor"
@@ -188,7 +188,7 @@
             android:layout_marginStart="56dp"
             android:layout_marginTop="16dp"
             style="@style/TextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/tv_Executor"
             >
@@ -217,7 +217,7 @@
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Contract"
             />
 
@@ -230,7 +230,7 @@
             style="@style/TextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/tv_ContractTransport"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -257,7 +257,7 @@
             android:text="Дата начала поездки"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_Executor"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             android:layout_marginTop="24dp"
             />
@@ -270,7 +270,7 @@
             android:layout_marginEnd="23dp"
             style="@style/TextInputLayout"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/btn_startDate"
             app:layout_constraintTop_toBottomOf="@id/tv_StartDate"
             >
@@ -315,7 +315,7 @@
             android:text="Время начала поездки"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_StartDate"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             android:layout_marginTop="24dp"
             />
@@ -328,7 +328,7 @@
             android:layout_marginEnd="23dp"
             style="@style/TextInputLayout"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/btn_startTime"
             app:layout_constraintTop_toBottomOf="@id/tv_StartTime"
             >
@@ -376,7 +376,7 @@
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_ContractTransport"
             />
 
@@ -419,7 +419,7 @@
             android:id="@+id/btn_endDate"
             android:text="Выбрать день"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/textInput_Layout_EndDate"
             app:layout_constraintTop_toBottomOf="@id/tv_EndDate"
             android:layout_marginTop="16dp"
@@ -434,7 +434,7 @@
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_EndDate"
             />
 
@@ -480,7 +480,7 @@
             android:id="@+id/btn_endTime"
             android:text="Выбрать день"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/textInput_Layout_EndDateHours"
             app:layout_constraintTop_toBottomOf="@id/tv_EndTime"
             android:layout_marginTop="16dp"
@@ -494,7 +494,7 @@
             android:text="Госномер"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_StartDateHours"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             android:layout_marginTop="24dp"
             />
@@ -504,7 +504,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="56dp"
             android:layout_marginEnd="56dp"
-            app:layout_constraintStart_toEndOf="@id/leftGuideline"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/tv_StateNumber"
             style="@style/TextInputLayout"
@@ -563,7 +563,7 @@
             android:text="Сохранить"
             style="@style/ExtraButton"
             app:layout_constraintTop_toBottomOf="@id/barrier_bottom"
-            app:layout_constraintEnd_toStartOf="@id/rightGuideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="28dp"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
