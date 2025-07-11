@@ -7,6 +7,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Control.ControlFragment"
     android:background="@color/color_black"
+    android:scrollbars="vertical"
+    android:fillViewport="true"
+
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,223 +17,259 @@
         android:layout_height="match_parent"
         android:paddingBottom="36dp"
         >
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_mainLabel"
+
+        <!-- Направляющие -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_mainLabel"
             android:text="Полевой контроль"
             style="@style/mainLabel"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toTopOf="parent"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_secondLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Отчетность"
             style="@style/secondLabel"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-            app:layout_constraintStart_toStartOf="parent"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Date"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="35dp"
-            android:layout_marginStart="5dp"
             android:text="Дата: "
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintBottom_toTopOf="@id/tv_secondLabel"
             style="@style/ArrangementText"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_equipmentName"
-            android:layout_width="250dp"
-            android:layout_height="60dp"
+
             android:text="Название прибора /\nоборудования"
-            android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             style="@style/ArrangementText"
+            android:layout_marginTop="24dp"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_equipmentName"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
             style="@style/TextInputLayout"
-            app:layout_constraintStart_toEndOf="@id/tv_equipmentName"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
             app:endIconMode="dropdown_menu"
+            android:layout_marginTop="24dp"
             >
 
             <AutoCompleteTextView
                 android:id="@+id/AutoCompleteTextView_equipmentName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""
-                android:textStyle="normal"
-                android:textSize="22sp"
-                android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_input_text"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Type"
-            android:layout_width="250dp"
-            android:layout_height="60dp"
             android:text="Комплекс работ"
-            android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_equipmentName"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             style="@style/ArrangementText"
+            android:layout_marginTop="24dp"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Type"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
             style="@style/TextInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_equipmentName"
-            app:layout_constraintStart_toEndOf="@id/tv_Type"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:endIconMode="dropdown_menu"
+            android:layout_marginTop="24dp"
             >
 
             <AutoCompleteTextView
                 android:id="@+id/AutoCompleteTextView_Type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textStyle="normal"
-                android:textColor="@color/color_input_text"
-                android:textSize="22sp"
-                android:inputType="none"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_bottom_of_Type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="textInputLayout_Type"
+            />
 
         <CheckBox
             android:id="@+id/checkBoxManualType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Нет нарушения"
-            android:textSize="20sp"
             style="@style/checkBox"
-            app:layout_constraintStart_toEndOf="@id/tv_Type"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Type"
+            app:layout_constraintTop_toBottomOf="@id/barrier_bottom_of_Type"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_orderNumber"
-            android:layout_width="250dp"
-            android:layout_height="80dp"
             android:text="Получить № предписания"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
             style="@style/SimpleButton"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_orderNumber"
-            android:layout_width="250dp"
-            android:layout_height="80dp"
-            android:text=""
-            app:layout_constraintStart_toEndOf="@id/btn_orderNumber"
+            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            android:layout_marginTop="24dp"
             style="@style/ArrangementText"
+
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Report"
-            android:layout_width="250dp"
-            android:layout_height="60dp"
-            android:text="Отчет о результатах инспекции"
-            android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
             style="@style/ArrangementText"
+            android:text="Отчет о результатах инспекции"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
+
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Report"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
             style="@style/TextInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/tv_orderNumber"
             app:layout_constraintStart_toEndOf="@id/tv_Report"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/InputEditText_Report"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""
-                android:textStyle="normal"
-                android:textSize="22sp"
-                android:inputType="textMultiLine"
-                android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_input_text"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Remarks"
-            android:layout_width="250dp"
-            android:layout_height="60dp"
             android:text="Замечания к документации"
-            android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tv_Report"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
             style="@style/ArrangementText"
+
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Remarks"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
             style="@style/TextInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Report"
             app:layout_constraintStart_toEndOf="@id/tv_Remarks"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/InputEditText_Remarks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text=""
-                android:textStyle="normal"
-                android:textSize="22sp"
-                android:inputType="textMultiLine"
-                android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_input_text"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -238,26 +277,23 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_addRow"
-            android:layout_width="250dp"
-            android:layout_height="80dp"
             android:text="Добавить вид работ"
-            android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
-            android:layout_gravity="center"
             style="@style/SimpleButton"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
             />
 
         <TableLayout
             android:id="@+id/table"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/btn_addRow"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginTop="24dp"
             android:showDividers="middle"
             android:gravity="center"
@@ -327,7 +363,7 @@
                 <ImageView
                     android:gravity="center"
                     android:layout_width="0dp"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:src="@drawable/edit_32"
                     android:layout_marginStart="4dp"
@@ -341,28 +377,34 @@
         <!--     Нижняя часть-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Back"
-            android:layout_width="160dp"
-            android:layout_height="60dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
             android:text="Назад"
+            style="@style/SimpleButton"
             app:layout_constraintTop_toBottomOf="@id/table"
             app:layout_constraintEnd_toStartOf="@id/btn_Next"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="48dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="24dp"
-            style="@style/SimpleButton"
+            android:layout_marginBottom="24dp"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Next"
-            android:layout_width="160dp"
-            android:layout_height="60dp"
-            android:text="Сохранить"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:maxHeight="70dp"
+            android:text="Далее"
             style="@style/ExtraButton"
             app:layout_constraintTop_toBottomOf="@id/table"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="48dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
