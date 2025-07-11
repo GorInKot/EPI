@@ -133,16 +133,15 @@
             >
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteWorkType"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:minHeight="56dp"
-                android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_input_text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
 
                 />
@@ -185,16 +184,15 @@
             >
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteCustomer"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:minHeight="56dp"
-                android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_input_text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
 
                 />
@@ -286,16 +284,15 @@
             >
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteObject"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:minHeight="56dp"
-                android:textSize="18sp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
                 android:inputType="text"
                 android:textColor="@color/color_black"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -390,17 +387,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_Plot"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="normal"
-                android:textSize="18sp"
-                android:inputType="text"
-                android:singleLine="true"
+                android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-
-                android:textColor="@color/color_black"
-                android:paddingTop="12dp"
+                android:minHeight="56dp"
                 android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -447,16 +441,15 @@
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteContractor"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:minHeight="56dp"
-                android:textSize="18sp"
+                android:paddingBottom="12dp"
+                android:textSize="14sp"
                 android:inputType="text"
                 android:textColor="@color/color_black"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -587,17 +580,15 @@
             >
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteSubContractor"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:minHeight="56dp"
-                android:textSize="18sp"
-                android:inputType="text"
-
-                android:textColor="@color/color_black"
-                android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -690,16 +681,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_RepSSK_Gp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="normal"
-                android:textSize="18sp"
-                android:inputType="text"
-                android:singleLine="true"
+                android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_black"
-                android:paddingTop="12dp"
+                android:minHeight="56dp"
                 android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
 
                 />
@@ -741,16 +730,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_Subcontractor"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="normal"
-                android:textSize="18sp"
-                android:inputType="text"
-                android:singleLine="true"
+                android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_black"
-                android:paddingTop="12dp"
+                android:minHeight="56dp"
                 android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -789,16 +776,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_RepSubContractor"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="normal"
-                android:textSize="18sp"
-                android:inputType="text"
-                android:singleLine="true"
+                android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_black"
-                android:paddingTop="12dp"
+                android:minHeight="56dp"
                 android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -839,16 +824,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditText_RepSSK_Sub"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="normal"
-                android:textSize="18sp"
-                android:inputType="text"
-                android:singleLine="true"
+                android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/color_black"
-                android:paddingTop="12dp"
+                android:minHeight="56dp"
                 android:paddingBottom="12dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 />
         </com.google.android.material.textfield.TextInputLayout>
