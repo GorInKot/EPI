@@ -33,7 +33,7 @@ class ControlFragment : Fragment() {
     private var _binding: FragmentControlBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SharedViewModel by activityViewModels()
+    private val viewModel: ControlViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,9 +68,9 @@ class ControlFragment : Fragment() {
         }
 
         // Подписка на Дату и время
-        viewModel.currentDate.observe(viewLifecycleOwner) {
-            binding.tvDate.text = "Дата: $it"
-        }
+//        viewModel.currentDate.observe(viewLifecycleOwner) {
+//            binding.tvDate.text = "Дата: $it"
+//        }
 
         // Чек бокс
         binding.checkBoxManualType.setOnCheckedChangeListener { _ , isChecked ->
@@ -78,13 +78,13 @@ class ControlFragment : Fragment() {
         }
 
         // Получить номер предписания
-        binding.btnOrderNumber.setOnClickListener {
-            if (!viewModel.startDate.value.isNullOrBlank() && !viewModel.startTime.value.isNullOrBlank()) {
-                viewModel.generateOrderNumber()
-            } else {
-                Toast.makeText(requireContext(), "Дата в время начала поездки не заданы", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        binding.btnOrderNumber.setOnClickListener {
+//            if (!viewModel.startDate.value.isNullOrBlank() && !viewModel.startTime.value.isNullOrBlank()) {
+//                viewModel.generateOrderNumber()
+//            } else {
+//                Toast.makeText(requireContext(), "Дата в время начала поездки не заданы", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
         // Добавление заголовка таблицы
         viewModel.controlRow.observe(viewLifecycleOwner) { rows ->

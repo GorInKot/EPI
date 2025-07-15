@@ -27,7 +27,7 @@ class TransportFragment : Fragment() {
     private var _binding: FragmentTransportBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SharedViewModel by activityViewModels()
+    private val viewModel: TransportVIewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

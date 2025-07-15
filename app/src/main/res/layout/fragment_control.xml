@@ -9,7 +9,6 @@
     android:background="@color/color_black"
     android:scrollbars="vertical"
     android:fillViewport="true"
-
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -36,40 +36,40 @@ class ReportsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecyclerView()
+//        setupRecyclerView()
 
         binding.RepFrMainMenuBtn.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
         }
     }
 
-    private fun prepareExpandableData(): MutableList<Any> {
-        val parentItem = ParentItem(
-            date = viewModel.currentDate.value ?: "не указано",
-            obj = viewModel.selectedObject.value ?: "не указано",
-            children = listOf(
-                ChildItem(
-                    workType = viewModel.selectedWorkType.value ?: "—",
-                    customer = viewModel.selectedCustomer.value ?: "—",
-                    contractor = viewModel.selectedContractor.value ?: "—",
-                    transportCustomer = viewModel.customerName.value ?: "—"
-                )
-            )
-        )
+//    private fun prepareExpandableData(): MutableList<Any> {
+//        val parentItem = ParentItem(
+//            date = viewModel.currentDate.value ?: "не указано",
+//            obj = viewModel.selectedObject.value ?: "не указано",
+//            children = listOf(
+//                ChildItem(
+//                    workType = viewModel.selectedWorkType.value ?: "—",
+//                    customer = viewModel.selectedCustomer.value ?: "—",
+//                    contractor = viewModel.selectedContractor.value ?: "—",
+//                    transportCustomer = viewModel.customerName.value ?: "—"
+//                )
+//            )
+//        )
+//
+//        val list = mutableListOf<Any>()
+//        list.add(parentItem)
+//        return list
+//    }
 
-        val list = mutableListOf<Any>()
-        list.add(parentItem)
-        return list
-    }
-
-    private fun setupRecyclerView() {
-        // Здесь можно подготовить данные из viewModel
-        val data = prepareExpandableData()
-
-        adapter = ExpandableAdapter(data)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-    }
+//    private fun setupRecyclerView() {
+//        // Здесь можно подготовить данные из viewModel
+//        val data = prepareExpandableData()
+//
+//        adapter = ExpandableAdapter(data)
+//        binding.recyclerView.adapter = adapter
+//        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

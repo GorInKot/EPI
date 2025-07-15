@@ -2,21 +2,24 @@ package com.example.epi.DataBase
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReportDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReport(report: ReportEntity)
+    @Insert
+    suspend fun insert(report: Report): Long
 
-    @Query("SELECT * FROM reports ORDER BY id DESC")
-    suspend fun getAllReports(): List<ReportEntity>
+    @Query("SELECT * FROM reports WHERE isSend = 0 ORDER BY id DESC LIMIT 1")
+    suspend fun getLastUnsentReport(): Report?
+
+    @Query("SELECT * FROM reports")
+    fun getAllReports(): Flow<List<Report>>
 
     @Update
-    suspend fun updateReport(report: ReportEntity)
+    suspend fun update(report: Report)
 
     @Query("DELETE FROM reports")
-    suspend fun clearAll()
+    suspend fun deleteAll()
 }

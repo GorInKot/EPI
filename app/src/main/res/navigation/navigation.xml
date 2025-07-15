@@ -15,9 +15,29 @@
     <fragment
         android:id="@+id/arrangementFragment"
         android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
-        android:label="Arrangement"
-        tools:layout="@layout/fragment_arrangment"
-        />
+        android:label="ArrangementFragment"
+        tools:layout="@layout/fragment_arrangment">
+        <action
+            android:id="@+id/action_arrangementFragment_to_transportFragment"
+            app:destination="@id/transportFragment">
+            <argument
+                android:name="reportId"
+                app:argType="long"/>
+        </action>
+        <action
+            android:id="@+id/action_arrangementFragment_to_startFragment"
+            app:destination="@id/StartFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transportFragment"
+        android:name="com.example.epi.Fragments.Transport.TransportFragment"
+        android:label="TransportFragment"
+        tools:layout="@layout/fragment_transport">
+        <argument
+            android:name="reportId"
+            app:argType="long"/>
+    </fragment>
 
     <fragment
         android:id="@+id/controlFragment"
@@ -39,12 +59,7 @@
         tools:layout="@layout/fragment_reports"
         />
 
-    <fragment
-        android:id="@+id/transportFragment"
-        android:name="com.example.epi.Fragments.Transport.TransportFragment"
-        android:label="Transport"
-        tools:layout="@layout/fragment_transport"
-        />
+
 
     <fragment
         android:id="@+id/sendReportFragment"

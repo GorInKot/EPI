@@ -29,7 +29,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
-import com.example.epi.ViewModel.SharedViewModel
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.InputStream
 
@@ -39,7 +38,7 @@ class FixingVolumesFragment : Fragment() {
     private var _binding: FragmentFixingVolumesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SharedViewModel by activityViewModels()
+    private val viewModel: FixVolumesViewModel by activityViewModels()
 
     private var rowCount = 1
 
@@ -250,7 +249,7 @@ class FixingVolumesFragment : Fragment() {
         buttonContainer.addView(editButton)
         buttonContainer.addView(deleteButton)
 
-        tableRow.addView(createCell(viewModel.selectedObject.value.toString()))
+//        tableRow.addView(createCell(viewModel.selectedObject.value.toString()))
         tableRow.addView(createCell(row.projectWorkType))
         tableRow.addView(createCell(row.measure))
         tableRow.addView(createCell(row.plan))
