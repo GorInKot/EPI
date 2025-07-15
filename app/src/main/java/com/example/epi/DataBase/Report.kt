@@ -11,6 +11,7 @@ data class Report(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val date: String = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()),
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
+
     val workType: String = "",
     val customer: String = "",
     val obj: String = "",
@@ -21,6 +22,7 @@ data class Report(
     val subContractor: String = "",
     val repSubContractor: String = "",
     val repSSKSub: String = "",
+
     val isEmpty: Boolean = false,
     val executor: String = "",
     val startDate: String = "",

@@ -1,23 +1,23 @@
 package com.example.epi.Fragments.Transport
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.example.epi.App
 import com.example.epi.R
-import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentTransportBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +27,9 @@ class TransportFragment : Fragment() {
     private var _binding: FragmentTransportBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: TransportVIewModel by activityViewModels()
+    private val viewModel: TransportViewModel by viewModels {
+        TransportViewModelFactory((requireActivity().application as App).reportRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +60,6 @@ class TransportFragment : Fragment() {
         binding.chBoxMCustomer.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setTransportAbsent(isChecked)
             viewModel.clearTransport()
-
-
         }
 
         // Дата начала поездки
@@ -102,11 +102,40 @@ class TransportFragment : Fragment() {
     }
 
     private fun setupButtons() {
+
         binding.btnNext.setOnClickListener {
             if (validateInputs()) {
-                findNavController().navigate(R.id.controlFragment)
+
+                viewModel.viewModelScope.launch {
+
+                    val reportId = viewModel.updateTransportReport()
+                    if (reportId > 0) {
+                        Snackbar
+                            .make(
+                                binding.root,
+                                "Отчет обновлен с ID: $reportId",
+                                Snackbar.LENGTH_SHORT
+                            )
+                            .setBackgroundTint(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    android.R.color.holo_red_dark
+                                )
+                            )
+                            .setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    android.R.color.white
+                                )
+                            )
+                            .show()
+                        findNavController().navigate(R.id.controlFragment)
+                    }
+                }
             }
         }
+
+
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }

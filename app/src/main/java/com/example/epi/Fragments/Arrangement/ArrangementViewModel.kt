@@ -141,7 +141,7 @@ class ArrangementViewModel(private val repository: ReportRepository) : ViewModel
         return errors
     }
 
-    suspend fun saveReport(): Long {
+    suspend fun saveOrUpdateReport(): Long {
         try {
             // Проверяем валидацию
             val errors = validateArrangementInputs(

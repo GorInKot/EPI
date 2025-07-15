@@ -1,12 +1,14 @@
 package com.example.epi.Fragments.Transport
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.epi.DataBase.ReportRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TransportVIewModel: ViewModel() {
+class TransportViewModel(val repository: ReportRepository): ViewModel() {
 
     // ---------- TransportViewModel data and functions ----------
 
@@ -30,6 +32,10 @@ class TransportVIewModel: ViewModel() {
     val endTime = MutableLiveData("")
 
     val transportInClearing = MutableLiveData(false)
+
+    // ---------- Событие ошибки ----------
+    private val _errorEvent = MutableLiveData<String>()
+    val errorEvent: LiveData<String> get() = _errorEvent
 
     fun clearTransport() {
 
@@ -116,6 +122,64 @@ class TransportVIewModel: ViewModel() {
 
         return errors
     }
+
+    suspend fun updateTransportReport(): Long {
+        try {
+            val errors = validateTransportInputs(
+                _isTransportAbsent = isTransportAbsent.value ?: false,
+                customerName = customerName.value,
+                contractCustomer = contractCustomer.value,
+                executorName = executorName.value,
+                contractTransport = contractTransport.value,
+                stateNumber = stateNumber.value,
+                startDate = startDate.value,
+                startTime = startTime.value,
+                endDate = endDate.value,
+                endTime = endTime.value
+            )
+            if (errors.isNotEmpty()) {
+                Log.e("Tagg", "Transport: Validation failed in saveReport: $errors")
+                _errorEvent.postValue("Не все поля заполнены корректно")
+                return 0L
+            }
+
+
+            val existingReport = repository.getLastUnsentReport()
+            if (existingReport == null) {
+                Log.e("Tagg", "Transport: No unsent report found to update")
+                _errorEvent.postValue("Ошибка: нет незавершенного отчета для обновления")
+                return 0L
+            }
+
+            // Обновляем отчет данными из TransportFragment
+            val updatedReport = existingReport.copy(
+                customer = if (isTransportAbsent.value == true) "" else customerName.value.orEmpty(),
+                contract = if (isTransportAbsent.value == true) "" else contractCustomer.value.orEmpty(),
+                executor = if (isTransportAbsent.value == true) "" else executorName.value.orEmpty(),
+                contractTransport = if (isTransportAbsent.value == true) "" else contractTransport.value.orEmpty(),
+                stateNumber = if (isTransportAbsent.value == true) "" else stateNumber.value.orEmpty(),
+                startDate = if (isTransportAbsent.value == true) "" else startDate.value.orEmpty(),
+                startTime = if (isTransportAbsent.value == true) "" else startTime.value.orEmpty(),
+                endDate = if (isTransportAbsent.value == true) "" else endDate.value.orEmpty(),
+                endTime = if (isTransportAbsent.value == true) "" else endTime.value.orEmpty(),
+                isEmpty = isTransportAbsent.value ?: false
+            )
+
+            Log.d("Tagg", "Transport: Updating Report: $updatedReport")
+            repository.updateReport(updatedReport)
+            Log.d("Tagg", "Transport: Report updated successfully with ID: ${updatedReport.id}")
+            return updatedReport.id
+        } catch (e: Exception) {
+            Log.e("Tagg", "Transport: Error in updateTransportReport: ${e.message}", e)
+            _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+            return 0L
+        }
+    }
+
+
+
+
+
 
     fun validateTransportStartBeforeEnd(): String? {
         val start = startDate.value.orEmpty() + " " + startTime.value.orEmpty()

@@ -308,7 +308,7 @@ class ArrangementFragment : Fragment() {
                 Log.d("Tagg", "RepSSKSub: ${viewModel.repSSKSubText.value}")
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val reportId = withContext(Dispatchers.IO) { viewModel.saveReport() }
+                        val reportId = withContext(Dispatchers.IO) { viewModel.saveOrUpdateReport() }
                         Log.d("Tagg", "Report ID: $reportId")
                         if (reportId > 0) {
                             Toast.makeText(requireContext(), "Отчет сохранен", Toast.LENGTH_SHORT).show()
