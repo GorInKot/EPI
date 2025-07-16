@@ -29,6 +29,16 @@ class ControlViewModel: ViewModel() {
     private val _controlRows = MutableLiveData<List<ControlRow>>(emptyList())
     val controlRow: LiveData<List<ControlRow>> get() = _controlRows
 
+    // Добавляем поля для даты и времени
+    private val _currentDate = MutableLiveData<String>(dateFormat.format(System.currentTimeMillis()))
+    val currentDate: LiveData<String> get() = _currentDate
+
+    private val _startDate = MutableLiveData<String>("")
+    val startDate: LiveData<String> get() = _startDate
+
+    private val _startTime = MutableLiveData<String>("")
+    val startTime: LiveData<String> get() = _startTime
+
     val equipmentNames = MutableLiveData<List<String>>(
         listOf(
             "Прибор 1", "Прибор 2", "Прибор 3",
@@ -47,33 +57,40 @@ class ControlViewModel: ViewModel() {
         )
     )
 
-    // ---- Получение даты и времени начала поездки ----
-    // ---- для генерации номера предписания ----
+    fun generateOrderNumber() {
 
+        try {
+            // Используем startDate, если задано, иначе текущую дату
+            val dateStr = _startDate.value.takeIf { !it.isNullOrBlank() }
+                ?: dateFormat.format(System.currentTimeMillis())
+            val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            val date = LocalDate.parse(dateStr, formatterInputDate)
+            val formattedDate = date.format(DateTimeFormatter.ofPattern("MMdd"))
 
-//    fun generateOrderNumber() {
-//
-//        try {
-//            val dateStr = startDate.value ?: return
-//
-//            val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-//
-//            val date = LocalDate.parse(dateStr, formatterInputDate)
-//
-//
-//            val formattedDate = date.format(DateTimeFormatter.ofPattern("MMdd"))
-//
-//            // TODO - получение табельного номера
-//            val personNumber = "0000" // пока хардкод
-//
-//            val generatedNumber = "$personNumber.$formattedDate.${extraOrderNumber++}"
-//
-//            _orderNumber.value = generatedNumber
-//        } catch (e: Exception) {
-//            _orderNumber.value = "Ошибка генерации номера"
-//            e.printStackTrace()
-//        }
-//    }
+            val personNumber = "0000"
+
+            val generatedNumber = "$personNumber.$formattedDate.$orderCounter"
+
+            // Инкрементируем порядковый номер
+            orderCounter++
+
+            // Проверяем, включено ли нарушение
+            _orderNumber.value = if (_isViolation.value == true) "Нет нарушения" else generatedNumber
+
+        } catch (e: Exception) {
+            _orderNumber.value = "Ошибка генерации номера"
+            e.printStackTrace()
+        }
+    }
+
+    // Методы для установки startDate и startTime (если пользователь задает их)
+    fun setStartDate(date: String) {
+        _startDate.value = date
+    }
+
+    fun setStartTime(time: String) {
+        _startTime.value = time
+    }
 
     fun setViolation(checked: Boolean) {
         _isViolation.value = checked

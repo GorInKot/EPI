@@ -25,8 +25,8 @@ import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.R
 import com.example.epi.ViewModel.RowValidationResult
-import com.example.epi.ViewModel.SharedViewModel
 import com.example.epi.databinding.FragmentControlBinding
+import androidx.navigation.fragment.navArgs
 
 class ControlFragment : Fragment() {
 
@@ -49,6 +49,7 @@ class ControlFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         // Подписка на номер предписания
         viewModel.orderNumber.observe(viewLifecycleOwner) {
             binding.tvOrderNumber.text = it
@@ -62,15 +63,16 @@ class ControlFragment : Fragment() {
         // Подписка на строки
         viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
             binding.table.removeAllViews()
+            addTableHeader()
             rows.forEach { row ->
                 addRowToTable(row)
             }
         }
 
         // Подписка на Дату и время
-//        viewModel.currentDate.observe(viewLifecycleOwner) {
-//            binding.tvDate.text = "Дата: $it"
-//        }
+        viewModel.currentDate.observe(viewLifecycleOwner) {
+            binding.tvDate.text = "Дата: $it"
+        }
 
         // Чек бокс
         binding.checkBoxManualType.setOnCheckedChangeListener { _ , isChecked ->
@@ -78,22 +80,19 @@ class ControlFragment : Fragment() {
         }
 
         // Получить номер предписания
-//        binding.btnOrderNumber.setOnClickListener {
-//            if (!viewModel.startDate.value.isNullOrBlank() && !viewModel.startTime.value.isNullOrBlank()) {
-//                viewModel.generateOrderNumber()
-//            } else {
-//                Toast.makeText(requireContext(), "Дата в время начала поездки не заданы", Toast.LENGTH_SHORT).show()
+        binding.btnOrderNumber.setOnClickListener {
+            viewModel.generateOrderNumber()
+            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
+        }
+
+//        // Добавление заголовка таблицы
+//        viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
+//            binding.table.removeAllViews()
+//            addTableHeader()
+//            rows.forEach { row ->
+//                addRowToTable(row)
 //            }
 //        }
-
-        // Добавление заголовка таблицы
-        viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
-            binding.table.removeAllViews()
-            addTableHeader()
-            rows.forEach { row ->
-                addRowToTable(row)
-            }
-        }
 
         viewModel.equipmentNames.observe(viewLifecycleOwner) { equipmentList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentList)
@@ -147,12 +146,12 @@ class ControlFragment : Fragment() {
 
         // Кнопка "Далее"
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.fixFragment)
+            findNavController().navigate(R.id.action_controlFragment_to_fixVolumesFragment)
         }
 
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.transportFragment)
+            findNavController().navigate(R.id.action_controlFragment_to_transportFragment)
         }
     }
 

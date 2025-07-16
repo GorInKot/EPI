@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -21,6 +20,8 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+
+
 
 class TransportFragment : Fragment() {
 
@@ -103,11 +104,10 @@ class TransportFragment : Fragment() {
 
     private fun setupButtons() {
 
+        // Далее
         binding.btnNext.setOnClickListener {
             if (validateInputs()) {
-
                 viewModel.viewModelScope.launch {
-
                     val reportId = viewModel.updateTransportReport()
                     if (reportId > 0) {
                         Snackbar
@@ -129,13 +129,17 @@ class TransportFragment : Fragment() {
                                 )
                             )
                             .show()
-                        findNavController().navigate(R.id.controlFragment)
+                        val action = TransportFragmentDirections.actionTransportFragmentToControlFragment(
+                            reportId = reportId,
+                            startDate = viewModel.startDate.value
+                        )
+                        findNavController().navigate(action)
                     }
                 }
             }
         }
 
-
+        // Назад
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }

@@ -63,6 +63,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/mainLabel"
+            android:maxLines="1"
             />
 
         <!--  Дата -->

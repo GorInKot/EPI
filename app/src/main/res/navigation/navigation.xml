@@ -34,17 +34,42 @@
         android:name="com.example.epi.Fragments.Transport.TransportFragment"
         android:label="TransportFragment"
         tools:layout="@layout/fragment_transport">
-        <argument
-            android:name="reportId"
-            app:argType="long"/>
+        <action
+            android:id="@+id/action_transportFragment_to_controlFragment"
+            app:destination="@id/controlFragment">
+            <argument
+                android:name="reportId"
+                app:argType="long"/>
+            <argument
+                android:name="startDate"
+                app:argType="string"
+                app:nullable="true"/>
+        </action>
+        <action
+            android:id="@+id/action_transportFragment_to_arrangementFragment"
+            app:destination="@id/arrangementFragment">
+
+        </action>
+
     </fragment>
 
     <fragment
         android:id="@+id/controlFragment"
         android:name="com.example.epi.Fragments.Control.ControlFragment"
         android:label="Control"
-        tools:layout="@layout/fragment_control"
-        />
+        tools:layout="@layout/fragment_control">
+
+        <action
+            android:id="@+id/action_controlFragment_to_fixVolumesFragment"
+            app:destination="@id/fixFragment">
+        </action>
+
+        <action
+            android:id="@+id/action_controlFragment_to_transportFragment"
+            app:destination="@id/transportFragment">
+        </action>
+
+    </fragment>
 
     <fragment
         android:id="@+id/fixFragment"
