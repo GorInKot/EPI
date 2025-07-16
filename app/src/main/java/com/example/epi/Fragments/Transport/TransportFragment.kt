@@ -1,5 +1,7 @@
 package com.example.epi.Fragments.Transport
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +18,12 @@ import com.example.epi.R
 import com.example.epi.databinding.FragmentTransportBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-
+import kotlin.Exception
 
 
 class TransportFragment : Fragment() {
@@ -110,25 +113,6 @@ class TransportFragment : Fragment() {
                 viewModel.viewModelScope.launch {
                     val reportId = viewModel.updateTransportReport()
                     if (reportId > 0) {
-                        Snackbar
-                            .make(
-                                binding.root,
-                                "Отчет обновлен с ID: $reportId",
-                                Snackbar.LENGTH_SHORT
-                            )
-                            .setBackgroundTint(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    android.R.color.holo_red_dark
-                                )
-                            )
-                            .setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    android.R.color.white
-                                )
-                            )
-                            .show()
                         val action = TransportFragmentDirections.actionTransportFragmentToControlFragment(
                             reportId = reportId,
                             startDate = viewModel.startDate.value
@@ -143,6 +127,115 @@ class TransportFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }
+
+        // Выбор даты начала поездки
+        binding.btnStartDate.setOnClickListener {
+            showDatePickerDialog(binding.textInputEditTextStartDate) { date ->
+                viewModel.startDate.value = date
+                binding.textInputEditTextStartDate.setText(date)
+            }
+        }
+
+        // Выбор времени начала поездки
+        binding.btnStartTime.setOnClickListener {
+            showMaterialTimePicker(binding.textInputEditTextStartDateHours) {date ->
+                viewModel.startTime.value = date
+                binding.textInputEditTextStartDateHours.setText(date)
+            }
+        }
+
+        // Выбор даты завершения поездки
+        binding.btnEndDate.setOnClickListener {
+            showDatePickerDialog(binding.textInputEditTextEndDate) { date ->
+                viewModel.endDate.value = date
+                binding.textInputEditTextEndDate.setText(date)
+            }
+        }
+
+        // Выбор времени завершения поездки
+        binding.btnEndTime.setOnClickListener {
+            showMaterialTimePicker(binding.textInputEditTextEndDateHours) {date ->
+                viewModel.endTime.value = date
+                binding.textInputEditTextEndDateHours.setText(date)
+            }
+        }
+    }
+
+    private fun showDatePickerDialog(editText: AppCompatEditText, onDateSelected: (date: String) -> Unit) {
+        val calendar = Calendar.getInstance()
+        val currentText = editText.text.toString()
+        if (currentText.isNotBlank() && isValidDate(currentText)) {
+            try {
+                val sdf = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+                val date = sdf.parse(currentText)
+                date?.let { calendar.time = it }
+            } catch (e: Exception) {
+                // Если не парсится, берем текущую дату
+            }
+        }
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val formattedDate = String.format(
+                    Locale.getDefault(),
+                    "%02d.%02d.%04d",
+                    selectedDay,
+                    selectedMonth + 1,
+                    selectedYear
+                )
+                onDateSelected(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.show()
+    }
+
+    private fun showMaterialTimePicker(editText: AppCompatEditText, onTimeSelected: (time: String) -> Unit) {
+        val calendar = Calendar.getInstance()
+        val currentText = editText.text.toString()
+        var hour = calendar.get(Calendar.HOUR_OF_DAY)
+        var minute = calendar.get(Calendar.MINUTE)
+
+        if (currentText.isNotBlank() && isValidTimeFormat(currentText)) {
+            try {
+                val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+                val time = sdf.parse(currentText)
+                time?.let {
+                    calendar.time = it
+                    hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    minute = calendar.get(Calendar.MINUTE)
+                }
+            } catch (e: Exception) {
+                // Если время не парсится, используем текущее время
+            }
+        }
+
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(hour)
+            .setMinute(minute)
+            .setTitleText("Выберите время")
+            .build()
+
+        timePicker.addOnPositiveButtonClickListener {
+            val formattedTime = String.format(
+                Locale.getDefault(),
+                "%02d:%02d %s",
+                if (timePicker.hour % 12 == 0) 12 else timePicker.hour % 12,
+                timePicker.minute,
+                if (timePicker.hour >= 12) "PM" else "AM"
+            )
+            onTimeSelected(formattedTime)
+        }
+
+        timePicker.show(parentFragmentManager, "MaterialTimePicker")
     }
 
     private fun setupDateInput(editText: androidx.appcompat.widget.AppCompatEditText) {
@@ -213,7 +306,6 @@ class TransportFragment : Fragment() {
         binding.textInputEditTextEndDate.setText(viewModel.endDate.value)
         binding.textInputEditTextEndDateHours.setText(viewModel.endTime.value)
     }
-
 
     private fun isValidDate(date: String):Boolean {
         return try {

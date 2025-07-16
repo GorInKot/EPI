@@ -5,114 +5,138 @@
     android:id="@+id/dialogEditRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="24dp"
+    android:layout_margin="12dp"
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
     android:padding="24dp"
     android:backgroundTint="@color/color_black_dark"
     >
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        >
+        android:paddingBottom="36dp">
 
-        <TextView
-            android:id="@+id/dialogTitle"
-            android:layout_width="match_parent"
+        <!-- Направляющие -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/dialogTitle"
             android:text="Редактирование строки"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:layout_gravity="center"
             style="@style/mainLabel"
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:id="@+id/textInputLayout_dialog_equipment"
             android:hint="Наименование оборудования"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
             style="@style/CustomAlertDialogTextView"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/dialogTitle"
+            android:layout_marginTop="12dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edEquipment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:textColor="@color/background"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:id="@+id/textInputLayout_dialog_type"
             android:hint="Тип работы"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
             style="@style/CustomAlertDialogTextView"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_equipment"
+            android:layout_marginTop="24dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:paddingStart="16dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:id="@+id/textInputLayout_dialog_orderNumber"
             android:hint="Номер предписания"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
             style="@style/CustomAlertDialogTextView"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_type"
+            android:layout_marginTop="24dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editOrderNumber"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:paddingStart="16dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:id="@+id/textInputLayout_dialog_report"
             android:hint="Отчет о результатах"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_orderNumber"
+            android:layout_marginTop="24dp"
             style="@style/CustomAlertDialogTextView"
             >
 
@@ -120,66 +144,70 @@
                 android:id="@+id/editReport"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:paddingStart="16dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:id="@+id/textInputLayout_dialog_remarks"
             android:hint="Замечания"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
             style="@style/CustomAlertDialogTextView"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_report"
+            android:layout_marginTop="24dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editRemarks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:paddingStart="16dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:textColor="@color/color_black"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            android:gravity="end">
+            android:text="Отмена"
+            style="@style/SimpleButton"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/btnSave"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_remarks"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:layout_marginEnd="8dp"
+            />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCancel"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Отмена"
-                style="@style/SimpleButton"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginTop="0dp"
-                />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSave"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Сохранить"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="0dp"
-                style="@style/ExtraButton"
-
-                />
-        </LinearLayout>
-    </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            android:layout_marginTop="12dp"
+            style="@style/ExtraButton"
+            app:layout_constraintStart_toEndOf="@id/btnCancel"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_remarks"
+            android:layout_marginStart="8dp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
