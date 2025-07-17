@@ -98,7 +98,9 @@ class ControlViewModel: ViewModel() {
     }
 
     fun addRow(row: ControlRow) {
-        _controlRows.value = _controlRows.value?.plus(row)
+        val currentList = _controlRows.value?.toMutableList() ?: mutableListOf()
+        currentList.add(row)
+        _controlRows.value = currentList
     }
 
     fun removeRow(row: ControlRow) {
@@ -111,6 +113,9 @@ class ControlViewModel: ViewModel() {
         if (index != -1) {
             currentList[index] = newRow
             _controlRows.value = currentList
+        } else {
+            // Логирование для отладки
+            android.util.Log.w("ControlViewModel", "Row not found: $oldRow")
         }
     }
 

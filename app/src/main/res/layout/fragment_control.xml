@@ -64,6 +64,7 @@
             style="@style/mainLabel"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toTopOf="parent"
+            android:maxLines="1"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -72,6 +73,7 @@
             style="@style/secondLabel"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+            android:maxLines="1"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -82,6 +84,7 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintBottom_toTopOf="@id/tv_secondLabel"
             style="@style/ArrangementText"
+            android:maxLines="1"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -281,96 +284,104 @@
             style="@style/SimpleButton"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
-            app:layout_constraintStart_toEndOf="@id/guideline_right"
-            />
+            app:layout_constraintStart_toEndOf="@id/guideline_right" />
 
-        <TableLayout
-            android:id="@+id/table"
+        <!-- Заголовок таблицы -->
+        <LinearLayout
+            android:id="@+id/tableHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/color_three"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/btn_addRow"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginTop="24dp"
-            android:showDividers="middle"
-            android:gravity="center"
-            android:background="@color/color_three"
-            android:stretchColumns="*"
-            >
+            android:padding="8dp">
 
-            <TableRow
-                android:layout_gravity="center"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Наименование прибора"
+                android:textStyle="bold"
+                android:textSize="20sp"
                 android:gravity="center"
-                >
-                <TextView
-                    android:text="Наименование прибора"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    />
-                <TextView
-                    android:text="Вид работ"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    />
-                <TextView
-                    android:text="Номер предписания"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    />
-                <TextView
-                    android:text="Отчет о результатах\nинспекции"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    />
-                <TextView
-                    android:text="Замечания"
-                    android:padding="8dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    />
-                <ImageView
-                    android:gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/edit_32"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_gravity="center"
-                    />
-            </TableRow>
-        </TableLayout>
+                android:textColor="@color/black"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Вид работ"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Номер предписания"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Отчет о результатах\nинспекции"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Замечания"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Действия"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:padding="8dp" />
+        </LinearLayout>
+
+        <!-- RecyclerView для строк -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewControl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/tableHeader"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:background="@android:color/white" />
 
 
         <!--     Нижняя часть-->
@@ -382,7 +393,7 @@
             android:maxHeight="70dp"
             android:text="Назад"
             style="@style/SimpleButton"
-            app:layout_constraintTop_toBottomOf="@id/table"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewControl"
             app:layout_constraintEnd_toStartOf="@id/btn_Next"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
@@ -398,7 +409,7 @@
             android:maxHeight="70dp"
             android:text="Далее"
             style="@style/ExtraButton"
-            app:layout_constraintTop_toBottomOf="@id/table"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewControl"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"

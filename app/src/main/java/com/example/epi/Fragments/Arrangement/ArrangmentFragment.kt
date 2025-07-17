@@ -295,7 +295,7 @@ class ArrangementFragment : Fragment() {
         binding.btnNext.setOnClickListener {
             if (validateInputs()) {
                 Log.d("Tagg", "Валидация прошла")
-                // Log input values to debug
+                // Логирование значений
                 Log.d("Tagg", "WorkType: ${viewModel.selectedWorkType.value}")
                 Log.d("Tagg", "Customer: ${viewModel.selectedCustomer.value}, ManualCustomer: ${viewModel.manualCustomer.value}")
                 Log.d("Tagg", "Object: ${viewModel.selectedObject.value}, ManualObject: ${viewModel.manualObject.value}")
@@ -306,13 +306,35 @@ class ArrangementFragment : Fragment() {
                 Log.d("Tagg", "SubContractorText: ${viewModel.subContractorText.value}")
                 Log.d("Tagg", "RepSubContractor: ${viewModel.repSubcontractorText.value}")
                 Log.d("Tagg", "RepSSKSub: ${viewModel.repSSKSubText.value}")
+
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val reportId = withContext(Dispatchers.IO) { viewModel.saveOrUpdateReport() }
                         Log.d("Tagg", "Report ID: $reportId")
+
                         if (reportId > 0) {
                             Toast.makeText(requireContext(), "Отчет сохранен", Toast.LENGTH_SHORT).show()
-                            val action = ArrangementFragmentDirections.actionArrangementFragmentToTransportFragment(reportId)
+
+                            // Получаем objectID (из выпадающего списка или вручную)
+                            val objectID = viewModel.selectedObject.value ?: viewModel.manualObject.value
+                            if (objectID.isNullOrBlank()) {
+                                Toast.makeText(requireContext(), "Объект не задан", Toast.LENGTH_SHORT).show()
+                                return@launch
+                            }
+
+                            val customerID = viewModel.selectedCustomer.value ?: viewModel.manualCustomer.value
+                            if (customerID.isNullOrBlank()) {
+                                Toast.makeText(requireContext(), "Заказчик не задан", Toast.LENGTH_SHORT).show()
+                                return@launch
+                            }
+
+                            // Переход с передачей reportId и objectID
+                            val action = ArrangementFragmentDirections
+                                .actionArrangementFragmentToTransportFragment(
+                                    reportId = reportId,
+                                    objectId = objectID,
+                                    customer = customerID
+                                )
                             findNavController().navigate(action)
                         } else {
                             Toast.makeText(requireContext(), "Ошибка сохранения отчета", Toast.LENGTH_SHORT).show()
@@ -326,6 +348,7 @@ class ArrangementFragment : Fragment() {
                 Log.d("Tagg", "Валидация НЕ прошла")
             }
         }
+
 
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {

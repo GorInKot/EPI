@@ -27,6 +27,7 @@ import com.example.epi.R
 import com.example.epi.ViewModel.RowValidationResult
 import com.example.epi.databinding.FragmentControlBinding
 import androidx.navigation.fragment.navArgs
+import kotlinx.serialization.builtins.serializer
 
 class ControlFragment : Fragment() {
 
@@ -34,21 +35,21 @@ class ControlFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ControlViewModel by activityViewModels()
+    private lateinit var adapter: ControlRowAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentControlBinding.inflate(inflater, container, false)
-
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Настройка RecyclerView
+        setupRecyclerView()
 
         // Подписка на номер предписания
         viewModel.orderNumber.observe(viewLifecycleOwner) {
@@ -62,38 +63,26 @@ class ControlFragment : Fragment() {
 
         // Подписка на строки
         viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
-            binding.table.removeAllViews()
-            addTableHeader()
-            rows.forEach { row ->
-                addRowToTable(row)
-            }
+            adapter.submitList(rows)
         }
 
-        // Подписка на Дату и время
+        // Подписка на дату и время
         viewModel.currentDate.observe(viewLifecycleOwner) {
             binding.tvDate.text = "Дата: $it"
         }
 
-        // Чек бокс
-        binding.checkBoxManualType.setOnCheckedChangeListener { _ , isChecked ->
+        // Чекбокс
+        binding.checkBoxManualType.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setViolation(isChecked)
         }
 
         // Получить номер предписания
         binding.btnOrderNumber.setOnClickListener {
             viewModel.generateOrderNumber()
-            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
         }
 
-//        // Добавление заголовка таблицы
-//        viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
-//            binding.table.removeAllViews()
-//            addTableHeader()
-//            rows.forEach { row ->
-//                addRowToTable(row)
-//            }
-//        }
-
+        // Подписка на списки для AutoCompleteTextView
         viewModel.equipmentNames.observe(viewLifecycleOwner) { equipmentList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentList)
             binding.AutoCompleteTextViewEquipmentName.setAdapter(adapter)
@@ -114,7 +103,7 @@ class ControlFragment : Fragment() {
             }
         }
 
-        // Добавить строки (вид работ)
+        // Добавить строку
         binding.btnAddRow.setOnClickListener {
             val input = RowInput(
                 equipmentName = binding.AutoCompleteTextViewEquipmentName.text.toString().trim(),
@@ -155,115 +144,20 @@ class ControlFragment : Fragment() {
         }
     }
 
-    private fun addTableHeader() {
-        val headerRow = TableRow(requireContext())
-        headerRow.layoutParams = TableLayout.LayoutParams(
-            TableLayout.LayoutParams.MATCH_PARENT,
-            TableLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        val headers = listOf("Оборудование", "Вид работ", "№ предписания", "Отчёт", "Примечание", "Действия")
-
-        headers.forEach { title ->
-            val textView = TextView(requireContext()).apply {
-                text = title
-                setPadding(8, 8, 8, 8)
-                textSize = 18f
-                setTextColor(Color.BLACK)
-                gravity = Gravity.CENTER
-                setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                setTextColor(ContextCompat.getColor(context, R.color.background))
-
-                layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-            }
-            headerRow.addView(textView)
-        }
-
-        binding.table.addView(headerRow)
-    }
-
-    private fun addRowToTable(row: ControlRow) {
-        val tableRow = TableRow(requireContext())
-        tableRow.layoutParams = TableLayout.LayoutParams(
-            TableLayout.LayoutParams.MATCH_PARENT,
-            TableLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        fun createCell(text: String): TextView {
-            return TextView(requireContext()).apply {
-                this.text = text
-                setPadding(8, 8, 8, 8)
-                textSize = 18f
-                setTextColor(Color.BLACK)
-                gravity = Gravity.CENTER
-                setBackgroundColor(Color.GRAY)
-                layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-            }
-        }
-
-        val buttonContainer = LinearLayout(requireContext()).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setBackgroundColor(Color.GRAY)
-            layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f).apply {
-                gravity = Gravity.CENTER
-            }
-        }
-
-        val deleteButton = ImageButton(requireContext()).apply {
-            setImageResource(R.drawable.delete_24)
-            setBackgroundColor(Color.TRANSPARENT)
-            setPadding(8, 8, 8, 8)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                marginEnd = 32
-            }
-            setOnClickListener {
+    private fun setupRecyclerView() {
+        adapter = ControlRowAdapter(
+            onEditClick = { row, position ->
+                showEditDialog(row, position)
+            },
+            onDeleteClick = { row ->
                 viewModel.removeRow(row)
-                Toast.makeText(requireContext(),
-                    "Строка удалена", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Строка удалена", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        val editButton = ImageButton(requireContext()).apply {
-            setImageResource(R.drawable.edit_24)
-            setBackgroundColor(Color.TRANSPARENT)
-            setPadding(8, 8, 8, 8)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                marginStart = 132
-                marginEnd = 32
-            }
-            setOnClickListener {
-                val cells = (0 until tableRow.childCount - 1).map { index ->
-                    tableRow.getChildAt(index) as TextView
-                }
-                showEditDialog(row, cells)
-            }
-        }
-
-        // Добавляем кнопки в контейнер
-        buttonContainer.addView(editButton)
-        buttonContainer.addView(deleteButton)
-
-        // Добавляем ячейки в строку
-        tableRow.addView(createCell(row.equipmentName))
-        tableRow.addView(createCell(row.workType))
-        tableRow.addView(createCell(row.orderNumber))
-        tableRow.addView(createCell(row.report))
-        tableRow.addView(createCell(row.remarks))
-
-        // Добавление контейнера с кнопками в ячейку строки
-        tableRow.addView(buttonContainer)
-
-        // Добавляем строку в таблицу
-        binding.table.addView(tableRow)
+        )
+        binding.recyclerViewControl.adapter = adapter
     }
 
-    private fun showEditDialog(row: ControlRow, cells: List<TextView>) {
+    private fun showEditDialog(row: ControlRow, position: Int) {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_edit_row, null)
 
@@ -273,11 +167,12 @@ class ControlFragment : Fragment() {
         val editReport = dialogView.findViewById<EditText>(R.id.editReport)
         val editRemarks = dialogView.findViewById<EditText>(R.id.editRemarks)
 
-        editEquipment.setText(cells[0].text)
-        editType.setText(cells[1].text)
-        editOrder.setText(cells[2].text)
-        editReport.setText(cells[3].text)
-        editRemarks.setText(cells[4].text)
+        // Заполняем поля данными из ControlRow
+        editEquipment.setText(row.equipmentName)
+        editType.setText(row.workType)
+        editOrder.setText(row.orderNumber)
+        editReport.setText(row.report)
+        editRemarks.setText(row.remarks)
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -290,23 +185,19 @@ class ControlFragment : Fragment() {
 
         dialogView.findViewById<Button>(R.id.btnSave).setOnClickListener {
             val updatedRow = ControlRow(
-                editEquipment.text.toString(),
-                editType.text.toString(),
-                editOrder.text.toString(),
-                editReport.text.toString(),
-                editRemarks.text.toString()
+                equipmentName = editEquipment.text.toString(),
+                workType = editType.text.toString(),
+                orderNumber = editOrder.text.toString(),
+                report = editReport.text.toString(),
+                remarks = editRemarks.text.toString()
             )
             viewModel.updateRow(oldRow = row, newRow = updatedRow)
-
-            Toast.makeText(requireContext(),
-                "Изменения сохранены", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
         dialog.show()
     }
 
-    // Очищаем поля ввода
     private fun clearInputFields() {
         binding.AutoCompleteTextViewEquipmentName.setText("")
         binding.AutoCompleteTextViewType.setText("")

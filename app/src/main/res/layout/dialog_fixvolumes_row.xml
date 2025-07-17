@@ -9,55 +9,49 @@
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
     android:padding="24dp"
-    android:backgroundTint="@color/color_black_dark"
-    >
+    android:backgroundTint="@color/color_black_dark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="36dp">
 
-    <!-- Направляющие -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.1"
-        />
+        <!-- Направляющие -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_middle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dialogTitle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Редактирование строки"
             android:textSize="22sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:paddingBottom="16dp"
             android:paddingTop="16dp"
-            android:layout_gravity="center"
+            android:paddingBottom="16dp"
             style="@style/mainLabel"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_dialog_id"
@@ -66,8 +60,7 @@
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/dialogTitle"
-            >
+            app:layout_constraintTop_toBottomOf="@id/dialogTitle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edIdObject"
@@ -81,8 +74,7 @@
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -93,9 +85,9 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_id"
             style="@style/CustomAlertDialogTextView"
-            >
+            app:endIconMode="dropdown_menu">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/textInputWorkProject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -103,12 +95,11 @@
                 android:paddingEnd="10dp"
                 android:minHeight="56dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="none"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -119,9 +110,9 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_worktype"
             style="@style/CustomAlertDialogTextView"
-            >
+            app:endIconMode="dropdown_menu">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/editMeasures"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -129,12 +120,11 @@
                 android:paddingEnd="10dp"
                 android:minHeight="56dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="none"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -144,8 +134,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_measures"
-            style="@style/CustomAlertDialogTextView"
-            >
+            style="@style/CustomAlertDialogTextView">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editPlan"
@@ -155,12 +144,11 @@
                 android:paddingEnd="10dp"
                 android:minHeight="56dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="numberDecimal"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -170,8 +158,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_volumes"
-            style="@style/CustomAlertDialogTextView"
-            >
+            style="@style/CustomAlertDialogTextView">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editFact"
@@ -181,12 +168,11 @@
                 android:paddingEnd="10dp"
                 android:minHeight="56dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="numberDecimal"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -200,8 +186,7 @@
             app:layout_constraintEnd_toStartOf="@id/btnFixSave"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_fact"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            android:layout_marginEnd="8dp"
-            />
+            android:layout_marginEnd="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFixSave"
@@ -213,10 +198,6 @@
             app:layout_constraintStart_toEndOf="@id/btnFixCancel"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_fact"
-            android:layout_marginStart="8dp"
-            />
-
+            android:layout_marginStart="8dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </com.google.android.material.card.MaterialCardView>

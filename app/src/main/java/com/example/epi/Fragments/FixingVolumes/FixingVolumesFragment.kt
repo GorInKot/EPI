@@ -7,31 +7,25 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.R
 import com.example.epi.databinding.FragmentFixingVolumesBinding
-import android.net.Uri
-import android.text.InputType
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import androidx.fragment.app.activityViewModels
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.InputStream
-
+import android.net.Uri
+import android.widget.AutoCompleteTextView
 
 class FixingVolumesFragment : Fragment() {
 
@@ -39,14 +33,13 @@ class FixingVolumesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: FixVolumesViewModel by activityViewModels()
-
+    private lateinit var adapter: FixVolumesRowAdapter
     private var rowCount = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentFixingVolumesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -54,15 +47,15 @@ class FixingVolumesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Настройка RecyclerView
+        setupRecyclerView()
 
+        // Подписка на строки
         viewModel.fixRows.observe(viewLifecycleOwner) { rows ->
-            binding.table.removeAllViews()
-            addTableHeader()
-            rows.forEach { row ->
-                addRowToTable(row)
-            }
+            adapter.submitList(rows)
         }
 
+        // Подписка на списки автодополнения
         viewModel.fixWorkType.observe(viewLifecycleOwner) { workTypeList ->
             val adapter = ArrayAdapter(
                 requireContext(),
@@ -70,21 +63,21 @@ class FixingVolumesFragment : Fragment() {
                 workTypeList
             )
             binding.AutoCompleteTextViewWorkType.setAdapter(adapter)
-            binding.AutoCompleteTextViewWorkType.inputType = InputType.TYPE_NULL
+            binding.AutoCompleteTextViewWorkType.inputType = android.text.InputType.TYPE_NULL
             binding.AutoCompleteTextViewWorkType.keyListener = null
             binding.AutoCompleteTextViewWorkType.setOnClickListener {
                 binding.AutoCompleteTextViewWorkType.showDropDown()
             }
         }
 
-        viewModel.fixMeasures.observe(viewLifecycleOwner) {measuresList ->
+        viewModel.fixMeasures.observe(viewLifecycleOwner) { measuresList ->
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
                 measuresList
             )
             binding.AutoCompleteTextViewMeasureUnits.setAdapter(adapter)
-            binding.AutoCompleteTextViewMeasureUnits.inputType = InputType.TYPE_NULL
+            binding.AutoCompleteTextViewMeasureUnits.inputType = android.text.InputType.TYPE_NULL
             binding.AutoCompleteTextViewMeasureUnits.keyListener = null
             binding.AutoCompleteTextViewMeasureUnits.setOnClickListener {
                 binding.AutoCompleteTextViewMeasureUnits.showDropDown()
@@ -134,10 +127,9 @@ class FixingVolumesFragment : Fragment() {
             binding.AutoCompleteTextViewMeasureUnits.setText("")
             binding.TextInputEditTextPlan.setText("")
             binding.TextInputEditTextFact.setText("")
-
         }
 
-
+        // Навигация
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.sendReportFragment)
         }
@@ -147,197 +139,49 @@ class FixingVolumesFragment : Fragment() {
         }
     }
 
-    private fun addTableHeader() {
-        val headerRow = TableRow(requireContext())
-        headerRow.layoutParams = TableLayout.LayoutParams(
-            TableLayout.LayoutParams.MATCH_PARENT,
-            TableLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = Gravity.CENTER_VERTICAL
-        }
-
-        val headers = listOf(
-            "ID\nОбъекта",
-            "Вид работ из проекта",
-            "Единицы измерения",
-            "Объем работ по проекту",
-            "Выполненный объем работ",
-            "Остаток\nпо объему",
-            "\nДействия"
-        )
-
-        headers.forEach { title ->
-            val textView = TextView(requireContext()).apply {
-                text = title
-                setPadding(8, 0, 8, 32)
-                textSize = 18f
-                gravity = Gravity.CENTER
-                setTextColor(Color.BLACK)
-                setBackgroundColor(Color.LTGRAY)
-
-                layoutParams = TableRow.LayoutParams(0, 120, 1f)
-            }
-            headerRow.addView(textView)
-        }
-
-        binding.table.addView(headerRow)
-    }
-
-    private fun addRowToTable(row: FixVolumesRow) {
-        val tableRow = TableRow(requireContext())
-        tableRow.layoutParams = TableLayout.LayoutParams(
-            TableLayout.LayoutParams.MATCH_PARENT,
-            TableLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        fun createCell(text: String): TextView {
-            return TextView(requireContext()).apply {
-                this.text = text
-                setPadding(8, 8, 8, 8)
-                textSize = 18f
-                gravity = Gravity.CENTER
-                setTextColor(Color.BLACK)
-                setBackgroundColor(Color.GRAY)
-                layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-            }
-        }
-
-        val buttonContainer = LinearLayout(requireContext()).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setBackgroundColor(Color.GRAY)
-            layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f).apply {
-                gravity = Gravity.CENTER
-            }
-        }
-
-        val deleteButton = ImageButton(requireContext()).apply {
-            setImageResource(R.drawable.delete_24)
-            setBackgroundColor(Color.TRANSPARENT)
-            setPadding(8, 8, 8, 8)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                marginEnd = 32
-            }
-            setOnClickListener {
+    private fun setupRecyclerView() {
+        adapter = FixVolumesRowAdapter(
+            onEditClick = { row, position ->
+                showEditDialog(row, position)
+            },
+            onDeleteClick = { row ->
                 viewModel.removeFixRow(row)
-                Toast.makeText(requireContext(),
-                    "Строка удалена", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Строка удалена", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        val editButton = ImageButton(requireContext()).apply {
-            setImageResource(R.drawable.edit_24)
-            setBackgroundColor(Color.TRANSPARENT)
-            setPadding(8, 8, 8, 8)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                marginStart = 132
-                marginEnd = 32
-            }
-            setOnClickListener {
-                val cells = (0 until tableRow.childCount - 1).map { index ->
-                    tableRow.getChildAt(index) as TextView
-                }
-                showEditDialog(row, cells)
-            }
-        }
-
-        buttonContainer.addView(editButton)
-        buttonContainer.addView(deleteButton)
-
-//        tableRow.addView(createCell(viewModel.selectedObject.value.toString()))
-        tableRow.addView(createCell(row.projectWorkType))
-        tableRow.addView(createCell(row.measure))
-        tableRow.addView(createCell(row.plan))
-        tableRow.addView(createCell(row.fact))
-        tableRow.addView(createCell(row.result
-        ))
-        tableRow.addView(buttonContainer)
-
-        binding.table.addView(tableRow)
+        )
+        binding.recyclerViewFixVolumes.adapter = adapter
     }
 
-
-    // Запуск выбора Excel-файла
-    private val excelPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri = result.data?.data
-            uri?.let {
-                parseExcelFile(it)
-            }
-        }
-    }
-
-    // Открытие Excel-файла
-    private fun openExcelFilePicker() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
-        }
-        excelPickerLauncher.launch(intent)
-    }
-
-    // Парсинг Excel-файла и заполнение EditText полей
-    private fun parseExcelFile(uri: Uri) {
-        try {
-            val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uri)
-            val workbook = XSSFWorkbook(inputStream)
-            val sheet = workbook.getSheetAt(0)
-
-            // Предполагаем, что данные в строке 2 (index = 1)
-            val row = sheet.getRow(22) ?: throw Exception("Нет строки с данными")
-
-            val workType = row.getCell(0)?.toString()?.trim() ?: ""
-            val measure = row.getCell(2)?.toString()?.trim() ?: ""
-            val plan = row.getCell(3)?.toString()?.trim() ?: ""
-            val fact = row.getCell(6)?.toString()?.trim() ?: ""
-
-            Log.d(
-                "FixingVolumesFragment",
-                "Получили Excel: 0 столбец: '$workType'," +
-                        "Получили 2 столбец: '$measure'," +
-                        "Получили 3 столбец: '$plan'," +
-                        "Получили 6 стобец: '$fact'"
-            )
-
-            Toast.makeText(requireContext(),"0 столбец: '$workType'", Toast.LENGTH_LONG).show()
-
-
-            binding.AutoCompleteTextViewWorkType.setText(workType)
-            binding.AutoCompleteTextViewMeasureUnits.setText(measure)
-            binding.TextInputEditTextPlan.setText(plan)
-            binding.TextInputEditTextFact.setText(fact)
-
-            Toast.makeText(requireContext(), "Данные из Excel загружены", Toast.LENGTH_SHORT).show()
-
-            workbook.close()
-            inputStream?.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(requireContext(), "Ошибка чтения Excel: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun showEditDialog(row: FixVolumesRow, cells: List<TextView>) {
+    private fun showEditDialog(row: FixVolumesRow, position: Int) {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_fixvolumes_row, null)
 
-        val editIdObject = dialogView.findViewById<EditText>(R.id.edIdObject)
-        val editWorkProject = dialogView.findViewById<EditText>(R.id.textInputWorkProject)
-        val editMeasures = dialogView.findViewById<EditText>(R.id.editMeasures)
-        val editPlan = dialogView.findViewById<EditText>(R.id.editPlan)
-        val editFact = dialogView.findViewById<EditText>(R.id.editFact)
+        val editIdObject = dialogView.findViewById<TextInputEditText>(R.id.edIdObject)
+//        val textInputLayoutWorkProject = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutWorkProject)
+        val editWorkProject = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputWorkProject)
+//        val textInputLayoutMeasures = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutMeasures)
+        val editMeasures = dialogView.findViewById<AutoCompleteTextView>(R.id.editMeasures)
+        val editPlan = dialogView.findViewById<TextInputEditText>(R.id.editPlan)
+        val editFact = dialogView.findViewById<TextInputEditText>(R.id.editFact)
 
-        // Заполняем поля значениями из ячеек таблицы
-        editIdObject.setText(cells[0].text)
-        editWorkProject.setText(cells[1].text)
-        editMeasures.setText(cells[2].text)
-        editPlan.setText(cells[3].text)
-        editFact.setText(cells[4].text)
+        // Заполняем поля данными из FixVolumesRow
+        editIdObject.setText(row.ID_object)
+        editWorkProject.setText(row.projectWorkType)
+        editMeasures.setText(row.measure)
+        editPlan.setText(row.plan)
+        editFact.setText(row.fact)
+
+        // Настройка автодополнения
+        viewModel.fixWorkType.value?.let { workTypeList ->
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeList)
+            editWorkProject.setAdapter(adapter)
+            editWorkProject.setOnClickListener { editWorkProject.showDropDown() }
+        }
+        viewModel.fixMeasures.value?.let { measuresList ->
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, measuresList)
+            editMeasures.setAdapter(adapter)
+            editMeasures.setOnClickListener { editMeasures.showDropDown() }
+        }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -362,12 +206,7 @@ class FixingVolumesFragment : Fragment() {
                 return@setOnClickListener
             }
 
-
-            val result = if (planValue != null && factValue != null) {
-                (planValue - factValue).toString()
-            } else {
-                "0.0"
-            }
+            val result = planValue - factValue
 
             val updateFixRow = FixVolumesRow(
                 ID_object = editIdObject.text.toString(),
@@ -375,11 +214,10 @@ class FixingVolumesFragment : Fragment() {
                 measure = editMeasures.text.toString(),
                 plan = editPlan.text.toString(),
                 fact = editFact.text.toString(),
-                result = result
+                result = result.toString()
             )
 
             viewModel.updateFixRow(oldRow = row, newRow = updateFixRow)
-
             Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
@@ -387,7 +225,65 @@ class FixingVolumesFragment : Fragment() {
         dialog.show()
     }
 
-
+    // TODO - парсинг Excel (на всякий оставим)
+    // Запуск выбора Excel-файла
+//    private val excelPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val uri = result.data?.data
+//            uri?.let {
+//                parseExcelFile(it)
+//            }
+//        }
+//    }
+//
+//    // Открытие Excel-файла
+//    private fun openExcelFilePicker() {
+//        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+//            addCategory(Intent.CATEGORY_OPENABLE)
+//            type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
+//        }
+//        excelPickerLauncher.launch(intent)
+//    }
+//
+//    // Парсинг Excel-файла и заполнение EditText полей
+//    private fun parseExcelFile(uri: Uri) {
+//        try {
+//            val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uri)
+//            val workbook = XSSFWorkbook(inputStream)
+//            val sheet = workbook.getSheetAt(0)
+//
+//            // Предполагаем, что данные в строке 23 (index = 22)
+//            val row = sheet.getRow(22) ?: throw Exception("Нет строки с данными")
+//
+//            val workType = row.getCell(0)?.toString()?.trim() ?: ""
+//            val measure = row.getCell(2)?.toString()?.trim() ?: ""
+//            val plan = row.getCell(3)?.toString()?.trim() ?: ""
+//            val fact = row.getCell(6)?.toString()?.trim() ?: ""
+//
+//            Log.d(
+//                "FixingVolumesFragment",
+//                "Получили Excel: 0 столбец: '$workType'," +
+//                        "Получили 2 столбец: '$measure'," +
+//                        "Получили 3 столбец: '$plan'," +
+//                        "Получили 6 стобец: '$fact'"
+//            )
+//
+//            Toast.makeText(requireContext(), "0 столбец: '$workType'", Toast.LENGTH_LONG).show()
+//
+//            binding.AutoCompleteTextViewWorkType.setText(workType)
+//            binding.AutoCompleteTextViewMeasureUnits.setText(measure)
+//            binding.TextInputEditTextPlan.setText(plan)
+//            binding.TextInputEditTextFact.setText(fact)
+//
+//            Toast.makeText(requireContext(), "Данные из Excel загружены", Toast.LENGTH_SHORT).show()
+//
+//            workbook.close()
+//            inputStream?.close()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(requireContext(), "Ошибка чтения Excel: ${e.message}", Toast.LENGTH_LONG).show()
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

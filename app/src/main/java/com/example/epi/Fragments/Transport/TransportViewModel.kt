@@ -123,6 +123,13 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
         return errors
     }
 
+    // Валидация гос номера
+    fun isValidStateNumber(number: String): Boolean {
+        // Формат: А 123 БВ 45 или А 123 БВ 456
+        // А, Б, В — допустимые кириллические буквы (АВЕКМНОРСТУХ)
+        return number.matches(Regex("^[АВЕКМНОРСТУХ]\\s\\d{3}\\s[АВЕКМНОРСТУХ]{2}\\s\\d{2,3}$"))
+    }
+
     suspend fun updateTransportReport(): Long {
         try {
             val errors = validateTransportInputs(
@@ -142,7 +149,6 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
                 _errorEvent.postValue("Не все поля заполнены корректно")
                 return 0L
             }
-
 
             val existingReport = repository.getLastUnsentReport()
             if (existingReport == null) {
@@ -173,28 +179,6 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
             Log.e("Tagg", "Transport: Error in updateTransportReport: ${e.message}", e)
             _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
             return 0L
-        }
-    }
-
-
-
-
-
-
-    fun validateTransportStartBeforeEnd(): String? {
-        val start = startDate.value.orEmpty() + " " + startTime.value.orEmpty()
-        val end = endDate.value.orEmpty() + " " + endTime.value.orEmpty()
-
-        return try {
-            val format = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-            val startDateTime = format.parse(start)
-            val endDateTime = format.parse(end)
-
-            if (startDateTime != null && endDateTime != null && startDateTime.after(endDateTime)) {
-                "Время окончания не может быть раньше времени начала"
-            } else null
-        } catch (e: Exception) {
-            "Ошибка формата даты/времени"
         }
     }
 

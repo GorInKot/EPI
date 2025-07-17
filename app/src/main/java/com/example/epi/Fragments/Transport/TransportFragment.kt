@@ -3,9 +3,11 @@ package com.example.epi.Fragments.Transport
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
@@ -14,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.epi.App
+import com.example.epi.Fragments.Arrangement.ArrangementFragmentDirections
 import com.example.epi.R
 import com.example.epi.databinding.FragmentTransportBinding
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +38,10 @@ class TransportFragment : Fragment() {
         TransportViewModelFactory((requireActivity().application as App).reportRepository)
     }
 
+    private var reportID: Long = 0
+    private var objectID: String? = null
+    private var customer: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +52,22 @@ class TransportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Получение аргументов
+        val args = TransportFragmentArgs.fromBundle(requireArguments())
+        reportID = args.reportId
+        objectID = args.objectId
+        customer = args.customer
+
+        Log.d("TransportFragment", "reportID = $reportID")
+        Log.d("TransportFragment", "objectID = $objectID")
+        Log.d("TransportFragment", "customer = $customer")
+
+        // Установка customer в textInputEditTextCustomer
+        customer?.let {
+            binding.textInputEditTextCustomer.setText(it)
+            viewModel.customerName.value = it
+        }
 
         setupObservers()
         setupInputListeners()
@@ -66,13 +89,16 @@ class TransportFragment : Fragment() {
             viewModel.clearTransport()
         }
 
-        // Дата начала поездки
+        // Дата начала и окончания поездки
         setupDateInput(binding.textInputEditTextStartDate)
         setupDateInput(binding.textInputEditTextEndDate)
 
         // Время начала и окончания
         setupTimeInput(binding.textInputEditTextStartDateHours, binding.textInputLayoutStartDateHours)
         setupTimeInput(binding.textInputEditTextEndDateHours, binding.textInputLayoutEndDateHours)
+
+        // Госномер
+        setupStateNumberInput(binding.textInputEditTextStateNumber, binding.textInputLayoutStateNumber)
 
         // Прочие текстовые поля
         binding.textInputEditTextCustomer.doAfterTextChanged {
@@ -102,30 +128,47 @@ class TransportFragment : Fragment() {
         binding.textInputEditTextEndDateHours.doAfterTextChanged {
             viewModel.endTime.value = it.toString()
         }
-
     }
 
     private fun setupButtons() {
-
         // Далее
         binding.btnNext.setOnClickListener {
             if (validateInputs()) {
                 viewModel.viewModelScope.launch {
-                    val reportId = viewModel.updateTransportReport()
-                    if (reportId > 0) {
-                        val action = TransportFragmentDirections.actionTransportFragmentToControlFragment(
-                            reportId = reportId,
-                            startDate = viewModel.startDate.value
-                        )
-                        findNavController().navigate(action)
+                    try {
+                        val reportId = viewModel.updateTransportReport()
+                        if (reportId > 0) {
+                            val action = TransportFragmentDirections
+                                .actionTransportFragmentToControlFragment(
+                                    reportId = reportId,
+                                    objectId = objectID ?: ""
+                                )
+                            findNavController().navigate(action)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Ошибка сохранения отчета: неверный ID",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e("TransportFragment", "Ошибка: reportId = $reportId")
+                        }
+                    } catch (e: Exception) {
+                        Log.e("TransportFragment", "Ошибка при сохранении отчета: ${e.message}")
+                        Toast.makeText(
+                            requireContext(),
+                            "Ошибка сохранения отчета: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
+            } else {
+                Log.d("TransportFragment", "Валидация не прошла")
             }
         }
 
         // Назад
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.arrangementFragment)
+            findNavController().navigate(R.id.action_transportFragment_to_arrangementFragment)
         }
 
         // Выбор даты начала поездки
@@ -138,9 +181,9 @@ class TransportFragment : Fragment() {
 
         // Выбор времени начала поездки
         binding.btnStartTime.setOnClickListener {
-            showMaterialTimePicker(binding.textInputEditTextStartDateHours) {date ->
-                viewModel.startTime.value = date
-                binding.textInputEditTextStartDateHours.setText(date)
+            showMaterialTimePicker(binding.textInputEditTextStartDateHours) { time ->
+                viewModel.startTime.value = time
+                binding.textInputEditTextStartDateHours.setText(time)
             }
         }
 
@@ -154,9 +197,9 @@ class TransportFragment : Fragment() {
 
         // Выбор времени завершения поездки
         binding.btnEndTime.setOnClickListener {
-            showMaterialTimePicker(binding.textInputEditTextEndDateHours) {date ->
-                viewModel.endTime.value = date
-                binding.textInputEditTextEndDateHours.setText(date)
+            showMaterialTimePicker(binding.textInputEditTextEndDateHours) { time ->
+                viewModel.endTime.value = time
+                binding.textInputEditTextEndDateHours.setText(time)
             }
         }
     }
@@ -166,11 +209,11 @@ class TransportFragment : Fragment() {
         val currentText = editText.text.toString()
         if (currentText.isNotBlank() && isValidDate(currentText)) {
             try {
-                val sdf = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+                val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
                 val date = sdf.parse(currentText)
                 date?.let { calendar.time = it }
             } catch (e: Exception) {
-                // Если не парсится, берем текущую дату
+                // Если не парсится, берём текущую дату
             }
         }
 
@@ -205,7 +248,7 @@ class TransportFragment : Fragment() {
 
         if (currentText.isNotBlank() && isValidTimeFormat(currentText)) {
             try {
-                val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+                val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
                 val time = sdf.parse(currentText)
                 time?.let {
                     calendar.time = it
@@ -213,12 +256,12 @@ class TransportFragment : Fragment() {
                     minute = calendar.get(Calendar.MINUTE)
                 }
             } catch (e: Exception) {
-                // Если время не парсится, используем текущее время
+                // Если время не парсится, используем текущее
             }
         }
 
         val timePicker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(hour)
             .setMinute(minute)
             .setTitleText("Выберите время")
@@ -227,10 +270,9 @@ class TransportFragment : Fragment() {
         timePicker.addOnPositiveButtonClickListener {
             val formattedTime = String.format(
                 Locale.getDefault(),
-                "%02d:%02d %s",
-                if (timePicker.hour % 12 == 0) 12 else timePicker.hour % 12,
-                timePicker.minute,
-                if (timePicker.hour >= 12) "PM" else "AM"
+                "%02d:%02d",
+                timePicker.hour,
+                timePicker.minute
             )
             onTimeSelected(formattedTime)
         }
@@ -238,7 +280,7 @@ class TransportFragment : Fragment() {
         timePicker.show(parentFragmentManager, "MaterialTimePicker")
     }
 
-    private fun setupDateInput(editText: androidx.appcompat.widget.AppCompatEditText) {
+    private fun setupDateInput(editText: AppCompatEditText) {
         var isFormatting = false
         editText.addTextChangedListener(object : android.text.TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -247,8 +289,8 @@ class TransportFragment : Fragment() {
                 if (isFormatting) return
                 val clean = s?.toString()?.replace("[^\\d]".toRegex(), "") ?: return
                 val formatted = StringBuilder()
-                if (clean.length > 8) return  // Ограничиваем максимум до ддММгггг
                 var cursorPosition = 0
+                if (clean.length > 8) return // Ограничиваем максимум до ддММгггг
                 if (clean.length >= 2) {
                     formatted.append(clean.substring(0, 2)).append(".")
                     cursorPosition = 3
@@ -271,51 +313,28 @@ class TransportFragment : Fragment() {
                 editText.setText(formatted.toString())
                 editText.setSelection(cursorPosition.coerceAtMost(formatted.length))
                 isFormatting = false
-                // Проверка Валидности даты
+                // Проверка валидности даты
                 if (formatted.length == 10) {
                     if (!isValidDate(formatted.toString())) {
                         val parent = editText.parent?.parent
-                        if (parent is com.google.android.material.textfield.TextInputLayout) {
+                        if (parent is TextInputLayout) {
                             parent.error = "Неверная дата"
                         }
                     } else {
                         val parent = editText.parent?.parent
-                        if (parent is com.google.android.material.textfield.TextInputLayout) {
+                        if (parent is TextInputLayout) {
                             parent.error = null
                         }
                     }
                 } else {
                     // Если дата неполная
                     val parent = editText.parent?.parent
-                    if (parent is com.google.android.material.textfield.TextInputLayout) {
+                    if (parent is TextInputLayout) {
                         parent.error = null
                     }
                 }
             }
         })
-    }
-
-    private fun restoreInputs() {
-        binding.textInputEditTextCustomer.setText(viewModel.customerName.value)
-        binding.textInputEditTextContract.setText(viewModel.contractCustomer.value)
-        binding.textInputEditTextExecutor.setText(viewModel.executorName.value)
-        binding.textInputEditTextContractTransport.setText(viewModel.contractTransport.value)
-        binding.textInputEditTextStateNumber.setText(viewModel.stateNumber.value)
-        binding.textInputEditTextStartDate.setText(viewModel.startDate.value)
-        binding.textInputEditTextStartDateHours.setText(viewModel.startTime.value)
-        binding.textInputEditTextEndDate.setText(viewModel.endDate.value)
-        binding.textInputEditTextEndDateHours.setText(viewModel.endTime.value)
-    }
-
-    private fun isValidDate(date: String):Boolean {
-        return try {
-            val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-            sdf.isLenient = false
-            sdf.parse(date)
-            true
-        } catch (e: Exception) {
-            false
-        }
     }
 
     private fun setupTimeInput(
@@ -326,10 +345,12 @@ class TransportFragment : Fragment() {
 
         editText.doAfterTextChanged {
             val input = it?.toString() ?: return@doAfterTextChanged
-            val clean = input.replace("[^\\d]".toRegex(), "")
+            val clean = input.replace("[^\\d]".toRegex(), "").trim()
 
             // Не реагируем на обновление, если значение не изменилось
-            if (clean == previous.replace(":", "")) return@doAfterTextChanged
+            if (clean == previous.replace(":", "")) {
+                return@doAfterTextChanged
+            }
 
             val formatted = when {
                 clean.length <= 2 -> clean
@@ -347,15 +368,101 @@ class TransportFragment : Fragment() {
 
             // Проверка формата и ошибки
             if (!isValidTimeFormat(formatted)) {
-                inputLayout.error = "Неверный формат: чч:мм"
+                inputLayout.error = "Неверный формат: чч:мм (00-23)"
             } else {
                 inputLayout.error = null
             }
         }
     }
 
-    private fun validateInputs(): Boolean {
+    private fun setupStateNumberInput(
+        editText: AppCompatEditText,
+        inputLayout: TextInputLayout
+    ) {
+        var previous = "" // Чтобы избежать бесконечного цикла обновлений
 
+        editText.doAfterTextChanged {
+            val input = it?.toString()?.trim()?.uppercase(Locale.getDefault()) ?: return@doAfterTextChanged
+            val clean = input.replace("[^АВЕКМНОРСТУХ\\d]".toRegex(), "") // Только допустимые буквы и цифры
+
+            // Не реагируем на обновление, если значение не изменилось
+            if (clean == previous.replace(" ", "")) {
+                return@doAfterTextChanged
+            }
+
+            val formatted = StringBuilder()
+            var cursorPosition = 0
+
+            when {
+                clean.length <= 1 -> {
+                    formatted.append(clean)
+                    cursorPosition = clean.length
+                }
+                clean.length <= 4 -> {
+                    formatted.append(clean.substring(0, 1)).append(" ").append(clean.substring(1))
+                    cursorPosition = clean.length + 1
+                }
+                clean.length <= 6 -> {
+                    formatted.append(clean.substring(0, 1)).append(" ")
+                        .append(clean.substring(1, 4)).append(" ")
+                        .append(clean.substring(4))
+                    cursorPosition = clean.length + 2
+                }
+                else -> {
+                    formatted.append(clean.substring(0, 1)).append(" ")
+                        .append(clean.substring(1, 4)).append(" ")
+                        .append(clean.substring(4, 6)).append(" ")
+                        .append(clean.substring(6))
+                    cursorPosition = clean.length + 3
+                }
+            }
+
+            previous = formatted.toString()
+
+            // Устанавливаем текст только если отличается
+            if (input != formatted.toString()) {
+                editText.setText(formatted.toString())
+                editText.setSelection(cursorPosition.coerceAtMost(formatted.length))
+            }
+
+            // Проверка формата и ошибки
+            if (!viewModel.isValidStateNumber(formatted.toString())) {
+                inputLayout.error = "Неверный формат: А123БВ45 или А123БВ456"
+            } else {
+                inputLayout.error = null
+            }
+        }
+    }
+
+    private fun restoreInputs() {
+        // Устанавливаем значения из ViewModel, если они есть, иначе используем аргумент customer
+        binding.textInputEditTextCustomer.setText(viewModel.customerName.value ?: customer)
+        binding.textInputEditTextContract.setText(viewModel.contractCustomer.value)
+        binding.textInputEditTextExecutor.setText(viewModel.executorName.value)
+        binding.textInputEditTextContractTransport.setText(viewModel.contractTransport.value)
+        binding.textInputEditTextStateNumber.setText(viewModel.stateNumber.value)
+        binding.textInputEditTextStartDate.setText(viewModel.startDate.value)
+        binding.textInputEditTextStartDateHours.setText(viewModel.startTime.value)
+        binding.textInputEditTextEndDate.setText(viewModel.endDate.value)
+        binding.textInputEditTextEndDateHours.setText(viewModel.endTime.value)
+    }
+
+    private fun isValidDate(date: String): Boolean {
+        return try {
+            val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            sdf.isLenient = false
+            sdf.parse(date)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun isValidTimeFormat(time: String): Boolean {
+        return time.matches(Regex("^([01]\\d|2[0-3]):[0-5]\\d$"))
+    }
+
+    private fun validateInputs(): Boolean {
         val isTransportAbsent = binding.chBoxMCustomer.isChecked
 
         val customer = binding.textInputEditTextCustomer.text?.toString()?.trim()
@@ -369,28 +476,28 @@ class TransportFragment : Fragment() {
         val endTime = binding.textInputEditTextEndDateHours.text?.toString()?.trim()
 
         val errors = viewModel.validateTransportInputs(
-            _isTransportAbsent=isTransportAbsent,
-            customerName=customer,
-            contractCustomer=contract,
-            executorName=executor,
-            contractTransport=contractTransport,
-            stateNumber=number,
-            startDate=dateStart,
-            startTime=timeStart,
-            endDate=dateEnd,
-            endTime=endTime
+            _isTransportAbsent = isTransportAbsent,
+            customerName = customer,
+            contractCustomer = contract,
+            executorName = executor,
+            contractTransport = contractTransport,
+            stateNumber = number,
+            startDate = dateStart,
+            startTime = timeStart,
+            endDate = dateEnd,
+            endTime = endTime
         )
 
         // Показать Snackbar при наличии ошибок
         if (errors.isNotEmpty()) {
             Snackbar
-                .make(binding.root, "Не все поля заполнены", Snackbar.LENGTH_SHORT)
+                .make(binding.root, "Не все поля заполнены или содержат ошибки", Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark))
                 .setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
                 .show()
         }
 
-        // ---------- Очистка ошибок ----------
+        // Очистка ошибок
         clearErrors(
             binding.textInputLayoutCustomer,
             binding.textInputLayoutContract,
@@ -403,12 +510,11 @@ class TransportFragment : Fragment() {
             binding.textInputLayoutEndDateHours
         )
 
-        // ---------- Установка ошибок ----------
+        // Установка ошибок
         setError(binding.textInputLayoutCustomer, errors["customerName"])
         setError(binding.textInputLayoutContract, errors["contractCustomer"])
         setError(binding.textInputLayoutExecutor, errors["executorName"])
         setError(binding.textInputLayoutContractTransport, errors["contractTransport"])
-
         setError(binding.textInputLayoutStartDate, errors["startDate"])
         setError(binding.textInputLayoutStartDateHours, errors["startTime"])
         setError(binding.textInputLayoutStateNumber, errors["stateNumber"])
@@ -430,20 +536,20 @@ class TransportFragment : Fragment() {
         layout.error = errorMessage
     }
 
-    private fun isValidTimeFormat(time: String): Boolean {
-        return time.matches(Regex("^([01]\\d|2[0-3]):[0-5]\\d\$"))
-    }
-
     private fun setFieldsEnabled(enabled: Boolean) {
         binding.textInputEditTextCustomer.isEnabled = enabled
         binding.textInputEditTextContract.isEnabled = enabled
         binding.textInputEditTextExecutor.isEnabled = enabled
         binding.textInputEditTextContractTransport.isEnabled = enabled
         binding.textInputEditTextStateNumber.isEnabled = enabled
-        binding.textInputEditTextStartDateHours.isEnabled = enabled
-        binding.textInputEditTextEndDateHours.isEnabled = enabled
-        binding.textInputEditTextStartDate.isEnabled = enabled
-        binding.textInputEditTextEndDate.isEnabled = enabled
+        binding.btnStartDate.isEnabled = enabled
+        binding.btnStartTime.isEnabled = enabled
+        binding.btnEndDate.isEnabled = enabled
+        binding.btnEndTime.isEnabled = enabled
+        binding.textInputEditTextStartDate.isEnabled = false
+        binding.textInputEditTextEndDate.isEnabled = false
+        binding.textInputEditTextStartDateHours.isEnabled = false
+        binding.textInputEditTextEndDateHours.isEnabled = false
     }
 
     override fun onDestroyView() {

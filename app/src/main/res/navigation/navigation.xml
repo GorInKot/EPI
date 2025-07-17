@@ -9,21 +9,30 @@
         android:id="@+id/StartFragment"
         android:name="com.example.epi.Fragments.General.StartFragment"
         android:label="Start Fragment"
-        tools:layout="@layout/fragment_start"
-        />
+        tools:layout="@layout/fragment_start" />
 
     <fragment
         android:id="@+id/arrangementFragment"
         android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
         android:label="ArrangementFragment"
         tools:layout="@layout/fragment_arrangment">
+
         <action
             android:id="@+id/action_arrangementFragment_to_transportFragment"
             app:destination="@id/transportFragment">
             <argument
+                android:name="customer"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
                 android:name="reportId"
-                app:argType="long"/>
+                app:argType="long" />
+            <argument
+                android:name="objectId"
+                app:argType="string"
+                app:nullable="true" />
         </action>
+
         <action
             android:id="@+id/action_arrangementFragment_to_startFragment"
             app:destination="@id/StartFragment" />
@@ -34,23 +43,34 @@
         android:name="com.example.epi.Fragments.Transport.TransportFragment"
         android:label="TransportFragment"
         tools:layout="@layout/fragment_transport">
+
+        <argument
+            android:name="customer"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="reportId"
+            app:argType="long" />
+        <argument
+            android:name="objectId"
+            app:argType="string"
+            app:nullable="true" />
+
         <action
             android:id="@+id/action_transportFragment_to_controlFragment"
             app:destination="@id/controlFragment">
             <argument
                 android:name="reportId"
-                app:argType="long"/>
+                app:argType="long" />
             <argument
-                android:name="startDate"
+                android:name="objectId"
                 app:argType="string"
-                app:nullable="true"/>
+                app:nullable="true" />
         </action>
+
         <action
             android:id="@+id/action_transportFragment_to_arrangementFragment"
-            app:destination="@id/arrangementFragment">
-
-        </action>
-
+            app:destination="@id/arrangementFragment" />
     </fragment>
 
     <fragment
@@ -59,55 +79,84 @@
         android:label="Control"
         tools:layout="@layout/fragment_control">
 
+        <argument
+            android:name="reportId"
+            app:argType="long" />
+        <argument
+            android:name="objectId"
+            app:argType="string"
+            app:nullable="true" />
+
         <action
             android:id="@+id/action_controlFragment_to_fixVolumesFragment"
             app:destination="@id/fixFragment">
+            <argument
+                android:name="reportId"
+                app:argType="long" />
+            <argument
+                android:name="objectId"
+                app:argType="string"
+                app:nullable="true" />
         </action>
 
         <action
             android:id="@+id/action_controlFragment_to_transportFragment"
-            app:destination="@id/transportFragment">
-        </action>
-
+            app:destination="@id/transportFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/fixFragment"
         android:name="com.example.epi.Fragments.FixingVolumes.FixingVolumesFragment"
         android:label="Fix"
-        tools:layout="@layout/fragment_fixing_volumes"
-        />
+        tools:layout="@layout/fragment_fixing_volumes">
 
-    <fragment
-        android:id="@+id/reportsFragment"
-        android:name="com.example.epi.Fragments.Reports.Reports.ReportsFragment"
-        tools:layout="@layout/fragment_reports"
-        />
+        <argument
+            android:name="reportId"
+            app:argType="long" />
+        <argument
+            android:name="objectId"
+            app:argType="string"
+            app:nullable="true" />
 
+        <action
+            android:id="@+id/action_fixVolumesFragment_to_sendReportFragment"
+            app:destination="@id/sendReportFragment" />
 
+        <action
+            android:id="@+id/action_fixVolumesFragment_to_controlFragment"
+            app:destination="@id/controlFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/sendReportFragment"
         android:name="com.example.epi.Fragments.Reports.SendReport.SendReportFragment"
         android:label="SendReport"
-        tools:layout="@layout/fragment_send_report"
-        />
+        tools:layout="@layout/fragment_send_report">
+
+        <action
+            android:id="@+id/action_sendReportFragment_to_reportsFragment"
+            app:destination="@id/reportsFragment" />
+
+        <action
+            android:id="@+id/action_sendReportFragment_to_fixVolumesFragment"
+            app:destination="@id/fixFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.example.epi.Fragments.Reports.Reports.ReportsFragment"
+        android:label="Reports"
+        tools:layout="@layout/fragment_reports" />
 
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.epi.Fragments.General.Registration.RegistrationFragment"
         android:label="Registration"
-        tools:layout="@layout/fragment_registration"
-        />
+        tools:layout="@layout/fragment_registration" />
 
     <fragment
         android:id="@+id/authFragment"
         android:name="com.example.epi.Fragments.General.Auth.AuthFragment"
         android:label="Auth"
-        tools:layout="@layout/fragment_auth"
-        />
-
-
-
-
+        tools:layout="@layout/fragment_auth" />
 </navigation>
