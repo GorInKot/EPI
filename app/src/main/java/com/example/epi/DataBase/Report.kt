@@ -12,6 +12,7 @@ data class Report(
     val date: String = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()),
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
 
+    // Расстановка
     val workType: String = "",
     val customer: String = "",
     val obj: String = "",
@@ -23,6 +24,7 @@ data class Report(
     val repSubContractor: String = "",
     val repSSKSub: String = "",
 
+    // Транспорт
     val isEmpty: Boolean = false,
     val executor: String = "",
     val startDate: String = "",
@@ -33,10 +35,15 @@ data class Report(
     val endDate: String = "",
     val endTime: String = "",
     val inViolation: Boolean = false,
+
+    // Контроль
     val equipment: String = "",
     val complexWork: String = "",
     val orderNumber: String = "",
     val report: String = "",
     val remarks: String = "",
+    val controlRows: String = "", // Поле для хранения JSON списка ControlRow
     val isSend: Boolean = false
+
+
 )

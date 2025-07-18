@@ -9,7 +9,7 @@
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
     android:padding="24dp"
-    android:backgroundTint="@color/color_black_dark"
+    android:background="@color/color_black"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout

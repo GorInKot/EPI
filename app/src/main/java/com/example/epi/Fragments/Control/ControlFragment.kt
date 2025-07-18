@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
@@ -27,6 +28,12 @@ import com.example.epi.R
 import com.example.epi.ViewModel.RowValidationResult
 import com.example.epi.databinding.FragmentControlBinding
 import androidx.navigation.fragment.navArgs
+import com.example.epi.App
+import com.example.epi.Fragments.Transport.TransportViewModel
+import com.example.epi.Fragments.Transport.TransportViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.serializer
 
 class ControlFragment : Fragment() {
@@ -34,7 +41,10 @@ class ControlFragment : Fragment() {
     private var _binding: FragmentControlBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ControlViewModel by activityViewModels()
+    private val viewModel: ControlViewModel by viewModels {
+        ControlViewModelFactory((requireActivity().application as App).reportRepository)
+    }
+
     private lateinit var adapter: ControlRowAdapter
 
     override fun onCreateView(
@@ -47,6 +57,11 @@ class ControlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        viewModel.loadPreviousReport()
+
+
 
         // Настройка RecyclerView
         setupRecyclerView()
@@ -135,7 +150,16 @@ class ControlFragment : Fragment() {
 
         // Кнопка "Далее"
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_controlFragment_to_fixVolumesFragment)
+            // Запускаем корутину для вызова suspend функции updateControlReport
+            CoroutineScope(Dispatchers.Main).launch {
+                val reportId = viewModel.updateControlReport()
+                if (reportId > 0) {
+                    // Успешно сохранено, переходим к следующему фрагменту
+                    findNavController().navigate(R.id.action_controlFragment_to_fixVolumesFragment)
+                } else {
+                    // Ошибка уже отображается через errorEvent, дополнительно ничего не делаем
+                }
+            }
         }
 
         // Кнопка "Назад"

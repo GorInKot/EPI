@@ -299,7 +299,8 @@
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginTop="24dp"
-            android:padding="8dp">
+            android:padding="8dp"
+            >
 
             <TextView
                 android:layout_width="0dp"
@@ -307,10 +308,15 @@
                 android:layout_weight="1"
                 android:text="Наименование прибора"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:padding="8dp" />
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -318,10 +324,15 @@
                 android:layout_weight="1"
                 android:text="Вид работ"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:padding="8dp" />
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -329,10 +340,15 @@
                 android:layout_weight="1"
                 android:text="Номер предписания"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:padding="8dp" />
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -340,10 +356,15 @@
                 android:layout_weight="1"
                 android:text="Отчет о результатах\nинспекции"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:padding="8dp" />
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -351,10 +372,15 @@
                 android:layout_weight="1"
                 android:text="Замечания"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:padding="8dp" />
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                />
 
             <TextView
                 android:layout_width="0dp"
@@ -362,10 +388,15 @@
                 android:layout_weight="1"
                 android:text="Действия"
                 android:textStyle="bold"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:padding="8dp" />
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="14sp"
+                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                />
         </LinearLayout>
 
         <!-- RecyclerView для строк -->
