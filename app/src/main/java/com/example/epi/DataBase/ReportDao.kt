@@ -22,4 +22,7 @@ interface ReportDao {
 
     @Query("DELETE FROM reports")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM reports WHERE date BETWEEN :startDate AND :endDate ORDER BY date")
+    fun getReportsByDateRange(startDate: String, endDate: String): Flow<List<Report>>
 }

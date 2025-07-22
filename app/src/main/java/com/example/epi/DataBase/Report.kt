@@ -43,6 +43,10 @@ data class Report(
     val report: String = "",
     val remarks: String = "",
     val controlRows: String = "", // Поле для хранения JSON списка ControlRow
+
+    // Объемы
+    val fixVolumesRows: String = "", // Поле для хранения JSON списка FixVolumesRow
+
     val isSend: Boolean = false
 
 

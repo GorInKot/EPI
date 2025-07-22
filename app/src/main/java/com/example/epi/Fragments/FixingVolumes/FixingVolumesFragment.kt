@@ -26,15 +26,23 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.InputStream
 import android.net.Uri
 import android.widget.AutoCompleteTextView
+import androidx.navigation.fragment.navArgs
+import com.example.epi.App
+import com.example.epi.ViewModel.RowValidationResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FixingVolumesFragment : Fragment() {
 
     private var _binding: FragmentFixingVolumesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FixVolumesViewModel by activityViewModels()
+    private val viewModel: FixVolumesViewModel by activityViewModels {
+        FixVolumesViewModelFactory((requireActivity().application as App).reportRepository)
+    }
+    private val args: FixingVolumesFragmentArgs by navArgs()
     private lateinit var adapter: FixVolumesRowAdapter
-    private var rowCount = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,12 +55,24 @@ class FixingVolumesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Загрузка данных из последнего незавершенного отчета
+        viewModel.loadPreviousReport()
+
         // Настройка RecyclerView
         setupRecyclerView()
+
+        // Получение аргументов
+        val objectId = args.objectId ?: ""
+        val reportId = args.reportId
 
         // Подписка на строки
         viewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
+        }
+
+        // Подписка на ошибки
+        viewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
 
         // Подписка на списки автодополнения
@@ -86,56 +106,48 @@ class FixingVolumesFragment : Fragment() {
 
         // Добавить запись
         binding.btnAdd.setOnClickListener {
-            val workType = binding.AutoCompleteTextViewWorkType.text.toString().trim()
-            val measures = binding.AutoCompleteTextViewMeasureUnits.text.toString().trim()
-            val plan = binding.TextInputEditTextPlan.text.toString().trim()
-            val fact = binding.TextInputEditTextFact.text.toString().trim()
-
-            if (workType.isBlank() || measures.isBlank() || plan.isBlank() || fact.isBlank()) {
-                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val planValue = plan.toDoubleOrNull()
-            val factValue = fact.toDoubleOrNull()
-
-            if (planValue == null || factValue == null) {
-                Toast.makeText(requireContext(), "Некорректные значения", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (factValue > planValue) {
-                Toast.makeText(requireContext(), "Значение Факт не может превышать значение План", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val result = planValue - factValue
-
             val newRow = FixVolumesRow(
-                ID_object = rowCount.toString(),
-                projectWorkType = workType,
-                measure = measures,
-                plan = plan,
-                fact = fact,
-                result = result.toString()
+                ID_object = objectId,
+                projectWorkType = binding.AutoCompleteTextViewWorkType.text.toString().trim(),
+                measure = binding.AutoCompleteTextViewMeasureUnits.text.toString().trim(),
+                plan = binding.TextInputEditTextPlan.text.toString().trim(),
+                fact = binding.TextInputEditTextFact.text.toString().trim(),
+                result = "" // Result вычисляется в ViewModel
             )
 
-            viewModel.addFixRow(newRow)
-            rowCount++
-
-            binding.AutoCompleteTextViewWorkType.setText("")
-            binding.AutoCompleteTextViewMeasureUnits.setText("")
-            binding.TextInputEditTextPlan.setText("")
-            binding.TextInputEditTextFact.setText("")
+            when (val result = viewModel.validateFixRowInput(newRow)) {
+                is RowValidationResult.Valid -> {
+                    val planValue = newRow.plan.toDoubleOrNull() ?: 0.0
+                    val factValue = newRow.fact.toDoubleOrNull() ?: 0.0
+                    val updatedRow = newRow.copy(result = (planValue - factValue).toString())
+                    viewModel.addFixRow(updatedRow)
+                    clearInputFields()
+                }
+                is RowValidationResult.Invalid -> {
+                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
-        // Навигация
+        // Кнопка "Сохранить"
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.sendReportFragment)
+            CoroutineScope(Dispatchers.Main).launch {
+                val updatedReportId = viewModel.updateFixVolumesReport()
+                if (updatedReportId > 0) {
+                    val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToSendReportFragment(
+                        reportId = updatedReportId,
+                        objectId = objectId
+                    )
+                    findNavController().navigate(action)
+                } else {
+                    Toast.makeText(requireContext(), "Ошибка при сохранении отчета", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
+        // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.controlFragment)
+            findNavController().navigate(R.id.action_fixVolumesFragment_to_controlFragment)
         }
     }
 
@@ -157,15 +169,13 @@ class FixingVolumesFragment : Fragment() {
             .inflate(R.layout.dialog_fixvolumes_row, null)
 
         val editIdObject = dialogView.findViewById<TextInputEditText>(R.id.edIdObject)
-//        val textInputLayoutWorkProject = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutWorkProject)
         val editWorkProject = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputWorkProject)
-//        val textInputLayoutMeasures = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutMeasures)
         val editMeasures = dialogView.findViewById<AutoCompleteTextView>(R.id.editMeasures)
         val editPlan = dialogView.findViewById<TextInputEditText>(R.id.editPlan)
         val editFact = dialogView.findViewById<TextInputEditText>(R.id.editFact)
 
-        // Заполняем поля данными из FixVolumesRow
         editIdObject.setText(row.ID_object)
+        editIdObject.isEnabled = false // ID_object не редактируется
         editWorkProject.setText(row.projectWorkType)
         editMeasures.setText(row.measure)
         editPlan.setText(row.plan)
@@ -193,97 +203,39 @@ class FixingVolumesFragment : Fragment() {
         }
 
         dialogView.findViewById<Button>(R.id.btnFixSave).setOnClickListener {
-            val planValue = editPlan.text.toString().toDoubleOrNull()
-            val factValue = editFact.text.toString().toDoubleOrNull()
-
-            if (planValue == null || factValue == null) {
-                Toast.makeText(requireContext(), "Некорректные значения", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (factValue > planValue) {
-                Toast.makeText(requireContext(), "Факт не может превышать План", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val result = planValue - factValue
-
-            val updateFixRow = FixVolumesRow(
-                ID_object = editIdObject.text.toString(),
-                projectWorkType = editWorkProject.text.toString(),
-                measure = editMeasures.text.toString(),
-                plan = editPlan.text.toString(),
-                fact = editFact.text.toString(),
-                result = result.toString()
+            val newRow = FixVolumesRow(
+                ID_object = row.ID_object,
+                projectWorkType = editWorkProject.text.toString().trim(),
+                measure = editMeasures.text.toString().trim(),
+                plan = editPlan.text.toString().trim(),
+                fact = editFact.text.toString().trim(),
+                result = ""
             )
 
-            viewModel.updateFixRow(oldRow = row, newRow = updateFixRow)
-            Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            when (val result = viewModel.validateFixRowInput(newRow)) {
+                is RowValidationResult.Valid -> {
+                    val planValue = newRow.plan.toDoubleOrNull() ?: 0.0
+                    val factValue = newRow.fact.toDoubleOrNull() ?: 0.0
+                    val updatedRow = newRow.copy(result = (planValue - factValue).toString())
+                    viewModel.updateFixRow(oldRow = row, newRow = updatedRow)
+                    Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+                is RowValidationResult.Invalid -> {
+                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         dialog.show()
     }
 
-    // TODO - парсинг Excel (на всякий оставим)
-    // Запуск выбора Excel-файла
-//    private val excelPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            val uri = result.data?.data
-//            uri?.let {
-//                parseExcelFile(it)
-//            }
-//        }
-//    }
-//
-//    // Открытие Excel-файла
-//    private fun openExcelFilePicker() {
-//        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-//            addCategory(Intent.CATEGORY_OPENABLE)
-//            type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
-//        }
-//        excelPickerLauncher.launch(intent)
-//    }
-//
-//    // Парсинг Excel-файла и заполнение EditText полей
-//    private fun parseExcelFile(uri: Uri) {
-//        try {
-//            val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uri)
-//            val workbook = XSSFWorkbook(inputStream)
-//            val sheet = workbook.getSheetAt(0)
-//
-//            // Предполагаем, что данные в строке 23 (index = 22)
-//            val row = sheet.getRow(22) ?: throw Exception("Нет строки с данными")
-//
-//            val workType = row.getCell(0)?.toString()?.trim() ?: ""
-//            val measure = row.getCell(2)?.toString()?.trim() ?: ""
-//            val plan = row.getCell(3)?.toString()?.trim() ?: ""
-//            val fact = row.getCell(6)?.toString()?.trim() ?: ""
-//
-//            Log.d(
-//                "FixingVolumesFragment",
-//                "Получили Excel: 0 столбец: '$workType'," +
-//                        "Получили 2 столбец: '$measure'," +
-//                        "Получили 3 столбец: '$plan'," +
-//                        "Получили 6 стобец: '$fact'"
-//            )
-//
-//            Toast.makeText(requireContext(), "0 столбец: '$workType'", Toast.LENGTH_LONG).show()
-//
-//            binding.AutoCompleteTextViewWorkType.setText(workType)
-//            binding.AutoCompleteTextViewMeasureUnits.setText(measure)
-//            binding.TextInputEditTextPlan.setText(plan)
-//            binding.TextInputEditTextFact.setText(fact)
-//
-//            Toast.makeText(requireContext(), "Данные из Excel загружены", Toast.LENGTH_SHORT).show()
-//
-//            workbook.close()
-//            inputStream?.close()
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(requireContext(), "Ошибка чтения Excel: ${e.message}", Toast.LENGTH_LONG).show()
-//        }
-//    }
+    private fun clearInputFields() {
+        binding.AutoCompleteTextViewWorkType.setText("")
+        binding.AutoCompleteTextViewMeasureUnits.setText("")
+        binding.TextInputEditTextPlan.setText("")
+        binding.TextInputEditTextFact.setText("")
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

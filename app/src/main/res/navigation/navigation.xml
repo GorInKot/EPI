@@ -11,6 +11,7 @@
         android:label="Start Fragment"
         tools:layout="@layout/fragment_start" />
 
+    <!-- Расстановка: Начало -->
     <fragment
         android:id="@+id/arrangementFragment"
         android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
@@ -109,7 +110,6 @@
         android:name="com.example.epi.Fragments.FixingVolumes.FixingVolumesFragment"
         android:label="Fix"
         tools:layout="@layout/fragment_fixing_volumes">
-
         <argument
             android:name="reportId"
             app:argType="long" />
@@ -117,11 +117,18 @@
             android:name="objectId"
             app:argType="string"
             app:nullable="true" />
-
         <action
             android:id="@+id/action_fixVolumesFragment_to_sendReportFragment"
-            app:destination="@id/sendReportFragment" />
-
+            app:destination="@id/sendReportFragment">
+            <argument
+                android:name="reportId"
+                app:argType="long"
+                />
+            <argument
+                android:name="objectId"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
         <action
             android:id="@+id/action_fixVolumesFragment_to_controlFragment"
             app:destination="@id/controlFragment" />
@@ -132,14 +139,29 @@
         android:name="com.example.epi.Fragments.Reports.SendReport.SendReportFragment"
         android:label="SendReport"
         tools:layout="@layout/fragment_send_report">
-
+        <argument
+            android:name="reportId"
+            app:argType="long"
+            />
+        <argument
+            android:name="objectId"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_sendReportFragment_to_reportsFragment"
             app:destination="@id/reportsFragment" />
-
         <action
             android:id="@+id/action_sendReportFragment_to_fixVolumesFragment"
-            app:destination="@id/fixFragment" />
+            app:destination="@id/fixFragment">
+            <argument
+                android:name="reportId"
+                app:argType="long"
+                />
+            <argument
+                android:name="objectId"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
     </fragment>
 
     <fragment

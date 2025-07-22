@@ -25,9 +25,33 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-        android:layout_marginStart="124dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="48dp"
         tools:listitem="@layout/item_parent_send_report"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_selectDates"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="Выбрать даты"
+        style="@style/SimpleButton"
+        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="25dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_exportDataToCSV"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="Скачать файл"
+        style="@style/SimpleButton"
+        app:layout_constraintTop_toBottomOf="@id/btn_selectDates"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="25dp"
         />
 
 

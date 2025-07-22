@@ -4,37 +4,26 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.R
 import com.example.epi.ViewModel.RowValidationResult
 import com.example.epi.databinding.FragmentControlBinding
-import androidx.navigation.fragment.navArgs
 import com.example.epi.App
-import com.example.epi.Fragments.Transport.TransportViewModel
-import com.example.epi.Fragments.Transport.TransportViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.builtins.serializer
 
 class ControlFragment : Fragment() {
 
@@ -45,6 +34,7 @@ class ControlFragment : Fragment() {
         ControlViewModelFactory((requireActivity().application as App).reportRepository)
     }
 
+    private val args: ControlFragmentArgs by navArgs()
     private lateinit var adapter: ControlRowAdapter
 
     override fun onCreateView(
@@ -59,9 +49,11 @@ class ControlFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        // Получение аргументов
+        val reportId = args.reportId
+        val objectId = args.objectId ?: ""
+
         viewModel.loadPreviousReport()
-
-
 
         // Настройка RecyclerView
         setupRecyclerView()
@@ -150,14 +142,16 @@ class ControlFragment : Fragment() {
 
         // Кнопка "Далее"
         binding.btnNext.setOnClickListener {
-            // Запускаем корутину для вызова suspend функции updateControlReport
             CoroutineScope(Dispatchers.Main).launch {
-                val reportId = viewModel.updateControlReport()
-                if (reportId > 0) {
-                    // Успешно сохранено, переходим к следующему фрагменту
-                    findNavController().navigate(R.id.action_controlFragment_to_fixVolumesFragment)
+                val updatedReportId = viewModel.updateControlReport()
+                if (updatedReportId > 0) {
+                    val action = ControlFragmentDirections.actionControlFragmentToFixVolumesFragment(
+                        reportId = updatedReportId,
+                        objectId = objectId
+                    )
+                    findNavController().navigate(action)
                 } else {
-                    // Ошибка уже отображается через errorEvent, дополнительно ничего не делаем
+                    Toast.makeText(requireContext(), "Ошибка при сохранении отчета", Toast.LENGTH_SHORT).show()
                 }
             }
         }

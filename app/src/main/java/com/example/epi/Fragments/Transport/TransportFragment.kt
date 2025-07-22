@@ -1,7 +1,6 @@
 package com.example.epi.Fragments.Transport
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.epi.App
-import com.example.epi.Fragments.Arrangement.ArrangementFragmentDirections
 import com.example.epi.R
 import com.example.epi.databinding.FragmentTransportBinding
 import com.google.android.material.snackbar.Snackbar
@@ -25,8 +23,8 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.Exception
+import java.util.Calendar
+import java.util.Locale
 
 
 class TransportFragment : Fragment() {
