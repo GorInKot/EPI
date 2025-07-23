@@ -7,13 +7,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.epi.R
 
-class ExpandableAdapter(private val data: MutableList<Any>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ExpandableAdapter(private val data: MutableList<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_PARENT = 0
         private const val TYPE_CHILD = 1
     }
+
+    private val expandedPositions = mutableSetOf<Int>()
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -53,12 +54,11 @@ class ExpandableAdapter(private val data: MutableList<Any>) :
             objectText.text = "Объект: ${item.obj}"
 
             itemView.setOnClickListener {
-                if (item.isExpanded) {
+                if (expandedPositions.contains(position)) {
                     collapse(position, item)
                 } else {
                     expand(position, item)
                 }
-                item.isExpanded = !item.isExpanded
             }
         }
     }
@@ -78,12 +78,27 @@ class ExpandableAdapter(private val data: MutableList<Any>) :
     }
 
     private fun expand(position: Int, parentItem: ParentItem) {
-        data.addAll(position + 1, parentItem.children)
-        notifyItemRangeInserted(position + 1, parentItem.children.size)
+        val insertPosition = position + 1 + countExpandedChildrenBefore(position)
+        data.addAll(insertPosition, parentItem.children)
+        expandedPositions.add(position)
+        notifyItemRangeInserted(insertPosition, parentItem.children.size)
     }
 
     private fun collapse(position: Int, parentItem: ParentItem) {
-        data.subList(position + 1, position + 1 + parentItem.children.size).clear()
-        notifyItemRangeRemoved(position + 1, parentItem.children.size)
+        val startPosition = position + 1 + countExpandedChildrenBefore(position)
+        val itemCount = parentItem.children.size
+        data.subList(startPosition, startPosition + itemCount).clear()
+        expandedPositions.remove(position)
+        notifyItemRangeRemoved(startPosition, itemCount)
+    }
+
+    private fun countExpandedChildrenBefore(position: Int): Int {
+        var count = 0
+        for (i in 0 until position) {
+            if (data[i] is ParentItem && expandedPositions.contains(i)) {
+                count += (data[i] as ParentItem).children.size
+            }
+        }
+        return count
     }
 }

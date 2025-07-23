@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.epi.DataBase.ReportRepository
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
-import com.example.epi.ViewModel.RowValidationResult
+import com.example.epi.RowValidationResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
@@ -285,3 +285,4 @@ class ControlViewModel(val repository: ReportRepository): ViewModel() {
         _controlRows.value = emptyList()
     }
 }
+

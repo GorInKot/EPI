@@ -292,16 +292,4 @@ class ArrangementViewModel(private val repository: ReportRepository) : ViewModel
 
         arrangementIsClearing.value = false
     }
-
-    fun getAllReports(): Flow<List<Report>> {
-        return repository.getAllReports()
-    }
-
-    suspend fun updateReport(report: Report) {
-        repository.updateReport(report)
-    }
-
-    suspend fun clearAllReports() {
-        repository.clearAllReports()
-    }
 }

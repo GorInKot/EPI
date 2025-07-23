@@ -7,12 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epi.DataBase.ReportRepository
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
-import com.example.epi.ViewModel.RowValidationResult
+import com.example.epi.RowValidationResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class FixVolumesViewModel(private val repository: ReportRepository) : ViewModel() {
 

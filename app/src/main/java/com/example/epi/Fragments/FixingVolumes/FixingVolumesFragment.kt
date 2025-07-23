@@ -1,34 +1,27 @@
 package com.example.epi.Fragments.FixingVolumes
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.epi.R
-import com.example.epi.databinding.FragmentFixingVolumesBinding
-import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.InputStream
-import android.net.Uri
-import android.widget.AutoCompleteTextView
-import androidx.navigation.fragment.navArgs
 import com.example.epi.App
-import com.example.epi.ViewModel.RowValidationResult
+import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
+import com.example.epi.R
+import com.example.epi.RowValidationResult
+import com.example.epi.SharedViewModel
+import com.example.epi.ViewModel.SharedViewModelFactory
+import com.example.epi.databinding.FragmentFixingVolumesBinding
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,10 +31,9 @@ class FixingVolumesFragment : Fragment() {
     private var _binding: FragmentFixingVolumesBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FixVolumesViewModel by activityViewModels {
-        FixVolumesViewModelFactory((requireActivity().application as App).reportRepository)
+    private val sharedViewModel: SharedViewModel by activityViewModels {
+        SharedViewModelFactory((requireActivity().application as App).reportRepository)
     }
-    private val args: FixingVolumesFragmentArgs by navArgs()
     private lateinit var adapter: FixVolumesRowAdapter
 
     override fun onCreateView(
@@ -56,27 +48,23 @@ class FixingVolumesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Загрузка данных из последнего незавершенного отчета
-        viewModel.loadPreviousReport()
+        sharedViewModel.loadPreviousReport()
 
         // Настройка RecyclerView
         setupRecyclerView()
 
-        // Получение аргументов
-        val objectId = args.objectId ?: ""
-        val reportId = args.reportId
-
         // Подписка на строки
-        viewModel.fixRows.observe(viewLifecycleOwner) { rows ->
+        sharedViewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
         }
 
         // Подписка на ошибки
-        viewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
+        sharedViewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
 
         // Подписка на списки автодополнения
-        viewModel.fixWorkType.observe(viewLifecycleOwner) { workTypeList ->
+        sharedViewModel.fixWorkType.observe(viewLifecycleOwner) { workTypeList ->
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
@@ -90,7 +78,7 @@ class FixingVolumesFragment : Fragment() {
             }
         }
 
-        viewModel.fixMeasures.observe(viewLifecycleOwner) { measuresList ->
+        sharedViewModel.fixMeasures.observe(viewLifecycleOwner) { measuresList ->
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
@@ -106,38 +94,38 @@ class FixingVolumesFragment : Fragment() {
 
         // Добавить запись
         binding.btnAdd.setOnClickListener {
+            val objectId = sharedViewModel.selectedObject.value.orEmpty() // Используем существующее поле
             val newRow = FixVolumesRow(
                 ID_object = objectId,
                 projectWorkType = binding.AutoCompleteTextViewWorkType.text.toString().trim(),
                 measure = binding.AutoCompleteTextViewMeasureUnits.text.toString().trim(),
                 plan = binding.TextInputEditTextPlan.text.toString().trim(),
                 fact = binding.TextInputEditTextFact.text.toString().trim(),
-                result = "" // Result вычисляется в ViewModel
+                result = "" // Вычисляется в validateFixRowInput
             )
 
-            when (val result = viewModel.validateFixRowInput(newRow)) {
+            when (val result = sharedViewModel.validateFixRowInput(newRow)) {
                 is RowValidationResult.Valid -> {
                     val planValue = newRow.plan.toDoubleOrNull() ?: 0.0
                     val factValue = newRow.fact.toDoubleOrNull() ?: 0.0
                     val updatedRow = newRow.copy(result = (planValue - factValue).toString())
-                    viewModel.addFixRow(updatedRow)
+                    sharedViewModel.addFixRow(updatedRow)
                     clearInputFields()
                 }
                 is RowValidationResult.Invalid -> {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
                 }
+
+                else -> {}
             }
         }
 
         // Кнопка "Сохранить"
         binding.btnNext.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val updatedReportId = viewModel.updateFixVolumesReport()
+                val updatedReportId = sharedViewModel.updateFixVolumesReport()
                 if (updatedReportId > 0) {
-                    val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToSendReportFragment(
-                        reportId = updatedReportId,
-                        objectId = objectId
-                    )
+                    val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToSendReportFragment()
                     findNavController().navigate(action)
                 } else {
                     Toast.makeText(requireContext(), "Ошибка при сохранении отчета", Toast.LENGTH_SHORT).show()
@@ -157,7 +145,7 @@ class FixingVolumesFragment : Fragment() {
                 showEditDialog(row, position)
             },
             onDeleteClick = { row ->
-                viewModel.removeFixRow(row)
+                sharedViewModel.removeFixRow(row)
                 Toast.makeText(requireContext(), "Строка удалена", Toast.LENGTH_SHORT).show()
             }
         )
@@ -182,12 +170,12 @@ class FixingVolumesFragment : Fragment() {
         editFact.setText(row.fact)
 
         // Настройка автодополнения
-        viewModel.fixWorkType.value?.let { workTypeList ->
+        sharedViewModel.fixWorkType.value?.let { workTypeList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeList)
             editWorkProject.setAdapter(adapter)
             editWorkProject.setOnClickListener { editWorkProject.showDropDown() }
         }
-        viewModel.fixMeasures.value?.let { measuresList ->
+        sharedViewModel.fixMeasures.value?.let { measuresList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, measuresList)
             editMeasures.setAdapter(adapter)
             editMeasures.setOnClickListener { editMeasures.showDropDown() }
@@ -212,18 +200,20 @@ class FixingVolumesFragment : Fragment() {
                 result = ""
             )
 
-            when (val result = viewModel.validateFixRowInput(newRow)) {
+            when (val result = sharedViewModel.validateFixRowInput(newRow)) {
                 is RowValidationResult.Valid -> {
                     val planValue = newRow.plan.toDoubleOrNull() ?: 0.0
                     val factValue = newRow.fact.toDoubleOrNull() ?: 0.0
                     val updatedRow = newRow.copy(result = (planValue - factValue).toString())
-                    viewModel.updateFixRow(oldRow = row, newRow = updatedRow)
+                    sharedViewModel.updateFixRow(oldRow = row, newRow = updatedRow)
                     Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
                 is RowValidationResult.Invalid -> {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
                 }
+
+                else -> {}
             }
         }
 

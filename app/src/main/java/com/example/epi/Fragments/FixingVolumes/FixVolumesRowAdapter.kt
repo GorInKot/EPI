@@ -38,19 +38,15 @@ class FixVolumesRowAdapter(
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
 
         fun bind(row: FixVolumesRow, position: Int) {
-            tvIdObject.text = row.ID_object
-            tvProjectWorkType.text = row.projectWorkType
-            tvMeasure.text = row.measure
-            tvPlan.text = row.plan
-            tvFact.text = row.fact
-            tvResult.text = row.result
+            tvIdObject.text = row.ID_object ?: ""
+            tvProjectWorkType.text = row.projectWorkType ?: ""
+            tvMeasure.text = row.measure ?: ""
+            tvPlan.text = row.plan ?: ""
+            tvFact.text = row.fact ?: ""
+            tvResult.text = row.result ?: ""
 
-            btnEdit.setOnClickListener {
-                onEditClick(row, position)
-            }
-            btnDelete.setOnClickListener {
-                onDeleteClick(row)
-            }
+            btnEdit.setOnClickListener { onEditClick(row, position) }
+            btnDelete.setOnClickListener { onDeleteClick(row) }
         }
     }
 

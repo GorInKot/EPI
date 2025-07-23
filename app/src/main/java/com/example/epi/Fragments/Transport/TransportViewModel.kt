@@ -21,7 +21,6 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
     }
 
     // Поля формы транспорта
-    val customerName = MutableLiveData("")
     val contractCustomer = MutableLiveData("")
     val executorName = MutableLiveData("")
     val contractTransport = MutableLiveData("")
@@ -41,7 +40,7 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
 
         transportInClearing.value = true
 
-        customerName.value = ""
+//        customerName.value = ""
         contractCustomer.value = ""
         executorName.value = ""
         contractTransport.value = ""
@@ -57,7 +56,7 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
     // Валидация транспорта
     fun validateTransportInputs(
         _isTransportAbsent: Boolean,
-        customerName: String?,
+//        customerName: String?,
         contractCustomer: String?,
         executorName: String?,
         contractTransport: String?,
@@ -72,9 +71,9 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
 
         if (_isTransportAbsent) return errors
 
-        if (customerName.isNullOrBlank()) {
-            errors["customerName"] = "Укажите Заказчика"
-        }
+//        if (customerName.isNullOrBlank()) {
+//            errors["customerName"] = "Укажите Заказчика"
+//        }
         if (contractCustomer.isNullOrBlank()) {
             errors["contractCustomer"] = "Укажите договор СК"
         }
@@ -134,7 +133,7 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
         try {
             val errors = validateTransportInputs(
                 _isTransportAbsent = isTransportAbsent.value ?: false,
-                customerName = customerName.value,
+//                customerName = customerName.value,
                 contractCustomer = contractCustomer.value,
                 executorName = executorName.value,
                 contractTransport = contractTransport.value,
@@ -159,7 +158,7 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
 
             // Обновляем отчет данными из TransportFragment
             val updatedReport = existingReport.copy(
-                customer = if (isTransportAbsent.value == true) "" else customerName.value.orEmpty(),
+//                customer = if (isTransportAbsent.value == true) "" else customerName.value.orEmpty(),
                 contract = if (isTransportAbsent.value == true) "" else contractCustomer.value.orEmpty(),
                 executor = if (isTransportAbsent.value == true) "" else executorName.value.orEmpty(),
                 contractTransport = if (isTransportAbsent.value == true) "" else contractTransport.value.orEmpty(),

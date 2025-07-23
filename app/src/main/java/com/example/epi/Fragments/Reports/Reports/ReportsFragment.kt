@@ -2,12 +2,16 @@ package com.example.epi.Fragments.Reports.Reports
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,19 +52,8 @@ class ReportsFragment : Fragment() {
     private var selectedStartDate: String? = null
     private var selectedEndDate: String? = null
 
-    // Регистрация ActivityResult для сохранения файла
-    private val createDocument = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { uri ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    try {
-                        exportToCsvWithUri(uri, selectedStartDate!!, selectedEndDate!!)
-                    } catch (e: Exception) {
-                        Toast.makeText(context, "Ошибка при экспорте: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
+    companion object {
+        private const val REQUEST_CODE_STORAGE_PERMISSION = 100
     }
 
     override fun onCreateView(
@@ -79,21 +73,23 @@ class ReportsFragment : Fragment() {
         // Подписка на данные из ViewModel
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reports.collectLatest { reports ->
-                adapter = ExpandableAdapter(reports.map { report ->
-                    ParentItem(
-                        date = report.date,
-                        obj = report.obj,
-                        children = listOf(
-                            ChildItem(
-                                workType = report.workType,
-                                customer = report.customer,
-                                contractor = report.contractor,
-                                transportCustomer = report.executor
-                            )
-                        ),
-                        isExpanded = false
-                    )
-                }.toMutableList())
+                adapter = ExpandableAdapter(mutableListOf<Any>().apply {
+                    addAll(reports.map { report ->
+                        ParentItem(
+                            date = report.date,
+                            obj = report.obj,
+                            children = listOf(
+                                ChildItem(
+                                    workType = report.workType,
+                                    customer = report.customer,
+                                    contractor = report.contractor,
+                                    transportCustomer = report.executor
+                                )
+                            ),
+                            isExpanded = false
+                        )
+                    })
+                })
                 binding.recyclerView.adapter = adapter
             }
         }
@@ -106,7 +102,7 @@ class ReportsFragment : Fragment() {
         // Кнопка экспорта
         binding.btnExportDataToCSV.setOnClickListener {
             if (selectedStartDate != null && selectedEndDate != null) {
-                startExport()
+                checkStoragePermission()
             } else {
                 Toast.makeText(context, "Выберите диапазон дат", Toast.LENGTH_SHORT).show()
             }
@@ -120,6 +116,7 @@ class ReportsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.addItemDecoration(VerticalSpaceItemDecoration(16)) // Отступ между элементами
     }
 
     private fun showDateRangePicker() {
@@ -144,29 +141,54 @@ class ReportsFragment : Fragment() {
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
     }
 
-    private fun startExport() {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/csv"
-            putExtra(Intent.EXTRA_TITLE, "reports_${System.currentTimeMillis()}.csv")
+    private fun checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_CODE_STORAGE_PERMISSION
+            )
+        } else {
+            exportToCsv(selectedStartDate!!, selectedEndDate!!)
         }
-        createDocument.launch(intent)
     }
 
-    private suspend fun exportToCsvWithUri(uri: android.net.Uri, startDate: String, endDate: String) {
-        try {
-            val reports = withContext(Dispatchers.IO) {
-                viewModel.getReportsForExport(startDate, endDate)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_STORAGE_PERMISSION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (selectedStartDate != null && selectedEndDate != null) {
+                exportToCsv(selectedStartDate!!, selectedEndDate!!)
             }
+        } else {
+            Toast.makeText(context, "Разрешение на запись не предоставлено", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-            if (reports.isEmpty()) {
-                Toast.makeText(context, "Нет данных за выбранный период", Toast.LENGTH_SHORT).show()
-                return
-            }
+    private fun exportToCsv(startDate: String, endDate: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val reports = withContext(Dispatchers.IO) {
+                    viewModel.getReportsForExport(startDate, endDate)
+                }
 
-            withContext(Dispatchers.IO) {
-                requireContext().contentResolver.openFileDescriptor(uri, "w")?.use { descriptor ->
-                    FileWriter(descriptor.fileDescriptor).use { writer ->
+                if (reports.isEmpty()) {
+                    Toast.makeText(context, "Нет данных за выбранный период", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                val fileName = "reports_${System.currentTimeMillis()}.csv"
+                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
+
+                withContext(Dispatchers.IO) {
+                    FileWriter(file).use { writer ->
                         // Заголовки CSV
                         writer.append("ID,Date,Time,WorkType,Customer,Object,Plot,Contractor,RepContractor,RepSSKGp,SubContractor,RepSubContractor,RepSSKSub,IsEmpty,Executor,StartDate,StartTime,StateNumber,Contract,ContractTransport,EndDate,EndTime,InViolation,Equipment,ComplexWork,OrderNumber,Report,Remarks,IsSend\n")
                         // Данные
@@ -175,11 +197,11 @@ class ReportsFragment : Fragment() {
                         }
                     }
                 }
-            }
 
-            Toast.makeText(context, "Файл сохранен в папке Загрузки", Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            Toast.makeText(context, "Ошибка при экспорте: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Ошибка при экспорте: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

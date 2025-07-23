@@ -1,72 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Reports.Reports.ReportsFragment"
     android:background="@color/color_black"
     >
 
-    <!--  Заголовок -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_mainLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Мои отчеты"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/mainLabel"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:paddingBottom="36dp"
+        >
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="48dp"
-        tools:listitem="@layout/item_parent_send_report"
-        />
+        <!-- Направляющие -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp"
+            />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_selectDates"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="Выбрать даты"
-        style="@style/SimpleButton"
-        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="25dp"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1"
+            />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_exportDataToCSV"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:text="Скачать файл"
-        style="@style/SimpleButton"
-        app:layout_constraintTop_toBottomOf="@id/btn_selectDates"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="25dp"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"
+            />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8"
+            />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/RepFr_MainMenu_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="Главное меню"
-        style="@style/SimpleButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="25dp"
-        android:layout_marginStart="25dp"
-        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp"
+            />
 
 
+        <!--  Заголовок -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_mainLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Мои отчеты"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/mainLabel"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="24dp"
+            android:nestedScrollingEnabled="true"
+            tools:listitem="@layout/item_parent_send_report"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_selectDates"
+            android:text="Выбрать даты"
+            style="@style/SimpleButton"
+            app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="0dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_exportDataToCSV"
+            android:text="Скачать файл"
+            style="@style/SimpleButton"
+            app:layout_constraintTop_toBottomOf="@id/btn_selectDates"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/RepFr_MainMenu_btn"
+            android:text="Главное меню"
+            style="@style/SimpleButton"
+            app:layout_constraintTop_toBottomOf="@id/btn_exportDataToCSV"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -21,17 +21,17 @@
         <action
             android:id="@+id/action_arrangementFragment_to_transportFragment"
             app:destination="@id/transportFragment">
-            <argument
-                android:name="customer"
-                app:argType="string"
-                app:nullable="true" />
-            <argument
-                android:name="reportId"
-                app:argType="long" />
-            <argument
-                android:name="objectId"
-                app:argType="string"
-                app:nullable="true" />
+<!--            <argument-->
+<!--                android:name="customer"-->
+<!--                app:argType="string"-->
+<!--                app:nullable="true" />-->
+<!--            <argument-->
+<!--                android:name="reportId"-->
+<!--                app:argType="long" />-->
+<!--            <argument-->
+<!--                android:name="objectId"-->
+<!--                app:argType="string"-->
+<!--                app:nullable="true" />-->
         </action>
 
         <action
@@ -45,28 +45,28 @@
         android:label="TransportFragment"
         tools:layout="@layout/fragment_transport">
 
-        <argument
-            android:name="customer"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="reportId"
-            app:argType="long" />
-        <argument
-            android:name="objectId"
-            app:argType="string"
-            app:nullable="true" />
+<!--        <argument-->
+<!--            android:name="customer"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
+<!--        <argument-->
+<!--            android:name="reportId"-->
+<!--            app:argType="long" />-->
+<!--        <argument-->
+<!--            android:name="objectId"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
 
         <action
             android:id="@+id/action_transportFragment_to_controlFragment"
             app:destination="@id/controlFragment">
-            <argument
-                android:name="reportId"
-                app:argType="long" />
-            <argument
-                android:name="objectId"
-                app:argType="string"
-                app:nullable="true" />
+<!--            <argument-->
+<!--                android:name="reportId"-->
+<!--                app:argType="long" />-->
+<!--            <argument-->
+<!--                android:name="objectId"-->
+<!--                app:argType="string"-->
+<!--                app:nullable="true" />-->
         </action>
 
         <action
@@ -80,24 +80,24 @@
         android:label="Control"
         tools:layout="@layout/fragment_control">
 
-        <argument
-            android:name="reportId"
-            app:argType="long" />
-        <argument
-            android:name="objectId"
-            app:argType="string"
-            app:nullable="true" />
+<!--        <argument-->
+<!--            android:name="reportId"-->
+<!--            app:argType="long" />-->
+<!--        <argument-->
+<!--            android:name="objectId"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
 
         <action
             android:id="@+id/action_controlFragment_to_fixVolumesFragment"
             app:destination="@id/fixFragment">
-            <argument
-                android:name="reportId"
-                app:argType="long" />
-            <argument
-                android:name="objectId"
-                app:argType="string"
-                app:nullable="true" />
+<!--            <argument-->
+<!--                android:name="reportId"-->
+<!--                app:argType="long" />-->
+<!--            <argument-->
+<!--                android:name="objectId"-->
+<!--                app:argType="string"-->
+<!--                app:nullable="true" />-->
         </action>
 
         <action
@@ -110,24 +110,24 @@
         android:name="com.example.epi.Fragments.FixingVolumes.FixingVolumesFragment"
         android:label="Fix"
         tools:layout="@layout/fragment_fixing_volumes">
-        <argument
-            android:name="reportId"
-            app:argType="long" />
-        <argument
-            android:name="objectId"
-            app:argType="string"
-            app:nullable="true" />
+<!--        <argument-->
+<!--            android:name="reportId"-->
+<!--            app:argType="long" />-->
+<!--        <argument-->
+<!--            android:name="objectId"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
         <action
             android:id="@+id/action_fixVolumesFragment_to_sendReportFragment"
             app:destination="@id/sendReportFragment">
-            <argument
-                android:name="reportId"
-                app:argType="long"
-                />
-            <argument
-                android:name="objectId"
-                app:argType="string"
-                app:nullable="true" />
+<!--            <argument-->
+<!--                android:name="reportId"-->
+<!--                app:argType="long"-->
+<!--                />-->
+<!--            <argument-->
+<!--                android:name="objectId"-->
+<!--                app:argType="string"-->
+<!--                app:nullable="true" />-->
         </action>
         <action
             android:id="@+id/action_fixVolumesFragment_to_controlFragment"
@@ -139,28 +139,28 @@
         android:name="com.example.epi.Fragments.Reports.SendReport.SendReportFragment"
         android:label="SendReport"
         tools:layout="@layout/fragment_send_report">
-        <argument
-            android:name="reportId"
-            app:argType="long"
-            />
-        <argument
-            android:name="objectId"
-            app:argType="string"
-            app:nullable="true" />
+<!--        <argument-->
+<!--            android:name="reportId"-->
+<!--            app:argType="long"-->
+<!--            />-->
+<!--        <argument-->
+<!--            android:name="objectId"-->
+<!--            app:argType="string"-->
+<!--            app:nullable="true" />-->
         <action
             android:id="@+id/action_sendReportFragment_to_reportsFragment"
             app:destination="@id/reportsFragment" />
         <action
             android:id="@+id/action_sendReportFragment_to_fixVolumesFragment"
             app:destination="@id/fixFragment">
-            <argument
-                android:name="reportId"
-                app:argType="long"
-                />
-            <argument
-                android:name="objectId"
-                app:argType="string"
-                app:nullable="true" />
+<!--            <argument-->
+<!--                android:name="reportId"-->
+<!--                app:argType="long"-->
+<!--                />-->
+<!--            <argument-->
+<!--                android:name="objectId"-->
+<!--                app:argType="string"-->
+<!--                app:nullable="true" />-->
         </action>
     </fragment>
 

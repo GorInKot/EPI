@@ -12,15 +12,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.R
-import com.example.epi.ViewModel.RowValidationResult
 import com.example.epi.databinding.FragmentControlBinding
 import com.example.epi.App
+import com.example.epi.RowValidationResult
+import com.example.epi.SharedViewModel
+import com.example.epi.ViewModel.SharedViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,11 +31,10 @@ class ControlFragment : Fragment() {
     private var _binding: FragmentControlBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ControlViewModel by viewModels {
-        ControlViewModelFactory((requireActivity().application as App).reportRepository)
+    private val sharedViewModel: SharedViewModel by activityViewModels {
+        SharedViewModelFactory((requireActivity().application as App).reportRepository)
     }
 
-    private val args: ControlFragmentArgs by navArgs()
     private lateinit var adapter: ControlRowAdapter
 
     override fun onCreateView(
@@ -50,47 +50,47 @@ class ControlFragment : Fragment() {
 
 
         // Получение аргументов
-        val reportId = args.reportId
-        val objectId = args.objectId ?: ""
+//        val reportId = args.reportId
+//        val objectId = args.objectId ?: ""
 
-        viewModel.loadPreviousReport()
+        sharedViewModel.loadPreviousReport()
 
         // Настройка RecyclerView
         setupRecyclerView()
 
         // Подписка на номер предписания
-        viewModel.orderNumber.observe(viewLifecycleOwner) {
+        sharedViewModel.orderNumber.observe(viewLifecycleOwner) {
             binding.tvOrderNumber.text = it
         }
 
         // Подписка на чекбокс
-        viewModel.isViolation.observe(viewLifecycleOwner) { isChecked ->
+        sharedViewModel.isViolation.observe(viewLifecycleOwner) { isChecked ->
             binding.btnOrderNumber.isEnabled = !isChecked
         }
 
         // Подписка на строки
-        viewModel.controlRow.observe(viewLifecycleOwner) { rows ->
+        sharedViewModel.controlRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
         }
 
         // Подписка на дату и время
-        viewModel.currentDate.observe(viewLifecycleOwner) {
+        sharedViewModel.currentDate.observe(viewLifecycleOwner) {
             binding.tvDate.text = "Дата: $it"
         }
 
         // Чекбокс
         binding.checkBoxManualType.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setViolation(isChecked)
+            sharedViewModel.setViolation(isChecked)
         }
 
         // Получить номер предписания
         binding.btnOrderNumber.setOnClickListener {
-            viewModel.generateOrderNumber()
+            sharedViewModel.generateOrderNumber()
 //            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
         }
 
         // Подписка на списки для AutoCompleteTextView
-        viewModel.equipmentNames.observe(viewLifecycleOwner) { equipmentList ->
+        sharedViewModel.equipmentNames.observe(viewLifecycleOwner) { equipmentList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentList)
             binding.AutoCompleteTextViewEquipmentName.setAdapter(adapter)
             binding.AutoCompleteTextViewEquipmentName.setOnClickListener {
@@ -98,7 +98,7 @@ class ControlFragment : Fragment() {
             }
         }
 
-        viewModel.controlWorkTypes.observe(viewLifecycleOwner) { workTypesList ->
+        sharedViewModel.controlWorkTypes.observe(viewLifecycleOwner) { workTypesList ->
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -121,9 +121,9 @@ class ControlFragment : Fragment() {
                 isViolationChecked = binding.checkBoxManualType.isChecked
             )
 
-            when (val result = viewModel.validateRowInput(input)) {
+            when (val result = sharedViewModel.validateRowInput(input)) {
                 is RowValidationResult.Valid -> {
-                    viewModel.addRow(
+                    sharedViewModel.addRow(
                         ControlRow(
                             input.equipmentName,
                             input.workType,
@@ -137,17 +137,20 @@ class ControlFragment : Fragment() {
                 is RowValidationResult.Invalid -> {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
                 }
+
+                else -> {}
             }
         }
+
 
         // Кнопка "Далее"
         binding.btnNext.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val updatedReportId = viewModel.updateControlReport()
+                val updatedReportId = sharedViewModel.updateControlReport()
                 if (updatedReportId > 0) {
                     val action = ControlFragmentDirections.actionControlFragmentToFixVolumesFragment(
-                        reportId = updatedReportId,
-                        objectId = objectId
+//                        reportId = updatedReportId,
+//                        objectId = objectId
                     )
                     findNavController().navigate(action)
                 } else {
@@ -168,7 +171,7 @@ class ControlFragment : Fragment() {
                 showEditDialog(row, position)
             },
             onDeleteClick = { row ->
-                viewModel.removeRow(row)
+                sharedViewModel.removeRow(row)
                 Toast.makeText(requireContext(), "Строка удалена", Toast.LENGTH_SHORT).show()
             }
         )
@@ -209,7 +212,7 @@ class ControlFragment : Fragment() {
                 report = editReport.text.toString(),
                 remarks = editRemarks.text.toString()
             )
-            viewModel.updateRow(oldRow = row, newRow = updatedRow)
+            sharedViewModel.updateRow(oldRow = row, newRow = updatedRow)
             Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
