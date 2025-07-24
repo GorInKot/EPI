@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,11 +49,6 @@ class ControlFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        // Получение аргументов
-//        val reportId = args.reportId
-//        val objectId = args.objectId ?: ""
-
         sharedViewModel.loadPreviousReport()
 
         // Настройка RecyclerView
@@ -93,6 +89,8 @@ class ControlFragment : Fragment() {
         sharedViewModel.equipmentNames.observe(viewLifecycleOwner) { equipmentList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, equipmentList)
             binding.AutoCompleteTextViewEquipmentName.setAdapter(adapter)
+            binding.AutoCompleteTextViewEquipmentName.inputType = InputType.TYPE_NULL
+            binding.AutoCompleteTextViewEquipmentName.keyListener = null
             binding.AutoCompleteTextViewEquipmentName.setOnClickListener {
                 binding.AutoCompleteTextViewEquipmentName.showDropDown()
             }
@@ -105,6 +103,8 @@ class ControlFragment : Fragment() {
                 workTypesList
             )
             binding.AutoCompleteTextViewType.setAdapter(adapter)
+            binding.AutoCompleteTextViewType.inputType = InputType.TYPE_NULL
+            binding.AutoCompleteTextViewType.keyListener = null
             binding.AutoCompleteTextViewType.setOnClickListener {
                 binding.AutoCompleteTextViewType.showDropDown()
             }
@@ -148,10 +148,7 @@ class ControlFragment : Fragment() {
             CoroutineScope(Dispatchers.Main).launch {
                 val updatedReportId = sharedViewModel.updateControlReport()
                 if (updatedReportId > 0) {
-                    val action = ControlFragmentDirections.actionControlFragmentToFixVolumesFragment(
-//                        reportId = updatedReportId,
-//                        objectId = objectId
-                    )
+                    val action = ControlFragmentDirections.actionControlFragmentToFixVolumesFragment()
                     findNavController().navigate(action)
                 } else {
                     Toast.makeText(requireContext(), "Ошибка при сохранении отчета", Toast.LENGTH_SHORT).show()

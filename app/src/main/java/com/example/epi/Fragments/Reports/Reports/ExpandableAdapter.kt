@@ -47,10 +47,12 @@ class ExpandableAdapter(private val data: MutableList<Any>) : RecyclerView.Adapt
 
     inner class ParentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val dateText: TextView = itemView.findViewById(R.id.textView_date)
+        private val timeText: TextView = itemView.findViewById(R.id.textView_time)
         private val objectText: TextView = itemView.findViewById(R.id.textView_object)
 
         fun bind(item: ParentItem, position: Int) {
             dateText.text = "Дата: ${item.date}"
+            timeText.text = "Время: ${item.time}"
             objectText.text = "Объект: ${item.obj}"
 
             itemView.setOnClickListener {

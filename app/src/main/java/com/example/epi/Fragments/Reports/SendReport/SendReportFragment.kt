@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.epi.App
 import com.example.epi.R
 import com.example.epi.SharedViewModel
@@ -61,7 +62,10 @@ class SendReportFragment : Fragment() {
                 try {
                     val reportId = sharedViewModel.saveOrUpdateReport()
                     if (reportId > 0) {
-                        findNavController().navigate(R.id.reportsFragment)
+                        sharedViewModel.clearAllData()
+                        findNavController().navigate(R.id.action_sendReportFragment_to_reportsFragment, null, navOptions {
+                            popUpTo(R.id.StartFragment) { inclusive = false }
+                        })
                     } else {
                         // Обработка ошибки уже логируется в SharedViewModel
                     }

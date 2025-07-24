@@ -14,7 +14,13 @@ import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -27,6 +33,10 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private val gson = Gson()
+
+    // Флаг для отслеживания сохраненного отчета
+    private val _isReportSaved = MutableLiveData<Boolean>(false)
+    val isReportSaved: LiveData<Boolean> get() = _isReportSaved
 
     // Данные из ArrangementFragment
     private val _currentDate = MutableLiveData<String>(dateFormat.format(Date()))
@@ -98,15 +108,13 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         val customers = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
         val objects = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
         val contractors = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
-        val subContractors = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2", "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
+        val subContractors = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2",
+            "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
     }
 
     // Данные из TransportFragment
     private val _isTransportAbsent = MutableLiveData(false)
     val isTransportAbsent: LiveData<Boolean> get() = _isTransportAbsent
-
-//    private val _transportCustomerName = MutableLiveData<String>()
-//    val transportCustomerName: LiveData<String> get() = _transportCustomerName
 
     private val _transportContractCustomer = MutableLiveData<String>()
     val transportContractCustomer: LiveData<String> get() = _transportContractCustomer
@@ -156,10 +164,8 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
 
     val equipmentNames = MutableLiveData<List<String>>(
         listOf(
-            "Прибор 1", "Прибор 2", "Прибор 3",
-            "Прибор 4", "Прибор 5", "Прибор 6",
-            "Прибор 7", "Прибор 8", "Прибор 9",
-            "Прибор 10", "Прибор 11", "Прибор 12"
+            "Прибор 1", "Прибор 2", "Прибор 3", "Прибор 4", "Прибор 5", "Прибор 6",
+            "Прибор 7", "Прибор 8", "Прибор 9", "Прибор 10", "Прибор 11", "Прибор 12"
         )
     )
 
@@ -192,13 +198,25 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         )
     )
 
+    private val _reports = MutableStateFlow<List<Report>>(emptyList())
+    val reports: StateFlow<List<Report>> = _reports
+
     init {
+        //
         updateDateTime()
+
+        // загрузка всех отчетов
+        viewModelScope.launch {
+            repository.getAllReports().collectLatest { reports ->
+                _reports.value = reports
+            }
+        }
     }
 
     fun updateDateTime() {
-        _currentDate.value = dateFormat.format(Date())
-        _currentTime.value = timeFormat.format(Date())
+        val now = Calendar.getInstance()
+        _currentDate.postValue(dateFormat.format(now.time))
+        _currentTime.postValue(timeFormat.format(now.time))
     }
 
     // Методы для ArrangementFragment
@@ -254,198 +272,204 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         return errors
     }
 
-    suspend fun saveOrUpdateReport(): Long {
-        try {
-            val errors = validateArrangementInputs(
-                workType = _selectedWorkType.value,
-                customer = _selectedCustomer.value,
-                manualCustomer = _manualCustomer.value,
-                objectId = _selectedObject.value,
-                manualObject = _manualObject.value,
-                plotText = _plotText.value,
-                contractor = _selectedContractor.value,
-                manualContractor = _manualContractor.value,
-                subContractor = _selectedSubContractor.value,
-                manualSubContractor = _manualSubContractor.value,
-                repSSKGpText = _repSSKGpText.value,
-                subContractorText = _subContractorText.value,
-                repSubcontractorText = _repSubcontractorText.value,
-                repSSKSubText = _repSSKSubText.value
-            )
-            if (errors.isNotEmpty()) {
-                Log.e("Tagg", "Validation failed in saveReport: $errors")
-                _errorEvent.postValue("Не все поля заполнены корректно")
-                return 0L
-            }
-
-            val report = Report(
-                date = _currentDate.value.orEmpty(),
-                time = _currentTime.value.orEmpty(),
-                workType = _selectedWorkType.value.orEmpty(),
-                customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
-                obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
-                plot = _plotText.value.orEmpty(),
-                contractor = if (_isManualContractor.value == true) _manualContractor.value.orEmpty() else _selectedContractor.value.orEmpty(),
-                repContractor = if (_isManualSubContractor.value == true) _manualSubContractor.value.orEmpty() else _selectedSubContractor.value.orEmpty(),
-                repSSKGp = _repSSKGpText.value.orEmpty(),
-                subContractor = _subContractorText.value.orEmpty(),
-                repSubContractor = _repSubcontractorText.value.orEmpty(),
-                repSSKSub = _repSSKSubText.value.orEmpty(),
-                contract = _transportContractCustomer.value.orEmpty(),
-                executor = _transportExecutorName.value.orEmpty(),
-                contractTransport = _transportContractTransport.value.orEmpty(),
-                stateNumber = _transportStateNumber.value.orEmpty(),
-                startDate = _transportStartDate.value.orEmpty(),
-                startTime = _transportStartTime.value.orEmpty(),
-                endDate = _transportEndDate.value.orEmpty(),
-                endTime = _transportEndTime.value.orEmpty(),
-                orderNumber = _orderNumber.value.orEmpty(),
-                inViolation = _isViolation.value ?: false,
-                equipment = (_controlRows.value?.firstOrNull()?.equipmentName ?: ""),
-                complexWork = (_controlRows.value?.firstOrNull()?.workType ?: ""),
-                report = (_controlRows.value?.firstOrNull()?.report ?: ""),
-                remarks = (_controlRows.value?.firstOrNull()?.remarks ?: ""),
-                controlRows = gson.toJson(_controlRows.value),
-                fixVolumesRows = gson.toJson(_fixRows.value),
-                isEmpty = _isTransportAbsent.value ?: false
-            )
-            Log.d("Tagg", "Saving Report: $report")
-            val reportId = repository.saveReport(report)
-            Log.d("Tagg", "Repository returned ID: $reportId")
-            if (reportId > 0) {
-                Log.d("Tagg", "Report saved successfully with ID: $reportId")
-                return reportId
-            } else {
-                Log.e("Tagg", "Failed to save report: Invalid ID returned")
-                _errorEvent.postValue("Ошибка при сохранении отчета: недопустимый ID")
-                return 0L
-            }
-        } catch (e: Exception) {
-            Log.e("Tagg", "Error in saveReport: ${e.message}", e)
-            _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
-            return 0L
-        }
-    }
-
-    fun loadPreviousReport() {
-        viewModelScope.launch {
+    // Новое
+    suspend fun saveArrangementData(): Long {
+        return withContext(Dispatchers.IO) {
+            Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
             try {
-                val report = repository.getLastUnsentReport()
-                report?.let {
-                    _selectedWorkType.value = it.workType
-                    if (it.customer in customers) {
-                        _selectedCustomer.value = it.customer
-                        _isManualCustomer.value = false
-                    } else {
-                        _manualCustomer.value = it.customer
-                        _isManualCustomer.value = true
+                val arrangementErrors = validateArrangementInputs(
+                    workType = _selectedWorkType.value,
+                    customer = _selectedCustomer.value,
+                    manualCustomer = _manualCustomer.value,
+                    objectId = _selectedObject.value,
+                    manualObject = _manualObject.value,
+                    plotText = _plotText.value,
+                    contractor = _selectedContractor.value,
+                    manualContractor = _manualContractor.value,
+                    subContractor = _selectedSubContractor.value,
+                    manualSubContractor = _manualSubContractor.value,
+                    repSSKGpText = _repSSKGpText.value,
+                    subContractorText = _subContractorText.value,
+                    repSubcontractorText = _repSubcontractorText.value,
+                    repSSKSubText = _repSSKSubText.value
+                )
+                if (arrangementErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
+                        Log.d("Taag", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
                     }
-                    if (it.obj in objects) {
-                        _selectedObject.value = it.obj
-                        _isManualObject.value = false
-                    } else {
-                        _manualObject.value = it.obj
-                        _isManualObject.value = true
-                    }
-                    _plotText.value = it.plot
-                    if (it.contractor in contractors) {
-                        _selectedContractor.value = it.contractor
-                        _isManualContractor.value = false
-                    } else {
-                        _manualContractor.value = it.contractor
-                        _isManualContractor.value = true
-                    }
-                    if (it.repContractor in subContractors) {
-                        _selectedSubContractor.value = it.repContractor
-                        _isManualSubContractor.value = false
-                    } else {
-                        _manualSubContractor.value = it.repContractor
-                        _isManualSubContractor.value = true
-                    }
-                    _repSSKGpText.value = it.repSSKGp
-                    _subContractorText.value = it.subContractor
-                    _repSubcontractorText.value = it.repSubContractor
-                    _repSSKSubText.value = it.repSSKSub
-                    _transportContractCustomer.value = it.contract
-                    _transportExecutorName.value = it.executor
-                    _transportContractTransport.value = it.contractTransport
-                    _transportStateNumber.value = it.stateNumber
-                    _transportStartDate.value = it.startDate
-                    _transportStartTime.value = it.startTime
-                    _transportEndDate.value = it.endDate
-                    _transportEndTime.value = it.endTime
-                    _orderNumber.value = it.orderNumber
-                    _isViolation.value = it.inViolation
-                    _controlStartDate.value = it.startDate
-                    _controlStartTime.value = it.startTime
-                    val controlRows = if (it.controlRows.isNotBlank()) {
-                        try {
-                            val type = object : TypeToken<List<ControlRow>>() {}.type
-                            gson.fromJson(it.controlRows, type) ?: emptyList()
-                        } catch (e: Exception) {
-                            Log.e("Tagg", "Control: Error parsing controlRows JSON: ${e.message}")
-                            emptyList<ControlRow>()
-                        }
-                    } else {
-                        if (it.equipment.isNotBlank()) {
-                            listOf(
-                                ControlRow(
-                                    equipmentName = it.equipment,
-                                    workType = it.complexWork,
-                                    report = it.report,
-                                    remarks = it.remarks,
-                                    orderNumber = it.orderNumber
-                                )
-                            )
-                        } else {
-                            emptyList()
-                        }
-                    }
-                    _controlRows.value = controlRows
-                    val fixRows = if (it.fixVolumesRows.isNotBlank()) {
-                        try {
-                            val type = object : TypeToken<List<FixVolumesRow>>() {}.type
-                            gson.fromJson(it.fixVolumesRows, type) ?: emptyList()
-                        } catch (e: Exception) {
-                            Log.e("Tagg", "FixVolumes: Error parsing fixVolumesRows JSON: ${e.message}")
-                            emptyList<FixVolumesRow>()
-                        }
-                    } else {
-                        emptyList()
-                    }
-                    _fixRows.value = fixRows
+                    return@withContext 0L
                 }
+
+                val report = Report(
+                    date = _currentDate.value.orEmpty(),
+                    time = _currentTime.value.orEmpty(),
+                    workType = _selectedWorkType.value.orEmpty(),
+                    customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
+                    obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
+                    plot = _plotText.value.orEmpty(),
+                    contractor = if (_isManualContractor.value == true) _manualContractor.value.orEmpty() else _selectedContractor.value.orEmpty(),
+                    repContractor = if (_isManualSubContractor.value == true) _manualSubContractor.value.orEmpty() else _selectedSubContractor.value.orEmpty(),
+                    repSSKGp = _repSSKGpText.value.orEmpty(),
+                    subContractor = _subContractorText.value.orEmpty(),
+                    repSubContractor = _repSubcontractorText.value.orEmpty(),
+                    repSSKSub = _repSSKSubText.value.orEmpty(),
+                    // Поля Transport, Control и FixVolumes остаются пустыми
+                    contract = "",
+                    executor = "",
+                    contractTransport = "",
+                    stateNumber = "",
+                    startDate = "",
+                    startTime = "",
+                    endDate = "",
+                    endTime = "",
+                    orderNumber = "",
+                    inViolation = false,
+                    equipment = "",
+                    complexWork = "",
+                    report = "",
+                    remarks = "",
+                    controlRows = "",
+                    fixVolumesRows = "",
+                    isEmpty = false
+                )
+                Log.d("Tagg", "Saving full report: $report")
+                val reportId = repository.saveReport(report)
+                Log.d("Tagg", "Saved report ID: $reportId")
+                if (reportId > 0) {
+                    withContext(Dispatchers.Main) {
+                        _isReportSaved.postValue(true)
+                        Log.d("Tagg", "Report saved successfully, isReportSaved set to true")
+                    }
+                }
+                reportId
             } catch (e: Exception) {
-                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета")
+                Log.e("Tagg", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
+                }
+                0L
             }
         }
     }
 
-    fun clearAll() {
-        _selectedWorkType.value = ""
-        _selectedCustomer.value = ""
-        _selectedObject.value = ""
-        _selectedContractor.value = ""
-        _selectedSubContractor.value = ""
-        _manualCustomer.value = ""
-        _manualObject.value = ""
-        _manualContractor.value = ""
-        _manualSubContractor.value = ""
-        _isManualCustomer.value = false
-        _isManualObject.value = false
-        _isManualContractor.value = false
-        _isManualSubContractor.value = false
-        _plotText.value = ""
-        _repSSKGpText.value = ""
-        _subContractorText.value = ""
-        _repSubcontractorText.value = ""
-        _repSSKSubText.value = ""
-        updateDateTime()
+
+    // Старое
+    suspend fun saveOrUpdateReport(): Long {
+        return withContext(Dispatchers.IO) {
+            Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
+            try {
+                val arrangementErrors = validateArrangementInputs(
+                    workType = _selectedWorkType.value,
+                    customer = _selectedCustomer.value,
+                    manualCustomer = _manualCustomer.value,
+                    objectId = _selectedObject.value,
+                    manualObject = _manualObject.value,
+                    plotText = _plotText.value,
+                    contractor = _selectedContractor.value,
+                    manualContractor = _manualContractor.value,
+                    subContractor = _selectedSubContractor.value,
+                    manualSubContractor = _manualSubContractor.value,
+                    repSSKGpText = _repSSKGpText.value,
+                    subContractorText = _subContractorText.value,
+                    repSubcontractorText = _repSubcontractorText.value,
+                    repSSKSubText = _repSSKSubText.value
+                )
+                if (arrangementErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
+                        Log.d("Taag", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val transportErrors = validateTransportInputs(
+                    isTransportAbsent = _isTransportAbsent.value ?: false,
+                    contractCustomer = _transportContractCustomer.value,
+                    executorName = _transportExecutorName.value,
+                    contractTransport = _transportContractTransport.value,
+                    stateNumber = _transportStateNumber.value,
+                    startDate = _transportStartDate.value,
+                    startTime = _transportStartTime.value,
+                    endDate = _transportEndDate.value,
+                    endTime = _transportEndTime.value
+                )
+                if (transportErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${transportErrors.values.joinToString()}")
+                        Log.d("Tagg", "Transport validation errors: ${transportErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val controlErrors = validateControlInputs(
+                    isViolation = _isViolation.value ?: false,
+                    orderNumber = _orderNumber.value,
+//                    startDate = _controlStartDate.value,
+//                    startTime = _controlStartTime.value,
+                    controlRows = _controlRows.value
+                )
+                if (controlErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля контроля заполнены корректно: ${controlErrors.values.joinToString()}")
+                        Log.d("Tagg", "Control validation errors: ${controlErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val report = Report(
+                    date = _currentDate.value.orEmpty(),
+                    time = _currentTime.value.orEmpty(),
+                    workType = _selectedWorkType.value.orEmpty(),
+                    customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
+                    obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
+                    plot = _plotText.value.orEmpty(),
+                    contractor = if (_isManualContractor.value == true) _manualContractor.value.orEmpty() else _selectedContractor.value.orEmpty(),
+                    repContractor = if (_isManualSubContractor.value == true) _manualSubContractor.value.orEmpty() else _selectedSubContractor.value.orEmpty(),
+                    repSSKGp = _repSSKGpText.value.orEmpty(),
+                    subContractor = _subContractorText.value.orEmpty(),
+                    repSubContractor = _repSubcontractorText.value.orEmpty(),
+                    repSSKSub = _repSSKSubText.value.orEmpty(),
+                    contract = _transportContractCustomer.value.orEmpty(),
+                    executor = _transportExecutorName.value.orEmpty(),
+                    contractTransport = _transportContractTransport.value.orEmpty(),
+                    stateNumber = _transportStateNumber.value.orEmpty(),
+                    startDate = _transportStartDate.value.orEmpty(),
+                    startTime = _transportStartTime.value.orEmpty(),
+                    endDate = _transportEndDate.value.orEmpty(),
+                    endTime = _transportEndTime.value.orEmpty(),
+                    orderNumber = _orderNumber.value.orEmpty(),
+                    inViolation = _isViolation.value ?: false,
+                    equipment = (_controlRows.value?.firstOrNull()?.equipmentName ?: ""),
+                    complexWork = (_controlRows.value?.firstOrNull()?.workType ?: ""),
+                    report = (_controlRows.value?.firstOrNull()?.report ?: ""),
+                    remarks = (_controlRows.value?.firstOrNull()?.remarks ?: ""),
+                    controlRows = gson.toJson(_controlRows.value),
+                    fixVolumesRows = gson.toJson(_fixRows.value),
+                    isEmpty = _isTransportAbsent.value ?: false
+                )
+                Log.d("Tagg", "Saving full report: $report")
+                val reportId = repository.saveReport(report)
+                Log.d("Tagg", "Saved report ID: $reportId")
+                if (reportId > 0) {
+                    withContext(Dispatchers.Main) {
+                        _isReportSaved.postValue(true)
+                        Log.d("Tagg", "Report saved successfully, isReportSaved set to true")
+                    }
+                }
+                reportId
+            } catch (e: Exception) {
+                Log.e("Tagg", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
+                }
+                0L
+            }
+        }
     }
 
     // Методы для TransportFragment
     fun setTransportAbsent(value: Boolean) { _isTransportAbsent.value = value }
-//    fun setTransportCustomerName(value: String) { _transportCustomerName.value = value.trim() }
     fun setTransportContractCustomer(value: String) { _transportContractCustomer.value = value.trim() }
     fun setTransportExecutorName(value: String) { _transportExecutorName.value = value.trim() }
     fun setTransportContractTransport(value: String) { _transportContractTransport.value = value.trim() }
@@ -457,7 +481,6 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
 
     fun clearTransport() {
         _transportInClearing.value = true
-//        _transportCustomerName.value = ""
         _transportContractCustomer.value = ""
         _transportExecutorName.value = ""
         _transportContractTransport.value = ""
@@ -529,48 +552,56 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     }
 
     suspend fun updateTransportReport(): Long {
-        try {
-            val errors = validateTransportInputs(
-                isTransportAbsent = _isTransportAbsent.value ?: false,
-                contractCustomer = _transportContractCustomer.value,
-                executorName = _transportExecutorName.value,
-                contractTransport = _transportContractTransport.value,
-                stateNumber = _transportStateNumber.value,
-                startDate = _transportStartDate.value,
-                startTime = _transportStartTime.value,
-                endDate = _transportEndDate.value,
-                endTime = _transportEndTime.value
-            )
-            if (errors.isNotEmpty()) {
-                Log.e("Tagg", "Transport: Validation failed in updateTransportReport: $errors")
-                _errorEvent.postValue("Не все поля заполнены корректно")
-                return 0L
+        return withContext(Dispatchers.IO) {
+            try {
+                val errors = validateTransportInputs(
+                    isTransportAbsent = _isTransportAbsent.value ?: false,
+                    contractCustomer = _transportContractCustomer.value,
+                    executorName = _transportExecutorName.value,
+                    contractTransport = _transportContractTransport.value,
+                    stateNumber = _transportStateNumber.value,
+                    startDate = _transportStartDate.value,
+                    startTime = _transportStartTime.value,
+                    endDate = _transportEndDate.value,
+                    endTime = _transportEndTime.value
+                )
+                if (errors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${errors.values.joinToString()}")
+                        Log.e("Tagg", "Transport: Validation failed in updateTransportReport: $errors")
+                    }
+                    return@withContext 0L
+                }
+                val existingReport = repository.getLastUnsentReport()
+                if (existingReport == null) {
+                    Log.e("Tagg", "Transport: No unsent report found to update")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: нет незавершенного отчета для обновления")
+                    }
+                    return@withContext 0L
+                }
+                val updatedReport = existingReport.copy(
+                    contract = if (_isTransportAbsent.value == true) "" else _transportContractCustomer.value.orEmpty(),
+                    executor = if (_isTransportAbsent.value == true) "" else _transportExecutorName.value.orEmpty(),
+                    contractTransport = if (_isTransportAbsent.value == true) "" else _transportContractTransport.value.orEmpty(),
+                    stateNumber = if (_isTransportAbsent.value == true) "" else _transportStateNumber.value.orEmpty(),
+                    startDate = if (_isTransportAbsent.value == true) "" else _transportStartDate.value.orEmpty(),
+                    startTime = if (_isTransportAbsent.value == true) "" else _transportStartTime.value.orEmpty(),
+                    endDate = if (_isTransportAbsent.value == true) "" else _transportEndDate.value.orEmpty(),
+                    endTime = if (_isTransportAbsent.value == true) "" else _transportEndTime.value.orEmpty(),
+                    isEmpty = _isTransportAbsent.value ?: false
+                )
+                Log.d("Tagg", "Transport: Updating Report: $updatedReport")
+                repository.updateReport(updatedReport)
+                Log.d("Tagg", "Transport: Report updated successfully with ID: ${updatedReport.id}")
+                updatedReport.id
+            } catch (e: Exception) {
+                Log.e("Tagg", "Transport: Error in updateTransportReport: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+                }
+                0L
             }
-            val existingReport = repository.getLastUnsentReport()
-            if (existingReport == null) {
-                Log.e("Tagg", "Transport: No unsent report found to update")
-                _errorEvent.postValue("Ошибка: нет незавершенного отчета для обновления")
-                return 0L
-            }
-            val updatedReport = existingReport.copy(
-                contract = if (_isTransportAbsent.value == true) "" else _transportContractCustomer.value.orEmpty(),
-                executor = if (_isTransportAbsent.value == true) "" else _transportExecutorName.value.orEmpty(),
-                contractTransport = if (_isTransportAbsent.value == true) "" else _transportContractTransport.value.orEmpty(),
-                stateNumber = if (_isTransportAbsent.value == true) "" else _transportStateNumber.value.orEmpty(),
-                startDate = if (_isTransportAbsent.value == true) "" else _transportStartDate.value.orEmpty(),
-                startTime = if (_isTransportAbsent.value == true) "" else _transportStartTime.value.orEmpty(),
-                endDate = if (_isTransportAbsent.value == true) "" else _transportEndDate.value.orEmpty(),
-                endTime = if (_isTransportAbsent.value == true) "" else _transportEndTime.value.orEmpty(),
-                isEmpty = _isTransportAbsent.value ?: false
-            )
-            Log.d("Tagg", "Transport: Updating Report: $updatedReport")
-            repository.updateReport(updatedReport)
-            Log.d("Tagg", "Transport: Report updated successfully with ID: ${updatedReport.id}")
-            return updatedReport.id
-        } catch (e: Exception) {
-            Log.e("Tagg", "Transport: Error in updateTransportReport: ${e.message}", e)
-            _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
-            return 0L
         }
     }
 
@@ -618,7 +649,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
             currentList[index] = newRow
             _controlRows.value = currentList
         } else {
-            Log.w("ControlViewModel", "Row not found: $oldRow")
+            Log.w("Tagg", "ControlFragment: Row not found: $oldRow")
         }
     }
 
@@ -637,23 +668,16 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     fun validateControlInputs(
         isViolation: Boolean,
         orderNumber: String?,
-        startDate: String?,
-        startTime: String?,
+//        startDate: String?,
+//        startTime: String?,
         controlRows: List<ControlRow>?
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
-        if (!isViolation && orderNumber.isNullOrBlank()) {
-            errors["orderNumber"] = "Укажите номер предписания"
-        }
-        if (startDate.isNullOrBlank()) {
-            errors["startDate"] = "Укажите дату начала"
-        }
-        if (startTime.isNullOrBlank()) {
-            errors["startTime"] = "Укажите время начала"
-        }
-        if (controlRows.isNullOrEmpty()) {
-            errors["controlRows"] = "Добавьте хотя бы одну строку контроля"
-        } else {
+        if (!isViolation && orderNumber.isNullOrBlank()) errors["orderNumber"] = "Укажите номер предписания"
+//        if (startDate.isNullOrBlank()) errors["startDate"] = "Укажите дату начала"
+//        if (startTime.isNullOrBlank()) errors["startTime"] = "Укажите время начала"
+        if (controlRows.isNullOrEmpty()) errors["controlRows"] = "Добавьте хотя бы одну строку контроля"
+        else {
             controlRows.forEachIndexed { index, row ->
                 val input = RowInput(
                     equipmentName = row.equipmentName,
@@ -664,9 +688,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     isViolationChecked = isViolation
                 )
                 when (val result = validateRowInput(input)) {
-                    is RowValidationResult.Invalid -> {
-                        errors["row_$index"] = result.reason
-                    }
+                    is RowValidationResult.Invalid -> errors["row_$index"] = result.reason
                     else -> {}
                 }
             }
@@ -675,50 +697,53 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     }
 
     suspend fun updateControlReport(): Long {
-        try {
-            val errors = validateControlInputs(
-                isViolation = _isViolation.value ?: false,
-                orderNumber = _orderNumber.value,
-                startDate = _controlStartDate.value,
-                startTime = _controlStartTime.value,
-                controlRows = _controlRows.value
-            )
-            if (errors.isNotEmpty()) {
-                Log.e("Tagg", "Control: Validation failed: $errors")
-                _errorEvent.postValue("Не все поля заполнены корректно")
-                return 0L
+        return withContext(Dispatchers.IO) {
+            try {
+                val errors = validateControlInputs(
+                    isViolation = _isViolation.value ?: false,
+                    orderNumber = _orderNumber.value,
+//                    startDate = _controlStartDate.value,
+//                    startTime = _controlStartTime.value,
+                    controlRows = _controlRows.value
+                )
+                if (errors.isNotEmpty()) {
+                    Log.e("Tagg", "Control: Validation failed: $errors")
+                    _errorEvent.postValue("Не все поля заполнены корректно")
+                    return@withContext 0L
+                }
+
+                val existingReport = repository.getLastUnsentReport()
+                if (existingReport == null) {
+                    Log.e("Tagg", "Control: No unsent report found")
+                    _errorEvent.postValue("Ошибка: нет незавершенного отчета")
+                    return@withContext 0L
+                }
+
+                val controlRowsJson = gson.toJson(_controlRows.value)
+                val firstRow = _controlRows.value?.firstOrNull()
+
+                val updatedReport = existingReport.copy(
+                    orderNumber = if (_isViolation.value == true) "Нет нарушения" else _orderNumber.value.orEmpty(),
+                    inViolation = _isViolation.value ?: false,
+                    startDate = _controlStartDate.value.orEmpty(),
+                    startTime = _controlStartTime.value.orEmpty(),
+                    equipment = firstRow?.equipmentName ?: "",
+                    complexWork = firstRow?.workType ?: "",
+                    report = firstRow?.report ?: "",
+                    remarks = firstRow?.remarks ?: "",
+                    controlRows = controlRowsJson
+                )
+                Log.d("Tagg", "Control: Updating Report: $updatedReport")
+                repository.updateReport(updatedReport)
+                Log.d("Tagg", "Control: Report updated successfully with ID: ${updatedReport.id}")
+                updatedReport.id
+            } catch (e: Exception) {
+                Log.e("Tagg", "Control: Error in updateControlReport: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+                }
+                0L
             }
-
-            val existingReport = repository.getLastUnsentReport()
-            if (existingReport == null) {
-                Log.e("Tagg", "Control: No unsent report found")
-                _errorEvent.postValue("Ошибка: нет незавершенного отчета")
-                return 0L
-            }
-
-            val controlRowsJson = gson.toJson(_controlRows.value)
-            val firstRow = _controlRows.value?.firstOrNull()
-
-            val updatedReport = existingReport.copy(
-                orderNumber = if (_isViolation.value == true) "Нет нарушения" else _orderNumber.value.orEmpty(),
-                inViolation = _isViolation.value ?: false,
-                startDate = _controlStartDate.value.orEmpty(),
-                startTime = _controlStartTime.value.orEmpty(),
-                equipment = firstRow?.equipmentName ?: "",
-                complexWork = firstRow?.workType ?: "",
-                report = firstRow?.report ?: "",
-                remarks = firstRow?.remarks ?: "",
-                controlRows = controlRowsJson
-            )
-
-            Log.d("Tagg", "Control: Updating Report: $updatedReport")
-            repository.updateReport(updatedReport)
-            Log.d("Tagg", "Control: Report updated successfully with ID: ${updatedReport.id}")
-            return updatedReport.id
-        } catch (e: Exception) {
-            Log.e("Tagg", "Control: Error in updateControlReport: ${e.message}", e)
-            _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
-            return 0L
         }
     }
 
@@ -748,7 +773,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
             current[index] = newRow
             _fixRows.value = current
         } else {
-            Log.w("FixVolumesViewModel", "Row not found: $oldRow")
+            Log.w("Tagg", "FixVolumesFragment:Row not found: $oldRow")
         }
     }
 
@@ -786,41 +811,46 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     }
 
     suspend fun updateFixVolumesReport(): Long {
-        try {
-            val errors = validateFixVolumesInputs(fixRows = _fixRows.value)
-            if (errors.isNotEmpty()) {
-                Log.e("Tagg", "FixVolumes: Validation failed: $errors")
-                _errorEvent.postValue("Не все поля заполнены корректно")
-                return 0L
+        return withContext(Dispatchers.IO) {
+            try {
+                val errors = validateFixVolumesInputs(fixRows = _fixRows.value)
+                if (errors.isNotEmpty()) {
+                    Log.e("Tagg", "FixVolumes: Validation failed: $errors")
+                    _errorEvent.postValue("Не все поля заполнены корректно")
+                    return@withContext 0L
+                }
+                val existingReport = repository.getLastUnsentReport()
+                if (existingReport == null) {
+                    Log.e("Tagg", "FixVolumes: No unsent report found")
+                    _errorEvent.postValue("Ошибка: нет незавершенного отчета")
+                    return@withContext 0L
+                }
+                val fixRowsJson = gson.toJson(_fixRows.value)
+                val updatedReport = existingReport.copy(
+                    fixVolumesRows = fixRowsJson
+                )
+                Log.d("Tagg", "FixVolumes: Updating Report: $updatedReport")
+                repository.updateReport(updatedReport)
+                Log.d(
+                    "Tagg",
+                    "FixVolumes: Report updated successfully with ID: ${updatedReport.id}"
+                )
+                updatedReport.id
+            } catch (e: Exception) {
+                Log.e("Tagg", "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+                }
+                0L
             }
-            val existingReport = repository.getLastUnsentReport()
-            if (existingReport == null) {
-                Log.e("Tagg", "FixVolumes: No unsent report found")
-                _errorEvent.postValue("Ошибка: нет незавершенного отчета")
-                return 0L
-            }
-            val fixRowsJson = gson.toJson(_fixRows.value)
-            val updatedReport = existingReport.copy(
-                fixVolumesRows = fixRowsJson
-            )
-            Log.d("Tagg", "FixVolumes: Updating Report: $updatedReport")
-            repository.updateReport(updatedReport)
-            Log.d("Tagg", "FixVolumes: Report updated successfully with ID: ${updatedReport.id}")
-            return updatedReport.id
-        } catch (e: Exception) {
-            Log.e("Tagg", "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
-            _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
-            return 0L
         }
     }
 
-    fun clearFixVolumes() {
-        _fixRows.value = emptyList()
-    }
+    fun clearFixVolumes() { _fixRows.value = emptyList() }
 
     // Методы для SendReportFragment
     fun exportDatabase(context: Context) {
-        val dbName = "app_database" // Исправлено с "app*database" на корректное имя
+        val dbName = "app_database"
         val dbPath = context.getDatabasePath(dbName)
         val exportDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "")
         if (!exportDir.exists()) exportDir.mkdirs()
@@ -865,6 +895,150 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
             FixRows: ${gson.toJson(_fixRows.value)}
         """.trimIndent()
         println("Entered Data: $data")
+    }
+
+    fun filterReportsByDateRange(startDate: String, endDate: String) {
+        viewModelScope.launch {
+            repository.getReportsByDateRange(startDate, endDate).collectLatest { reports ->
+                _reports.value = reports
+            }
+        }
+    }
+
+    suspend fun getReportsForExport(startDate: String, endDate: String): List<Report> {
+        return repository.getReportsByDateRange(startDate, endDate).first()
+    }
+
+    fun loadPreviousReport() {
+        viewModelScope.launch {
+            try {
+                val report = repository.getLastUnsentReport()
+                report?.let {
+                    _selectedWorkType.value = it.workType
+                    if (it.customer in customers) {
+                        _selectedCustomer.value = it.customer
+                        _isManualCustomer.value = false
+                    } else {
+                        _manualCustomer.value = it.customer
+                        _isManualCustomer.value = true
+                    }
+                    if (it.obj in objects) {
+                        _selectedObject.value = it.obj
+                        _isManualObject.value = false
+                    } else {
+                        _manualObject.value = it.obj
+                        _isManualObject.value = true
+                    }
+                    _plotText.value = it.plot
+                    if (it.contractor in contractors) {
+                        _selectedContractor.value = it.contractor
+                        _isManualContractor.value = false
+                    } else {
+                        _manualContractor.value = it.contractor
+                        _isManualContractor.value = true
+                    }
+                    if (it.repContractor in subContractors) {
+                        _selectedSubContractor.value = it.repContractor
+                        _isManualSubContractor.value = false
+                    } else {
+                        _manualSubContractor.value = it.repContractor
+                        _isManualSubContractor.value = true
+                    }
+                    _repSSKGpText.value = it.repSSKGp
+                    _subContractorText.value = it.subContractor
+                    _repSubcontractorText.value = it.repSubContractor
+                    _repSSKSubText.value = it.repSSKSub
+                    _transportContractCustomer.value = it.contract
+                    _transportExecutorName.value = it.executor
+                    _transportContractTransport.value = it.contractTransport
+                    _transportStateNumber.value = it.stateNumber
+//                    _transportStartDate.value = it.startDate
+//                    _transportStartTime.value = it.startTime
+//                    _transportEndDate.value = it.endDate
+//                    _transportEndTime.value = it.endTime
+//                    _orderNumber.value = it.orderNumber
+//                    _isViolation.value = it.inViolation
+//                    _controlStartDate.value = it.startDate
+//                    _controlStartTime.value = it.startTime
+//                    val controlRows = if (it.controlRows.isNotBlank()) {
+//                        try {
+//                            val type = object : TypeToken<List<ControlRow>>() {}.type
+//                            gson.fromJson(it.controlRows, type) ?: emptyList()
+//                        } catch (e: Exception) {
+//                            Log.e("Tagg", "Control: Error parsing controlRows JSON: ${e.message}")
+//                            emptyList<ControlRow>()
+//                        }
+//                    } else {
+//                        if (it.equipment.isNotBlank()) {
+//                            listOf(
+//                                ControlRow(
+//                                    equipmentName = it.equipment,
+//                                    workType = it.complexWork,
+//                                    report = it.report,
+//                                    remarks = it.remarks,
+//                                    orderNumber = it.orderNumber
+//                                )
+//                            )
+//                        } else {
+//                            emptyList()
+//                        }
+//                    }
+//                    _controlRows.value = controlRows
+//                    val fixRows = if (it.fixVolumesRows.isNotBlank()) {
+//                        try {
+//                            val type = object : TypeToken<List<FixVolumesRow>>() {}.type
+//                            gson.fromJson(it.fixVolumesRows, type) ?: emptyList()
+//                        } catch (e: Exception) {
+//                            Log.e("Tagg", "FixVolumes: Error parsing fixVolumesRows JSON: ${e.message}")
+//                            emptyList<FixVolumesRow>()
+//                        }
+//                    } else {
+//                        emptyList()
+//                    }
+//                    _fixRows.value = fixRows
+                }
+            } catch (e: Exception) {
+                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета")
+            }
+        }
+    }
+
+    fun clearAllData() {
+        _selectedWorkType.value = ""
+        _selectedCustomer.value = ""
+        _selectedObject.value = ""
+        _selectedContractor.value = ""
+        _selectedSubContractor.value = ""
+        _manualCustomer.value = ""
+        _manualObject.value = ""
+        _manualContractor.value = ""
+        _manualSubContractor.value = ""
+        _isManualCustomer.value = false
+        _isManualObject.value = false
+        _isManualContractor.value = false
+        _isManualSubContractor.value = false
+        _plotText.value = ""
+        _repSSKGpText.value = ""
+        _subContractorText.value = ""
+        _repSubcontractorText.value = ""
+        _repSSKSubText.value = ""
+        _transportContractCustomer.value = ""
+        _transportExecutorName.value = ""
+        _transportContractTransport.value = ""
+        _transportStateNumber.value = ""
+        _transportStartDate.value = ""
+        _transportStartTime.value = ""
+        _transportEndDate.value = ""
+        _transportEndTime.value = ""
+        _orderNumber.value = ""
+        _isViolation.value = false
+        _controlStartDate.value = ""
+        _controlStartTime.value = ""
+        _controlRows.value = emptyList()
+        _fixRows.value = emptyList()
+        _isTransportAbsent.value = false
+        updateDateTime()
+        _isReportSaved.postValue(false) // Используем postValue для безопасности
     }
 }
 

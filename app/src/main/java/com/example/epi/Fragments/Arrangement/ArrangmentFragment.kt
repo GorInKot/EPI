@@ -307,26 +307,25 @@ class ArrangementFragment : Fragment() {
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val reportId = withContext(Dispatchers.IO) {
-                            sharedViewModel.saveOrUpdateReport()
+                            sharedViewModel.saveArrangementData()
                         }
                         Log.d("Tagg", "Report ID: $reportId")
                         if (reportId > 0) {
-                            Toast.makeText(requireContext(), "Отчет сохранен", Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(requireContext(), "Отчет сохранен", Toast.LENGTH_SHORT).show()
                             // Получаем objectID (из выпадающего списка или вручную)
-                            val objectID = sharedViewModel.selectedObject.value ?: sharedViewModel.manualObject.value
-                            if (objectID.isNullOrBlank()) {
-                                Toast.makeText(requireContext(), "Объект не задан", Toast.LENGTH_SHORT).show()
-                                return@launch
-                            }
-                            val customerID = sharedViewModel.selectedCustomer.value ?: sharedViewModel.manualCustomer.value
-                            if (customerID.isNullOrBlank()) {
-                                Toast.makeText(requireContext(), "Заказчик не задан", Toast.LENGTH_SHORT).show()
-                                return@launch
-                            }
+//                            val objectID = sharedViewModel.selectedObject.value ?: sharedViewModel.manualObject.value
+//                            if (objectID.isNullOrBlank()) {
+//                                Toast.makeText(requireContext(), "Объект не задан", Toast.LENGTH_SHORT).show()
+//                                return@launch
+//                            }
+//                            val customerID = sharedViewModel.selectedCustomer.value ?: sharedViewModel.manualCustomer.value
+//                            if (customerID.isNullOrBlank()) {
+//                                Toast.makeText(requireContext(), "Заказчик не задан", Toast.LENGTH_SHORT).show()
+//                                return@launch
+//                            }
                             // Переход с передачей reportId и objectID
                             val action = ArrangementFragmentDirections
-                                .actionArrangementFragmentToTransportFragment(
-                                )
+                                .actionArrangementFragmentToTransportFragment()
                             findNavController().navigate(action)
                         } else {
                             Toast.makeText(requireContext(), "Ошибка сохранения отчета", Toast.LENGTH_SHORT).show()
@@ -356,7 +355,7 @@ class ArrangementFragment : Fragment() {
 
         // Кнопка "Очистить"
         binding.btnClear.setOnClickListener {
-            sharedViewModel.clearAll()
+            sharedViewModel.clearAllData()
             removeAllTextWatchers()
             clearUiFields()
             addAllTextWatchers()
