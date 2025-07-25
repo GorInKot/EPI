@@ -324,10 +324,9 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
                 android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -479,10 +478,9 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
                 android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -563,10 +561,9 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
                 android:padding="10dp"
 
                 />
@@ -601,10 +598,9 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
                 android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -637,10 +633,9 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
                 android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -674,10 +669,9 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
                 android:padding="10dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>

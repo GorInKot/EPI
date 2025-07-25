@@ -166,9 +166,16 @@ class ArrangementFragment : Fragment() {
 
         // Участок
         plotTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextPlot.selectionStart}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextPlot.selectionStart}")
+            }
+
             override fun afterTextChanged(s: Editable?) {
+                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextPlot.selectionStart}")
                 sharedViewModel.setPlotText(s.toString())
             }
         }
@@ -248,9 +255,16 @@ class ArrangementFragment : Fragment() {
 
         // Представитель ССК ПО (ГП)
         repSSKGpTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
+            }
+
             override fun afterTextChanged(s: Editable?) {
+                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
                 sharedViewModel.setRepSSKGpText(s.toString())
             }
         }
@@ -258,9 +272,16 @@ class ArrangementFragment : Fragment() {
 
         // Субподрядчик
         subContractorTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextSubcontractor.selectionStart}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextSubcontractor.selectionStart}")
+            }
+
             override fun afterTextChanged(s: Editable?) {
+                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextSubcontractor.selectionStart}")
                 sharedViewModel.setSubContractorText(s.toString())
             }
         }
@@ -268,9 +289,16 @@ class ArrangementFragment : Fragment() {
 
         // Представитель субподрядчика
         repSubContractorTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSubContractor.selectionStart}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextRepSubContractor.selectionStart}")
+            }
+
             override fun afterTextChanged(s: Editable?) {
+                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextRepSubContractor.selectionStart}")
                 sharedViewModel.setRepSubcontractorText(s.toString())
             }
         }
@@ -278,9 +306,16 @@ class ArrangementFragment : Fragment() {
 
         // Представитель ССК ПО (Суб)
         repSSKSubTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSSKSub.selectionStart}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextRepSSKSub.selectionStart}")
+            }
+
             override fun afterTextChanged(s: Editable?) {
+                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextRepSSKSub.selectionStart}")
                 sharedViewModel.setRepSSKSubText(s.toString())
             }
         }
@@ -505,13 +540,21 @@ class ArrangementFragment : Fragment() {
                 binding.textInputEditTextPlot.addTextChangedListener(plotTextWatcher)
             }
         }
+        // Проверка обновлений из SharedViewModel (если используется LiveData)
         sharedViewModel.repSSKGpText.observe(viewLifecycleOwner) { text ->
-            if (binding.textInputEditTextRepSSKGp.text.toString() != text) {
-                binding.textInputEditTextRepSSKGp.removeTextChangedListener(repSSKGpTextWatcher)
+            if (text != binding.textInputEditTextRepSSKGp.text.toString()) {
+                val cursorPosition = binding.textInputEditTextRepSSKGp.selectionStart
                 binding.textInputEditTextRepSSKGp.setText(text)
-                binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
+                binding.textInputEditTextRepSSKGp.setSelection(cursorPosition.coerceAtMost(text.length))
             }
         }
+//        sharedViewModel.repSSKGpText.observe(viewLifecycleOwner) { text ->
+//            if (binding.textInputEditTextRepSSKGp.text.toString() != text) {
+//                binding.textInputEditTextRepSSKGp.removeTextChangedListener(repSSKGpTextWatcher)
+//                binding.textInputEditTextRepSSKGp.setText(text)
+//                binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
+//            }
+//        }
         sharedViewModel.subContractorText.observe(viewLifecycleOwner) { text ->
             if (binding.textInputEditTextSubcontractor.text.toString() != text) {
                 binding.textInputEditTextSubcontractor.removeTextChangedListener(subContractorTextWatcher)
