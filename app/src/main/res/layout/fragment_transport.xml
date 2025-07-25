@@ -211,18 +211,18 @@
             android:id="@+id/tv_ContractTransport"
             android:text="Договор по транспорту"
             style="@style/ArrangementText"
-            android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Contract"
+            android:layout_marginTop="24dp"
             />
 
         <!--  Текстовое поле: Договор по транспорту  -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInput_Layout_ContractTransport"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="56dp"
             android:layout_marginStart="56dp"
-            android:layout_marginTop="16dp"
             style="@style/TextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/tv_ContractTransport"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
@@ -367,10 +367,10 @@
             android:id="@+id/tv_EndDate"
             android:text="Дата завершения поездки"
             style="@style/ArrangementText"
-            android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_ContractTransport"
+            android:layout_marginTop="24dp"
             />
 
         <!-- Текстовое поле: дата завершения поездки   -->

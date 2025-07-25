@@ -107,7 +107,7 @@ class ReportsFragment : Fragment() {
             if (selectedStartDate != null && selectedEndDate != null) {
                 checkStoragePermission()
             } else {
-                Toast.makeText(context, "Выберите диапазон дат", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Выберите диапазон дат", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -169,7 +169,7 @@ class ReportsFragment : Fragment() {
                 exportToCsv(selectedStartDate!!, selectedEndDate!!)
             }
         } else {
-            Toast.makeText(context, "Разрешение на запись не предоставлено", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Разрешение на запись не предоставлено", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -180,14 +180,18 @@ class ReportsFragment : Fragment() {
     private fun exportToCsv(startDate: String, endDate: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
+                binding.parentProgressBar.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.VISIBLE
+                binding.textProgressBar.visibility = View.VISIBLE
                 delay(2000)
 
                 val reports = withContext(Dispatchers.IO) {
                     sharedViewModel.getReportsForExport(startDate, endDate)
                 }
                 if (reports.isEmpty()) {
+                    binding.parentProgressBar.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
+                    binding.textProgressBar.visibility = View.GONE
                     Toast.makeText(context, "Нет данных за выбранный период", Toast.LENGTH_SHORT).show()
                     return@launch
                 }
@@ -218,14 +222,15 @@ class ReportsFragment : Fragment() {
                                 outputStream.write(line.toByteArray())
                             }
                         }
-                        Toast.makeText(context, "Файл сохранен в папке Загрузки: $fileName", Toast.LENGTH_LONG).show()
+                        delay(1000)
+                        Toast.makeText(requireContext(), "Файл сохранен в папке Загрузки: $fileName", Toast.LENGTH_LONG).show()
                     } ?: run {
-                        Toast.makeText(context, "Ошибка при создании файла", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Ошибка при создании файла", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     // Используем File API для Android 9 и ниже
                     if (!isExternalStorageWritable()) {
-                        Toast.makeText(context, "Хранилище недоступно", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Хранилище недоступно", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
 
@@ -244,13 +249,15 @@ class ReportsFragment : Fragment() {
                     }
                     // Дополнительная пауза после записи для тестирования ProgressBar
                     delay(1000)
-                    Toast.makeText(context, "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Export error: ${e.message}", e)
-                Toast.makeText(context, "Ошибка при экспорте: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Ошибка при экспорте: ${e.message}", Toast.LENGTH_SHORT).show()
             } finally {
+                binding.parentProgressBar.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
+                binding.textProgressBar.visibility = View.GONE
             }
         }
     }

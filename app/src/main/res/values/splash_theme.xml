@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.EPI.Splash" parent="Theme.SplashScreen">
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/create_me_a_logo_for_a_company_that_controls_construction_processes_use_the_colors__orange_fca311_b_a3wephvtfqhalak5u6sd_1_2_2</item>
+        <item name="postSplashScreenTheme">@style/Theme.EPI</item>
+
+    </style>
+
+</resources>
