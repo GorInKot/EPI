@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epi.App
+import com.example.epi.DataBase.Report
 import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
@@ -30,14 +32,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
+import java.io.FileOutputStream
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class ReportsFragment : Fragment() {
-
     private var _binding: FragmentReportsBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ExpandableAdapter
@@ -54,8 +59,7 @@ class ReportsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentReportsBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,7 +67,6 @@ class ReportsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Отключение кнопки "Назад"
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             // Ничего не делаем, чтобы заблокировать возврат
@@ -102,10 +105,10 @@ class ReportsFragment : Fragment() {
             showDateRangePicker()
         }
 
-        // Кнопка экспорта
+        // Кнопка экспорта с выбором формата
         binding.btnExportDataToCSV.setOnClickListener {
             if (selectedStartDate != null && selectedEndDate != null) {
-                checkStoragePermission()
+                showExportFormatDialog()
             } else {
                 Toast.makeText(requireContext(), "Выберите диапазон дат", Toast.LENGTH_SHORT).show()
             }
@@ -139,7 +142,21 @@ class ReportsFragment : Fragment() {
         dateRangePicker.show(childFragmentManager, "DATE_RANGE_PICKER")
     }
 
-    private fun checkStoragePermission() {
+    private fun showExportFormatDialog() {
+        val formats = arrayOf("CSV", "Excel (XLSX)")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Выберите формат экспорта")
+            .setItems(formats) { _, which ->
+                when (which) {
+                    0 -> checkStoragePermission("csv")
+                    1 -> checkStoragePermission("xlsx")
+                }
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
+    }
+
+    private fun checkStoragePermission(format: String) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
             ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -152,7 +169,7 @@ class ReportsFragment : Fragment() {
                 REQUEST_CODE_STORAGE_PERMISSION
             )
         } else {
-            exportToCsv(selectedStartDate!!, selectedEndDate!!)
+            exportData(selectedStartDate!!, selectedEndDate!!, format)
         }
     }
 
@@ -162,11 +179,12 @@ class ReportsFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_STORAGE_PERMISSION && grantResults.isNotEmpty() &&
+        if (requestCode == REQUEST_CODE_STORAGE_PERMISSION &&
+            grantResults.isNotEmpty() &&
             grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
             if (selectedStartDate != null && selectedEndDate != null) {
-                exportToCsv(selectedStartDate!!, selectedEndDate!!)
+                exportData(selectedStartDate!!, selectedEndDate!!, "csv") // По умолчанию CSV
             }
         } else {
             Toast.makeText(requireContext(), "Разрешение на запись не предоставлено", Toast.LENGTH_SHORT).show()
@@ -177,7 +195,7 @@ class ReportsFragment : Fragment() {
         return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
     }
 
-    private fun exportToCsv(startDate: String, endDate: String) {
+    private fun exportData(startDate: String, endDate: String, format: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 binding.parentProgressBar.visibility = View.VISIBLE
@@ -188,6 +206,7 @@ class ReportsFragment : Fragment() {
                 val reports = withContext(Dispatchers.IO) {
                     sharedViewModel.getReportsForExport(startDate, endDate)
                 }
+
                 if (reports.isEmpty()) {
                     binding.parentProgressBar.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
@@ -196,61 +215,15 @@ class ReportsFragment : Fragment() {
                     return@launch
                 }
 
-                Log.d(TAG, "Exporting ${reports.size} reports")
+                Log.d(TAG, "Exporting ${reports.size} reports to $format")
+                val fileName = "reports_${System.currentTimeMillis()}.${format.lowercase()}"
 
-                val fileName = "reports_${System.currentTimeMillis()}.csv"
-                val csvHeader = "ID,Date,Time,WorkType,Customer,Object,Plot,Contractor,RepContractor,RepSSKGp,SubContractor,RepSubContractor,RepSSKSub,IsEmpty,Executor,StartDate,StartTime,StateNumber,Contract,ContractTransport,EndDate,EndTime,InViolation,Equipment,ComplexWork,OrderNumber,Report,Remarks,IsSend\n"
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    // Используем MediaStore для Android 10+
-                    val contentValues = ContentValues().apply {
-                        put(MediaStore.Downloads.DISPLAY_NAME, fileName)
-                        put(MediaStore.Downloads.MIME_TYPE, "text/csv")
-                        put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-                    }
-
-                    val uri = requireContext().contentResolver.insert(
-                        MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-                        contentValues
-                    )
-
-                    uri?.let {
-                        requireContext().contentResolver.openOutputStream(it)?.use { outputStream ->
-                            outputStream.write(csvHeader.toByteArray())
-                            reports.forEach { report ->
-                                val line = "${report.id},${report.date},${report.time},${report.workType.escapeCsv()},${report.customer.escapeCsv()},${report.obj.escapeCsv()},${report.plot.escapeCsv()},${report.contractor.escapeCsv()},${report.repContractor.escapeCsv()},${report.repSSKGp.escapeCsv()},${report.subContractor.escapeCsv()},${report.repSubContractor.escapeCsv()},${report.repSSKSub.escapeCsv()},${report.isEmpty},${report.executor.escapeCsv()},${report.startDate},${report.startTime},${report.stateNumber.escapeCsv()},${report.contract.escapeCsv()},${report.contractTransport.escapeCsv()},${report.endDate},${report.endTime},${report.inViolation},${report.equipment.escapeCsv()},${report.complexWork.escapeCsv()},${report.orderNumber.escapeCsv()},${report.report.escapeCsv()},${report.remarks.escapeCsv()},${report.isSend}\n"
-                                outputStream.write(line.toByteArray())
-                            }
-                        }
-                        delay(1000)
-                        Toast.makeText(requireContext(), "Файл сохранен в папке Загрузки: $fileName", Toast.LENGTH_LONG).show()
-                    } ?: run {
-                        Toast.makeText(requireContext(), "Ошибка при создании файла", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    // Используем File API для Android 9 и ниже
-                    if (!isExternalStorageWritable()) {
-                        Toast.makeText(requireContext(), "Хранилище недоступно", Toast.LENGTH_SHORT).show()
-                        return@launch
-                    }
-
-                    val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    if (!directory.exists()) {
-                        directory.mkdirs()
-                    }
-                    val file = File(directory, fileName)
-                    withContext(Dispatchers.IO) {
-                        FileWriter(file).use { writer ->
-                            writer.append(csvHeader)
-                            reports.forEach { report ->
-                                writer.append("${report.id},${report.date},${report.time},${report.workType.escapeCsv()},${report.customer.escapeCsv()},${report.obj.escapeCsv()},${report.plot.escapeCsv()},${report.contractor.escapeCsv()},${report.repContractor.escapeCsv()},${report.repSSKGp.escapeCsv()},${report.subContractor.escapeCsv()},${report.repSubContractor.escapeCsv()},${report.repSSKSub.escapeCsv()},${report.isEmpty},${report.executor.escapeCsv()},${report.startDate},${report.startTime},${report.stateNumber.escapeCsv()},${report.contract.escapeCsv()},${report.contractTransport.escapeCsv()},${report.endDate},${report.endTime},${report.inViolation},${report.equipment.escapeCsv()},${report.complexWork.escapeCsv()},${report.orderNumber.escapeCsv()},${report.report.escapeCsv()},${report.remarks.escapeCsv()},${report.isSend}\n")
-                            }
-                        }
-                    }
-                    // Дополнительная пауза после записи для тестирования ProgressBar
-                    delay(1000)
-                    Toast.makeText(requireContext(), "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+                if (format == "csv") {
+                    exportToCsv(startDate, endDate, reports, fileName)
+                } else if (format == "xlsx") {
+                    exportToExcel(startDate, endDate, reports, fileName)
                 }
+
             } catch (e: Exception) {
                 Log.e(TAG, "Export error: ${e.message}", e)
                 Toast.makeText(requireContext(), "Ошибка при экспорте: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -262,6 +235,237 @@ class ReportsFragment : Fragment() {
         }
     }
 
+    private suspend fun exportToCsv(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
+        val separator = ";"
+        val csvHeader = listOf(
+            "ИД", "Дата", "Время", "Режим работы", "Заказчик", "Объект", "Участок",
+            "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)",
+            "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+            "Отсутствие транспорта", "Исполнитель", "Дата начала", "Время начала",
+            "Госномер", "Договор", "Договор транспорта", "Дата окончания", "Время окончания",
+            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания",
+            "Отчет", "Примечания", "Отправлено"
+        ).joinToString(separator) { it.escapeCsv() } + "\n"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.Downloads.MIME_TYPE, "text/csv")
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            val uri = requireContext().contentResolver.insert(
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues
+            )
+            uri?.let { outputUri ->
+                requireContext().contentResolver.openOutputStream(outputUri)?.use { outputStream ->
+                    outputStream.write(byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte()))
+                    outputStream.write(csvHeader.toByteArray(Charsets.UTF_8))
+                    reports.forEach { report ->
+                        val line = listOf(
+                            report.id.toString(),
+                            report.date,
+                            report.time,
+                            report.workType,
+                            report.customer,
+                            report.obj,
+                            report.plot,
+                            report.contractor,
+                            report.repContractor,
+                            report.repSSKGp,
+                            report.subContractor,
+                            report.repSubContractor,
+                            report.repSSKSub,
+                            report.isEmpty.toString(),
+                            report.executor,
+                            report.startDate,
+                            report.startTime,
+                            report.stateNumber,
+                            report.contract,
+                            report.contractTransport,
+                            report.endDate,
+                            report.endTime,
+                            report.inViolation.toString(),
+                            report.equipment,
+                            report.complexWork,
+                            report.orderNumber,
+                            report.report,
+                            report.remarks,
+                            report.isSend.toString()
+                        ).joinToString(separator) { it.escapeCsv() } + "\n"
+                        outputStream.write(line.toByteArray(Charsets.UTF_8))
+                    }
+                }
+                delay(1000)
+                Toast.makeText(requireContext(), "Файл сохранен в папке Загрузки: $fileName", Toast.LENGTH_LONG).show()
+            } ?: run {
+                Toast.makeText(requireContext(), "Ошибка при создании файла", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (!isExternalStorageWritable()) {
+                Toast.makeText(requireContext(), "Хранилище недоступно", Toast.LENGTH_SHORT).show()
+                return
+            }
+            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!directory.exists()) {
+                directory.mkdirs()
+            }
+            val file = File(directory, fileName)
+            withContext(Dispatchers.IO) {
+                FileWriter(file, Charsets.UTF_8).use { writer ->
+                    writer.write("\uFEFF")
+                    writer.append(csvHeader)
+                    reports.forEach { report ->
+                        val line = listOf(
+                            report.id.toString(),
+                            report.date,
+                            report.time,
+                            report.workType,
+                            report.customer,
+                            report.obj,
+                            report.plot,
+                            report.contractor,
+                            report.repContractor,
+                            report.repSSKGp,
+                            report.subContractor,
+                            report.repSubContractor,
+                            report.repSSKSub,
+                            report.isEmpty.toString(),
+                            report.executor,
+                            report.startDate,
+                            report.startTime,
+                            report.stateNumber,
+                            report.contract,
+                            report.contractTransport,
+                            report.endDate,
+                            report.endTime,
+                            report.inViolation.toString(),
+                            report.equipment,
+                            report.complexWork,
+                            report.orderNumber,
+                            report.report,
+                            report.remarks,
+                            report.isSend.toString()
+                        ).joinToString(separator) { it.escapeCsv() } + "\n"
+                        writer.append(line)
+                    }
+                }
+            }
+            delay(1000)
+            Toast.makeText(requireContext(), "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private suspend fun exportToExcel(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
+        val workbook = XSSFWorkbook()
+        val sheet = workbook.createSheet("Отчеты")
+        val headerStyle = workbook.createCellStyle().apply {
+            setFont(workbook.createFont().apply {
+                bold = true
+            })
+            setFillForegroundColor(IndexedColors.LIGHT_BLUE.index)
+            setFillPattern(FillPatternType.SOLID_FOREGROUND)
+        }
+
+        // Заголовки
+        val headers = listOf(
+            "ИД", "Дата", "Время", "Режим работы", "Заказчик", "Объект", "Участок",
+            "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)",
+            "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+            "Отсутствие транспорта", "Исполнитель", "Дата начала", "Время начала",
+            "Госномер", "Договор", "Договор транспорта", "Дата окончания", "Время окончания",
+            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания",
+            "Отчет", "Примечания", "Отправлено"
+        )
+        val headerRow = sheet.createRow(0)
+        headers.forEachIndexed { index, header ->
+            val cell = headerRow.createCell(index)
+            cell.setCellValue(header)
+            cell.cellStyle = headerStyle
+        }
+
+        // Данные
+        reports.forEachIndexed { rowIndex, report ->
+            val row = sheet.createRow(rowIndex + 1)
+            val values = listOf(
+                report.id.toString(),
+                report.date,
+                report.time,
+                report.workType,
+                report.customer,
+                report.obj,
+                report.plot,
+                report.contractor,
+                report.repContractor,
+                report.repSSKGp,
+                report.subContractor,
+                report.repSubContractor,
+                report.repSSKSub,
+                report.isEmpty.toString(),
+                report.executor,
+                report.startDate,
+                report.startTime,
+                report.stateNumber,
+                report.contract,
+                report.contractTransport,
+                report.endDate,
+                report.endTime,
+                report.inViolation.toString(),
+                report.equipment,
+                report.complexWork,
+                report.orderNumber,
+                report.report,
+                report.remarks,
+                report.isSend.toString()
+            )
+            values.forEachIndexed { colIndex, value ->
+                row.createCell(colIndex).setCellValue(value)
+            }
+        }
+
+        // Устанавливаем фиксированную ширину столбцов (в единицах 1/256 символа)
+        headers.indices.forEach { index ->
+            sheet.setColumnWidth(index, 15 * 256) // 15 символов ширины
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.Downloads.MIME_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            val uri = requireContext().contentResolver.insert(
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues
+            )
+            uri?.let { outputUri ->
+                requireContext().contentResolver.openOutputStream(outputUri)?.use { outputStream ->
+                    workbook.write(outputStream)
+                }
+                delay(1000)
+                Toast.makeText(requireContext(), "Файл сохранен в папке Загрузки: $fileName", Toast.LENGTH_LONG).show()
+            } ?: run {
+                Toast.makeText(requireContext(), "Ошибка при создании файла", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (!isExternalStorageWritable()) {
+                Toast.makeText(requireContext(), "Хранилище недоступно", Toast.LENGTH_SHORT).show()
+                return
+            }
+            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!directory.exists()) {
+                directory.mkdirs()
+            }
+            val file = File(directory, fileName)
+            withContext(Dispatchers.IO) {
+                FileOutputStream(file).use { outputStream ->
+                    workbook.write(outputStream)
+                }
+            }
+            delay(1000)
+            Toast.makeText(requireContext(), "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        }
+        workbook.close()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -270,7 +474,7 @@ class ReportsFragment : Fragment() {
 
 // Расширение для экранирования значений в CSV
 fun String.escapeCsv(): String {
-    if (this.contains(",") || this.contains("\"") || this.contains("\n")) {
+    if (this.contains(",") || this.contains(";") || this.contains("\"") || this.contains("\n")) {
         return "\"${this.replace("\"", "\"\"")}\""
     }
     return this

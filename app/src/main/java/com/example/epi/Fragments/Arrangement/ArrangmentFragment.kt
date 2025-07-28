@@ -258,14 +258,15 @@ class ArrangementFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
             }
-
             override fun afterTextChanged(s: Editable?) {
                 Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
-                sharedViewModel.setRepSSKGpText(s.toString())
+                val currentText = s.toString()
+                if (currentText != sharedViewModel.repSSKGpText.value) {
+                    sharedViewModel.setRepSSKGpText(currentText)
+                }
             }
         }
         binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
@@ -543,9 +544,12 @@ class ArrangementFragment : Fragment() {
         // Проверка обновлений из SharedViewModel (если используется LiveData)
         sharedViewModel.repSSKGpText.observe(viewLifecycleOwner) { text ->
             if (text != binding.textInputEditTextRepSSKGp.text.toString()) {
+                binding.textInputEditTextRepSSKGp.removeTextChangedListener(repSSKGpTextWatcher)
                 val cursorPosition = binding.textInputEditTextRepSSKGp.selectionStart
                 binding.textInputEditTextRepSSKGp.setText(text)
                 binding.textInputEditTextRepSSKGp.setSelection(cursorPosition.coerceAtMost(text.length))
+                binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
+                Log.d("LiveData", "Updated text: '$text', Cursor: $cursorPosition")
             }
         }
 //        sharedViewModel.repSSKGpText.observe(viewLifecycleOwner) { text ->
@@ -608,15 +612,23 @@ class ArrangementFragment : Fragment() {
         }
         sharedViewModel.isManualCustomer.observe(viewLifecycleOwner) { isChecked ->
             binding.checkBoxManualCustomer.isChecked = isChecked
+            binding.textInputLayoutAutoCustomer.visibility = if (isChecked) View.GONE else View.VISIBLE
+            binding.hiddenTextInputLayoutManualCustomer.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         sharedViewModel.isManualObject.observe(viewLifecycleOwner) { isChecked ->
             binding.checkBoxManualObject.isChecked = isChecked
+            binding.textInputLayoutAutoObject.visibility = if (isChecked) View.GONE else View.VISIBLE
+            binding.hiddenTextInputLayoutManualObject.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         sharedViewModel.isManualContractor.observe(viewLifecycleOwner) { isChecked ->
             binding.checkBoxManualContractor.isChecked = isChecked
+            binding.textInputLayoutAutoContractor.visibility = if (isChecked) View.GONE else View.VISIBLE
+            binding.hiddenTextInputLayoutManualContractor.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         sharedViewModel.isManualSubContractor.observe(viewLifecycleOwner) { isChecked ->
             binding.checkBoxManualSubContractor.isChecked = isChecked
+            binding.textInputLayoutAutoSubContractor.visibility = if (isChecked) View.GONE else View.VISIBLE
+            binding.hiddenTextInputLayoutManualSubContractor.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         sharedViewModel.manualCustomer.observe(viewLifecycleOwner) { newValue ->
             val current = binding.hiddenTextInputEditTextManualCustomer.text?.toString() ?: ""
@@ -657,18 +669,36 @@ class ArrangementFragment : Fragment() {
         manualInputLayout: View,
         manualEditText: EditText
     ) {
+        // Устанавливаем начальное состояние из ViewModel
+        val isChecked = when (checkbox.id) {
+            R.id.checkBoxManualCustomer -> sharedViewModel.isManualCustomer.value ?: false
+            R.id.checkBoxManualObject -> sharedViewModel.isManualObject.value ?: false
+            R.id.checkBoxManualContractor -> sharedViewModel.isManualContractor.value ?: false
+            R.id.checkBoxManualSubContractor -> sharedViewModel.isManualSubContractor.value ?: false
+            else -> false
+        }
+        checkbox.isChecked = isChecked
+        autoInputLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
+        manualInputLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
+
+        // Привязываем слушатель после установки начального состояния
         checkbox.setOnCheckedChangeListener { _, isChecked ->
+            autoInputLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
+            manualInputLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
             if (isChecked) {
-                autoInputLayout.visibility = View.GONE
-                manualInputLayout.visibility = View.VISIBLE
                 manualEditText.requestFocus()
                 val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(manualEditText, InputMethodManager.SHOW_IMPLICIT)
             } else {
-                autoInputLayout.visibility = View.VISIBLE
-                manualInputLayout.visibility = View.GONE
                 val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(manualEditText.windowToken, 0)
+            }
+            // Обновляем ViewModel
+            when (checkbox.id) {
+                R.id.checkBoxManualCustomer -> sharedViewModel.setIsManualCustomer(isChecked)
+                R.id.checkBoxManualObject -> sharedViewModel.setIsManualObject(isChecked)
+                R.id.checkBoxManualContractor -> sharedViewModel.setIsManualContractor(isChecked)
+                R.id.checkBoxManualSubContractor -> sharedViewModel.setIsManualSubContractor(isChecked)
             }
         }
     }

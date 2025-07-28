@@ -225,16 +225,16 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     fun setIsManualContractor(value: Boolean) { _isManualContractor.value = value }
     fun setIsManualSubContractor(value: Boolean) { _isManualSubContractor.value = value }
 
-    fun setManualCustomer(value: String) { _manualCustomer.value = value.trim() }
-    fun setManualObject(value: String) { _manualObject.value = value.trim() }
-    fun setManualContractor(value: String) { _manualContractor.value = value.trim() }
-    fun setManualSubContractor(value: String) { _manualSubContractor.value = value.trim() }
+    fun setManualCustomer(value: String) { _manualCustomer.value = value }
+    fun setManualObject(value: String) { _manualObject.value = value }
+    fun setManualContractor(value: String) { _manualContractor.value = value }
+    fun setManualSubContractor(value: String) { _manualSubContractor.value = value }
 
-    fun setPlotText(value: String) { _plotText.value = value.trim() }
-    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value.trim() }
-    fun setSubContractorText(value: String) { _subContractorText.value = value.trim() }
-    fun setRepSubcontractorText(value: String) { _repSubcontractorText.value = value.trim() }
-    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value.trim() }
+    fun setPlotText(value: String) { _plotText.value = value }
+    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value }
+    fun setSubContractorText(value: String) { _subContractorText.value = value }
+    fun setRepSubcontractorText(value: String) { _repSubcontractorText.value = value }
+    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
 
     fun setSelectedWorkType(value: String) { _selectedWorkType.value = value }
     fun setSelectedCustomer(value: String) { _selectedCustomer.value = value }

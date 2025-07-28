@@ -10,10 +10,6 @@
         <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
     </style>
 
-    <style name="CursorTheme" parent="">
-        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
-    </style>
-
     <!-- Стиль для заголовка -->
     <style name="mainLabel">
         <item name="android:textSize">24sp</item>
@@ -263,3 +259,4 @@
     </style>
 
 </resources>
+
