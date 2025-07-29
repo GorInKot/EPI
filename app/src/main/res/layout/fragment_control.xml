@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Control.ControlFragment"
-    android:background="@color/color_black"
     android:scrollbars="vertical"
     android:fillViewport="true"
     >
@@ -118,10 +117,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,10 +154,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -186,19 +185,20 @@
             android:layout_marginTop="24dp"
             style="@style/SimpleButton"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@id/tv_orderNumber"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_orderNumber"
-            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout_Report"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:layout_marginTop="24dp"
             style="@style/ArrangementText"
-
+            android:gravity="center"
+            android:maxLines="1"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -209,7 +209,6 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
-
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             />
 
@@ -218,8 +217,9 @@
             style="@style/TextInputLayout"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/tv_orderNumber"
+            app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
             app:layout_constraintStart_toEndOf="@id/tv_Report"
+
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -231,10 +231,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -268,10 +268,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -284,7 +284,9 @@
             style="@style/SimpleButton"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
-            app:layout_constraintStart_toEndOf="@id/guideline_right" />
+            app:strokeColor="@color/color_orange"
+            android:maxLines="1"
+            />
 
         <!-- Заголовок таблицы -->
         <LinearLayout
@@ -292,7 +294,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/color_three"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/btn_addRow"
@@ -300,122 +301,127 @@
             android:layout_marginEnd="0dp"
             android:layout_marginTop="24dp"
             android:padding="8dp"
+            style="@style/TableHeader"
             >
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Наименование прибора"
+                android:text="Наименование\nприбора"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:textColor="@color/black"
+                style="@style/ArrangementText"
                 android:padding="4dp"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
+                android:textSize="14sp"
                 />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Вид работ"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:padding="4dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeMaxTextSize="22sp"
-                android:autoSizeStepGranularity="2sp"
-                android:maxLines="2"
-                />
-
-            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Номер предписания"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:textColor="@color/black"
+                style="@style/ArrangementText"
                 android:padding="4dp"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
+                android:textSize="14sp"
                 />
 
             <TextView
+                android:text="Номер\nпредписания"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="center"
+                style="@style/ArrangementText"
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                android:textSize="14sp"
+                />
+
+            <TextView
                 android:text="Отчет о результатах\nинспекции"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:padding="4dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeMaxTextSize="22sp"
-                android:autoSizeStepGranularity="2sp"
-                android:maxLines="2"
-                />
-
-            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="center"
+                style="@style/ArrangementText"
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                android:textSize="14sp"
+                />
+
+            <TextView
                 android:text="Замечания"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:padding="4dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeMaxTextSize="22sp"
-                android:autoSizeStepGranularity="2sp"
-                android:maxLines="2"
-                />
-
-            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Действия"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:textColor="@color/black"
+                style="@style/ArrangementText"
                 android:padding="4dp"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeMaxTextSize="22sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:text="Действия"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="center"
+                style="@style/ArrangementText"
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                android:textSize="14sp"
                 />
         </LinearLayout>
 
         <!-- RecyclerView для строк -->
+        <!--     Нижняя часть-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewControl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/tableHeader"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
             android:layout_marginTop="8dp"
+            android:background="@color/color_grey_dark"
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:background="@android:color/white" />
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/tableHeader" />
 
-
-        <!--     Нижняя часть-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_Back"
             android:layout_width="0dp"

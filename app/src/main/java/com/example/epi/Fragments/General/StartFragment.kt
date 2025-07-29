@@ -25,6 +25,10 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.imbSettings.setOnClickListener {
+            findNavController().navigate(R.id.SettingFragment)
+        }
+
         binding.btnArrangement.setOnClickListener {
             findNavController().navigate(R.id.arrangementFragment)
         }

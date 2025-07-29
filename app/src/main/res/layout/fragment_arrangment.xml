@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/color_black"
     android:scrollbars="vertical"
     android:fillViewport="true"
     >
@@ -60,6 +59,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_mainLabel"
             android:text="Расстановка"
+            android:layout_width="0dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/mainLabel"
@@ -70,6 +70,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Date"
             android:text="Дата: "
+            android:layout_width="0dp"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
@@ -80,6 +81,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Time"
             android:text="Время: "
+            android:layout_width="0dp"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/tv_Date"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
@@ -91,6 +93,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_WorkType"
             android:text="Режим работы:"
+            android:layout_width="0dp"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
@@ -102,6 +105,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_autoWorkType"
             style="@style/TextInputLayout"
+            android:layout_width="0dp"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/tv_Date"
@@ -129,6 +133,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Customer"
             android:text="Заказчик:"
+            android:layout_width="0dp"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
@@ -140,6 +145,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_autoCustomer"
             style="@style/TextInputLayout"
+            android:layout_width="0dp"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoWorkType"

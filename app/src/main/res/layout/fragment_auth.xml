@@ -58,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Авторизация"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             style="@style/mainLabel"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -72,12 +72,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Табельный номер"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tvAuthTitle"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             >
 
@@ -91,7 +90,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -103,12 +101,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Введите пароль"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:passwordToggleEnabled="true"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             >
 
@@ -122,7 +120,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="textPassword"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -141,6 +138,7 @@
             app:layout_constraintTop_toBottomOf="@id/guideline_bottom"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
             />
 
         <!-- Кнопка на регистрацию -->
@@ -149,7 +147,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться"
-            android:textColor="@color/color_grey"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_left"

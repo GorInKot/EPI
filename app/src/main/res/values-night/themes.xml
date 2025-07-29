@@ -1,17 +1,200 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.EPI" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:background">@color/color_black_light</item> <!-- #E7090808, может быть нечитаем -->
+        <item name="android:statusBarColor">@color/color_black</item> <!-- #1A1A1A -->
+        <item name="android:navigationBarColor">@color/color_black_light</item> <!-- #3A3A3A -->
+    </style>
 
-    <style name="Theme.EPI" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Тёмная тема: переопределения -->
-        <item name="colorPrimary">@color/main</item>
-        <item name="colorOnPrimary">@color/color_one</item>
-
-        <item name="colorSurface">@color/background</item>
-        <item name="colorOnSurface">@color/color</item>
-
-        <item name="backgroundColor">@color/background</item>
-        <item name="colorOnBackground">@color/color_one</item>
-
+    <style name="Theme.EPI" parent="Base.Theme.EPI">
         <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
     </style>
 
+    <style name="mainLabel">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_orange</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="maxLines">1</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">18sp</item>
+        <item name="android:autoSizeMaxTextSize">28sp</item>
+        <item name="android:autoSizeStepGranularity">2sp</item>
+        <item name="android:background">?android:background</item>
+    </style>
+
+    <style name="secondLabel">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/color_orange</item> <!-- #FCA311 -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="maxLines">1</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">16sp</item>
+        <item name="android:autoSizeMaxTextSize">24sp</item>
+        <item name="android:autoSizeStepGranularity">2sp</item>
+        <item name="android:background">?android:background</item>
+    </style>
+
+    <style name="CustomAlertDialogTextView">
+        <item name="android:textColor">@color/color_grey</item> <!-- #E5E5E5 -->
+        <item name="android:textColorHint">@color/color_grey</item> <!-- #E7090808, нечитаем -->
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundColor">@color/color_black_dark</item> <!-- #E5E5E5 -->
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ArrangementText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/color_grey</item> <!-- #E5E5E5 -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:ellipsize">end</item>
+        <item name="maxLines">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">14sp</item>
+        <item name="android:autoSizeMaxTextSize">20sp</item>
+        <item name="android:autoSizeStepGranularity">2sp</item>
+    </style>
+
+    <style name="ExtraButton">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/color_black_dark</item> <!-- #E7090808, нечитаем -->
+        <item name="android:backgroundTint">@color/color_orange</item> <!-- #FCA311 -->
+        <item name="strokeColor">@color/color_black_dark</item> <!-- #E7090808 -->
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">14sp</item>
+        <item name="android:autoSizeMaxTextSize">20sp</item>
+        <item name="android:autoSizeStepGranularity">2sp</item>
+        <item name="rippleColor">@color/color_grey_dark</item>
+        <item name="elevation">4dp</item>
+    </style>
+
+    <style name="SimpleButton">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/color_grey</item>
+        <item name="android:backgroundTint">?android:background</item>
+        <item name="strokeColor">@color/color_grey</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">14sp</item>
+        <item name="android:autoSizeMaxTextSize">20sp</item>
+        <item name="android:autoSizeStepGranularity">2sp</item>
+        <item name="rippleColor">@color/color_grey_dark</item> <!-- #6A6A6A -->
+        <item name="elevation">4dp</item>
+    </style>
+
+    <style name="TextInputLayout">
+        <item name="android:textColor">?android:background</item>
+        <item name="android:textColorHint">@color/color_orange</item>
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundColor">@color/color_grey</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+    </style>
+
+    <style name="checkBox">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/color_grey</item> <!-- #E5E5E5 -->
+        <item name="buttonTint">@color/color_orange</item> <!-- #FCA311 -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Стиль для кнопки в главном меню -->
+    <style name="MainsButton">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/color_orange</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+        <item name="cornerRadius">32dp</item>
+        <item name="backgroundTint">?android:background</item>
+        <item name="strokeColor">@color/color_orange</item>
+        <item name="strokeWidth">5dp</item>
+        <item name="rippleColor">@color/color_grey</item>
+    </style>
+
+    <style name="CustomTimePickerTheme" parent="Theme.Material3.Dark">
+        <item name="android:textColor">@color/color_white</item> <!-- #FFFFFF -->
+        <item name="android:background">@color/color_black_light</item> <!-- #3A3A3A -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TableHeader">
+        <item name="android:background">?android:background</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+    </style>
 </resources>

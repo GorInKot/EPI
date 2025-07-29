@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/color_grey_dark"
     android:paddingBottom="16dp"
     android:elevation="4dp"
     >
@@ -76,18 +75,6 @@
             android:maxLines="1"
             android:paddingEnd="24dp"
             />
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView_isSend"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/baseline_calendar_month_24"-->
-<!--            app:layout_constraintStart_toEndOf="@id/textView_isSend"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_marginStart="24dp"-->
-<!--            android:layout_marginTop="4dp"-->
-<!--            android:layout_marginBottom="4dp"-->
-<!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

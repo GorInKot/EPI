@@ -45,8 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5"
-                />
+                app:layout_constraintGuide_begin="640dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_right"
@@ -91,6 +90,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_selectDates"
                 android:text="Выбрать даты"
+                android:layout_width="0dp"
                 style="@style/SimpleButton"
                 app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
                 app:layout_constraintStart_toEndOf="@id/guideline_right"
@@ -104,6 +104,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_exportDataToCSV"
                 android:text="Скачать файл"
+                android:layout_width="0dp"
                 style="@style/SimpleButton"
                 app:layout_constraintTop_toBottomOf="@id/btn_selectDates"
                 app:layout_constraintStart_toEndOf="@id/guideline_right"
@@ -117,6 +118,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/RepFr_MainMenu_btn"
                 android:text="Главное меню"
+                android:layout_width="0dp"
                 style="@style/SimpleButton"
                 app:layout_constraintTop_toBottomOf="@id/btn_exportDataToCSV"
                 app:layout_constraintStart_toEndOf="@id/guideline_right"

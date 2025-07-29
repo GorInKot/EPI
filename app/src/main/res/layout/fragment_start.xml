@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_black"
     tools:context=".MainActivity"
     >
 
@@ -80,9 +79,6 @@
         android:text="Расстановка"
         android:textSize="24sp"
         style="@style/MainsButton"
-        app:strokeColor="@color/color_orange"
-        app:strokeWidth="5dp"
-        app:rippleColor="@color/color_black_light"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toStartOf="@id/guideline_left"
@@ -99,9 +95,6 @@
         android:text="Отчёты"
         android:textSize="24sp"
         style="@style/MainsButton"
-        app:strokeColor="@color/color_orange"
-        app:strokeWidth="5dp"
-        app:rippleColor="@color/color_black_light"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -118,9 +111,6 @@
         android:text="Выход"
         android:textSize="24sp"
         style="@style/MainsButton"
-        app:strokeColor="@color/color_orange"
-        app:strokeWidth="5dp"
-        app:rippleColor="@color/color_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline_right"
         android:layout_marginStart="24dp"
@@ -129,24 +119,6 @@
         app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
         />
 
-    <!-- Flow-группа -->
-<!--    <androidx.constraintlayout.helper.widget.Flow-->
-<!--        android:id="@+id/buttonsFlow"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:constraint_referenced_ids="btn_Arrangement,btn_Reports,btn_LogOut"-->
-<!--        app:flow_wrapMode="chain"-->
-<!--        app:flow_horizontalAlign="center"-->
-<!--        app:flow_horizontalGap="24dp"-->
-<!--        app:flow_verticalGap="24dp"-->
-<!--        app:flow_maxElementsWrap="3"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tv_SecondLabel"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_marginTop="60dp"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:layout_marginEnd="24dp"/>-->
-
     <!-- Авторизация -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/btn_Auth"
@@ -154,11 +126,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="Авторизоваться"
-        android:textColor="@color/color_orange"
         style="@style/ArrangementText"
         app:layout_constraintTop_toBottomOf="@id/guideline_bottom"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        />
+
+    <ImageButton
+        android:id="@+id/imb_Settings"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:maxHeight="90dp"
+        android:layout_width="wrap_content"
+        android:minWidth="50dp"
+        android:maxWidth="90dp"
+        android:src="@drawable/baseline_all_inclusive_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="24dp"
+        android:backgroundTint="?android:background"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,16 +4,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_orange">#FF5722</color>
-    <color name="background">#434343</color> <!-- Как указано, но может быть нечитаем -->
-    <color name="color_one">#E7090808</color>
+    <color name="background">#E7090808</color> <!-- Как указано, но может быть нечитаем -->
+    <color name="color_one">#434343</color>
     <color name="color_two">#8B817E</color>
     <color name="color_three">#A4A4A4</color>
     <color name="color_black">#1A1A1A</color>
     <color name="color_black_light">#3A3A3A</color>
     <color name="color_black_dark">#E7090808</color> <!-- Как указано, но может быть нечитаем для текста -->
     <color name="color_input_text">#E5E5E5</color>
-    <color name="color_grey">#E2E1E1</color>
+    <color name="color_grey">#E5E5E5</color>
     <color name="color_grey_dark">#6A6A6A</color>
-    <color name="color_grey_new">#D5D5D5</color>
+    <color name="color_white">#FFFFFF</color>
 </resources>
-

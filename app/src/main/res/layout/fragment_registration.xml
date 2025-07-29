@@ -54,12 +54,11 @@
             android:id="@+id/textInputLayout_secondName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/guideline_top"
             android:hint="Фамилия"
-            android:textColorHint="@color/color_black_dark"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -72,7 +71,6 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -84,12 +82,12 @@
             android:id="@+id/textInputLayout_firstName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_secondName"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:hint="Имя"
-            android:textColorHint="@color/color_black_dark"
+            android:layout_marginTop="16dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -102,7 +100,6 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -113,12 +110,12 @@
             android:id="@+id/textInputLayout_thirdName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_firstName"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:hint="Отчество"
-            android:textColorHint="@color/color_black_dark"
+            android:layout_marginTop="16dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -131,7 +128,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="textPersonName"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -144,11 +140,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Укажите табельный номер:"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_thirdName"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            android:textColorHint="@color/color_black_dark"
+            android:layout_marginTop="16dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -161,7 +157,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="number"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -174,11 +169,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Номер телефона: +7 "
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
-            android:textColorHint="@color/color_black_dark"
+            android:layout_marginTop="16dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -191,7 +186,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="phone"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -204,12 +198,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Выберите филиал из списка"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Phone"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            android:textColorHint="@color/color_black_dark"
             app:endIconMode="dropdown_menu"
+            android:layout_marginTop="16dp"
             >
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -223,7 +217,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="none"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -236,12 +229,12 @@
             android:layout_width="00dp"
             android:layout_height="wrap_content"
             android:hint="Выберите ПУ из списка"
-            style="@style/RegistrationTextInputLayout"
+            style="@style/TextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Branch"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            android:textColorHint="@color/color_black_dark"
             app:endIconMode="dropdown_menu"
+            android:layout_marginTop="16dp"
             >
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -255,7 +248,6 @@
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
                 android:inputType="none"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"

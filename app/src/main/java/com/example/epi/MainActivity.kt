@@ -10,6 +10,7 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,6 +23,14 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Инициализация темы до setContentView
+        val sharedPreferences = getSharedPreferences("theme_prefs", MODE_PRIVATE)
+        val theme = sharedPreferences.getString("theme", "system") ?: "system"
+        when (theme) {
+            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
         // Устанавливаем splashScreen
         val splashScreen = installSplashScreen()
         installSplashScreen().apply {
@@ -48,6 +57,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+
+
+
+
             super.onCreate(savedInstanceState)
 
             binding = ActivityMainBinding.inflate(layoutInflater)

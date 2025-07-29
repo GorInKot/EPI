@@ -11,6 +11,12 @@
         android:label="Start Fragment"
         tools:layout="@layout/fragment_start" />
 
+    <fragment
+        android:id="@+id/SettingFragment"
+        android:name="com.example.epi.Fragments.General.SettingsFragment"
+        android:label="Swttings Fragment"
+        tools:layout="@layout/fragment_settings"/>
+
     <!-- Расстановка: Начало -->
     <fragment
         android:id="@+id/arrangementFragment"

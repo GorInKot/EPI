@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#808080"
     android:padding="8dp"
+    android:background="?android:background"
     >
 
         <com.google.android.material.textview.MaterialTextView
@@ -17,7 +17,7 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeStepGranularity="2sp"
-            android:textColor="@color/black"
+            style="@style/ArrangementText"
             android:gravity="center"
             android:padding="4dp"
             />
@@ -31,7 +31,7 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeStepGranularity="2sp"
-            android:textColor="@color/black"
+            style="@style/ArrangementText"
             android:gravity="center"
             android:padding="4dp"
             />
@@ -45,7 +45,7 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeStepGranularity="2sp"
-            android:textColor="@color/black"
+            style="@style/ArrangementText"
             android:gravity="center"
             android:padding="4dp"
             />
@@ -59,7 +59,7 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeStepGranularity="2sp"
-            android:textColor="@color/black"
+            style="@style/ArrangementText"
             android:gravity="center"
             android:padding="4dp"
             />
@@ -73,7 +73,7 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeStepGranularity="2sp"
-            android:textColor="@color/black"
+            style="@style/ArrangementText"
             android:gravity="center"
             android:padding="4dp"
             />
@@ -87,7 +87,7 @@
             android:autoSizeMinTextSize="14sp"
             android:autoSizeMaxTextSize="22sp"
             android:autoSizeStepGranularity="2sp"
-            android:textColor="@color/black"
+            style="@style/ArrangementText"
             android:gravity="center"
             android:padding="4dp"
             />
@@ -98,7 +98,6 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="#808080"
             >
 
             <ImageButton

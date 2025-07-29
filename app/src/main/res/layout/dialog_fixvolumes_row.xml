@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="36dp"
-        android:background="@color/color_black"
         >
 
         <!-- Направляющие -->
@@ -58,7 +57,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_dialog_id"
             android:hint="ID Объекта"
-            style="@style/CustomAlertDialogTextView"
+            style="@style/TextInputLayout"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
@@ -73,10 +72,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="text"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,7 +86,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_id"
-            style="@style/CustomAlertDialogTextView"
+            style="@style/TextInputLayout"
             app:endIconMode="dropdown_menu"
             >
 
@@ -100,10 +99,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="none"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,7 +113,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_worktype"
-            style="@style/CustomAlertDialogTextView"
+            style="@style/TextInputLayout"
             app:endIconMode="dropdown_menu"
             >
 
@@ -127,10 +126,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="none"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,7 +140,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_measures"
-            style="@style/CustomAlertDialogTextView"
+            style="@style/TextInputLayout"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -153,10 +152,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="numberDecimal"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -167,7 +166,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_volumes"
-            style="@style/CustomAlertDialogTextView"
+            style="@style/TextInputLayout"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -179,10 +178,10 @@
                 android:minHeight="56dp"
                 android:textSize="14sp"
                 android:inputType="numberDecimal"
-                android:textColor="@color/color_black"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
