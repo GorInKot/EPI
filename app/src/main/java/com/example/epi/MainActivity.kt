@@ -7,13 +7,12 @@ import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.epi.ViewModel.MainViewModel
 import com.example.epi.databinding.ActivityMainBinding
 
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
         // Устанавливаем splashScreen
-        val splashScreen = installSplashScreen()
+//        val splashScreen = installSplashScreen()
         installSplashScreen().apply {
             setKeepOnScreenCondition { viewModel.isLoading.value }
             // Добавляем анимацию только для Android 12+ (API 31+)
@@ -58,10 +57,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
-
-
-
             super.onCreate(savedInstanceState)
 
             binding = ActivityMainBinding.inflate(layoutInflater)
@@ -69,5 +64,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+//        hideSystemUI()
+    }
 
+    @Suppress("DEPRECATION")
+    private fun hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.let {
+                it.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    )
+        }
+    }
 }

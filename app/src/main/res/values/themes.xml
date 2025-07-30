@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.EPI" parent="Theme.Material3.Light.NoActionBar">
-        <item name="android:background">@color/color_grey_new</item> <!-- #D9D8D8 -->
-        <item name="android:statusBarColor">@color/color_black</item> <!-- #1A1A1A -->
-        <item name="android:navigationBarColor">@color/color_grey</item> <!-- #FFFFFF -->
+        <item name="android:background">@color/color_grey</item> <!-- #D9D8D8 -->
+        <item name="android:statusBarColor">@color/color_black_light</item> <!-- #1A1A1A -->
+        <item name="android:navigationBarColor">@color/color_black_light</item> <!-- #FFFFFF -->
+
     </style>
 
     <style name="Theme.EPI" parent="Base.Theme.EPI">
@@ -118,14 +119,6 @@
         <item name="elevation">4dp</item>
     </style>
 
-<!--    <style name="ButtonBack">-->
-<!--        <item name="cornerRadius">32dp</item>-->
-<!--        <item name="android:textSize">18sp</item>-->
-<!--        <item name="android:textStyle">normal</item>-->
-<!--        <item name="android:textColor">@color/color_black_dark</item>-->
-<!--        <item name="android:backgroundTint">@color/color_orange</item>-->
-<!--        <item name="android:fontFamily">sans-serif-medium</item>-->
-<!--    </style>-->
 
     <style name="SimpleButton">
         <item name="android:textSize">18sp</item>
@@ -202,11 +195,21 @@
     </style>
 
     <style name="TableHeader">
-        <item name="android:background">?android:background</item>
+        <item name="backgroundTint">@color/soft_dark</item>
+        <item name="background">@color/soft_dark</item>
+        <item name="android:background">@color/soft_dark</item>
+        <item name="android:backgroundTint">@color/soft_dark</item>
         <item name="android:padding">8dp</item>
         <item name="android:layout_marginStart">0dp</item>
         <item name="android:layout_marginEnd">0dp</item>
         <item name="android:layout_marginTop">24dp</item>
+    </style>
+
+    <style name="Rv">
+        <item name="backgroundTint">@color/soft_dark</item>
+        <item name="background">@color/soft_dark</item>
+        <item name="android:background">@color/soft_dark</item>
+        <item name="android:backgroundTint">@color/soft_dark</item>
     </style>
 </resources>
 

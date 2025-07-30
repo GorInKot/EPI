@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.EPI" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:background">@color/color_black_light</item> <!-- #E7090808, может быть нечитаем -->
-        <item name="android:statusBarColor">@color/color_black</item> <!-- #1A1A1A -->
-        <item name="android:navigationBarColor">@color/color_black_light</item> <!-- #3A3A3A -->
+        <item name="android:statusBarColor">@color/color_grey</item> <!-- #1A1A1A -->
+        <item name="android:navigationBarColor">@color/color_grey</item> <!-- #3A3A3A -->
     </style>
 
     <style name="Theme.EPI" parent="Base.Theme.EPI">
@@ -191,10 +191,20 @@
     </style>
 
     <style name="TableHeader">
-        <item name="android:background">?android:background</item>
+        <item name="backgroundTint">@color/neutral_grey</item>
+        <item name="background">@color/neutral_grey</item>
+        <item name="android:background">@color/neutral_grey</item>
+        <item name="android:backgroundTint">@color/neutral_grey</item>
         <item name="android:padding">8dp</item>
         <item name="android:layout_marginStart">0dp</item>
         <item name="android:layout_marginEnd">0dp</item>
         <item name="android:layout_marginTop">24dp</item>
+    </style>
+
+    <style name="Rv">
+        <item name="backgroundTint">@color/neutral_grey</item>
+        <item name="background">@color/neutral_grey</item>
+        <item name="android:background">@color/neutral_grey</item>
+        <item name="android:backgroundTint">@color/neutral_grey</item>
     </style>
 </resources>

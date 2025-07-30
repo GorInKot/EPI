@@ -300,11 +300,12 @@
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginTop="24dp"
-            android:padding="8dp"
+            android:padding="4dp"
             style="@style/TableHeader"
+
             >
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -319,9 +320,13 @@
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
                 />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:text="Вид работ"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -336,9 +341,13 @@
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
                 />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:text="Номер\nпредписания"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -353,9 +362,13 @@
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
                 />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:text="Отчет о результатах\nинспекции"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -370,9 +383,13 @@
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
                 />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:text="Замечания"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -387,9 +404,13 @@
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
                 />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:text="Действия"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -404,6 +425,10 @@
                 android:autoSizeStepGranularity="2sp"
                 android:maxLines="2"
                 android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
                 />
         </LinearLayout>
 
@@ -414,11 +439,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/color_grey_dark"
+            style="@style/Rv"
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tableHeader" />
 

@@ -15,4 +15,7 @@
     <color name="color_grey">#E5E5E5</color>
     <color name="color_grey_dark">#6A6A6A</color>
     <color name="color_white">#FFFFFF</color>
+
+    <color name="soft_dark">#4A4A4A</color>
+    <color name="neutral_grey">#E0E0E0</color>
 </resources>
