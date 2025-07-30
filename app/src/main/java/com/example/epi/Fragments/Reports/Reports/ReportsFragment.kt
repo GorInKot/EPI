@@ -216,7 +216,8 @@ class ReportsFragment : Fragment() {
                 }
 
                 Log.d(TAG, "Exporting ${reports.size} reports to $format")
-                val fileName = "reports_${System.currentTimeMillis()}.${format.lowercase()}"
+                val fileName = "Сводный отчет за ${startDate}-${endDate}.${format.lowercase()}"
+//                val fileName = "Сводный отчет_${System.currentTimeMillis()}.${format.lowercase()}"
 
                 if (format == "csv") {
                     exportToCsv(startDate, endDate, reports, fileName)
