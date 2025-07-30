@@ -52,6 +52,7 @@ dependencies {
             }
         }
     }
+    implementation ("org.mindrot:jbcrypt:0.4")
     implementation ("androidx.core:core-splashscreen:1.0.1")
     implementation ("com.google.code.gson:gson:2.10.1")
 

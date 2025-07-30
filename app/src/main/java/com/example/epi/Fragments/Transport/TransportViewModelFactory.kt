@@ -2,7 +2,7 @@ package com.example.epi.Fragments.Transport
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.epi.DataBase.ReportRepository
+import com.example.epi.DataBase.Report.ReportRepository
 
 class TransportViewModelFactory(private val reportRepository: ReportRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

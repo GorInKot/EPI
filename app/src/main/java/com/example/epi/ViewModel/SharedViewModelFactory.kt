@@ -2,7 +2,7 @@ package com.example.epi.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.epi.DataBase.ReportRepository
+import com.example.epi.DataBase.Report.ReportRepository
 import com.example.epi.SharedViewModel
 
 class SharedViewModelFactory(private val repository: ReportRepository) : ViewModelProvider.Factory {

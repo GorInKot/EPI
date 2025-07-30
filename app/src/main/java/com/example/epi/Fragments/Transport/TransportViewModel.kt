@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.epi.DataBase.ReportRepository
+import com.example.epi.DataBase.Report.ReportRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 

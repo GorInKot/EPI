@@ -5,10 +5,14 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import android.util.Log
+import com.example.epi.DataBase.Report.Report
+import com.example.epi.DataBase.Report.ReportDao
+import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class], version = 5, exportSchema = false)
+@Database(entities = [Report::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
+    abstract fun userDao(): UserDao
 
     companion object {
         val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -77,6 +81,28 @@ abstract class AppDatabase : RoomDatabase() {
                 """)
                 database.execSQL("DROP TABLE reports")
                 database.execSQL("ALTER TABLE reports_new RENAME TO reports")
+            }
+        }
+
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                Log.d("Tagg", "Applying MIGRATION_5_6")
+                database.execSQL(
+                    """
+            CREATE TABLE users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                secondName TEXT NOT NULL,
+                firstName TEXT NOT NULL,
+                thirdName TEXT,
+                employeeNumber TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                branch TEXT NOT NULL,
+                pu TEXT NOT NULL,
+                password TEXT NOT NULL,
+                UNIQUE(employeeNumber)
+            )
+            """
+                )
             }
         }
     }

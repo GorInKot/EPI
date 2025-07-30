@@ -7,13 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.epi.DataBase.Report
-import com.example.epi.DataBase.ReportRepository
+import com.example.epi.DataBase.Report.Report
+import com.example.epi.DataBase.Report.ReportRepository
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -21,7 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epi.App
-import com.example.epi.DataBase.Report
+import com.example.epi.DataBase.Report.Report
 import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory

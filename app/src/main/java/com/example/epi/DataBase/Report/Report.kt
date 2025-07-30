@@ -1,4 +1,4 @@
-package com.example.epi.DataBase
+package com.example.epi.DataBase.Report
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
