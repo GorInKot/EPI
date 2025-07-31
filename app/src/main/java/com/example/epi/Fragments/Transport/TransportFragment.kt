@@ -292,6 +292,7 @@ class TransportFragment : Fragment() {
             }
         }
         val timePicker = MaterialTimePicker.Builder()
+            .setTheme(R.style.CustomTimePickerTheme)
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(hour)
             .setMinute(minute)

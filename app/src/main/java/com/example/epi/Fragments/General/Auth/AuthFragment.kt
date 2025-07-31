@@ -113,7 +113,7 @@ class AuthFragment : Fragment() {
                     if (user != null) {
                         Log.d("Tagg", "Checking password, hashed: ${user.password}")
                         if (BCrypt.checkpw(password, user.password)) {
-                            Toast.makeText(requireContext(), "Авторизация успешна", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Добро пожаловать, ${user.firstName} ${user.thirdName}!", Toast.LENGTH_SHORT).show()
                             saveUserSession(user)
                             binding.textInputEditTextNumber.text?.clear()
                             binding.textInputEditTextPassword.text?.clear()

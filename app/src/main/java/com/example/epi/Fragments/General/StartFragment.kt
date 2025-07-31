@@ -42,6 +42,8 @@ class StartFragment : Fragment() {
         }
 
         binding.btnLogOut.setOnClickListener {
+
+
             activity?.finish()
         }
     }

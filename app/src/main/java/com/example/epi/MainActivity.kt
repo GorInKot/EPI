@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.findNavController
 import com.example.epi.ViewModel.MainViewModel
 import com.example.epi.databinding.ActivityMainBinding
 
@@ -62,11 +63,17 @@ class MainActivity : AppCompatActivity() {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
         }
+
+        // Проверка авторизации
+//        if (!isUserLoggedIn()) {
+//            val navController = findNavController(R.id.nav_host_fragment)
+//            navController.navigate(R.id.authFragment)
+//        }
     }
 
-    override fun onResume() {
-        super.onResume()
-//        hideSystemUI()
+    private fun isUserLoggedIn(): Boolean {
+        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+        return sharedPreferences.contains("userId")
     }
 
     @Suppress("DEPRECATION")

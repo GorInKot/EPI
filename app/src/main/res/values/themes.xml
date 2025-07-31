@@ -145,18 +145,17 @@
     </style>
 
     <style name="TextInputLayout">
-        <item name="android:textColor">?android:background</item>
-        <item name="android:textColorHint">@color/color_one</item>
+        <item name="android:textColor">?android:background</item>  <!-- цвет текста -->
+        <item name="android:textColorHint">@color/color_one</item> <!-- цвет подсказки -->
         <item name="boxBackgroundMode">filled</item>
-        <item name="boxBackgroundColor">@color/color_white</item>
+        <item name="boxBackgroundColor">@color/color_white</item>  <!-- цвет фона, по идее, это необходимо менять для смены цвета икноки выпадающего списка -->
         <item name="boxCornerRadiusTopStart">12dp</item>
         <item name="boxCornerRadiusTopEnd">12dp</item>
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusBottomEnd">12dp</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
-<!--        <item name="boxStrokeColor">@color/color_black_dark</item>-->
-        <item name="boxStrokeColor">@android:color/transparent</item>
+        <item name="boxStrokeColor">@android:color/transparent</item> <!-- -->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">56dp</item>
@@ -187,13 +186,6 @@
         <item name="rippleColor">@color/color_grey</item>
     </style>
 
-    <style name="CustomTimePickerTheme" parent="Theme.Material3.Light">
-        <item name="android:textColor">@color/color_black</item> <!-- #1A1A1A -->
-        <item name="android:background">@color/color_white</item> <!-- #FFFFFF -->
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="TableHeader">
         <item name="backgroundTint">@color/soft_dark</item>
         <item name="background">@color/soft_dark</item>
@@ -211,6 +203,21 @@
         <item name="android:background">@color/soft_dark</item>
         <item name="android:backgroundTint">@color/soft_dark</item>
     </style>
+
+    <style name="CustomTimePickerTheme" parent="Theme.Material3.Light">
+        <item name="android:textColor">@color/color_black_light_similar</item> <!-- #1A1A1A -->
+        <item name="android:background">@color/color_grey_similar</item> <!-- #FFFFFF -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="CustomDatePickerTheme" parent="Theme.Material3.Dark">
+        <item name="android:textColor">@color/color_black_light_similar</item> <!-- #FFFFFF -->
+        <item name="android:background">@color/color_grey_similar</item> <!-- #3A3A3A -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>
 
 
