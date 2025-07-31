@@ -9,8 +9,8 @@ interface UserDao {
     @Insert
     suspend fun insertUser(user: User)
 
-    @Query("SELECT * FROM users WHERE employeeNumber = :employeeNumber AND password = :password")
-    suspend fun getUserByCredentials(employeeNumber: String, password: String): User?
+    @Query("SELECT * FROM users WHERE employeeNumber = :employeeNumber")
+    suspend fun getUserByCredentials(employeeNumber: String): User?
 
     @Query("SELECT * FROM users WHERE employeeNumber = :employeeNumber")
     suspend fun getUserByEmployeeNumber(employeeNumber: String): User?

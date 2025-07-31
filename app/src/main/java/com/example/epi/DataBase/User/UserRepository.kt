@@ -5,8 +5,8 @@ class UserRepository(private val userDao: UserDao) {
         userDao.insertUser(user)
     }
 
-    suspend fun getUserByCredentials(employeeNumber: String, password: String): User? {
-        return userDao.getUserByCredentials(employeeNumber, password)
+    suspend fun getUserByCredentials(employeeNumber: String): User? {
+        return userDao.getUserByCredentials(employeeNumber)
     }
 
     suspend fun getUserByEmployeeNumber(employeeNumber: String): User? {

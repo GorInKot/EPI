@@ -2,14 +2,15 @@ package com.example.epi.DataBase
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import android.util.Log
+import androidx.room.migration.Migration
 import com.example.epi.DataBase.Report.Report
 import com.example.epi.DataBase.Report.ReportDao
+import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class], version = 6, exportSchema = false)
+@Database(entities = [Report::class, User::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao
@@ -24,7 +25,6 @@ abstract class AppDatabase : RoomDatabase() {
                     existingColumns.add(cursor.getString(cursor.getColumnIndexOrThrow("name")))
                 }
                 cursor.close()
-
                 if ("date" !in existingColumns) {
                     database.execSQL("ALTER TABLE reports ADD COLUMN date TEXT NOT NULL DEFAULT ''")
                 }
@@ -37,7 +37,8 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 Log.d("Tagg", "Applying MIGRATION_2_3")
-                database.execSQL("""
+                database.execSQL(
+                    """
                     CREATE TABLE reports_new (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         date TEXT NOT NULL DEFAULT '',
@@ -69,16 +70,19 @@ abstract class AppDatabase : RoomDatabase() {
                         remarks TEXT NOT NULL DEFAULT '',
                         isSend INTEGER NOT NULL DEFAULT 0
                     )
-                """)
-                database.execSQL("""
+                    """
+                )
+                database.execSQL(
+                    """
                     INSERT INTO reports_new (
-                        id, date, time, workType, customer, obj, plot, contractor,
-                        repContractor, repSSKGp, subContractor, repSubContractor, repSSKSub
+                        id, date, time, workType, customer, obj, plot, contractor, repContractor, 
+                        repSSKGp, subContractor, repSubContractor, repSSKSub
                     )
-                    SELECT id, date, time, workType, customer, obj, plot, contractor,
-                           repContractor, repSSKGp, subContractor, repSubContractor, repSSKSub
+                    SELECT id, date, time, workType, customer, obj, plot, contractor, repContractor, 
+                           repSSKGp, subContractor, repSubContractor, repSSKSub 
                     FROM reports
-                """)
+                    """
+                )
                 database.execSQL("DROP TABLE reports")
                 database.execSQL("ALTER TABLE reports_new RENAME TO reports")
             }
@@ -89,20 +93,20 @@ abstract class AppDatabase : RoomDatabase() {
                 Log.d("Tagg", "Applying MIGRATION_5_6")
                 database.execSQL(
                     """
-            CREATE TABLE users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                secondName TEXT NOT NULL,
-                firstName TEXT NOT NULL,
-                thirdName TEXT,
-                employeeNumber TEXT NOT NULL,
-                phone TEXT NOT NULL,
-                branch TEXT NOT NULL,
-                pu TEXT NOT NULL,
-                password TEXT NOT NULL,
-                UNIQUE(employeeNumber)
-            )
-            """
+                    CREATE TABLE users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        secondName TEXT NOT NULL,
+                        firstName TEXT NOT NULL,
+                        thirdName TEXT,
+                        employeeNumber TEXT NOT NULL,
+                        phone TEXT NOT NULL,
+                        branch TEXT NOT NULL,
+                        pu TEXT NOT NULL,
+                        password TEXT NOT NULL
+                    )
+                    """
                 )
+                database.execSQL("CREATE UNIQUE INDEX index_users_employeeNumber ON users(employeeNumber)")
             }
         }
     }

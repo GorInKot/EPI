@@ -3,6 +3,7 @@ package com.example.epi.Fragments.General.Registration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -220,6 +221,7 @@ class RegistrationFragment : Fragment() {
 
     private fun registerUser() {
         val user = User(
+            id = 0,
             secondName = binding.textInputEditTextSecondName.text.toString().trim(),
             firstName = binding.textInputEditTextFirstName.text.toString().trim(),
             thirdName = binding.textInputEditTextThirdName.text.toString().trim().takeIf { it.isNotBlank() },
@@ -229,6 +231,10 @@ class RegistrationFragment : Fragment() {
             pu = binding.autoCompleteTextViewPU.text.toString().trim(),
             password = BCrypt.hashpw(binding.textInputEditTextPassword.text.toString().trim(), BCrypt.gensalt())
         )
+            Log.d("Tagg",
+                "secondName: ${user.secondName}, firstName: ${user.firstName}, thirdName: ${user.thirdName}," +
+                        " employeeNumber: ${user.employeeNumber}, phone: ${user.phone}, branch: ${user.branch}," +
+                        " pu: ${user.pu}, password: ${user.password} ")
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -256,6 +262,7 @@ class RegistrationFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 requireActivity().runOnUiThread {
+                    Log.d("Tagg", "Ошибка регистрации: ${e.message}")
                     Toast.makeText(requireContext(), "Ошибка регистрации: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }

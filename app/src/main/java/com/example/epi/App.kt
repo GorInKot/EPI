@@ -21,7 +21,7 @@ class App : Application() {
                 AppDatabase.MIGRATION_2_3,
                 AppDatabase.MIGRATION_5_6 // Миграция для таблицы users
             )
-            .fallbackToDestructiveMigration() // Для тестирования (удалите в продакшене)
+//            .fallbackToDestructiveMigration() // Для тестирования (удалите в продакшене)
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     Log.d("Tagg", "Database created")
@@ -29,6 +29,13 @@ class App : Application() {
 
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     Log.d("Tagg", "Database opened")
+                    val cursor = db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
+                    if (cursor.moveToFirst()) {
+                        Log.d("Tagg", "Table users exists")
+                    } else {
+                        Log.e("Tagg", "Table users does NOT exist")
+                    }
+                    cursor.close()
                 }
             })
             .build()

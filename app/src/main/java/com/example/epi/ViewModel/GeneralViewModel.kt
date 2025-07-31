@@ -26,8 +26,8 @@ class GeneralViewModel: ViewModel() {
         else if (number.length > 4 || !number.all { it.isDigit() }) errors["number"] = "Табельный номер должен содержать до 4 цифр"
 
         val phoneDigits = phone?.filter { it.isDigit() }
-        if (phoneDigits.isNullOrBlank() || phoneDigits.length != 10) {
-            errors["phone"] = "Введите корректный номер телефона (10 цифр)"
+        if (phoneDigits.isNullOrBlank()) {
+            errors["phone"] = "Введите корректный номер телефона"
         }
 
         if (branch.isNullOrBlank()) errors["branch"] = "Выберите филиал"

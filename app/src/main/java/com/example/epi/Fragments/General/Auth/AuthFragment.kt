@@ -9,9 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.epi.App
+import com.example.epi.DataBase.User.User
 import com.example.epi.R
 import com.example.epi.ViewModel.GeneralViewModel
 import com.example.epi.databinding.FragmentAuthBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.mindrot.jbcrypt.BCrypt
 
 
 class AuthFragment : Fragment() {
@@ -22,6 +28,7 @@ class AuthFragment : Fragment() {
     private val maxPasswordLength = 12
 
     private val viewModel: GeneralViewModel by viewModels()
+    private val userRepository by lazy { (requireContext().applicationContext as App).userRepository }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +56,12 @@ class AuthFragment : Fragment() {
     private fun buttons() {
         binding.btnLogin.setOnClickListener {
             if (validateInputs()){
-                Log.d("Tagg", "123")
-                Toast.makeText(requireContext(), "Здесь скоро будет авторизация", Toast.LENGTH_SHORT).show()
+                Log.d("Tagg", "Validation")
+//                Toast.makeText(requireContext(), "Здесь скоро будет авторизация", Toast.LENGTH_SHORT).show()
+                loginUser()
 
-                findNavController().navigate(R.id.StartFragment)
             } else {
-                Log.d("Tagg", "000")
+                Log.d("Tagg", "Validation failed")
             }
 
         }
@@ -89,6 +96,60 @@ class AuthFragment : Fragment() {
         binding.textInputLayoutPassword.error = errors["password"]
 
         return errors.isEmpty()
+    }
+
+    private fun loginUser() {
+        val employeeNumber = binding.textInputEditTextNumber.text.toString().trim()
+        val password = binding.textInputEditTextPassword.text.toString().trim()
+
+        Log.d("Tagg", "Attempting login with employeeNumber: $employeeNumber, password: $password")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val user = userRepository.getUserByCredentials(employeeNumber)
+                Log.d("Tagg", "User found: ${user?.toString() ?: "null"}")
+
+                requireActivity().runOnUiThread {
+                    if (user != null) {
+                        Log.d("Tagg", "Checking password, hashed: ${user.password}")
+                        if (BCrypt.checkpw(password, user.password)) {
+                            Toast.makeText(requireContext(), "Авторизация успешна", Toast.LENGTH_SHORT).show()
+                            saveUserSession(user)
+                            binding.textInputEditTextNumber.text?.clear()
+                            binding.textInputEditTextPassword.text?.clear()
+                            findNavController().navigate(R.id.StartFragment)
+                        } else {
+                            binding.textInputLayoutPassword.isErrorEnabled = true
+                            binding.textInputLayoutPassword.error = "Неверный пароль"
+                            Log.d("Tagg", "Password mismatch")
+                        }
+                    } else {
+                        binding.textInputLayoutNumber.isErrorEnabled = true
+                        binding.textInputLayoutNumber.error = "Пользователь с таким номером не найден"
+                        Log.d("Tagg", "user not found for employeeNumber: $employeeNumber")
+                    }
+                }
+            } catch (e: Exception) {
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Ошибка авторизации: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.d("Tagg", "Login error:", e)
+                }
+            }
+        }
+    }
+
+    private fun saveUserSession(user: User) {
+        val sharedPreferences = requireContext().getSharedPreferences("User_session", android.content.Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putInt("userId", user.id)
+            putString("employeeNumber", user.employeeNumber)
+            putString("secondName", user.secondName)
+            putString("firstName", user.firstName)
+            putString("thirdName", user.thirdName)
+            putString("branch", user.branch)
+            putString("pu", user.pu)
+            apply()
+        }
     }
 
 
