@@ -15,7 +15,7 @@
         android:id="@+id/arrangementFragment"
         android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
         android:label="ArrangementFragment"
-        tools:layout="@layout/fragment_arrangment">
+        tools:layout="@layout/fragment_arrangement">
 
         <action
             android:id="@+id/action_arrangementFragment_to_transportFragment"

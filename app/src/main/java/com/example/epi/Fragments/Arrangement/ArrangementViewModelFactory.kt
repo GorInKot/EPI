@@ -13,3 +13,4 @@ class ArrangementViewModelFactory(private val repository: ReportRepository) : Vi
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

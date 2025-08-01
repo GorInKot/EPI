@@ -11,6 +11,7 @@
     <color name="color_three">#A4A4A4</color>
 
     <color name="color">#FBBB2F</color>
+    <color name="error">#F44336</color>
 
     <!-- Новые цвета   -->
     <color name="color_black">#1A1A1A</color>

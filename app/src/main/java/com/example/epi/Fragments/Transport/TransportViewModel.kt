@@ -159,16 +159,15 @@ class TransportViewModel(val repository: ReportRepository): ViewModel() {
 
             // Обновляем отчет данными из TransportFragment
             val updatedReport = existingReport.copy(
-                customer = if (isTransportAbsent.value == true) "" else customerName.value.orEmpty(),
-                contract = if (isTransportAbsent.value == true) "" else contractCustomer.value.orEmpty(),
                 executor = if (isTransportAbsent.value == true) "" else executorName.value.orEmpty(),
-                contractTransport = if (isTransportAbsent.value == true) "" else contractTransport.value.orEmpty(),
-                stateNumber = if (isTransportAbsent.value == true) "" else stateNumber.value.orEmpty(),
-                startDate = if (isTransportAbsent.value == true) "" else startDate.value.orEmpty(),
-                startTime = if (isTransportAbsent.value == true) "" else startTime.value.orEmpty(),
-                endDate = if (isTransportAbsent.value == true) "" else endDate.value.orEmpty(),
-                endTime = if (isTransportAbsent.value == true) "" else endTime.value.orEmpty(),
-                isEmpty = isTransportAbsent.value ?: false
+                start_date = if (isTransportAbsent.value == true) "" else startDate.value.orEmpty(),
+                start_time = if (isTransportAbsent.value == true) "" else startTime.value.orEmpty(),
+                state_number = if (isTransportAbsent.value == true) "" else stateNumber.value.orEmpty(), // <-- тут
+                contract = if (isTransportAbsent.value == true) "" else contractCustomer.value.orEmpty(),
+                contract_transport = if (isTransportAbsent.value == true) "" else contractTransport.value.orEmpty(),
+                end_date = if (isTransportAbsent.value == true) "" else endDate.value.orEmpty(),
+                end_time = if (isTransportAbsent.value == true) "" else endTime.value.orEmpty(),
+                is_empty = isTransportAbsent.value ?: false
             )
 
             Log.d("Tagg", "Transport: Updating Report: $updatedReport")

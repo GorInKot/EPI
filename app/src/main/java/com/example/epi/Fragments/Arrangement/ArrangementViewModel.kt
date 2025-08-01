@@ -3,82 +3,71 @@ package com.example.epi.Fragments.Arrangement
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.epi.DataBase.Report
+import com.example.epi.DataBase.Entities.*
 import com.example.epi.DataBase.ReportRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import android.util.Log
+import java.util.*
 
 class ArrangementViewModel(private val repository: ReportRepository) : ViewModel() {
 
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-    val arrangementIsClearing = MutableLiveData(false)
+    val isClearing = MutableLiveData(false)
 
-    // ---------- Дата и время ----------
     private val _currentDate = MutableLiveData<String>()
     val currentDate: LiveData<String> = _currentDate
 
     private val _currentTime = MutableLiveData<String>()
     val currentTime: LiveData<String> = _currentTime
 
-    // ---------- Состояния чекбоксов ----------
     val isManualCustomer = MutableLiveData(false)
     val isManualObject = MutableLiveData(false)
+    val isManualPlot = MutableLiveData(false)
     val isManualContractor = MutableLiveData(false)
     val isManualSubContractor = MutableLiveData(false)
 
-    // ---------- Ручной ввод ----------
-    val manualCustomer = MutableLiveData<String>()
-    val manualObject = MutableLiveData<String>()
-    val manualContractor = MutableLiveData<String>()
-    val manualSubContractor = MutableLiveData<String>()
+    val manualCustomer = MutableLiveData<String?>()
+    val manualObject = MutableLiveData<String?>()
+    val manualPlot = MutableLiveData<String?>()
+    val manualContractor = MutableLiveData<String?>()
+    val manualSubContractor = MutableLiveData<String?>()
 
-    // ---------- Списки выбора ----------
-    val workTypes = listOf("Вахта", "Стандартный", "Суммированный")
-    val customers = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
-    val objects = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
-    val contractors = listOf(
-        "Генподрядчик 1", "Генподрядчик 2",
-        "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5"
-    )
-    val subContractors = listOf(
-        "Представитель Генподрядчика 1", "Представитель Генподрядчика 2",
-        "Представитель Генподрядчика 3", "Представитель Генподрядчика 4",
-        "Представитель Генподрядчика 5"
-    )
+    val customers: LiveData<List<CustomerEntity>> = repository.getAllCustomers().asLiveData()
+    val workTypes: LiveData<List<WorkTypeEntity>> = repository.getAllWorkTypes().asLiveData()
 
-    // ---------- Текстовые поля ----------
-    private val _plotText = MutableLiveData<String>()
-    val plotText: LiveData<String> get() = _plotText
+    private val _contractors = MutableLiveData<List<ContractorEntity>>(emptyList())
+    val contractors: LiveData<List<ContractorEntity>> get() = _contractors
 
-    private val _repSSKGpText = MutableLiveData<String>()
-    val repSSKGpText: LiveData<String> get() = _repSSKGpText
+    val selectedWorkType = MutableLiveData<WorkTypeEntity?>(null)
+    val selectedCustomer = MutableLiveData<CustomerEntity?>(null)
+    val selectedObject = MutableLiveData<ObjectEntity?>(null)
+    val selectedContractor = MutableLiveData<ContractorEntity?>(null)
+    val selectedSubContractor = MutableLiveData<SubContractorEntity?>(null)
+    val selectedPlot = MutableLiveData<PlotEntity?>(null)
 
-    private val _subContractorText = MutableLiveData<String>()
-    val subContractorText: LiveData<String> get() = _subContractorText
+    private val _objects = MutableLiveData<List<ObjectEntity>>(emptyList())
+    val objects: LiveData<List<ObjectEntity>> get() = _objects
 
-    private val _repSubcontractorText = MutableLiveData<String>()
-    val repSubcontractorText: LiveData<String> get() = _repSubcontractorText
+    private val _plots = MutableLiveData<List<PlotEntity>>(emptyList())
+    val plots: LiveData<List<PlotEntity>> get() = _plots
 
-    private val _repSSKSubText = MutableLiveData<String>()
-    val repSSKSubText: LiveData<String> get() = _repSSKSubText
+//    private val _plotText = MutableLiveData<String?>(null)
+//    val plotText: LiveData<String?> get() = _plotText
+    private val _repSSKGpText = MutableLiveData<String?>(null)
+    val repSSKGpText: LiveData<String?> get() = _repSSKGpText
+    private val _subContractorText = MutableLiveData<String?>(null)
+    val subContractorText: LiveData<String?> get() = _subContractorText
+    private val _repSubcontractorText = MutableLiveData<String?>(null)
+    val repSubcontractorText: LiveData<String?> get() = _repSubcontractorText
+    private val _repSSKSubText = MutableLiveData<String?>(null)
+    val repSSKSubText: LiveData<String?> get() = _repSSKSubText
 
-    // ---------- Выпадающие списки ----------
-    val selectedWorkType = MutableLiveData<String>()
-    val selectedCustomer = MutableLiveData<String>()
-    val selectedObject = MutableLiveData<String>()
-    val selectedContractor = MutableLiveData<String>()
-    val selectedSubContractor = MutableLiveData<String>()
-
-    // ---------- Событие ошибки ----------
-    private val _errorEvent = MutableLiveData<String>()
-    val errorEvent: LiveData<String> get() = _errorEvent
+    private val _errorEvent = MutableLiveData<String?>(null)
+    val errorEvent: LiveData<String?> get() = _errorEvent
 
     init {
         updateDateTime()
@@ -89,219 +78,177 @@ class ArrangementViewModel(private val repository: ReportRepository) : ViewModel
         _currentTime.value = timeFormat.format(Date())
     }
 
-    fun validateArrangementInputs(
-        workTypes: String?,
-        customers: String?,
-        manualCustomer: String?,
-        objects: String?,
-        manualObject: String?,
-        plotText: String?,
-        contractors: String?,
-        manualContractor: String?,
-        subContractors: String?,
-        manualSubContractor: String?,
-        repSSKGpText: String?,
-        subContractorText: String?,
-        repSubcontractorText: String?,
-        repSSKSubText: String?
-    ): Map<String, String?> {
-        val errors = mutableMapOf<String, String?>()
-
-        if (workTypes.isNullOrBlank()) {
-            errors["workTypes"] = "Укажите режим работы"
+    fun loadContractorsForCustomer(customerId: Long) {
+        viewModelScope.launch {
+            repository.getAllContractors().collect { contractors ->
+                _contractors.value = contractors.filter { it.customer_id == customerId }
+            }
         }
-        if (customers.isNullOrBlank() && manualCustomer.isNullOrBlank()) {
-            errors["customers"] = "Укажите заказчика"
-        }
-        if (objects.isNullOrBlank() && manualObject.isNullOrBlank()) {
-            errors["objects"] = "Укажите объект"
-        }
-        if (plotText.isNullOrBlank()) {
-            errors["plotText"] = "Укажите участок"
-        }
-        if (contractors.isNullOrBlank() && manualContractor.isNullOrBlank()) {
-            errors["contractors"] = "Укажите генподрядчика"
-        }
-        if (subContractors.isNullOrBlank() && manualSubContractor.isNullOrBlank()) {
-            errors["subContractors"] = "Укажите представителя генподрядчика"
-        }
-        if (repSSKGpText.isNullOrBlank()) {
-            errors["repSSKGpText"] = "Укажите представителя ССК ПО (ГП)"
-        }
-        if (subContractorText.isNullOrBlank()) {
-            errors["subContractorText"] = "Укажите субподрядчика"
-        }
-        if (repSubcontractorText.isNullOrBlank()) {
-            errors["repSubcontractorText"] = "Укажите представителя субподрядчика"
-        }
-        if (repSSKSubText.isNullOrBlank()) {
-            errors["repSSKSubText"] = "Укажите представителя ССК ПО (Суб)"
-        }
-
-        return errors
     }
 
-    suspend fun saveOrUpdateReport(): Long {
-        try {
-            // Проверяем валидацию
-            val errors = validateArrangementInputs(
-                workTypes = selectedWorkType.value,
-                customers = selectedCustomer.value,
-                manualCustomer = manualCustomer.value,
-                objects = selectedObject.value,
-                manualObject = manualObject.value,
-                plotText = plotText.value,
-                contractors = selectedContractor.value,
-                manualContractor = manualContractor.value,
-                subContractors = selectedSubContractor.value,
-                manualSubContractor = manualSubContractor.value,
-                repSSKGpText = repSSKGpText.value,
-                subContractorText = subContractorText.value,
-                repSubcontractorText = repSubcontractorText.value,
-                repSSKSubText = repSSKSubText.value
-            )
-            if (errors.isNotEmpty()) {
-                Log.e("Tagg", "Validation failed in saveReport: $errors")
-                _errorEvent.postValue("Не все поля заполнены корректно")
-                return 0L
+    fun loadObjectsForCustomer(customerId: Long) {
+        viewModelScope.launch {
+            repository.getAllObjects().collect { allObjects ->
+                _objects.value = allObjects.filter { it.customer_id == customerId }
             }
-
-            val report = Report(
-                date = currentDate.value.orEmpty(),
-                time = currentTime.value.orEmpty(),
-                workType = selectedWorkType.value.orEmpty(),
-                customer = if (isManualCustomer.value == true) manualCustomer.value.orEmpty() else selectedCustomer.value.orEmpty(),
-                obj = if (isManualObject.value == true) manualObject.value.orEmpty() else selectedObject.value.orEmpty(),
-                plot = plotText.value.orEmpty(),
-                contractor = if (isManualContractor.value == true) manualContractor.value.orEmpty() else selectedContractor.value.orEmpty(),
-                repContractor = if (isManualSubContractor.value == true) manualSubContractor.value.orEmpty() else selectedSubContractor.value.orEmpty(),
-                repSSKGp = repSSKGpText.value.orEmpty(),
-                subContractor = subContractorText.value.orEmpty(),
-                repSubContractor = repSubcontractorText.value.orEmpty(),
-                repSSKSub = repSSKSubText.value.orEmpty()
-                // Остальные поля остаются пустыми (значения по умолчанию)
-            )
-            Log.d("Tagg", "Saving Report: $report")
-            val reportId = repository.saveReport(report)
-            Log.d("Tagg", "Repository returned ID: $reportId")
-            if (reportId > 0) {
-                Log.d("Tagg", "Report saved successfully with ID: $reportId")
-                return reportId
-            } else {
-                Log.e("Tagg", "Failed to save report: Invalid ID returned")
-                _errorEvent.postValue("Ошибка при сохранении отчета: недопустимый ID")
-                return 0L
-            }
-        } catch (e: Exception) {
-            Log.e("Tagg", "Error in saveReport: ${e.message}", e)
-            _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
-            return 0L
         }
+    }
+
+    fun loadPlotsForObject(objectId: Long) {
+        viewModelScope.launch {
+            repository.getPlotsForObject(objectId).collect { filteredPlots ->
+                _plots.value = filteredPlots
+            }
+        }
+    }
+
+
+    fun validateInputs(): Boolean {
+        val errors = mutableListOf<String>()
+
+        if (selectedWorkType.value == null) {
+            errors.add("Укажите режим работы")
+        }
+
+        if (selectedCustomer.value == null && manualCustomer.value.isNullOrBlank()) {
+            errors.add("Укажите заказчика")
+        }
+
+        if (selectedObject.value == null && manualObject.value.isNullOrBlank()) {
+            errors.add("Укажите объект")
+        }
+
+        if (selectedPlot.value == null && manualPlot.value.isNullOrBlank()) {
+            errors.add("Укажите участок")
+        }
+
+        if (selectedContractor.value == null && manualContractor.value.isNullOrBlank()) {
+            errors.add("Укажите генподрядчика")
+        }
+
+        // Правильная проверка для selectedSubContractor (SubContractorEntity)
+        if ((selectedSubContractor.value?.name.isNullOrBlank()) && manualSubContractor.value.isNullOrBlank()) {
+            errors.add("Укажите представителя генподрядчика")
+        }
+
+        if (repSSKGpText.value.isNullOrBlank()) {
+            errors.add("Укажите представителя ССК ПО (ГП)")
+        }
+
+        if (subContractorText.value.isNullOrBlank()) {
+            errors.add("Укажите субподрядчика")
+        }
+
+        if (repSubcontractorText.value.isNullOrBlank()) {
+            errors.add("Укажите представителя субподрядчика")
+        }
+
+        if (repSSKSubText.value.isNullOrBlank()) {
+            errors.add("Укажите представителя ССК ПО (Суб)")
+        }
+
+        if (errors.isNotEmpty()) {
+            _errorEvent.value = errors.joinToString("\n")
+            return false
+        }
+
+        return true
+    }
+
+    suspend fun saveReport(): Long {
+        return try {
+            require(selectedWorkType.value != null) { "Не выбран тип работы" }
+            require(selectedCustomer.value != null) { "Не выбран заказчик" }
+            require(selectedObject.value != null) { "Не выбран объект" }
+
+            val report = ReportEntity(
+                date = currentDate.value ?: "",
+                time = currentTime.value ?: "",
+                work_type_id = selectedWorkType.value!!.id,
+                customer_id = selectedCustomer.value!!.id,
+                object_id = selectedObject.value!!.id,
+                plot_id = selectedPlot.value?.id ?: 0L,
+                contractor_id = selectedContractor.value?.id ?: 0L,
+                sub_contractor_id = selectedSubContractor.value?.id ?: 0L,
+                rep_contractor = selectedSubContractor.value?.name ?: "",
+                rep_ssk_gp = repSSKGpText.value ?: "",
+                rep_sub_contractor = repSubcontractorText.value ?: "",
+                rep_ssk_sub = repSSKSubText.value ?: "",
+                is_empty = false,
+                executor = null,
+                start_date = null,
+                start_time = null,
+                state_number = null,
+                contract = null,
+                contract_transport = null,
+                end_date = null,
+                end_time = null,
+                in_violation = false,
+                equipment = null,
+                complex_work = null,
+                order_number = null,
+                report_text = null,
+                remarks = null,
+                is_send = false
+            )
+
+            repository.saveReport(report)
+        } catch (e: IllegalArgumentException) {
+            _errorEvent.value = e.message
+            0L
+        }
+    }
+
+    fun clearAll() {
+        isClearing.value = true
+
+        selectedWorkType.value = null
+        selectedCustomer.value = null
+        selectedObject.value = null
+        selectedContractor.value = null
+        selectedSubContractor.value = null
+        selectedPlot.value = null
+
+        manualCustomer.value = null
+        manualObject.value = null
+        manualContractor.value = null
+        manualSubContractor.value = null
+
+        isManualCustomer.value = false
+        isManualObject.value = false
+        isManualPlot.value = false
+        isManualContractor.value = false
+        isManualSubContractor.value = false
+
+        _repSSKGpText.value = null
+        _subContractorText.value = null
+        _repSubcontractorText.value = null
+        _repSSKSubText.value = null
+
+        isClearing.value = false
     }
 
     fun loadPreviousReport() {
         viewModelScope.launch {
-            try {
-                val report = repository.getLastUnsentReport()
-                report?.let {
-                    selectedWorkType.value = it.workType
-                    if (it.customer in customers) {
-                        selectedCustomer.value = it.customer
-                        isManualCustomer.value = false
-                    } else {
-                        manualCustomer.value = it.customer
-                        isManualCustomer.value = true
-                    }
-                    if (it.obj in objects) {
-                        selectedObject.value = it.obj
-                        isManualObject.value = false
-                    } else {
-                        manualObject.value = it.obj
-                        isManualObject.value = true
-                    }
-                    _plotText.value = it.plot
-                    if (it.contractor in contractors) {
-                        selectedContractor.value = it.contractor
-                        isManualContractor.value = false
-                    } else {
-                        manualContractor.value = it.contractor
-                        isManualContractor.value = true
-                    }
-                    if (it.repContractor in subContractors) {
-                        selectedSubContractor.value = it.repContractor
-                        isManualSubContractor.value = false
-                    } else {
-                        manualSubContractor.value = it.repContractor
-                        isManualSubContractor.value = true
-                    }
-                    _repSSKGpText.value = it.repSSKGp
-                    _subContractorText.value = it.subContractor
-                    _repSubcontractorText.value = it.repSubContractor
-                    _repSSKSubText.value = it.repSSKSub
-                }
-            } catch (e: Exception) {
-                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета")
+            val lastReport = repository.getLastUnsentReport()
+            lastReport?.let { report ->
+                selectedWorkType.value = report.work_type_id?.let { repository.getWorkTypeById(it) }
+                selectedCustomer.value = report.customer_id?.let { repository.getCustomerById(it) }
+                selectedObject.value = report.object_id?.let { repository.getObjectById(it) }
+                selectedContractor.value = report.contractor_id?.let { repository.getContractorById(it) }
+                selectedPlot.value = report.plot_id?.let { repository.getPlotById(it) }
+                selectedSubContractor.value = report.sub_contractor_id?.let { repository.getSubContractorById(it) }
+
+                _repSSKGpText.value = report.rep_ssk_gp
+                _subContractorText.value = "" // или report.subContractorText
+                _repSubcontractorText.value = report.rep_sub_contractor
+                _repSSKSubText.value = report.rep_ssk_sub
             }
         }
     }
 
-    fun onPlotChanged(newText: String) {
-        _plotText.value = newText.trim()
-    }
-
-    fun onRepSSKGpChanged(newText: String) {
-        _repSSKGpText.value = newText.trim()
-    }
-
-    fun onSubContractorChanged(newText: String) {
-        _subContractorText.value = newText.trim()
-    }
-
-    fun onRepSubcontractorChanged(newText: String) {
-        _repSubcontractorText.value = newText.trim()
-    }
-
-    fun onRepSSKSubChanged(newText: String) {
-        _repSSKSubText.value = newText.trim()
-    }
-
-    fun clearAll() {
-        arrangementIsClearing.value = true
-
-        selectedWorkType.value = ""
-        selectedCustomer.value = ""
-        selectedObject.value = ""
-        selectedContractor.value = ""
-        selectedSubContractor.value = ""
-
-        manualCustomer.value = ""
-        manualObject.value = ""
-        manualContractor.value = ""
-        manualSubContractor.value = ""
-
-        isManualCustomer.value = false
-        isManualObject.value = false
-        isManualContractor.value = false
-        isManualSubContractor.value = false
-
-        _plotText.value = ""
-        _repSSKGpText.value = ""
-        _subContractorText.value = ""
-        _repSubcontractorText.value = ""
-        _repSSKSubText.value = ""
-
-        arrangementIsClearing.value = false
-    }
-
-    fun getAllReports(): Flow<List<Report>> {
-        return repository.getAllReports()
-    }
-
-    suspend fun updateReport(report: Report) {
-        repository.updateReport(report)
-    }
-
-    suspend fun clearAllReports() {
-        repository.clearAllReports()
-    }
+    fun onRepSSKGpChanged(text: String?) { _repSSKGpText.value = text }
+    fun onSubContractorChanged(text: String?) { _subContractorText.value = text }
+    fun onRepSubcontractorChanged(text: String?) { _repSubcontractorText.value = text }
+    fun onRepSSKSubChanged(text: String?) { _repSSKSubText.value = text }
 }

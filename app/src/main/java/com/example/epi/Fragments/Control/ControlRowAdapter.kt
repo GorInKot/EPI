@@ -14,45 +14,40 @@ import com.example.epi.R
 class ControlRowAdapter(
     private val onEditClick: (ControlRow, Int) -> Unit,
     private val onDeleteClick: (ControlRow) -> Unit
-) : ListAdapter<ControlRow, ControlRowAdapter.ControlRowViewHolder>(ControlRowDiffCallback()) {
+) : ListAdapter<ControlRow, ControlRowAdapter.ViewHolder>(DiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ControlRowViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_control_row, parent, false)
-        return ControlRowViewHolder(view)
-    }
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val tvEquipment: TextView = view.findViewById(R.id.tvEquipmentName)
+        private val tvWorkType: TextView = view.findViewById(R.id.tvWorkType)
+        private val tvOrderNumber: TextView = view.findViewById(R.id.tvOrderNumber)
+        private val tvReport: TextView = view.findViewById(R.id.tvReport)
+        private val tvRemarks: TextView = view.findViewById(R.id.tvRemarks)
+        private val btnEdit: ImageButton = view.findViewById(R.id.btnEdit)
+        private val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
 
-    override fun onBindViewHolder(holder: ControlRowViewHolder, position: Int) {
-        val row = getItem(position)
-        holder.bind(row, position)
-    }
-
-    inner class ControlRowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvEquipmentName: TextView = itemView.findViewById(R.id.tvEquipmentName)
-        private val tvWorkType: TextView = itemView.findViewById(R.id.tvWorkType)
-        private val tvOrderNumber: TextView = itemView.findViewById(R.id.tvOrderNumber)
-        private val tvReport: TextView = itemView.findViewById(R.id.tvReport)
-        private val tvRemarks: TextView = itemView.findViewById(R.id.tvRemarks)
-        private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit)
-        private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
-
-        fun bind(row: ControlRow, position: Int) {
-            tvEquipmentName.text = row.equipmentName
+        fun bind(row: ControlRow, position: Int, onEdit: (ControlRow, Int) -> Unit, onDelete: (ControlRow) -> Unit) {
+            tvEquipment.text = row.equipmentName
             tvWorkType.text = row.workType
             tvOrderNumber.text = row.orderNumber
             tvReport.text = row.report
             tvRemarks.text = row.remarks
 
-            btnEdit.setOnClickListener {
-                onEditClick(row, position)
-            }
-            btnDelete.setOnClickListener {
-                onDeleteClick(row)
-            }
+            btnEdit.setOnClickListener { onEdit(row, position) }
+            btnDelete.setOnClickListener { onDelete(row) }
         }
     }
 
-    class ControlRowDiffCallback : DiffUtil.ItemCallback<ControlRow>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_control_row, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position), position, onEditClick, onDeleteClick)
+    }
+
+    private class DiffCallback : DiffUtil.ItemCallback<ControlRow>() {
         override fun areItemsTheSame(oldItem: ControlRow, newItem: ControlRow): Boolean {
             return oldItem == newItem
         }
