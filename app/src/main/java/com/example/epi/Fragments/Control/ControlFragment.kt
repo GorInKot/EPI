@@ -33,7 +33,10 @@ class ControlFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        SharedViewModelFactory((requireActivity().application as App).reportRepository)
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
     }
 
     private lateinit var adapter: ControlRowAdapter

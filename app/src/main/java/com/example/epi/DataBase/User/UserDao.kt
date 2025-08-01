@@ -2,6 +2,7 @@ package com.example.epi.DataBase.User
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -17,4 +18,10 @@ interface UserDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM users WHERE employeeNumber = :employeeNumber)")
     suspend fun isEmployeeNumberTaken(employeeNumber: String): Boolean
+
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getUserById(id: Int): User?
+
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertUser(user: User)
 }

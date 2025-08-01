@@ -183,26 +183,26 @@
         <item name="rippleColor">@color/color_grey</item>
     </style>
 
-<!--    <style name="CustomTimePickerTheme" parent="Theme.Material3.Dark">-->
-<!--        <item name="android:textColor">@color/color_white</item> &lt;!&ndash; #FFFFFF &ndash;&gt;-->
-<!--        <item name="android:background">@color/color_black_light</item> &lt;!&ndash; #3A3A3A &ndash;&gt;-->
+    <style name="CustomTimePickerTheme" parent="Theme.Material3.Dark">
+        <item name="android:textColor">@color/color_white</item> <!-- #FFFFFF -->
+        <item name="android:background">@color/color_black_light</item> <!-- #3A3A3A -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+<!--    <style name="CustomTimePickerTheme" parent="Theme.Material3.Light">-->
+<!--        <item name="android:textColor">@color/color_grey_similar</item> &lt;!&ndash; #1A1A1A &ndash;&gt;-->
+<!--        <item name="android:background">@color/color_black_light_similar</item> &lt;!&ndash; #FFFFFF &ndash;&gt;-->
 <!--        <item name="android:fontFamily">sans-serif-medium</item>-->
 <!--        <item name="android:textSize">20sp</item>-->
 <!--    </style>-->
 
-    <style name="CustomTimePickerTheme" parent="Theme.Material3.Light">
-        <item name="android:textColor">@color/color_grey_similar</item> <!-- #1A1A1A -->
-        <item name="android:background">@color/color_black_light_similar</item> <!-- #FFFFFF -->
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="CustomDatePickerTheme" parent="Theme.Material3.Dark">
-        <item name="android:textColor">@color/color_grey_similar</item> <!-- #FFFFFF -->
-        <item name="android:background">@color/color_black_light_similar</item> <!-- #3A3A3A -->
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-    </style>
+<!--    <style name="CustomDatePickerTheme" parent="Theme.Material3.Dark">-->
+<!--        <item name="android:textColor">@color/color_grey_similar</item> &lt;!&ndash; #FFFFFF &ndash;&gt;-->
+<!--        <item name="android:background">@color/color_black_light_similar</item> &lt;!&ndash; #3A3A3A &ndash;&gt;-->
+<!--        <item name="android:fontFamily">sans-serif-medium</item>-->
+<!--        <item name="android:textSize">20sp</item>-->
+<!--    </style>-->
 
     <style name="TableHeader">
         <item name="backgroundTint">@color/neutral_grey</item>

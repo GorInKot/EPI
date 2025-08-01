@@ -7,6 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -29,7 +34,10 @@ class SendReportFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        SharedViewModelFactory((requireActivity().application as App).reportRepository)
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
     }
 
     companion object {
@@ -45,7 +53,9 @@ class SendReportFragment : Fragment() {
 
         binding.SeRFrBtnInfo.setOnClickListener {
             Log.d(TAG, "Info-кнопка нажата")
-//            showAllEnteredData()
+            val data = sharedViewModel.showAllEnteredData()
+            Log.d(TAG, "Data for dialog: $data")
+            showInfoDialog(data)
             sharedViewModel.exportDatabase(requireContext())
             Log.d(TAG, "Показали AlertDialog с информацией")
         }
@@ -80,25 +90,32 @@ class SendReportFragment : Fragment() {
         }
     }
 
-    fun exportDatabase(context: Context) {
-        val dbName = "app_database"
-        val dbPath = context.getDatabasePath(dbName)
-
-        val exportDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "")
-        if (!exportDir.exists()) exportDir.mkdirs()
-
-        val outFile = File(exportDir, dbName)
-        try {
-            FileInputStream(dbPath).use { input ->
-                FileOutputStream(outFile).use { output ->
-                    input.copyTo(output)
-                }
-            }
-            Log.d("ExportDB", "БД экспортирована в: ${outFile.absolutePath}")
-        } catch (e: Exception) {
-            Log.e("ExportDB", "Ошибка экспорта: ${e.message}")
+    private fun showInfoDialog(data: String) {
+        // Создаем TextView для отображения данных
+        val textView = TextView(requireContext()).apply {
+            text = data
+            setPadding(32) // padding в 16dp (примерно 32px в зависимости от плотности)
+            textSize = 16f
+            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
         }
+
+        // Создаем ScrollView для прокрутки длинного текста
+        val scrollView = ScrollView(requireContext()).apply {
+            addView(textView)
+        }
+
+        // Создаем AlertDialog
+        AlertDialog.Builder(requireContext())
+            .setTitle("Информация об отчете")
+            .setView(scrollView)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(true)
+            .create()
+            .show()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

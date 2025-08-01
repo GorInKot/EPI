@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.epi.DataBase.Report.Report
 import com.example.epi.DataBase.Report.ReportRepository
+import com.example.epi.DataBase.User.User
+import com.example.epi.DataBase.User.UserRepository
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
@@ -28,7 +30,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
+class SharedViewModel(
+    private val reportRepository: ReportRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private val gson = Gson()
@@ -144,7 +149,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
 
     // Данные из ControlFragment
     private var orderCounter = 1
-    private var extraOrderNumber = 1
+//    private var extraOrderNumber = 1
 
     private val _orderNumber = MutableLiveData<String>("")
     val orderNumber: LiveData<String> get() = _orderNumber
@@ -206,7 +211,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
 
         // загрузка всех отчетов
         viewModelScope.launch {
-            repository.getAllReports().collectLatest { reports ->
+            reportRepository.getAllReports().collectLatest { reports ->
                 _reports.value = reports
             }
         }
@@ -333,7 +338,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     isEmpty = false
                 )
                 Log.d("Tagg", "Saving full report: $report")
-                val reportId = repository.saveReport(report)
+                val reportId = reportRepository.saveReport(report)
                 Log.d("Tagg", "Saved report ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
@@ -404,8 +409,6 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                 val controlErrors = validateControlInputs(
                     isViolation = _isViolation.value ?: false,
                     orderNumber = _orderNumber.value,
-//                    startDate = _controlStartDate.value,
-//                    startTime = _controlStartTime.value,
                     controlRows = _controlRows.value
                 )
                 if (controlErrors.isNotEmpty()) {
@@ -448,7 +451,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     isEmpty = _isTransportAbsent.value ?: false
                 )
                 Log.d("Tagg", "Saving full report: $report")
-                val reportId = repository.saveReport(report)
+                val reportId = reportRepository.saveReport(report)
                 Log.d("Tagg", "Saved report ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
@@ -571,7 +574,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     }
                     return@withContext 0L
                 }
-                val existingReport = repository.getLastUnsentReport()
+                val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
                     Log.e("Tagg", "Transport: No unsent report found to update")
                     withContext(Dispatchers.Main) {
@@ -591,7 +594,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     isEmpty = _isTransportAbsent.value ?: false
                 )
                 Log.d("Tagg", "Transport: Updating Report: $updatedReport")
-                repository.updateReport(updatedReport)
+                reportRepository.updateReport(updatedReport)
                 Log.d("Tagg", "Transport: Report updated successfully with ID: ${updatedReport.id}")
                 updatedReport.id
             } catch (e: Exception) {
@@ -624,8 +627,8 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         }
     }
 
-    fun setControlStartDate(date: String) { _controlStartDate.value = date.trim() }
-    fun setControlStartTime(time: String) { _controlStartTime.value = time.trim() }
+//    fun setControlStartDate(date: String) { _controlStartDate.value = date.trim() }
+//    fun setControlStartTime(time: String) { _controlStartTime.value = time.trim() }
     fun setViolation(checked: Boolean) {
         _isViolation.value = checked
         _orderNumber.value = if (checked) "Нет нарушения" else ""
@@ -667,14 +670,10 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
     fun validateControlInputs(
         isViolation: Boolean,
         orderNumber: String?,
-//        startDate: String?,
-//        startTime: String?,
         controlRows: List<ControlRow>?
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (!isViolation && orderNumber.isNullOrBlank()) errors["orderNumber"] = "Укажите номер предписания"
-//        if (startDate.isNullOrBlank()) errors["startDate"] = "Укажите дату начала"
-//        if (startTime.isNullOrBlank()) errors["startTime"] = "Укажите время начала"
         if (controlRows.isNullOrEmpty()) errors["controlRows"] = "Добавьте хотя бы одну строку контроля"
         else {
             controlRows.forEachIndexed { index, row ->
@@ -701,8 +700,6 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                 val errors = validateControlInputs(
                     isViolation = _isViolation.value ?: false,
                     orderNumber = _orderNumber.value,
-//                    startDate = _controlStartDate.value,
-//                    startTime = _controlStartTime.value,
                     controlRows = _controlRows.value
                 )
                 if (errors.isNotEmpty()) {
@@ -711,7 +708,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     return@withContext 0L
                 }
 
-                val existingReport = repository.getLastUnsentReport()
+                val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
                     Log.e("Tagg", "Control: No unsent report found")
                     _errorEvent.postValue("Ошибка: нет незавершенного отчета")
@@ -733,7 +730,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     controlRows = controlRowsJson
                 )
                 Log.d("Tagg", "Control: Updating Report: $updatedReport")
-                repository.updateReport(updatedReport)
+                reportRepository.updateReport(updatedReport)
                 Log.d("Tagg", "Control: Report updated successfully with ID: ${updatedReport.id}")
                 updatedReport.id
             } catch (e: Exception) {
@@ -746,13 +743,13 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         }
     }
 
-    fun clearControl() {
-        _orderNumber.value = ""
-        _isViolation.value = false
-        _controlStartDate.value = ""
-        _controlStartTime.value = ""
-        _controlRows.value = emptyList()
-    }
+//    fun clearControl() {
+//        _orderNumber.value = ""
+//        _isViolation.value = false
+//        _controlStartDate.value = ""
+//        _controlStartTime.value = ""
+//        _controlRows.value = emptyList()
+//    }
 
     // Методы для FixVolumesFragment
     fun addFixRow(fixRow: FixVolumesRow) {
@@ -818,7 +815,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     _errorEvent.postValue("Не все поля заполнены корректно")
                     return@withContext 0L
                 }
-                val existingReport = repository.getLastUnsentReport()
+                val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
                     Log.e("Tagg", "FixVolumes: No unsent report found")
                     _errorEvent.postValue("Ошибка: нет незавершенного отчета")
@@ -829,7 +826,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     fixVolumesRows = fixRowsJson
                 )
                 Log.d("Tagg", "FixVolumes: Updating Report: $updatedReport")
-                repository.updateReport(updatedReport)
+                reportRepository.updateReport(updatedReport)
                 Log.d(
                     "Tagg",
                     "FixVolumes: Report updated successfully with ID: ${updatedReport.id}"
@@ -845,7 +842,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         }
     }
 
-    fun clearFixVolumes() { _fixRows.value = emptyList() }
+//    fun clearFixVolumes() { _fixRows.value = emptyList() }
 
     // Методы для SendReportFragment
     fun exportDatabase(context: Context) {
@@ -865,53 +862,54 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         }
     }
 
-    fun showAllEnteredData() {
-        // Заглушка: вывод данных в лог
-        val data = """
-            Date: ${_currentDate.value}
-            Time: ${_currentTime.value}
-            WorkType: ${_selectedWorkType.value}
-            Customer: ${if (_isManualCustomer.value == true) _manualCustomer.value else _selectedCustomer.value}
-            Object: ${if (_isManualObject.value == true) _manualObject.value else _selectedObject.value}
-            Plot: ${_plotText.value}
-            Contractor: ${if (_isManualContractor.value == true) _manualContractor.value else _selectedContractor.value}
-            SubContractor: ${if (_isManualSubContractor.value == true) _manualSubContractor.value else _selectedSubContractor.value}
-            RepSSKGp: ${_repSSKGpText.value}
-            SubContractorText: ${_subContractorText.value}
-            RepSubcontractor: ${_repSubcontractorText.value}
-            RepSSKSub: ${_repSSKSubText.value}
-            TransportContract: ${_transportContractCustomer.value}
-            TransportExecutor: ${_transportExecutorName.value}
-            TransportContractTransport: ${_transportContractTransport.value}
-            TransportStateNumber: ${_transportStateNumber.value}
-            TransportStartDate: ${_transportStartDate.value}
-            TransportStartTime: ${_transportStartTime.value}
-            TransportEndDate: ${_transportEndDate.value}
-            TransportEndTime: ${_transportEndTime.value}
-            OrderNumber: ${_orderNumber.value}
-            IsViolation: ${_isViolation.value}
-            ControlRows: ${gson.toJson(_controlRows.value)}
-            FixRows: ${gson.toJson(_fixRows.value)}
-        """.trimIndent()
-        println("Entered Data: $data")
+    fun showAllEnteredData(): String {
+        return """
+        Дата: ${_currentDate.value}
+        Время: ${_currentTime.value}
+        Тип работ: ${_selectedWorkType.value}
+        Заказчик: ${if (_isManualCustomer.value == true) _manualCustomer.value else _selectedCustomer.value}
+        Объект: ${if (_isManualObject.value == true) _manualObject.value else _selectedObject.value}
+        Участок: ${_plotText.value}
+        Подрядчик: ${if (_isManualContractor.value == true) _manualContractor.value else _selectedContractor.value}
+        Субподрядчик: ${if (_isManualSubContractor.value == true) _manualSubContractor.value else _selectedSubContractor.value}
+        Представитель ССК ГП: ${_repSSKGpText.value}
+        Текст субподрядчика: ${_subContractorText.value}
+        Представитель субподрядчика: ${_repSubcontractorText.value}
+        Представитель ССК субподрядчика: ${_repSSKSubText.value}
+        Договор транспорта: ${_transportContractCustomer.value}
+        Исполнитель по транспорту: ${_transportExecutorName.value}
+        Транспорт по договору: ${_transportContractTransport.value}
+        
+        Госномер транспорта: ${_transportStateNumber.value}
+        Дата начала поездки: ${_transportStartDate.value}
+        Время начала поездки: ${_transportStartTime.value}
+        Дата окончания поездки: ${_transportEndDate.value}
+        Время окончания поездки: ${_transportEndTime.value}
+        Номер заказа: ${_orderNumber.value}
+        Нарушение: ${_isViolation.value}
+        
+        Контрольные строки: ${gson.toJson(_controlRows.value)}
+        
+        Строки фиксации: ${gson.toJson(_fixRows.value)}
+    """.trimIndent()
     }
 
     fun filterReportsByDateRange(startDate: String, endDate: String) {
         viewModelScope.launch {
-            repository.getReportsByDateRange(startDate, endDate).collectLatest { reports ->
+            reportRepository.getReportsByDateRange(startDate, endDate).collectLatest { reports ->
                 _reports.value = reports
             }
         }
     }
 
     suspend fun getReportsForExport(startDate: String, endDate: String): List<Report> {
-        return repository.getReportsByDateRange(startDate, endDate).first()
+        return reportRepository.getReportsByDateRange(startDate, endDate).first()
     }
 
     fun loadPreviousReport() {
         viewModelScope.launch {
             try {
-                val report = repository.getLastUnsentReport()
+                val report = reportRepository.getLastUnsentReport()
                 report?.let {
                     _selectedWorkType.value = it.workType
                     if (it.customer in customers) {
@@ -951,50 +949,7 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
                     _transportExecutorName.value = it.executor
                     _transportContractTransport.value = it.contractTransport
                     _transportStateNumber.value = it.stateNumber
-//                    _transportStartDate.value = it.startDate
-//                    _transportStartTime.value = it.startTime
-//                    _transportEndDate.value = it.endDate
-//                    _transportEndTime.value = it.endTime
-//                    _orderNumber.value = it.orderNumber
-//                    _isViolation.value = it.inViolation
-//                    _controlStartDate.value = it.startDate
-//                    _controlStartTime.value = it.startTime
-//                    val controlRows = if (it.controlRows.isNotBlank()) {
-//                        try {
-//                            val type = object : TypeToken<List<ControlRow>>() {}.type
-//                            gson.fromJson(it.controlRows, type) ?: emptyList()
-//                        } catch (e: Exception) {
-//                            Log.e("Tagg", "Control: Error parsing controlRows JSON: ${e.message}")
-//                            emptyList<ControlRow>()
-//                        }
-//                    } else {
-//                        if (it.equipment.isNotBlank()) {
-//                            listOf(
-//                                ControlRow(
-//                                    equipmentName = it.equipment,
-//                                    workType = it.complexWork,
-//                                    report = it.report,
-//                                    remarks = it.remarks,
-//                                    orderNumber = it.orderNumber
-//                                )
-//                            )
-//                        } else {
-//                            emptyList()
-//                        }
-//                    }
-//                    _controlRows.value = controlRows
-//                    val fixRows = if (it.fixVolumesRows.isNotBlank()) {
-//                        try {
-//                            val type = object : TypeToken<List<FixVolumesRow>>() {}.type
-//                            gson.fromJson(it.fixVolumesRows, type) ?: emptyList()
-//                        } catch (e: Exception) {
-//                            Log.e("Tagg", "FixVolumes: Error parsing fixVolumesRows JSON: ${e.message}")
-//                            emptyList<FixVolumesRow>()
-//                        }
-//                    } else {
-//                        emptyList()
-//                    }
-//                    _fixRows.value = fixRows
+
                 }
             } catch (e: Exception) {
                 _errorEvent.postValue("Ошибка при загрузке предыдущего отчета")
@@ -1038,6 +993,38 @@ class SharedViewModel(private val repository: ReportRepository) : ViewModel() {
         _isTransportAbsent.value = false
         updateDateTime()
         _isReportSaved.postValue(false) // Используем postValue для безопасности
+    }
+
+    // LiveData для данных текущего пользователя
+    private val _currentUser = MutableLiveData<User?>(null)
+    val currentUser: LiveData<User?> get() = _currentUser
+
+    // Загрузка данных пользователя
+    fun loadCurrentUser(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Получаем employeeNumber из SharedPreferences
+                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                val employeeNumber = sharedPreferences.getString("current_user", null)
+                if (employeeNumber != null) {
+                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = user
+                        Log.d("SharedViewModel", "Loaded user: $user")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e("SharedViewModel", "No employeeNumber found in SharedPreferences")
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
+                    Log.e("SharedViewModel", "Error loading user: ${e.message}", e)
+                }
+            }
+        }
     }
 }
 

@@ -16,4 +16,9 @@ class UserRepository(private val userDao: UserDao) {
     suspend fun isEmployeeNumberTaken(employeeNumber: String): Boolean {
         return userDao.isEmployeeNumberTaken(employeeNumber)
     }
+
+    suspend fun getUserById(id: Int): User? {
+        return userDao.getUserById(id)
+    }
+
 }

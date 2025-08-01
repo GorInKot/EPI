@@ -34,7 +34,10 @@ class ArrangementFragment : Fragment() {
     private var _binding: FragmentArrangmentBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        SharedViewModelFactory((requireActivity().application as App).reportRepository)
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
     }
 
     private lateinit var plotTextWatcher: TextWatcher

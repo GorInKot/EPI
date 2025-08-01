@@ -47,7 +47,10 @@ class ReportsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: ExpandableAdapter
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        SharedViewModelFactory((requireActivity().application as App).reportRepository)
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
     }
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private var selectedStartDate: String? = null
@@ -127,7 +130,7 @@ class ReportsFragment : Fragment() {
 
     private fun showDateRangePicker() {
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTheme(R.style.CustomDatePickerTheme)
+//            .setTheme(R.style.CustomTimePickerTheme)
             .setTitleText("Выберите диапазон дат")
             .build()
         dateRangePicker.addOnPositiveButtonClickListener { dateRange ->

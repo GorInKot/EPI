@@ -34,7 +34,10 @@ class TransportFragment : Fragment() {
     private var _binding: FragmentTransportBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        SharedViewModelFactory((requireActivity().application as App).reportRepository)
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
     }
 
     private lateinit var contractCustomerTextWatcher: TextWatcher
@@ -61,6 +64,22 @@ class TransportFragment : Fragment() {
         setupInputListeners()
         setupButtons()
         restoreInputs()
+
+        // Загрузка данных пользователя
+        sharedViewModel.loadCurrentUser(requireContext())
+
+        // Наблюдаем за данными пользователя
+        sharedViewModel.currentUser.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                val specialistName = "Специалист СК: ${user.firstName} ${user.secondName}" +
+                        (user.thirdName?.let { it }?: "")
+                binding.tvSpecialist.text = specialistName
+                Log.d("Tagg", "Set tvSpecialist to $specialistName")
+            } else {
+                binding.tvSpecialist.text = "Специалист не указан"
+                Log.d("Tagg", "No user data available")
+            }
+        }
     }
 
     private fun setupObservers() {
@@ -292,7 +311,7 @@ class TransportFragment : Fragment() {
             }
         }
         val timePicker = MaterialTimePicker.Builder()
-            .setTheme(R.style.CustomTimePickerTheme)
+//            .setTheme(R.style.CustomTimePickerTheme)
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(hour)
             .setMinute(minute)
