@@ -59,6 +59,8 @@ class FixingVolumesFragment : Fragment() {
         // Подписка на строки
         sharedViewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
+            // Лог для отладки
+            android.util.Log.d("FixingVolumesFragment", "Submitting list to adapter: $rows")
         }
 
         // Подписка на ошибки
@@ -97,26 +99,29 @@ class FixingVolumesFragment : Fragment() {
 
         // Добавить запись
         binding.btnAdd.setOnClickListener {
-            val objectId = sharedViewModel.selectedObject.value.orEmpty() // Используем существующее поле
+            val objectId = if (sharedViewModel.isManualObject.value == true) {
+                sharedViewModel.manualObject.value.orEmpty()
+            } else {
+                sharedViewModel.selectedObject.value.orEmpty()
+            }
             val newRow = FixVolumesRow(
                 ID_object = objectId,
                 projectWorkType = binding.AutoCompleteTextViewWorkType.text.toString().trim(),
                 measure = binding.AutoCompleteTextViewMeasureUnits.text.toString().trim(),
                 plan = binding.TextInputEditTextPlan.text.toString().trim(),
                 fact = binding.TextInputEditTextFact.text.toString().trim(),
-                result = "" // Вычисляется в validateFixRowInput
+                result = "" // result будет установлен в recalculateFixRows
             )
 
-            when (val result = sharedViewModel.validateFixRowInput(newRow)) {
+            when (val result = sharedViewModel.validateAndCalculateRemainingVolume(newRow)) {
                 is RowValidationResult.Valid -> {
-                    val planValue = newRow.plan.toDoubleOrNull() ?: 0.0
-                    val factValue = newRow.fact.toDoubleOrNull() ?: 0.0
-                    val updatedRow = newRow.copy(result = (planValue - factValue).toString())
-                    sharedViewModel.addFixRow(updatedRow)
+                    sharedViewModel.addFixRow(newRow)
                     clearInputFields()
+                    Toast.makeText(requireContext(), "Строка добавлена", Toast.LENGTH_SHORT).show()
                 }
                 is RowValidationResult.Invalid -> {
-                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_LONG).show()
+                    highlightErrorField(result.reason)
                 }
 
                 else -> {}
@@ -125,13 +130,17 @@ class FixingVolumesFragment : Fragment() {
 
         // Кнопка "Сохранить"
         binding.btnNext.setOnClickListener {
+            if (sharedViewModel.fixRows.value.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "Добавьте хотя бы одну строку фиксации объемов", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
             CoroutineScope(Dispatchers.Main).launch {
                 val updatedReportId = sharedViewModel.updateFixVolumesReport()
                 if (updatedReportId > 0) {
                     val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToSendReportFragment()
                     findNavController().navigate(action)
                 } else {
-                    Toast.makeText(requireContext(), "Ошибка при сохранении отчета", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Ошибка при сохранении отчета", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -200,20 +209,18 @@ class FixingVolumesFragment : Fragment() {
                 measure = editMeasures.text.toString().trim(),
                 plan = editPlan.text.toString().trim(),
                 fact = editFact.text.toString().trim(),
-                result = ""
+                result = "" // result будет установлен в recalculateFixRows
             )
 
-            when (val result = sharedViewModel.validateFixRowInput(newRow)) {
+            when (val result = sharedViewModel.validateAndCalculateRemainingVolume(newRow, excludeRow = row)) {
                 is RowValidationResult.Valid -> {
-                    val planValue = newRow.plan.toDoubleOrNull() ?: 0.0
-                    val factValue = newRow.fact.toDoubleOrNull() ?: 0.0
-                    val updatedRow = newRow.copy(result = (planValue - factValue).toString())
-                    sharedViewModel.updateFixRow(oldRow = row, newRow = updatedRow)
+                    sharedViewModel.updateFixRow(oldRow = row, newRow = newRow)
                     Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
                 is RowValidationResult.Invalid -> {
-                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_LONG).show()
+                    highlightErrorField(result.reason, dialogView)
                 }
 
                 else -> {}
@@ -221,6 +228,32 @@ class FixingVolumesFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun highlightErrorField(reason: String, dialogView: View? = null) {
+        val context = dialogView ?: binding.root
+        when {
+//            reason.contains("ID объекта") -> {
+//                (context.findViewById<TextInputEditText>(R.id.edIdObject)
+//                    ?: binding.TextInputEditTextIdObject)?.error = reason
+//            }
+            reason.contains("Вид работ") -> {
+                (context.findViewById<AutoCompleteTextView>(R.id.textInputWorkProject)
+                    ?: binding.AutoCompleteTextViewWorkType)?.error = reason
+            }
+            reason.contains("Единица измерения") -> {
+                (context.findViewById<AutoCompleteTextView>(R.id.editMeasures)
+                    ?: binding.AutoCompleteTextViewMeasureUnits)?.error = reason
+            }
+            reason.contains("План") -> {
+                (context.findViewById<TextInputEditText>(R.id.editPlan)
+                    ?: binding.TextInputEditTextPlan)?.error = reason
+            }
+            reason.contains("Факт") -> {
+                (context.findViewById<TextInputEditText>(R.id.editFact)
+                    ?: binding.TextInputEditTextFact)?.error = reason
+            }
+        }
     }
 
     private fun clearInputFields() {

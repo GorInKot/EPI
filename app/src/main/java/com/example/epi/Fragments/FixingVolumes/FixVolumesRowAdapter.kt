@@ -1,5 +1,6 @@
 package com.example.epi.Fragments.FixingVolumes
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class FixVolumesRowAdapter(
 
     override fun onBindViewHolder(holder: FixVolumesViewHolder, position: Int) {
         val row = getItem(position)
+        Log.d("FixVolumesRowAdapter", "Binding row at position $position: $row")
         holder.bind(row, position)
     }
 
@@ -38,12 +40,12 @@ class FixVolumesRowAdapter(
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
 
         fun bind(row: FixVolumesRow, position: Int) {
-            tvIdObject.text = row.ID_object ?: ""
-            tvProjectWorkType.text = row.projectWorkType ?: ""
-            tvMeasure.text = row.measure ?: ""
-            tvPlan.text = row.plan ?: ""
-            tvFact.text = row.fact ?: ""
-            tvResult.text = row.result ?: ""
+            tvIdObject.text = row.ID_object
+            tvProjectWorkType.text = row.projectWorkType
+            tvMeasure.text = row.measure
+            tvPlan.text = row.plan
+            tvFact.text = row.fact
+            tvResult.text = row.result
 
             btnEdit.setOnClickListener { onEditClick(row, position) }
             btnDelete.setOnClickListener { onDeleteClick(row) }
@@ -52,7 +54,7 @@ class FixVolumesRowAdapter(
 
     class FixVolumesRowDiffCallback : DiffUtil.ItemCallback<FixVolumesRow>() {
         override fun areItemsTheSame(oldItem: FixVolumesRow, newItem: FixVolumesRow): Boolean {
-            return oldItem.ID_object == newItem.ID_object
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: FixVolumesRow, newItem: FixVolumesRow): Boolean {

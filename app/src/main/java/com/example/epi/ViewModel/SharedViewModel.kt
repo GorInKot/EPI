@@ -663,7 +663,7 @@ class SharedViewModel(
             input.remarks.isBlank() -> RowValidationResult.Invalid("Примечание не заполнено")
             !input.isViolationChecked && input.orderNumber.isBlank() ->
                 RowValidationResult.Invalid("Номер предписания обязателен")
-            else -> RowValidationResult.Valid
+            else -> RowValidationResult.Valid()
         }
     }
 
@@ -755,11 +755,13 @@ class SharedViewModel(
     fun addFixRow(fixRow: FixVolumesRow) {
         val current = _fixRows.value?.toMutableList() ?: mutableListOf()
         current.add(fixRow)
-        _fixRows.value = current
+        _fixRows.value = recalculateFixRows(current)
     }
 
     fun removeFixRow(fixRow: FixVolumesRow) {
-        _fixRows.value = _fixRows.value?.filterNot { it == fixRow }
+        val current = _fixRows.value?.toMutableList() ?: return
+        current.remove(fixRow)
+        _fixRows.value = recalculateFixRows(current)
     }
 
     fun updateFixRow(oldRow: FixVolumesRow, newRow: FixVolumesRow) {
@@ -773,20 +775,53 @@ class SharedViewModel(
         }
     }
 
-    fun validateFixRowInput(input: FixVolumesRow): RowValidationResult {
-        return when {
-            input.ID_object.isBlank() -> RowValidationResult.Invalid("ID объекта не указан")
-            _fixRows.value?.any { it.ID_object != input.ID_object && it != input } == true ->
-                RowValidationResult.Invalid("ID объекта должен совпадать для всех строк")
-            input.projectWorkType.isBlank() -> RowValidationResult.Invalid("Вид работ не указан")
-            input.measure.isBlank() -> RowValidationResult.Invalid("Единица измерения не указана")
-            input.plan.isBlank() -> RowValidationResult.Invalid("План не указан")
-            input.fact.isBlank() -> RowValidationResult.Invalid("Факт не указан")
-            input.plan.toDoubleOrNull() == null -> RowValidationResult.Invalid("План должен быть числом")
-            input.fact.toDoubleOrNull() == null -> RowValidationResult.Invalid("Факт должен быть числом")
-            input.fact.toDouble() > input.plan.toDouble() -> RowValidationResult.Invalid("Факт не может превышать План")
-            else -> RowValidationResult.Valid
+    private fun recalculateFixRows(rows: List<FixVolumesRow>): List<FixVolumesRow> {
+        Log.d("Tagg", "Recalculating rows: $rows")
+        val result = rows.groupBy { Triple(it.projectWorkType, it.measure, it.plan) }
+            .flatMap { (key, group) ->
+                val totalFact = group.sumOf { it.fact.toDoubleOrNull() ?: 0.0 }
+                val planValue = group.first().plan.toDoubleOrNull() ?: 0.0
+                val remainingVolume = planValue - totalFact
+                Log.d("Tagg", "Group: $key, totalFact: $totalFact, planValue: $planValue, remainingVolume: $remainingVolume")
+                group.map { row ->
+                    row.copy(result = if (remainingVolume >= 0) remainingVolume.toString() else "0.0")
+                }
+            }
+        Log.d("Tagg", "Recalculated rows: $result")
+        return result
+    }
+
+    fun validateAndCalculateRemainingVolume(input: FixVolumesRow, excludeRow: FixVolumesRow? = null): RowValidationResult {
+        when {
+            input.ID_object.isBlank() -> return RowValidationResult.Invalid("ID объекта не указан")
+            _fixRows.value?.any { it.ID_object != input.ID_object && it != input && it != excludeRow } == true ->
+                return RowValidationResult.Invalid("ID объекта должен совпадать для всех строк")
+            input.projectWorkType.isBlank() -> return RowValidationResult.Invalid("Вид работ не указан")
+            input.measure.isBlank() -> return RowValidationResult.Invalid("Единица измерения не указана")
+            input.plan.isBlank() -> return RowValidationResult.Invalid("План не указан")
+            input.fact.isBlank() -> return RowValidationResult.Invalid("Факт не указан")
+            input.plan.toDoubleOrNull() == null -> return RowValidationResult.Invalid("План должен быть числом")
+            input.fact.toDoubleOrNull() == null -> return RowValidationResult.Invalid("Факт должен быть числом")
         }
+
+        val planValue = input.plan.toDouble()
+        val factValue = input.fact.toDouble()
+
+        val matchingRows = _fixRows.value?.filter {
+            it != excludeRow &&
+                    it.projectWorkType == input.projectWorkType &&
+                    it.measure == input.measure &&
+                    it.plan == input.plan
+        } ?: emptyList()
+
+        val totalFact = matchingRows.sumOf { it.fact.toDoubleOrNull() ?: 0.0 } + factValue
+        val remainingVolume = planValue - totalFact
+
+        if (remainingVolume < 0) {
+            return RowValidationResult.Invalid("Сумма фактических значений превышает плановое")
+        }
+
+        return RowValidationResult.Valid(remainingVolume)
     }
 
     fun validateFixVolumesInputs(fixRows: List<FixVolumesRow>?): Map<String, String?> {
@@ -795,7 +830,7 @@ class SharedViewModel(
             errors["fixRows"] = "Добавьте хотя бы одну строку фиксации объемов"
         } else {
             fixRows.forEachIndexed { index, row ->
-                when (val result = validateFixRowInput(row)) {
+                when (val result = validateAndCalculateRemainingVolume(row)) {
                     is RowValidationResult.Invalid -> {
                         errors["row_$index"] = result.reason
                     }
@@ -1029,6 +1064,6 @@ class SharedViewModel(
 }
 
 sealed class RowValidationResult {
-    object Valid: RowValidationResult()
+    data class Valid(val remainingVolume: Double? = null): RowValidationResult()
     data class Invalid(val reason: String): RowValidationResult()
 }
