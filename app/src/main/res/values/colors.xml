@@ -4,6 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_orange">#FF5722</color>
+    <color name="color_yellow">#FFEB3B</color>
     <color name="background">#434343</color> <!-- Как указано, но может быть нечитаем -->
     <color name="color_one">#E7090808</color>
     <color name="color_two">#8B817E</color>

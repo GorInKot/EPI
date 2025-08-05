@@ -130,7 +130,7 @@ class ReportsFragment : Fragment() {
 
     private fun showDateRangePicker() {
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-//            .setTheme(R.style.CustomTimePickerTheme)
+            .setTheme(R.style.CustomPickerTheme)
             .setTitleText("Выберите диапазон дат")
             .build()
         dateRangePicker.addOnPositiveButtonClickListener { dateRange ->

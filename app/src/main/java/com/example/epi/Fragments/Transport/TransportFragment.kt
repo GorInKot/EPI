@@ -21,6 +21,7 @@ import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
 import com.example.epi.databinding.FragmentTransportBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -235,6 +236,7 @@ class TransportFragment : Fragment() {
 
         // Выбор времени начала поездки
         binding.btnStartTime.setOnClickListener {
+            Log.d("Tagg", "Кнопка выбора времени начала поездки нажата")
             showMaterialTimePicker(binding.textInputEditTextStartDateHours) { time ->
                 sharedViewModel.setTransportStartTime(time)
                 binding.textInputEditTextStartDateHours.setText(time)
@@ -251,6 +253,7 @@ class TransportFragment : Fragment() {
 
         // Выбор времени завершения поездки
         binding.btnEndTime.setOnClickListener {
+            Log.d("Tagg", "Кнопка выбора времени завершения поездки нажата")
             showMaterialTimePicker(binding.textInputEditTextEndDateHours) { time ->
                 sharedViewModel.setTransportEndTime(time)
                 binding.textInputEditTextEndDateHours.setText(time)
@@ -270,26 +273,24 @@ class TransportFragment : Fragment() {
                 // Если не парсится, берём текущую дату
             }
         }
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            { _, selectedYear, selectedMonth, selectedDay ->
-                val formattedDate = String.format(
-                    Locale.getDefault(),
-                    "%02d.%02d.%04d",
-                    selectedDay,
-                    selectedMonth + 1,
-                    selectedYear
-                )
-                onDateSelected(formattedDate)
-            },
-            year,
-            month,
-            day
-        )
-        datePickerDialog.show()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTheme(R.style.CustomPickerTheme)
+            .setTitleText("Выберите дату")
+            .setSelection(calendar.timeInMillis)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val selectedDate = Calendar.getInstance().apply { timeInMillis = selection }
+            val formattedDate = String.format(
+                Locale.getDefault(),
+                "%02d.%02d.%04d",
+                selectedDate.get(Calendar.DAY_OF_MONTH),
+                selectedDate.get(Calendar.MONTH) + 1,
+                selectedDate.get(Calendar.YEAR)
+            )
+            onDateSelected(formattedDate)
+        }
+        datePicker.show(parentFragmentManager, "MaterialDatePicker")
     }
 
     private fun showMaterialTimePicker(editText: AppCompatEditText, onTimeSelected: (time: String) -> Unit) {
@@ -308,10 +309,12 @@ class TransportFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 // Если время не парсится, используем текущее
+                Log.e("TimePickerError", "Ошибка парсинга времени: ${e.message}")
             }
         }
+        Log.d("TimePicker", "Creating TimePicker with hour=$hour, minute=$minute")
         val timePicker = MaterialTimePicker.Builder()
-//            .setTheme(R.style.CustomTimePickerTheme)
+            .setTheme(R.style.CustomTimePicker)
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(hour)
             .setMinute(minute)
@@ -325,8 +328,14 @@ class TransportFragment : Fragment() {
                 timePicker.minute
             )
             onTimeSelected(formattedTime)
+            Log.d("TimePicker", "Selected time: $formattedTime")
         }
-        timePicker.show(parentFragmentManager, "MaterialTimePicker")
+        try {
+            timePicker.show(parentFragmentManager, "CustomPickerTheme")
+            Log.d("TimePicker", "TimePicker shown successfully")
+        } catch (e: Exception) {
+            Log.e("TimePickerError", "Ошибка при отображении TimePicker: ${e.message}")
+        }
     }
 
     private fun setupDateInput(editText: AppCompatEditText) {
