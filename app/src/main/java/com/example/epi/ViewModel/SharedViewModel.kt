@@ -306,6 +306,7 @@ class SharedViewModel(
                 }
 
                 val report = Report(
+                    userName = "${currentUser.value?.firstName ?: "Петя"} ${currentUser.value?.secondName ?: "2"} ${currentUser.value?.thirdName ?: "2"}",
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
                     workType = _selectedWorkType.value.orEmpty(),
@@ -337,6 +338,7 @@ class SharedViewModel(
                     fixVolumesRows = "",
                     isEmpty = false
                 )
+                Log.d("Tagg", "UserName: ${report.userName}")
                 Log.d("Tagg", "Saving full report: $report")
                 val reportId = reportRepository.saveReport(report)
                 Log.d("Tagg", "Saved report ID: $reportId")
@@ -356,7 +358,6 @@ class SharedViewModel(
             }
         }
     }
-
 
     // Старое
     suspend fun saveOrUpdateReport(): Long {
@@ -627,8 +628,6 @@ class SharedViewModel(
         }
     }
 
-//    fun setControlStartDate(date: String) { _controlStartDate.value = date.trim() }
-//    fun setControlStartTime(time: String) { _controlStartTime.value = time.trim() }
     fun setViolation(checked: Boolean) {
         _isViolation.value = checked
         _orderNumber.value = if (checked) "Нет нарушения" else ""
@@ -742,14 +741,6 @@ class SharedViewModel(
             }
         }
     }
-
-//    fun clearControl() {
-//        _orderNumber.value = ""
-//        _isViolation.value = false
-//        _controlStartDate.value = ""
-//        _controlStartTime.value = ""
-//        _controlRows.value = emptyList()
-//    }
 
     // Методы для FixVolumesFragment
     fun addFixRow(fixRow: FixVolumesRow) {
@@ -876,8 +867,6 @@ class SharedViewModel(
             }
         }
     }
-
-//    fun clearFixVolumes() { _fixRows.value = emptyList() }
 
     // Методы для SendReportFragment
     fun exportDatabase(context: Context) {

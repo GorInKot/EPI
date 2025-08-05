@@ -4,40 +4,73 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import android.util.Log
+import androidx.room.Room
 import androidx.room.migration.Migration
 import com.example.epi.DataBase.Report.Report
 import com.example.epi.DataBase.Report.ReportDao
 import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class, User::class], version = 6, exportSchema = false)
+@Database(entities = [Report::class, User::class], version = 7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao
 
     companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getInstance(context: android.content.Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "app_database" // Единое имя базы данных
+                )
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_5_6, MIGRATION_6_7)
+                    .addCallback(object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            Log.d("Tagg", "Database created")
+                        }
+
+                        override fun onOpen(db: SupportSQLiteDatabase) {
+                            Log.d("Tagg", "Database opened")
+                            val cursor = db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
+                            if (cursor.moveToFirst()) {
+                                Log.d("Tagg", "Table users exists")
+                            } else {
+                                Log.e("Tagg", "Table users does NOT exist")
+                            }
+                            cursor.close()
+                        }
+                    })
+                    .build()
+                    .also { INSTANCE = it }
+            }
+        }
+
         val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+            override fun migrate(db: SupportSQLiteDatabase) {
                 Log.d("Tagg", "Applying MIGRATION_1_2")
-                val cursor = database.query("PRAGMA table_info(reports)")
+                val cursor = db.query("PRAGMA table_info(reports)")
                 val existingColumns = mutableListOf<String>()
                 while (cursor.moveToNext()) {
                     existingColumns.add(cursor.getString(cursor.getColumnIndexOrThrow("name")))
                 }
                 cursor.close()
                 if ("date" !in existingColumns) {
-                    database.execSQL("ALTER TABLE reports ADD COLUMN date TEXT NOT NULL DEFAULT ''")
+                    db.execSQL("ALTER TABLE reports ADD COLUMN date TEXT NOT NULL DEFAULT ''")
                 }
                 if ("time" !in existingColumns) {
-                    database.execSQL("ALTER TABLE reports ADD COLUMN time TEXT NOT NULL DEFAULT ''")
+                    db.execSQL("ALTER TABLE reports ADD COLUMN time TEXT NOT NULL DEFAULT ''")
                 }
             }
         }
 
         val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+            override fun migrate(db: SupportSQLiteDatabase) {
                 Log.d("Tagg", "Applying MIGRATION_2_3")
-                database.execSQL(
+                db.execSQL(
                     """
                     CREATE TABLE reports_new (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -72,7 +105,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                     """
                 )
-                database.execSQL(
+                db.execSQL(
                     """
                     INSERT INTO reports_new (
                         id, date, time, workType, customer, obj, plot, contractor, repContractor, 
@@ -83,8 +116,8 @@ abstract class AppDatabase : RoomDatabase() {
                     FROM reports
                     """
                 )
-                database.execSQL("DROP TABLE reports")
-                database.execSQL("ALTER TABLE reports_new RENAME TO reports")
+                db.execSQL("DROP TABLE reports")
+                db.execSQL("ALTER TABLE reports_new RENAME TO reports")
             }
         }
 
@@ -107,6 +140,21 @@ abstract class AppDatabase : RoomDatabase() {
                     """
                 )
                 database.execSQL("CREATE UNIQUE INDEX index_users_employeeNumber ON users(employeeNumber)")
+            }
+        }
+
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                Log.d("Tagg", "Applying MIGRATION_6_7")
+                val cursor = db.query("PRAGMA table_info(reports)")
+                val existingColumns = mutableListOf<String>()
+                while (cursor.moveToNext()) {
+                    existingColumns.add(cursor.getString(cursor.getColumnIndexOrThrow("name")))
+                }
+                cursor.close()
+                if ("userName" !in existingColumns) {
+                    db.execSQL("ALTER TABLE reports ADD COLUMN userName TEXT NOT NULL DEFAULT ''")
+                }
             }
         }
     }

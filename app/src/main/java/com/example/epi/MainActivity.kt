@@ -6,6 +6,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
@@ -13,14 +14,22 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.example.epi.DataBase.AppDatabase
 import com.example.epi.ViewModel.MainViewModel
 import com.example.epi.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var db: AppDatabase
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Инициализация темы до setContentView
@@ -29,51 +38,83 @@ class MainActivity : AppCompatActivity() {
         when (theme) {
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
+
         // Устанавливаем splashScreen
-//        val splashScreen = installSplashScreen()
         installSplashScreen().apply {
             setKeepOnScreenCondition { viewModel.isLoading.value }
-            // Добавляем анимацию только для Android 12+ (API 31+)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                setOnExitAnimationListener { slashScreenView ->
-                    val scaleX =
-                        ObjectAnimator.ofFloat(slashScreenView.view, View.SCALE_X, 1f, 1.5f)
-                    val scaleY =
-                        ObjectAnimator.ofFloat(slashScreenView.view, View.SCALE_Y, 1f, 1.5f)
-                    val alpha = ObjectAnimator.ofFloat(slashScreenView.view, View.ALPHA, 1f, 0f)
-//                    val rotation = ObjectAnimator.ofFloat(slashScreenView.view, View.ROTATION, 0f, 360f)
+                setOnExitAnimationListener { splashScreenView ->
+                    val scaleX = ObjectAnimator.ofFloat(splashScreenView.view, View.SCALE_X, 1f, 1.5f)
+                    val scaleY = ObjectAnimator.ofFloat(splashScreenView.view, View.SCALE_Y, 1f, 1.5f)
+                    val alpha = ObjectAnimator.ofFloat(splashScreenView.view, View.ALPHA, 1f, 0f)
                     AnimatorSet().apply {
-                        duration = 2000 // Длительность 1000 мс
+                        duration = 1000 // Сократили до 1 секунды для плавности
                         playTogether(scaleX, scaleY, alpha)
-//                        playTogether(scaleX, scaleY, alpha, rotation)
                         addListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
-                                slashScreenView.remove()
+                                splashScreenView.remove()
                             }
                         })
                         start()
                     }
                 }
             }
-
-            super.onCreate(savedInstanceState)
-
-            binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
         }
 
-        // Проверка авторизации
-//        if (!isUserLoggedIn()) {
-//            val navController = findNavController(R.id.nav_host_fragment)
-//            navController.navigate(R.id.authFragment)
-//        }
+        super.onCreate(savedInstanceState)
+
+        // Инициализация binding и контента
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Инициализация базы данных
+        db = AppDatabase.getInstance(this)
+
+        // Настройка NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
+            ?: NavHostFragment.create(R.navigation.navigation).also {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment, it)
+                    .setPrimaryNavigationFragment(it)
+                    .commitNow()
+            }
+        navController = navHostFragment.navController
+
+        // Проверка авторизации после инициализации
+        checkAuthStatus()
     }
 
-    private fun isUserLoggedIn(): Boolean {
-        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
-        return sharedPreferences.contains("userId")
+    private fun checkAuthStatus() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val sessionPrefs = getSharedPreferences("User_session", MODE_PRIVATE)
+            val savedUserId = sessionPrefs.getInt("userId", -1)
+            val savedEmployeeNumber = sessionPrefs.getString("employeeNumber", "Unknown")
+            val savedFirstName = sessionPrefs.getString("firstName", "Unknown")
+            val savedThirdName = sessionPrefs.getString("thirdName", "")
+
+            val isAuthenticated = if (savedUserId != -1) {
+                val userDao = db.userDao()
+                val user = userDao.getUserById(savedUserId)
+                user != null
+            } else {
+                false
+            }
+
+            withContext(Dispatchers.Main) {
+                Log.d("AuthCheck", "Authentication check - UserID: $savedUserId, " +
+                        "EmployeeNumber: $savedEmployeeNumber, " +
+                        "Name: $savedFirstName $savedThirdName, " +
+                        "Authenticated: $isAuthenticated")
+                if (!isAuthenticated) {
+                    navController.navigate(R.id.authFragment)
+                } else {
+                    navController.navigate(R.id.StartFragment)
+                }
+                viewModel.setLoading(false) // Устанавливаем false только после навигации
+            }
+        }
     }
 
     @Suppress("DEPRECATION")

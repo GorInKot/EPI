@@ -9,6 +9,9 @@ import java.util.Locale
 @Entity(tableName = "reports")
 data class Report(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    // Имя сотрудника
+    val userName: String = " ",
+
     val date: String = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()),
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
 
