@@ -183,13 +183,6 @@
         <item name="rippleColor">@color/color_grey</item>
     </style>
 
-    <style name="CustomTimePickerTheme" parent="Theme.Material3.Dark">
-        <item name="android:textColor">@color/color_white</item> <!-- #FFFFFF -->
-        <item name="android:background">@color/color_black_light</item> <!-- #3A3A3A -->
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="TableHeader">
         <item name="backgroundTint">@color/neutral_grey</item>
         <item name="background">@color/neutral_grey</item>
@@ -225,7 +218,7 @@
         <item name="materialButtonStyle">@style/PickerButton</item>
         <!-- Цвет выбранных элементов -->
         <item name="colorPrimary">@color/color_orange</item>
-        <item name="colorOnPrimary">@color/color_grey</item>
+        <item name="colorOnPrimary">@color/color_orange</item>
         <!-- Стиль для текстового поля -->
         <item name="editTextStyle">@style/CustomTextInput</item>
 
@@ -269,8 +262,8 @@
 
     <style name="PickerButton" parent="Widget.Material3.Button">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/color_grey</item>
-        <item name="android:backgroundTint">@color/color_orange</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:backgroundTint">@color/color_black</item>
         <item name="strokeColor">@color/color_grey</item>
         <item name="strokeWidth">2dp</item>
         <item name="cornerRadius">24dp</item>
