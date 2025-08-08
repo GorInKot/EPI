@@ -89,7 +89,7 @@ class ReportsFragment : Fragment() {
                             obj = report.obj,
                             children = listOf(
                                 ChildItem(
-                                    workType = report.workType,
+                                    workType = report.contract,
                                     customer = report.customer,
                                     contractor = report.contractor,
                                     transportCustomer = report.executor
@@ -243,7 +243,7 @@ class ReportsFragment : Fragment() {
     private suspend fun exportToCsv(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
         val separator = ";"
         val csvHeader = listOf(
-            "ИД", "Дата", "Время", "Режим работы", "Заказчик", "Объект", "Участок",
+            "ИД", "Дата", "Время", "Договор СК", "Заказчик", "Объект", "Участок",
             "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)",
             "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
             "Отсутствие транспорта", "Исполнитель", "Дата начала", "Время начала",
@@ -270,7 +270,7 @@ class ReportsFragment : Fragment() {
                             report.id.toString(),
                             report.date,
                             report.time,
-                            report.workType,
+                            report.contract,
                             report.customer,
                             report.obj,
                             report.plot,
@@ -285,7 +285,7 @@ class ReportsFragment : Fragment() {
                             report.startDate,
                             report.startTime,
                             report.stateNumber,
-                            report.contract,
+//                            report.contract,
                             report.contractTransport,
                             report.endDate,
                             report.endTime,
@@ -324,7 +324,7 @@ class ReportsFragment : Fragment() {
                             report.id.toString(),
                             report.date,
                             report.time,
-                            report.workType,
+                            report.contract,
                             report.customer,
                             report.obj,
                             report.plot,
@@ -339,7 +339,7 @@ class ReportsFragment : Fragment() {
                             report.startDate,
                             report.startTime,
                             report.stateNumber,
-                            report.contract,
+//                            report.contract,
                             report.contractTransport,
                             report.endDate,
                             report.endTime,
@@ -373,7 +373,7 @@ class ReportsFragment : Fragment() {
 
         // Заголовки
         val headers = listOf(
-            "ИД", "Дата", "Время", "Режим работы", "Заказчик", "Объект", "Участок",
+            "ИД", "Дата", "Время", "Договор СК", "Заказчик", "Объект", "Участок",
             "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)",
             "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
             "Отсутствие транспорта", "Исполнитель", "Дата начала", "Время начала",
@@ -395,7 +395,7 @@ class ReportsFragment : Fragment() {
                 report.id.toString(),
                 report.date,
                 report.time,
-                report.workType,
+                report.contract,
                 report.customer,
                 report.obj,
                 report.plot,
@@ -410,7 +410,7 @@ class ReportsFragment : Fragment() {
                 report.startDate,
                 report.startTime,
                 report.stateNumber,
-                report.contract,
+//                report.contract,
                 report.contractTransport,
                 report.endDate,
                 report.endTime,

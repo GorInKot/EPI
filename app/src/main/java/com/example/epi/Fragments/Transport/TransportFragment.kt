@@ -123,7 +123,7 @@ class TransportFragment : Fragment() {
                 sharedViewModel.setTransportContractCustomer(s.toString())
             }
         }
-        binding.textInputEditTextContract.doAfterTextChanged { sharedViewModel.setTransportContractCustomer(it.toString()) }
+//        binding.textInputEditTextContract.doAfterTextChanged { sharedViewModel.setTransportContractCustomer(it.toString()) }
 
         executorNameTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -475,7 +475,7 @@ class TransportFragment : Fragment() {
 
     private fun restoreInputs() {
         // Устанавливаем значения из SharedViewModel
-        binding.textInputEditTextContract.setText(sharedViewModel.transportContractCustomer.value)
+//        binding.textInputEditTextContract.setText(sharedViewModel.transportContractCustomer.value)
         binding.textInputEditTextExecutor.setText(sharedViewModel.transportExecutorName.value)
         binding.textInputEditTextContractTransport.setText(sharedViewModel.transportContractTransport.value)
         binding.textInputEditTextStateNumber.setText(sharedViewModel.transportStateNumber.value)
@@ -502,7 +502,7 @@ class TransportFragment : Fragment() {
 
     private fun validateInputs(): Boolean {
         val isTransportAbsent = binding.chBoxMCustomer.isChecked
-        val contract = binding.textInputEditTextContract.text?.toString()?.trim()
+//        val contract = binding.textInputEditTextContract.text?.toString()?.trim()
         val executor = binding.textInputEditTextExecutor.text?.toString()?.trim()
         val contractTransport = binding.textInputEditTextContractTransport.text?.toString()?.trim()
         val dateStart = binding.textInputEditTextStartDate.text?.toString()?.trim()
@@ -513,7 +513,7 @@ class TransportFragment : Fragment() {
 
         val errors = sharedViewModel.validateTransportInputs(
             isTransportAbsent = isTransportAbsent,
-            contractCustomer = contract,
+//            contractCustomer = "contract",
             executorName = executor,
             contractTransport = contractTransport,
             stateNumber = number,
@@ -534,7 +534,7 @@ class TransportFragment : Fragment() {
 
         // Очистка ошибок
         clearErrors(
-            binding.textInputLayoutContract,
+//            binding.textInputLayoutContract,
             binding.textInputLayoutExecutor,
             binding.textInputLayoutContractTransport,
             binding.textInputLayoutStartDate,
@@ -545,7 +545,7 @@ class TransportFragment : Fragment() {
         )
 
         // Установка ошибок
-        setError(binding.textInputLayoutContract, errors["contractCustomer"])
+//        setError(binding.textInputLayoutContract, errors["contractCustomer"])
         setError(binding.textInputLayoutExecutor, errors["executorName"])
         setError(binding.textInputLayoutContractTransport, errors["contractTransport"])
         setError(binding.textInputLayoutStartDate, errors["startDate"])
@@ -567,7 +567,7 @@ class TransportFragment : Fragment() {
     }
 
     private fun setFieldsEnabled(enabled: Boolean) {
-        binding.textInputEditTextContract.isEnabled = enabled
+//        binding.textInputEditTextContract.isEnabled = enabled
         binding.textInputEditTextExecutor.isEnabled = enabled
         binding.textInputEditTextContractTransport.isEnabled = enabled
         binding.textInputEditTextStateNumber.isEnabled = enabled
@@ -583,7 +583,7 @@ class TransportFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.textInputEditTextContract.removeTextChangedListener(contractCustomerTextWatcher)
+//        binding.textInputEditTextContract.removeTextChangedListener(contractCustomerTextWatcher)
         binding.textInputEditTextExecutor.removeTextChangedListener(executorNameTextWatcher)
         binding.textInputEditTextContractTransport.removeTextChangedListener(contractTransportTextWatcher)
         binding.textInputEditTextStateNumber.removeTextChangedListener(stateNumberTextWatcher)

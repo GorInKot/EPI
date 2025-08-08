@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.contracts.contract
 
 class SharedViewModel(
     private val reportRepository: ReportRepository,
@@ -78,6 +79,9 @@ class SharedViewModel(
     private val _plotText = MutableLiveData<String>()
     val plotText: LiveData<String> get() = _plotText
 
+    private val _contractText = MutableLiveData<String>()
+    val contractText: LiveData<String> get() = _contractText
+
     private val _repSSKGpText = MutableLiveData<String>()
     val repSSKGpText: LiveData<String> get() = _repSSKGpText
 
@@ -90,8 +94,8 @@ class SharedViewModel(
     private val _repSSKSubText = MutableLiveData<String>()
     val repSSKSubText: LiveData<String> get() = _repSSKSubText
 
-    private val _selectedWorkType = MutableLiveData<String>()
-    val selectedWorkType: LiveData<String> get() = _selectedWorkType
+//    private val _selectedWorkType = MutableLiveData<String>()
+//    val selectedWorkType: LiveData<String> get() = _selectedWorkType
 
     private val _selectedCustomer = MutableLiveData<String>()
     val selectedCustomer: LiveData<String> get() = _selectedCustomer
@@ -110,7 +114,7 @@ class SharedViewModel(
 
     // Списки выбора
     companion object {
-        val workTypes = listOf("Вахта", "Стандартный", "Суммированный")
+//        val workTypes = listOf("Вахта", "Стандартный", "Суммированный")
         val customers = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
         val objects = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
         val contractors = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
@@ -241,15 +245,14 @@ class SharedViewModel(
     fun setSubContractorText(value: String) { _subContractorText.value = value }
     fun setRepSubcontractorText(value: String) { _repSubcontractorText.value = value }
     fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
-
-    fun setSelectedWorkType(value: String) { _selectedWorkType.value = value }
+    fun setContractText(value: String) { _contractText.value = value }
     fun setSelectedCustomer(value: String) { _selectedCustomer.value = value }
     fun setSelectedObject(value: String) { _selectedObject.value = value }
     fun setSelectedContractor(value: String) { _selectedContractor.value = value }
     fun setSelectedSubContractor(value: String) { _selectedSubContractor.value = value }
 
     fun validateArrangementInputs(
-        workType: String?,
+        contract: String?,
         customer: String?,
         manualCustomer: String?,
         objectId: String?,
@@ -265,7 +268,7 @@ class SharedViewModel(
         repSSKSubText: String?
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
-        if (workType.isNullOrBlank()) errors["workType"] = "Укажите режим работы"
+        if (contract.isNullOrBlank()) errors["contract"] = "Укажите Договор СК"
         if (customer.isNullOrBlank() && manualCustomer.isNullOrBlank()) errors["customer"] = "Укажите заказчика"
         if (objectId.isNullOrBlank() && manualObject.isNullOrBlank()) errors["object"] = "Укажите объект"
         if (plotText.isNullOrBlank()) errors["plotText"] = "Укажите участок"
@@ -284,7 +287,7 @@ class SharedViewModel(
             Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    workType = _selectedWorkType.value,
+                    contract = _contractText.value,
                     customer = _selectedCustomer.value,
                     manualCustomer = _manualCustomer.value,
                     objectId = _selectedObject.value,
@@ -312,7 +315,7 @@ class SharedViewModel(
 //                    userName = user?.let { "${it.firstName} ${it.secondName} ${it.thirdName}" } ?: "Неизвестный пользователь",
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
-                    workType = _selectedWorkType.value.orEmpty(),
+                    contract = _contractText.value.orEmpty(),
                     customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
                     obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
                     plot = _plotText.value.orEmpty(),
@@ -323,7 +326,7 @@ class SharedViewModel(
                     repSubContractor = _repSubcontractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
                     // Поля Transport, Control и FixVolumes остаются пустыми
-                    contract = "",
+//                    contract = "",
                     executor = "",
                     contractTransport = "",
                     stateNumber = "",
@@ -368,7 +371,7 @@ class SharedViewModel(
             Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    workType = _selectedWorkType.value,
+                    contract = _contractText.value,
                     customer = _selectedCustomer.value,
                     manualCustomer = _manualCustomer.value,
                     objectId = _selectedObject.value,
@@ -393,7 +396,7 @@ class SharedViewModel(
 
                 val transportErrors = validateTransportInputs(
                     isTransportAbsent = _isTransportAbsent.value ?: false,
-                    contractCustomer = _transportContractCustomer.value,
+//                    contractCustomer = _transportContractCustomer.value,
                     executorName = _transportExecutorName.value,
                     contractTransport = _transportContractTransport.value,
                     stateNumber = _transportStateNumber.value,
@@ -426,7 +429,7 @@ class SharedViewModel(
                 val report = Report(
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
-                    workType = _selectedWorkType.value.orEmpty(),
+                    contract = _contractText.value.orEmpty(),
                     customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
                     obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
                     plot = _plotText.value.orEmpty(),
@@ -436,7 +439,7 @@ class SharedViewModel(
                     subContractor = _subContractorText.value.orEmpty(),
                     repSubContractor = _repSubcontractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
-                    contract = _transportContractCustomer.value.orEmpty(),
+//                    contract = _transportContractCustomer.value.orEmpty(),
                     executor = _transportExecutorName.value.orEmpty(),
                     contractTransport = _transportContractTransport.value.orEmpty(),
                     stateNumber = _transportStateNumber.value.orEmpty(),
@@ -500,7 +503,7 @@ class SharedViewModel(
 
     fun validateTransportInputs(
         isTransportAbsent: Boolean,
-        contractCustomer: String?,
+//        contractCustomer: String?,
         executorName: String?,
         contractTransport: String?,
         stateNumber: String?,
@@ -511,9 +514,9 @@ class SharedViewModel(
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (isTransportAbsent) return errors
-        if (contractCustomer.isNullOrBlank()) {
-            errors["contractCustomer"] = "Укажите договор СК"
-        }
+//        if (contractCustomer.isNullOrBlank()) {
+//            errors["contractCustomer"] = "Укажите договор СК"
+//        }
         if (executorName.isNullOrBlank()) {
             errors["executorName"] = "Укажите исполнителя по транспорту"
         }
@@ -562,7 +565,7 @@ class SharedViewModel(
             try {
                 val errors = validateTransportInputs(
                     isTransportAbsent = _isTransportAbsent.value ?: false,
-                    contractCustomer = _transportContractCustomer.value,
+//                    contractCustomer = _transportContractCustomer.value,
                     executorName = _transportExecutorName.value,
                     contractTransport = _transportContractTransport.value,
                     stateNumber = _transportStateNumber.value,
@@ -587,7 +590,7 @@ class SharedViewModel(
                     return@withContext 0L
                 }
                 val updatedReport = existingReport.copy(
-                    contract = if (_isTransportAbsent.value == true) "" else _transportContractCustomer.value.orEmpty(),
+//                    contract = if (_isTransportAbsent.value == true) "" else _transportContractCustomer.value.orEmpty(),
                     executor = if (_isTransportAbsent.value == true) "" else _transportExecutorName.value.orEmpty(),
                     contractTransport = if (_isTransportAbsent.value == true) "" else _transportContractTransport.value.orEmpty(),
                     stateNumber = if (_isTransportAbsent.value == true) "" else _transportStateNumber.value.orEmpty(),
@@ -893,7 +896,7 @@ class SharedViewModel(
         return """
         Дата: ${_currentDate.value}
         Время: ${_currentTime.value}
-        Тип работ: ${_selectedWorkType.value}
+        Договор СК: ${_contractText.value}
         Заказчик: ${if (_isManualCustomer.value == true) _manualCustomer.value else _selectedCustomer.value}
         Объект: ${if (_isManualObject.value == true) _manualObject.value else _selectedObject.value}
         Участок: ${_plotText.value}
@@ -903,21 +906,21 @@ class SharedViewModel(
         Текст субподрядчика: ${_subContractorText.value}
         Представитель субподрядчика: ${_repSubcontractorText.value}
         Представитель ССК субподрядчика: ${_repSSKSubText.value}
-        Договор транспорта: ${_transportContractCustomer.value}
+
+//        Договор транспорта: ${_transportContractCustomer.value}
         Исполнитель по транспорту: ${_transportExecutorName.value}
-        Транспорт по договору: ${_transportContractTransport.value}
-        
+        Транспорт по договору: ${_transportContractTransport.value}        
         Госномер транспорта: ${_transportStateNumber.value}
         Дата начала поездки: ${_transportStartDate.value}
         Время начала поездки: ${_transportStartTime.value}
         Дата окончания поездки: ${_transportEndDate.value}
         Время окончания поездки: ${_transportEndTime.value}
-        Номер заказа: ${_orderNumber.value}
+        Номер предписания: ${_orderNumber.value}
         Нарушение: ${_isViolation.value}
         
-        Контрольные строки: ${gson.toJson(_controlRows.value)}
+        Полевой контроль: ${gson.toJson(_controlRows.value)}
         
-        Строки фиксации: ${gson.toJson(_fixRows.value)}
+        Фиксация объема: ${gson.toJson(_fixRows.value)}
     """.trimIndent()
     }
 
@@ -938,7 +941,7 @@ class SharedViewModel(
             try {
                 val report = reportRepository.getLastUnsentReport()
                 report?.let {
-                    _selectedWorkType.value = it.workType
+                    _contractText.value = it.contract
                     if (it.customer in customers) {
                         _selectedCustomer.value = it.customer
                         _isManualCustomer.value = false
@@ -985,7 +988,7 @@ class SharedViewModel(
     }
 
     fun clearAllData() {
-        _selectedWorkType.value = ""
+        _contractText.value = ""
         _selectedCustomer.value = ""
         _selectedObject.value = ""
         _selectedContractor.value = ""

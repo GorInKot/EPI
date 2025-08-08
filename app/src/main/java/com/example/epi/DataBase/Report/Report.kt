@@ -16,7 +16,7 @@ data class Report(
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
 
     // Расстановка
-    val workType: String = "",
+    val contract: String = "",
     val customer: String = "",
     val obj: String = "",
     val plot: String = "",
@@ -33,7 +33,6 @@ data class Report(
     val startDate: String = "",
     val startTime: String = "",
     val stateNumber: String = "",
-    val contract: String = "",
     val contractTransport: String = "",
     val endDate: String = "",
     val endTime: String = "",

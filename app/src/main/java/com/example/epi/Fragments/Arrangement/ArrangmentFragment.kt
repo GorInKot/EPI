@@ -39,7 +39,7 @@ class ArrangementFragment : Fragment() {
             (requireActivity().application as App).userRepository
         )
     }
-
+    private lateinit var contractTextWatcher: TextWatcher
     private lateinit var plotTextWatcher: TextWatcher
     private lateinit var repSSKGpTextWatcher: TextWatcher
     private lateinit var subContractorTextWatcher: TextWatcher
@@ -79,23 +79,24 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun setupLeftBlock() {
-        // Режим работы
-        val workTypeAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            SharedViewModel.workTypes
-        )
-        binding.autoCompleteWorkType.setAdapter(workTypeAdapter)
-        binding.autoCompleteWorkType.inputType = InputType.TYPE_NULL
-        binding.autoCompleteWorkType.keyListener = null
-        binding.autoCompleteWorkType.setOnTouchListener { _, _ ->
-            binding.autoCompleteWorkType.showDropDown()
-            false
+
+        // Договор СК
+        contractTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextContract.selectionStart}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextContract.selectionStart}")
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextContract.selectionStart}")
+                sharedViewModel.setContractText(s.toString())
+            }
         }
-        binding.autoCompleteWorkType.setOnItemClickListener { parent, _, position, _ ->
-            val selectedWorkType = parent.getItemAtPosition(position).toString()
-            sharedViewModel.setSelectedWorkType(selectedWorkType)
-        }
+        binding.textInputEditTextContract.addTextChangedListener(contractTextWatcher)
+
 
         // Заказчик
         val customerListAdapter = ArrayAdapter(
@@ -332,7 +333,7 @@ class ArrangementFragment : Fragment() {
             if (validateInputs()) {
                 Log.d("Tagg", "Валидация прошла")
                 // Логирование значений
-                Log.d("Tagg", "WorkType: ${sharedViewModel.selectedWorkType.value}")
+                Log.d("Tagg", "Contract: ${sharedViewModel.contractText.value}")
                 Log.d("Tagg", "Customer: ${sharedViewModel.selectedCustomer.value}, ManualCustomer: ${sharedViewModel.manualCustomer.value}")
                 Log.d("Tagg", "Object: ${sharedViewModel.selectedObject.value}, ManualObject: ${sharedViewModel.manualObject.value}")
                 Log.d("Tagg", "Plot: ${sharedViewModel.plotText.value}")
@@ -403,7 +404,7 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun validateInputs(): Boolean {
-        val workTypes = binding.autoCompleteWorkType.text?.toString()?.trim()
+        val contract = binding.textInputEditTextContract.text?.toString()?.trim()
         val customers = binding.autoCompleteCustomer.text?.toString()?.trim()
         val manualCustomer = binding.hiddenTextInputEditTextManualCustomer.text?.toString()?.trim()
         val objects = binding.autoCompleteObject.text?.toString()?.trim()
@@ -419,7 +420,7 @@ class ArrangementFragment : Fragment() {
         val repSSKSubText = binding.textInputEditTextRepSSKSub.text?.toString()?.trim()
 
         val errors = sharedViewModel.validateArrangementInputs(
-            workTypes, customers, manualCustomer, objects, manualObject, plotText,
+            contract, customers, manualCustomer, objects, manualObject, plotText,
             contractors, manualContractor, subContractors, manualSubContractor,
             repSSKGpText, subContractorText, repSubcontractorText, repSSKSubText
         )
@@ -433,7 +434,7 @@ class ArrangementFragment : Fragment() {
         }
 
         clearErrors(
-            binding.textInputLayoutAutoWorkType, binding.textInputLayoutAutoCustomer,
+            binding.textInputLayoutContract, binding.textInputLayoutAutoCustomer,
             binding.hiddenTextInputLayoutManualCustomer, binding.textInputLayoutAutoObject,
             binding.hiddenTextInputLayoutManualObject, binding.textInputLayoutPlot,
             binding.textInputLayoutAutoContractor, binding.hiddenTextInputLayoutManualContractor,
@@ -442,7 +443,7 @@ class ArrangementFragment : Fragment() {
             binding.textInputLayoutRepSubContractor, binding.textInputLayoutRepSSKSub
         )
 
-        setError(binding.textInputLayoutAutoWorkType, errors["workTypes"])
+//        setError(binding.textInputLayoutAutoWorkType, errors["workTypes"])
         setConditionalDualError(
             autoFieldVisible = binding.autoCompleteCustomer.isShown,
             autoLayout = binding.textInputLayoutAutoCustomer,
@@ -512,12 +513,12 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun clearUiFields() {
+        binding.textInputEditTextContract.setText("")
         binding.textInputEditTextPlot.setText("")
         binding.textInputEditTextRepSSKGp.setText("")
         binding.textInputEditTextSubcontractor.setText("")
         binding.textInputEditTextRepSubContractor.setText("")
         binding.textInputEditTextRepSSKSub.setText("")
-        binding.autoCompleteWorkType.setText("")
         binding.autoCompleteCustomer.setText("")
         binding.autoCompleteObject.setText("")
         binding.autoCompleteContractor.setText("")
@@ -583,12 +584,12 @@ class ArrangementFragment : Fragment() {
                 binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
             }
         }
-        sharedViewModel.selectedWorkType.observe(viewLifecycleOwner) { workType ->
-            val currentText = binding.autoCompleteWorkType.text?.toString() ?: ""
-            if (currentText != workType) {
-                binding.autoCompleteWorkType.setText(workType ?: "", false)
-            }
-        }
+//        sharedViewModel.selectedWorkType.observe(viewLifecycleOwner) { workType ->
+//            val currentText = binding.autoCompleteWorkType.text?.toString() ?: ""
+//            if (currentText != workType) {
+//                binding.autoCompleteWorkType.setText(workType ?: "", false)
+//            }
+//        }
         sharedViewModel.selectedCustomer.observe(viewLifecycleOwner) { customer ->
             val currentText = binding.autoCompleteCustomer.text?.toString() ?: ""
             if (currentText != customer) {
