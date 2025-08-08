@@ -89,12 +89,12 @@ class MainActivity : AppCompatActivity() {
     private fun checkAuthStatus() {
         CoroutineScope(Dispatchers.IO).launch {
             val sessionPrefs = getSharedPreferences("User_session", MODE_PRIVATE)
-            val savedUserId = sessionPrefs.getInt("userId", -1)
+            val savedUserId = sessionPrefs.getLong("userId", -1)
             val savedEmployeeNumber = sessionPrefs.getString("employeeNumber", "Unknown")
             val savedFirstName = sessionPrefs.getString("firstName", "Unknown")
             val savedThirdName = sessionPrefs.getString("thirdName", "")
 
-            val isAuthenticated = if (savedUserId != -1) {
+            val isAuthenticated = if (savedUserId != -1L) {
                 val userDao = db.userDao()
                 val user = userDao.getUserById(savedUserId)
                 user != null

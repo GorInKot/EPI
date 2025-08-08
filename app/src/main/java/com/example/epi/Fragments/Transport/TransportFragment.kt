@@ -67,20 +67,20 @@ class TransportFragment : Fragment() {
         restoreInputs()
 
         // Загрузка данных пользователя
-        sharedViewModel.loadCurrentUser(requireContext())
+//        sharedViewModel.loadCurrentUser(requireContext())
 
         // Наблюдаем за данными пользователя
-        sharedViewModel.currentUser.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                val specialistName = "Специалист СК: ${user.firstName} ${user.secondName}" +
-                        (user.thirdName?.let { it }?: "")
-                binding.tvSpecialist.text = specialistName
-                Log.d("Tagg", "Set tvSpecialist to $specialistName")
-            } else {
-                binding.tvSpecialist.text = "Специалист не указан"
-                Log.d("Tagg", "No user data available")
-            }
-        }
+//        sharedViewModel.currentUser.observe(viewLifecycleOwner) { user ->
+//            if (user != null) {
+//                val specialistName = "Специалист СК: ${user.firstName} ${user.secondName}" +
+//                        (user.thirdName?.let { it }?: "")
+//                binding.tvSpecialist.text = specialistName
+//                Log.d("Tagg", "Set tvSpecialist to $specialistName")
+//            } else {
+//                binding.tvSpecialist.text = "Специалист не указан"
+//                Log.d("Tagg", "No user data available")
+//            }
+//        }
     }
 
     private fun setupObservers() {

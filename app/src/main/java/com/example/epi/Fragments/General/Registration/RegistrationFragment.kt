@@ -10,23 +10,23 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.App
-import com.example.epi.DataBase.User.User
 import com.example.epi.R
-import com.example.epi.ViewModel.GeneralViewModel
+import com.example.epi.SharedViewModel
+import com.example.epi.ViewModel.SharedViewModelFactory
 import com.example.epi.databinding.FragmentRegistrationBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.mindrot.jbcrypt.BCrypt
 
 class RegistrationFragment : Fragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: GeneralViewModel by viewModels()
-    private val userRepository by lazy { (requireContext().applicationContext as App).userRepository }
+    private val viewModel: SharedViewModel by activityViewModels {
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
+    }
     private val countryCodePrefix = "+7"
     private val maxPhoneLength = 18
     private val maxNumberLength = 4
@@ -64,6 +64,7 @@ class RegistrationFragment : Fragment() {
     ): View {
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
         buttons()
+//        observeAuthResult()
         return binding.root
     }
 
@@ -167,6 +168,42 @@ class RegistrationFragment : Fragment() {
         }
     }
 
+//    private fun observeAuthResult() {
+//        viewModel.authResult.observe(viewLifecycleOwner) { result ->
+//            when (result) {
+//                is SharedViewModel.AuthResult.RegistrationSuccess -> {
+//                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+//                    binding.textInputEditTextSecondName.text?.clear()
+//                    binding.textInputEditTextFirstName.text?.clear()
+//                    binding.textInputEditTextThirdName.text?.clear()
+//                    binding.textInputEditTextNumber.text?.clear()
+//                    binding.textInputEditTextPhone.text?.clear()
+//                    binding.autoCompleteTextViewBranch.text?.clear()
+//                    binding.autoCompleteTextViewPU.text?.clear()
+//                    binding.textInputEditTextPassword.text?.clear()
+//                    binding.textInputEditTextConfirmPassword.text?.clear()
+//                    findNavController().navigate(R.id.authFragment)
+//                }
+//                is SharedViewModel.AuthResult.RegistrationError -> {
+//                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+//                    if (result.message.contains("Табельный номер уже занят")) {
+//                        binding.textInputLayoutNumber.isErrorEnabled = true
+//                        binding.textInputLayoutNumber.error = result.message
+//                    } else {
+//                        // Общая ошибка, можно показать в любом поле или через диалог
+//                        binding.textInputLayoutPassword.isErrorEnabled = true
+//                        binding.textInputLayoutPassword.error = result.message
+//                    }
+//                }
+//                is SharedViewModel.AuthResult.Success,
+//                is SharedViewModel.AuthResult.Error,
+//                is SharedViewModel.AuthResult.Idle -> {
+//                    // Игнорируем состояния, связанные с авторизацией или сбросом
+//                }
+//            }
+//        }
+//    }
+
     private fun buttons() {
         binding.btnMainMenu.setOnClickListener {
             findNavController().navigate(R.id.StartFragment)
@@ -174,100 +211,64 @@ class RegistrationFragment : Fragment() {
         binding.btnAuth.setOnClickListener {
             findNavController().navigate(R.id.authFragment)
         }
-        binding.btnRegister.setOnClickListener {
-            if (validateInputs()) {
-                registerUser()
-            }
-        }
+//        binding.btnRegister.setOnClickListener {
+//            if (validateInputs()) {
+//                registerUser()
+//            }
+//        }
     }
 
-    private fun validateInputs(): Boolean {
-        val secondName = binding.textInputEditTextSecondName.text?.toString()?.trim()
-        val firstName = binding.textInputEditTextFirstName.text?.toString()?.trim()
-        val thirdName = binding.textInputEditTextThirdName.text?.toString()?.trim()
-        val number = binding.textInputEditTextNumber.text?.toString()?.trim()
-        val phone = binding.textInputEditTextPhone.text?.toString()?.trim()
-        val branch = binding.autoCompleteTextViewBranch.text?.toString()?.trim()
-        val pu = binding.autoCompleteTextViewPU.text?.toString()?.trim()
-        val password = binding.textInputEditTextPassword.text?.toString()?.trim()
-        val confirmPassword = binding.textInputEditTextConfirmPassword.text?.toString()?.trim()
-
-        // Валидация через ViewModel
-        val errors = viewModel.validateRegistrationInputs(
-            secondName, firstName, thirdName, number, phone, branch, pu, password, confirmPassword
-        )
-
-        binding.textInputLayoutSecondName.isErrorEnabled = !errors["secondName"].isNullOrBlank()
-        binding.textInputLayoutSecondName.error = errors["secondName"]
-        binding.textInputLayoutFirstName.isErrorEnabled = !errors["firstName"].isNullOrBlank()
-        binding.textInputLayoutFirstName.error = errors["firstName"]
-        binding.textInputLayoutThirdName.isErrorEnabled = !errors["thirdName"].isNullOrBlank()
-        binding.textInputLayoutThirdName.error = errors["thirdName"]
-        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
-        binding.textInputLayoutNumber.error = errors["number"]
-        binding.textInputLayoutPhone.isErrorEnabled = !errors["phone"].isNullOrBlank()
-        binding.textInputLayoutPhone.error = errors["phone"]
-        binding.textInputLayoutBranch.isErrorEnabled = !errors["branch"].isNullOrBlank()
-        binding.textInputLayoutBranch.error = errors["branch"]
-        binding.textInputLayoutPU.isErrorEnabled = !errors["pu"].isNullOrBlank()
-        binding.textInputLayoutPU.error = errors["pu"]
-        binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
-        binding.textInputLayoutPassword.error = errors["password"]
-        binding.textInputLayoutConfirmPassword.isErrorEnabled = !errors["confirmPassword"].isNullOrBlank()
-        binding.textInputLayoutConfirmPassword.error = errors["confirmPassword"]
-
-        return errors.isEmpty()
-    }
-
-    private fun registerUser() {
-        val user = User(
-            id = 0,
-            secondName = binding.textInputEditTextSecondName.text.toString().trim(),
-            firstName = binding.textInputEditTextFirstName.text.toString().trim(),
-            thirdName = binding.textInputEditTextThirdName.text.toString().trim().takeIf { it.isNotBlank() },
-            employeeNumber = binding.textInputEditTextNumber.text.toString().trim(),
-            phone = binding.textInputEditTextPhone.text.toString().trim(),
-            branch = binding.autoCompleteTextViewBranch.text.toString().trim(),
-            pu = binding.autoCompleteTextViewPU.text.toString().trim(),
-            password = BCrypt.hashpw(binding.textInputEditTextPassword.text.toString().trim(), BCrypt.gensalt())
-        )
-            Log.d("Tagg",
-                "secondName: ${user.secondName}, firstName: ${user.firstName}, thirdName: ${user.thirdName}," +
-                        " employeeNumber: ${user.employeeNumber}, phone: ${user.phone}, branch: ${user.branch}," +
-                        " pu: ${user.pu}, password: ${user.password} ")
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                if (userRepository.isEmployeeNumberTaken(user.employeeNumber)) {
-                    requireActivity().runOnUiThread {
-                        binding.textInputLayoutNumber.isErrorEnabled = true
-                        binding.textInputLayoutNumber.error = "Табельный номер уже занят"
-                    }
-                } else {
-                    userRepository.insertUser(user)
-                    requireActivity().runOnUiThread {
-                        Toast.makeText(requireContext(), "Регистрация успешна", Toast.LENGTH_SHORT).show()
-                        // Очистка полей после успешной регистрации
-                        binding.textInputEditTextSecondName.text?.clear()
-                        binding.textInputEditTextFirstName.text?.clear()
-                        binding.textInputEditTextThirdName.text?.clear()
-                        binding.textInputEditTextNumber.text?.clear()
-                        binding.textInputEditTextPhone.text?.clear()
-                        binding.autoCompleteTextViewBranch.text?.clear()
-                        binding.autoCompleteTextViewPU.text?.clear()
-                        binding.textInputEditTextPassword.text?.clear()
-                        binding.textInputEditTextConfirmPassword.text?.clear()
-                        findNavController().navigate(R.id.authFragment)
-                    }
-                }
-            } catch (e: Exception) {
-                requireActivity().runOnUiThread {
-                    Log.d("Tagg", "Ошибка регистрации: ${e.message}")
-                    Toast.makeText(requireContext(), "Ошибка регистрации: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
+//    private fun validateInputs(): Boolean {
+//        val secondName = binding.textInputEditTextSecondName.text?.toString()?.trim()
+//        val firstName = binding.textInputEditTextFirstName.text?.toString()?.trim()
+//        val thirdName = binding.textInputEditTextThirdName.text?.toString()?.trim()
+//        val number = binding.textInputEditTextNumber.text?.toString()?.trim()
+//        val phone = binding.textInputEditTextPhone.text?.toString()?.trim()
+//        val branch = binding.autoCompleteTextViewBranch.text?.toString()?.trim()
+//        val pu = binding.autoCompleteTextViewPU.text?.toString()?.trim()
+//        val password = binding.textInputEditTextPassword.text?.toString()?.trim()
+//        val confirmPassword = binding.textInputEditTextConfirmPassword.text?.toString()?.trim()
+//
+//        // Валидация через ViewModel
+//        val errors = viewModel.validateRegistrationInputs(
+//            secondName, firstName, thirdName, number, phone, branch, pu, password, confirmPassword
+//        )
+//
+//        binding.textInputLayoutSecondName.isErrorEnabled = !errors["secondName"].isNullOrBlank()
+//        binding.textInputLayoutSecondName.error = errors["secondName"]
+//        binding.textInputLayoutFirstName.isErrorEnabled = !errors["firstName"].isNullOrBlank()
+//        binding.textInputLayoutFirstName.error = errors["firstName"]
+//        binding.textInputLayoutThirdName.isErrorEnabled = !errors["thirdName"].isNullOrBlank()
+//        binding.textInputLayoutThirdName.error = errors["thirdName"]
+//        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
+//        binding.textInputLayoutNumber.error = errors["number"]
+//        binding.textInputLayoutPhone.isErrorEnabled = !errors["phone"].isNullOrBlank()
+//        binding.textInputLayoutPhone.error = errors["phone"]
+//        binding.textInputLayoutBranch.isErrorEnabled = !errors["branch"].isNullOrBlank()
+//        binding.textInputLayoutBranch.error = errors["branch"]
+//        binding.textInputLayoutPU.isErrorEnabled = !errors["pu"].isNullOrBlank()
+//        binding.textInputLayoutPU.error = errors["pu"]
+//        binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
+//        binding.textInputLayoutPassword.error = errors["password"]
+//        binding.textInputLayoutConfirmPassword.isErrorEnabled = !errors["confirmPassword"].isNullOrBlank()
+//        binding.textInputLayoutConfirmPassword.error = errors["confirmPassword"]
+//
+//        return errors.isEmpty()
+//    }
+//
+//    private fun registerUser() {
+//        val secondName = binding.textInputEditTextSecondName.text.toString().trim()
+//        val firstName = binding.textInputEditTextFirstName.text.toString().trim()
+//        val thirdName = binding.textInputEditTextThirdName.text.toString().trim().takeIf { it.isNotBlank() }
+//        val number = binding.textInputEditTextNumber.text.toString().trim()
+//        val phone = binding.textInputEditTextPhone.text.toString().trim()
+//        val branch = binding.autoCompleteTextViewBranch.text.toString().trim()
+//        val pu = binding.autoCompleteTextViewPU.text.toString().trim()
+//        val password = binding.textInputEditTextPassword.text.toString().trim()
+//
+//        Log.d("Tagg", "Attempting registration with employeeNumber: $number")
+//        viewModel.registerUser(secondName, firstName, thirdName, number, phone, branch, pu, password)
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

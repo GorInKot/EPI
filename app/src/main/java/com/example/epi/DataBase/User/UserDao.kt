@@ -20,7 +20,7 @@ interface UserDao {
     suspend fun isEmployeeNumberTaken(employeeNumber: String): Boolean
 
     @Query("SELECT * FROM users WHERE id = :id")
-    suspend fun getUserById(id: Int): User?
+    suspend fun getUserById(id: Long): User?
 
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    suspend fun insertUser(user: User)

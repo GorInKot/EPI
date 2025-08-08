@@ -18,10 +18,12 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.mindrot.jbcrypt.BCrypt
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -305,8 +307,9 @@ class SharedViewModel(
                     return@withContext 0L
                 }
 
+//                val user = _currentUser.value
                 val report = Report(
-                    userName = "${currentUser.value?.firstName ?: "Петя"} ${currentUser.value?.secondName ?: "2"} ${currentUser.value?.thirdName ?: "2"}",
+//                    userName = user?.let { "${it.firstName} ${it.secondName} ${it.thirdName}" } ?: "Неизвестный пользователь",
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
                     workType = _selectedWorkType.value.orEmpty(),
@@ -338,7 +341,7 @@ class SharedViewModel(
                     fixVolumesRows = "",
                     isEmpty = false
                 )
-                Log.d("Tagg", "UserName: ${report.userName}")
+//                Log.d("Tagg", "UserName: ${report.userName}")
                 Log.d("Tagg", "Saving full report: $report")
                 val reportId = reportRepository.saveReport(report)
                 Log.d("Tagg", "Saved report ID: $reportId")
@@ -1019,38 +1022,207 @@ class SharedViewModel(
         _isReportSaved.postValue(false) // Используем postValue для безопасности
     }
 
-    // LiveData для данных текущего пользователя
-    private val _currentUser = MutableLiveData<User?>(null)
-    val currentUser: LiveData<User?> get() = _currentUser
+    // ------------ Блок Авторизации и Регистрации ------------
 
-    // Загрузка данных пользователя
-    fun loadCurrentUser(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                // Получаем employeeNumber из SharedPreferences
-                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-                val employeeNumber = sharedPreferences.getString("current_user", null)
-                if (employeeNumber != null) {
-                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
-                    withContext(Dispatchers.Main) {
-                        _currentUser.value = user
-                        Log.d("SharedViewModel", "Loaded user: $user")
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e("SharedViewModel", "No employeeNumber found in SharedPreferences")
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
-                    Log.e("SharedViewModel", "Error loading user: ${e.message}", e)
-                }
-            }
-        }
-    }
+    // LiveData для данных текущего пользователя
+//    private val _currentUser = MutableLiveData<User?>(null)
+//    val currentUser: LiveData<User?> get() = _currentUser
+//
+//    // Загрузка данных пользователя
+//    fun loadCurrentUser(context: Context) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                // Получаем employeeNumber из SharedPreferences
+//                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+//                val employeeNumber = sharedPreferences.getString("current_user", null)
+//                if (employeeNumber != null) {
+//                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
+//                    withContext(Dispatchers.Main) {
+//                        _currentUser.value = user
+//                        Log.d("SharedViewModel", "Loaded user: $user")
+//                    }
+//                } else {
+//                    withContext(Dispatchers.Main) {
+//                        _errorEvent.postValue("Пользователь не авторизован")
+//                        Log.e("SharedViewModel", "No employeeNumber found in SharedPreferences")
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
+//                    Log.e("SharedViewModel", "Error loading user: ${e.message}", e)
+//                }
+//            }
+//        }
+//    }
+//
+//    // -------- Авторизация и Регистрация --------
+//
+//    // Авторизация
+//
+//    // LiveData для результатов авторизации
+//    private val _authResult = MutableLiveData<AuthResult>()
+//    val authResult: LiveData<AuthResult> get() = _authResult
+//
+//    fun loginUser(employeeNumber: String, password: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                Log.d("SharedViewModel", "Attempting login for employeeNumber: $employeeNumber, password: $password")
+//                val user = userRepository.getUserByCredentials(employeeNumber)
+//                Log.d("SharedViewModel", "User found: $user")
+//                if (user != null && BCrypt.checkpw(password, user.password)) {
+//                    withContext(Dispatchers.Main) {
+//                        _currentUser.value = user
+//                        _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
+//                    }
+//                } else {
+//                    withContext(Dispatchers.Main) {
+//                        _authResult.value = AuthResult.Error(
+//                            if (user == null) "Пользователь с таким номером не найден"
+//                            else "Неверный пароль"
+//                        )
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
+//                    Log.e("SharedViewModel", "Login error: ${e.message}", e)
+//                }
+//            }
+//        }
+//    }
+//
+//    // Очистка сессии (выход из аккаунта)
+//    fun logout() {
+//        _currentUser.value = null
+//        _authResult.value = AuthResult.Idle
+//        clearAllData()
+//    }
+//
+//    fun validateAuthInputs(
+//        number: String?,
+//        password: String?
+//    ): Map<String, String?> {
+//        val errors = mutableMapOf<String, String?>()
+//
+//        if (number.isNullOrBlank()) {
+//            errors["number"] = "Введите табельный номер"
+//        } else if (!number.all { it.isDigit() } || number.length > 4) {
+//            errors["number"] = "Табельный номер должен содержать 4 цифры"
+//        }
+//
+//        if (password.isNullOrBlank() || password.length != 12) {
+//            errors["password"] = "Введите корректный пароль"
+//        }
+//
+//        return errors
+//    }
+//
+//
+//    // Регистрация
+//    fun registerUser(
+//        secondName: String,
+//        firstName: String,
+//        thirdName: String?,
+//        employeeNumber: String,
+//        phone: String,
+//        branch: String,
+//        pu: String,
+//        password: String
+//    ) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                if (userRepository.isEmployeeNumberTaken(employeeNumber)) {
+//                    withContext(Dispatchers.Main) {
+//                        _authResult.value = AuthResult.RegistrationError("Табельный номер уже занят")
+//                    }
+//                } else {
+//                    val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
+//                    Log.d("SharedViewModel", "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
+//                    val user = User(
+//                        id = 0,
+//                        secondName = secondName,
+//                        firstName = firstName,
+//                        thirdName = thirdName,
+//                        employeeNumber = employeeNumber,
+//                        phone = phone,
+//                        branch = branch,
+//                        pu = pu,
+//                        password = hashedPassword
+//                    )
+//                    userRepository.insertUser(user)
+//                    withContext(Dispatchers.Main) {
+//                        _currentUser.value = user
+//                        _authResult.value = AuthResult.RegistrationSuccess("Регистрация успешна")
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    _authResult.value = AuthResult.RegistrationError("Ошибка регистрации: ${e.message}")
+//                    Log.e("SharedViewModel", "Registration error: ${e.message}", e)
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    fun validateRegistrationInputs(
+//        secondName: String?,
+//        firstName: String?,
+//        thirdName: String?,
+//        number: String?,
+//        phone: String?,
+//        branch: String?,
+//        pu: String?,
+//        password: String?,
+//        confirmPassword: String?
+//    ): Map<String, String?> {
+//        val errors = mutableMapOf<String, String?>()
+//
+//        if (secondName.isNullOrBlank()) errors["secondName"] = "Введите фамилию"
+//        if (firstName.isNullOrBlank()) errors["firstName"] = "Введите имя"
+//        if (thirdName.isNullOrBlank()) errors["thirdName"] = "Введите отчество"
+//        // Отчество необязательное, поэтому проверка отсутствует
+//        if (number.isNullOrBlank()) errors["number"] = "Введите табельный номер"
+//        else if (number.length > 4 || !number.all { it.isDigit() }) errors["number"] = "Табельный номер должен содержать до 4 цифр"
+//
+//        val phoneDigits = phone?.filter { it.isDigit() }
+//        if (phoneDigits.isNullOrBlank()) {
+//            errors["phone"] = "Введите корректный номер телефона"
+//        }
+//
+//        if (branch.isNullOrBlank()) errors["branch"] = "Выберите филиал"
+//        if (pu.isNullOrBlank()) errors["pu"] = "Выберите ПУ"
+//
+//        if (password.isNullOrBlank()) {
+//            errors["password"] = "Пароль не может быть пустым"
+//        } else if (password.length < 6) {
+//            errors["password"] = "Пароль должен содержать не менее 6 символов"
+//        } else if (password != confirmPassword) {
+//            errors["confirmPassword"] = "Пароли не совпадают"
+//        }
+//
+//        return errors
+//    }
+//
+//    private val _isLoading = MutableStateFlow(true)
+//    val isLoading = _isLoading.asStateFlow()
+//
+//    fun setLoading(isLoading: Boolean) {
+//        _isLoading.value = isLoading
+//    }
+
+    // Класс для результатов авторизации
+//    sealed class AuthResult {
+//        data class Success(val message: String) : AuthResult()
+//        data class Error(val message: String) : AuthResult()
+//        data class RegistrationSuccess(val message: String) : AuthResult() // Для успешной регистрации
+//        data class RegistrationError(val message: String) : AuthResult() // Для ошибок регистрации
+//        object Idle : AuthResult() // Новое состояние для сброса
+//    }
 }
+
+
 
 sealed class RowValidationResult {
     data class Valid(val remainingVolume: Double? = null): RowValidationResult()
