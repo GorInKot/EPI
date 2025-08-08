@@ -36,6 +36,24 @@
 
         <!--  Центральная граница  -->
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_leftmiddle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2"
+            />
+
+        <!--  Центральная граница  -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_rightmiddle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8"
+            />
+
+        <!--  Центральная граница  -->
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,16 +61,6 @@
             app:layout_constraintGuide_percent="0.5"
             />
 
-
-
-        <!-- Нижняя граница  -->
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/bottomGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="50dp"
-            />
 
         <!-- Заголовок   -->
         <com.google.android.material.textview.MaterialTextView
@@ -85,31 +93,33 @@
             android:layout_marginTop="12dp"
             />
 
-        <!--  Заголовок: Заказчик  -->
+        <!--  Заголовок: Договор  -->
 <!--        <com.google.android.material.textview.MaterialTextView-->
-<!--            android:id="@+id/tv_Customer"-->
-<!--            android:text="Заказчик"-->
+<!--            android:id="@+id/tv_Contract"-->
+<!--            android:text="Договор СК"-->
 <!--            style="@style/ArrangementText"-->
-<!--            app:layout_constraintStart_toEndOf="@id/guideline_left"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/guideline_middle"-->
+<!--            app:layout_constraintStart_toEndOf="@id/guideline_middle"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/guideline_right"-->
 <!--            app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"-->
 <!--            android:layout_marginTop="24dp"-->
 <!--            />-->
 
-        <!--  Текстовое поле: Заказчик  -->
+<!--        &lt;!&ndash;  Текстовое поле: Договор  &ndash;&gt;-->
 <!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/textInput_Layout_Customer"-->
+<!--            android:id="@+id/textInput_Layout_Contract"-->
 <!--            android:layout_marginEnd="56dp"-->
 <!--            android:layout_marginStart="56dp"-->
 <!--            android:layout_marginBottom="0dp"-->
 <!--            android:layout_marginTop="16dp"-->
 <!--            style="@style/TextInputLayout"-->
-<!--            app:layout_constraintStart_toEndOf="@id/guideline_left"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/guideline_middle"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/tv_Customer"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv_Contract"-->
+<!--            app:layout_constraintStart_toEndOf="@id/guideline_middle"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/guideline_right"-->
 <!--            >-->
+
 <!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/textInput_EditText_Customer"-->
+<!--                android:id="@+id/textInput_EditText_Contract"-->
+<!--                android:gravity="center|center_vertical"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:paddingStart="10dp"-->
@@ -117,53 +127,11 @@
 <!--                android:minHeight="56dp"-->
 <!--                android:paddingBottom="12dp"-->
 <!--                android:textSize="14sp"-->
-<!--                android:inputType="text"-->
-<!--                android:textColor="@color/color_black"-->
 <!--                android:importantForAccessibility="yes"-->
-<!--                android:gravity="center|center_vertical"-->
 <!--                android:padding="10dp"-->
+<!--                android:textColor="@color/color_black"-->
 <!--                />-->
 <!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-        <!--  Заголовок: Договор  -->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_Contract"
-            android:text="Договор СК"
-            style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/guideline_right"
-            app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"
-            android:layout_marginTop="24dp"
-            />
-
-        <!--  Текстовое поле: Договор  -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInput_Layout_Contract"
-            android:layout_marginEnd="56dp"
-            android:layout_marginStart="56dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="16dp"
-            style="@style/TextInputLayout"
-            app:layout_constraintTop_toBottomOf="@id/tv_Contract"
-            app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/guideline_right"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInput_EditText_Contract"
-                android:gravity="center|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:minHeight="56dp"
-                android:paddingBottom="12dp"
-                android:textSize="14sp"
-                android:importantForAccessibility="yes"
-                android:padding="10dp"
-                android:textColor="@color/color_black"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Заголовок: Исполнитель по транспорту  -->
         <com.google.android.material.textview.MaterialTextView
@@ -213,7 +181,7 @@
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
-            app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Contract"
+            app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"
             android:layout_marginTop="24dp"
             />
 
@@ -486,8 +454,8 @@
             android:text="Госномер"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Executor"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintStart_toEndOf="@id/guideline_leftmiddle"
+            app:layout_constraintEnd_toStartOf="@id/guideline_rightmiddle"
             android:layout_marginTop="24dp"
             />
 
@@ -496,8 +464,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="56dp"
             android:layout_marginEnd="56dp"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintStart_toEndOf="@id/guideline_leftmiddle"
+            app:layout_constraintEnd_toStartOf="@id/guideline_rightmiddle"
             app:layout_constraintTop_toBottomOf="@id/tv_StateNumber"
             style="@style/TextInputLayout"
             >
