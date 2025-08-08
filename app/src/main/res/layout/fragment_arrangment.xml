@@ -233,7 +233,7 @@
             style="@style/TextInputLayout"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualCustomer"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
             android:layout_marginTop="24dp"
             app:endIconMode="dropdown_menu"
             >
@@ -580,17 +580,18 @@
             android:text="Субподрядчик:"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_RepSSK_Gp"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoObject"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintBottom_toBottomOf="@id/textInputLayout_SubContractor"
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_SubContractor"
             style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_RepSSK_Gp"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoObject"
             app:layout_constraintStart_toEndOf="@id/guideline_right"
             android:layout_marginTop="24dp"
             >
@@ -616,7 +617,7 @@
             android:text="Представитель\nСубподрядчика:"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_SubContractor"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_SubContractor"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -651,7 +652,7 @@
             android:text="Представитель\nССК ПО (Суб):"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_RepSubContractor"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_RepSubContractor"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
