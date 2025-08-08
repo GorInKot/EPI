@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.example.epi.DataBase.AppDatabase
+import com.example.epi.DataBase.NewAppDatabase
 import com.example.epi.ViewModel.MainViewModel
 import com.example.epi.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-    private lateinit var db: AppDatabase
+    private lateinit var db: NewAppDatabase
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Инициализация базы данных
-        db = AppDatabase.getInstance(this)
+        db = NewAppDatabase.getInstance(this)
 
         // Настройка NavHostFragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
