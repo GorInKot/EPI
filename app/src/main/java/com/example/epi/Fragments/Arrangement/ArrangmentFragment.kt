@@ -40,12 +40,22 @@ class ArrangementFragment : Fragment() {
             (requireActivity().application as App).userRepository
         )
     }
+
+    // Old code
     private lateinit var contractTextWatcher: TextWatcher
 //    private lateinit var plotTextWatcher: TextWatcher
     private lateinit var repSSKGpTextWatcher: TextWatcher
     private lateinit var subContractorTextWatcher: TextWatcher
     private lateinit var repSubContractorTextWatcher: TextWatcher
     private lateinit var repSSKSubTextWatcher: TextWatcher
+
+    // New code (TextWatchers)
+//    private lateinit var customerTextWatcher: TextWatcher
+//    private lateinit var contractorTextWatcher: TextWatcher
+//    private lateinit var objectTextWatcher: TextWatcher
+//    private lateinit var plotTextWatcher: TextWatcher
+//    private lateinit var subContractorTextWatcher: TextWatcher
+//    private lateinit var workTypeTextWatcher: TextWatcher
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -167,22 +177,6 @@ class ArrangementFragment : Fragment() {
             }
         }
 
-        // Заказчик: обработка CheckBox
-        setupToggleCheckbox(
-            binding.checkBoxManualCustomer,
-            binding.textInputLayoutAutoCustomer,
-            binding.hiddenTextInputLayoutManualCustomer,
-            binding.hiddenTextInputEditTextManualCustomer
-        )
-        binding.hiddenTextInputEditTextManualCustomer.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setManualCustomer(s.toString())
-                sharedViewModel.setIsManualCustomer(true)
-            }
-        })
-
         // -------- Объект
         // Old code
 //        val objectListAdapter = ArrayAdapter(
@@ -222,21 +216,6 @@ class ArrangementFragment : Fragment() {
             }
         }
 
-        // Объект: обработка CheckBox
-        setupToggleCheckbox(
-            binding.checkBoxManualObject,
-            binding.textInputLayoutAutoObject,
-            binding.hiddenTextInputLayoutManualObject,
-            binding.hiddenTextInputEditTextManualObject
-        )
-        binding.hiddenTextInputEditTextManualObject.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setManualObject(s.toString())
-                sharedViewModel.setIsManualObject(true)
-            }
-        })
 
         // Участок
 
@@ -307,24 +286,81 @@ class ArrangementFragment : Fragment() {
             sharedViewModel.setSelectedContractor(selectedContractor)
             sharedViewModel.setIsManualContractor(false)
         }
-
-        // Генподрядчик: обработка CheckBox
-        setupToggleCheckbox(
-            binding.checkBoxManualContractor,
-            binding.textInputLayoutAutoContractor,
-            binding.hiddenTextInputLayoutManualContractor,
-            binding.hiddenTextInputEditTextManualContractor
-        )
-        binding.hiddenTextInputEditTextManualContractor.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setManualContractor(s.toString())
-                sharedViewModel.setIsManualContractor(true)
-            }
-        })
     }
 
+    // New Code (Left block)
+//    private fun setupLeftBlock() {
+//        // Customer
+//        customerTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setSelectedCustomer(s.toString())
+//            }
+//        }
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val dbHelper = ExtraDatabaseHelper(requireContext())
+//                val customers = withContext(Dispatchers.IO) {
+//                    dbHelper.getCustomer()
+//                }
+//                val customerListAdapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    customers.map { it.name }
+//                )
+//                binding.autoCompleteCustomer.setAdapter(customerListAdapter)
+//                binding.autoCompleteCustomer.inputType = InputType.TYPE_NULL
+//                binding.autoCompleteCustomer.keyListener = null
+//                binding.autoCompleteCustomer.setOnTouchListener { _, _ ->
+//                    binding.autoCompleteCustomer.showDropDown()
+//                    false
+//                }
+//                binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
+//                    val selectedCustomer = customers[position]
+//                    sharedViewModel.setSelectedCustomer(selectedCustomer.name)
+//                    sharedViewModel.setSelectedCustomerId(selectedCustomer.id)
+//                    updateDependentDropdowns(selectedCustomer.id, null, null)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("ArrangementFragment", "Ошибка загрузки заказчиков: ${e.message}")
+//                Toast.makeText(requireContext(), "Ошибка загрузки заказчиков", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        binding.autoCompleteCustomer.addTextChangedListener(customerTextWatcher)
+//
+//        // Contractor
+//        contractorTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setSelectedContractor(s.toString())
+//            }
+//        }
+//        setupContractorDropdown(null)
+//
+//        // Object
+//        objectTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setSelectedObject(s.toString())
+//            }
+//        }
+//        setupObjectDropdown(null)
+//
+//        // Plot
+//        plotTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setSelectedPlot(s.toString())
+//            }
+//        }
+//        setupPlotDropdown(null)
+//    }
+
+    // Old Code
     private fun setupRightBlock() {
         // Представитель Генподрядчика
         // Old code
@@ -365,22 +401,6 @@ class ArrangementFragment : Fragment() {
                 sharedViewModel.setIsManualSubContractor(false)
             }
         }
-
-        // Представитель Генподрядчика: обработка CheckBox
-        setupToggleCheckbox(
-            binding.checkBoxManualSubContractor,
-            binding.textInputLayoutAutoSubContractor,
-            binding.hiddenTextInputLayoutManualSubContractor,
-            binding.hiddenTextInputEditTextManualSubContractor
-        )
-        binding.hiddenTextInputEditTextManualSubContractor.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setManualSubContractor(s.toString())
-                sharedViewModel.setIsManualSubContractor(true)
-            }
-        })
 
         // Представитель ССК ПО (ГП)
         repSSKGpTextWatcher = object : TextWatcher {
@@ -451,6 +471,209 @@ class ArrangementFragment : Fragment() {
         }
         binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
     }
+
+    // New code (Right block)
+//    private fun setupRightBlock() {
+//        // SubContractor
+//        subContractorTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setSelectedSubContractor(s.toString())
+//            }
+//        }
+//        setupSubContractorDropdown(null)
+//
+//        // WorkType
+//        workTypeTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setSelectedWorkType(s.toString())
+//            }
+//        }
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val dbHelper = ExtraDatabaseHelper(requireContext())
+//                val workTypes = withContext(Dispatchers.IO) {
+//                    dbHelper.getWorkTypes()
+//                }
+//                val workTypeListAdapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    workTypes
+//                )
+//                binding.autoCompleteWorkType.setAdapter(workTypeListAdapter)
+//                binding.autoCompleteWorkType.inputType = InputType.TYPE_NULL
+//                binding.autoCompleteWorkType.keyListener = null
+//                binding.autoCompleteWorkType.setOnTouchListener { _, _ ->
+//                    binding.autoCompleteWorkType.showDropDown()
+//                    false
+//                }
+//                binding.autoCompleteWorkType.setOnItemClickListener { parent, _, position, _ ->
+//                    val selectedWorkType = parent.getItemAtPosition(position).toString()
+//                    sharedViewModel.setSelectedWorkType(selectedWorkType)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("ArrangementFragment", "Ошибка загрузки видов работ: ${e.message}")
+//                Toast.makeText(requireContext(), "Ошибка загрузки видов работ", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        binding.autoCompleteWorkType.addTextChangedListener(workTypeTextWatcher)
+//    }
+
+    // New code (setUpContractorDropdown)
+//    private fun setupContractorDropdown(customerId: Long?) {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val dbHelper = ExtraDatabaseHelper(requireContext())
+//                val contractors = withContext(Dispatchers.IO) {
+//                    customerId?.let { dbHelper.getContractor(it) } ?: emptyList()
+//                }
+//                val contractorListAdapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    contractors
+//                )
+//                binding.autoCompleteContractor.setAdapter(contractorListAdapter)
+//                binding.autoCompleteContractor.inputType = InputType.TYPE_NULL
+//                binding.autoCompleteContractor.keyListener = null
+//                binding.autoCompleteContractor.setOnTouchListener { _, _ ->
+//                    binding.autoCompleteContractor.showDropDown()
+//                    false
+//                }
+//                binding.autoCompleteContractor.setOnItemClickListener { parent, _, position, _ ->
+//                    val selectedContractor = parent.getItemAtPosition(position).toString()
+//                    sharedViewModel.setSelectedContractor(selectedContractor)
+//                    // Здесь можно добавить логику для получения contractorId, если нужно
+//                    updateDependentDropdowns(null, null, null) // Пока без фильтрации по contractorId
+//                }
+//                if (contractors.isEmpty()) {
+//                    binding.autoCompleteContractor.setText("", false)
+//                    sharedViewModel.setSelectedContractor(null)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("ArrangementFragment", "Ошибка загрузки подрядчиков: ${e.message}")
+//                Toast.makeText(requireContext(), "Ошибка загрузки подрядчиков", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
+    // New code (setUpObjectDropdown)
+//    private fun setupObjectDropdown(customerId: Long?) {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val dbHelper = ExtraDatabaseHelper(requireContext())
+//                val objects = withContext(Dispatchers.IO) {
+//                    customerId?.let { dbHelper.getObject(it) } ?: emptyList()
+//                }
+//                val objectListAdapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    objects
+//                )
+//                binding.autoCompleteObject.setAdapter(objectListAdapter)
+//                binding.autoCompleteObject.inputType = InputType.TYPE_NULL
+//                binding.autoCompleteObject.keyListener = null
+//                binding.autoCompleteObject.setOnTouchListener { _, _ ->
+//                    binding.autoCompleteObject.showDropDown()
+//                    false
+//                }
+//                binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
+//                    val selectedObject = parent.getItemAtPosition(position).toString()
+//                    sharedViewModel.setSelectedObject(selectedObject)
+//                    // Здесь можно добавить логику для получения objectId, если нужно
+//                    updateDependentDropdowns(null, null, null) // Пока без фильтрации по objectId
+//                }
+//                if (objects.isEmpty()) {
+//                    binding.autoCompleteObject.setText("", false)
+//                    sharedViewModel.setSelectedObject(null)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("ArrangementFragment", "Ошибка загрузки объектов: ${e.message}")
+//                Toast.makeText(requireContext(), "Ошибка загрузки объектов", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
+    // New code (setUpPlotDropdown)
+//    private fun setupPlotDropdown(objectId: Long?) {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val dbHelper = ExtraDatabaseHelper(requireContext())
+//                val plots = withContext(Dispatchers.IO) {
+//                    objectId?.let { dbHelper.getPlots(it) } ?: emptyList()
+//                }
+//                val plotListAdapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    plots
+//                )
+//                binding.autoCompletePlot.setAdapter(plotListAdapter)
+//                binding.autoCompletePlot.inputType = InputType.TYPE_NULL
+//                binding.autoCompletePlot.keyListener = null
+//                binding.autoCompletePlot.setOnTouchListener { _, _ ->
+//                    binding.autoCompletePlot.showDropDown()
+//                    false
+//                }
+//                binding.autoCompletePlot.setOnItemClickListener { parent, _, position, _ ->
+//                    val selectedPlot = parent.getItemAtPosition(position).toString()
+//                    sharedViewModel.setSelectedPlot(selectedPlot)
+//                }
+//                if (plots.isEmpty()) {
+//                    binding.autoCompletePlot.setText("", false)
+//                    sharedViewModel.setSelectedPlot(null)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("ArrangementFragment", "Ошибка загрузки участков: ${e.message}")
+//                Toast.makeText(requireContext(), "Ошибка загрузки участков", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
+    // New code (setUpSubContractorDropdown)
+//    private fun setupSubContractorDropdown(contractorId: Long?) {
+//        CoroutineScope(Dispatchers.Main).launch {
+//            try {
+//                val dbHelper = ExtraDatabaseHelper(requireContext())
+//                val subContractors = withContext(Dispatchers.IO) {
+//                    contractorId?.let { dbHelper.getSubContractors(it) } ?: emptyList()
+//                }
+//                val subContractorListAdapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    subContractors
+//                )
+//                binding.autoCompleteSubContractor.setAdapter(subContractorListAdapter)
+//                binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
+//                binding.autoCompleteSubContractor.keyListener = null
+//                binding.autoCompleteSubContractor.setOnTouchListener { _, _ ->
+//                    binding.autoCompleteSubContractor.showDropDown()
+//                    false
+//                }
+//                binding.autoCompleteSubContractor.setOnItemClickListener { parent, _, position, _ ->
+//                    val selectedSubContractor = parent.getItemAtPosition(position).toString()
+//                    sharedViewModel.setSelectedSubContractor(selectedSubContractor)
+//                }
+//                if (subContractors.isEmpty()) {
+//                    binding.autoCompleteSubContractor.setText("", false)
+//                    sharedViewModel.setSelectedSubContractor(null)
+//                }
+//            } catch (e: Exception) {
+//                Log.e("ArrangementFragment", "Ошибка загрузки субподрядчиков: ${e.message}")
+//                Toast.makeText(requireContext(), "Ошибка загрузки субподрядчиков", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+
+    // New code (updateDependentDropdowns)
+//    private fun updateDependentDropdowns(customerId: Long?, objectId: Long?, contractorId: Long?) {
+//        setupContractorDropdown(customerId)
+//        setupObjectDropdown(customerId)
+//        setupPlotDropdown(objectId)
+//        setupSubContractorDropdown(contractorId)
+//    }
+
 
     private fun setupButtons() {
         // Кнопка "Далее"
@@ -531,22 +754,19 @@ class ArrangementFragment : Fragment() {
     private fun validateInputs(): Boolean {
         val contract = binding.textInputEditTextContract.text?.toString()?.trim()
         val customers = binding.autoCompleteCustomer.text?.toString()?.trim()
-        val manualCustomer = binding.hiddenTextInputEditTextManualCustomer.text?.toString()?.trim()
         val objects = binding.autoCompleteObject.text?.toString()?.trim()
-        val manualObject = binding.hiddenTextInputEditTextManualObject.text?.toString()?.trim()
         val plotText = binding.autoCompletePlot.text?.toString()?.trim()
         val contractors = binding.autoCompleteContractor.text?.toString()?.trim()
-        val manualContractor = binding.hiddenTextInputEditTextManualContractor.text?.toString()?.trim()
         val subContractors = binding.autoCompleteSubContractor.text?.toString()?.trim()
-        val manualSubContractor = binding.hiddenTextInputEditTextManualSubContractor.text?.toString()?.trim()
+
         val repSSKGpText = binding.textInputEditTextRepSSKGp.text?.toString()?.trim()
         val subContractorText = binding.textInputEditTextSubcontractor.text?.toString()?.trim()
         val repSubcontractorText = binding.textInputEditTextRepSubContractor.text?.toString()?.trim()
         val repSSKSubText = binding.textInputEditTextRepSSKSub.text?.toString()?.trim()
 
         val errors = sharedViewModel.validateArrangementInputs(
-            contract, customers, manualCustomer, objects, manualObject, plotText,
-            contractors, manualContractor, subContractors, manualSubContractor,
+            contract, customers, objects, plotText,
+            contractors, subContractors,
             repSSKGpText, subContractorText, repSubcontractorText, repSSKSubText
         )
 
@@ -560,10 +780,8 @@ class ArrangementFragment : Fragment() {
 
         clearErrors(
             binding.textInputLayoutContract, binding.textInputLayoutAutoCustomer,
-            binding.hiddenTextInputLayoutManualCustomer, binding.textInputLayoutAutoObject,
-            binding.hiddenTextInputLayoutManualObject, binding.textInputLayoutPlot,
-            binding.textInputLayoutAutoContractor, binding.hiddenTextInputLayoutManualContractor,
-            binding.textInputLayoutAutoSubContractor, binding.hiddenTextInputLayoutManualSubContractor,
+            binding.textInputLayoutAutoObject, binding.textInputLayoutPlot,
+            binding.textInputLayoutAutoContractor, binding.textInputLayoutAutoSubContractor,
             binding.textInputLayoutRepSSKGp, binding.textInputLayoutSubContractor,
             binding.textInputLayoutRepSubContractor, binding.textInputLayoutRepSSKSub
         )
@@ -572,26 +790,22 @@ class ArrangementFragment : Fragment() {
         setConditionalDualError(
             autoFieldVisible = binding.autoCompleteCustomer.isShown,
             autoLayout = binding.textInputLayoutAutoCustomer,
-            manualLayout = binding.hiddenTextInputLayoutManualCustomer,
             errorMessage = errors["customers"]
         )
         setConditionalDualError(
             autoFieldVisible = binding.autoCompleteObject.isShown,
             autoLayout = binding.textInputLayoutAutoObject,
-            manualLayout = binding.hiddenTextInputLayoutManualObject,
             errorMessage = errors["objects"]
         )
         setError(binding.textInputLayoutPlot, errors["plotText"])
         setConditionalDualError(
             autoFieldVisible = binding.autoCompleteContractor.isShown,
             autoLayout = binding.textInputLayoutAutoContractor,
-            manualLayout = binding.hiddenTextInputLayoutManualContractor,
             errorMessage = errors["contractors"]
         )
         setConditionalDualError(
             autoFieldVisible = binding.autoCompleteSubContractor.isShown,
             autoLayout = binding.textInputLayoutAutoSubContractor,
-            manualLayout = binding.hiddenTextInputLayoutManualSubContractor,
             errorMessage = errors["subContractors"]
         )
         setError(binding.textInputLayoutRepSSKGp, errors["repSSKGpText"])
@@ -599,7 +813,6 @@ class ArrangementFragment : Fragment() {
         setConditionalDualError(
             autoFieldVisible = binding.textInputEditTextRepSubContractor.isShown,
             autoLayout = binding.textInputLayoutRepSubContractor,
-            manualLayout = binding.hiddenTextInputLayoutManualSubContractor,
             errorMessage = errors["repSubcontractorText"]
         )
         setError(binding.textInputLayoutRepSSKSub, errors["repSSKSubText"])
@@ -619,22 +832,27 @@ class ArrangementFragment : Fragment() {
     private fun setConditionalDualError(
         autoFieldVisible: Boolean,
         autoLayout: TextInputLayout,
-        manualLayout: TextInputLayout,
         errorMessage: String?
     ) {
         if (autoFieldVisible) {
             setError(autoLayout, errorMessage)
-        } else {
-            setError(manualLayout, errorMessage)
         }
     }
 
     private fun removeAllTextWatchers() {
+        // Old code
 //        binding.autoCompletePlot.removeTextChangedListener(plotTextWatcher)
         binding.textInputEditTextRepSSKGp.removeTextChangedListener(repSSKGpTextWatcher)
         binding.textInputEditTextSubcontractor.removeTextChangedListener(subContractorTextWatcher)
         binding.textInputEditTextRepSubContractor.removeTextChangedListener(repSubContractorTextWatcher)
         binding.textInputEditTextRepSSKSub.removeTextChangedListener(repSSKSubTextWatcher)
+
+        // New code
+//        binding.autoCompleteCustomer.removeTextChangedListener(customerTextWatcher)
+//        binding.autoCompleteContractor.removeTextChangedListener(contractorTextWatcher)
+//        binding.autoCompleteObject.removeTextChangedListener(objectTextWatcher)
+//        binding.autoCompletePlot.removeTextChangedListener(plotTextWatcher)
+//        binding.autoCompleteSubContractor.removeTextChangedListener(subContractorTextWatcher)
     }
 
     private fun clearUiFields() {
@@ -648,20 +866,27 @@ class ArrangementFragment : Fragment() {
         binding.autoCompleteObject.setText("")
         binding.autoCompleteContractor.setText("")
         binding.autoCompleteSubContractor.setText("")
-        binding.checkBoxManualCustomer.isChecked = false
-        binding.checkBoxManualObject.isChecked = false
-        binding.checkBoxManualContractor.isChecked = false
-        binding.checkBoxManualSubContractor.isChecked = false
     }
 
     private fun addAllTextWatchers() {
+
+        // Old code
 //        binding.autoCompletePlot.addTextChangedListener(plotTextWatcher)
+
         binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
         binding.textInputEditTextSubcontractor.addTextChangedListener(subContractorTextWatcher)
         binding.textInputEditTextRepSubContractor.addTextChangedListener(repSubContractorTextWatcher)
         binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
+
+        // New code
+//        binding.autoCompleteCustomer.addTextChangedListener(customerTextWatcher)
+//        binding.autoCompleteContractor.addTextChangedListener(contractorTextWatcher)
+//        binding.autoCompleteObject.addTextChangedListener(objectTextWatcher)
+//        binding.autoCompletePlot.addTextChangedListener(plotTextWatcher)
+//        binding.autoCompleteSubContractor.addTextChangedListener(subContractorTextWatcher)
     }
 
+    // Old code
     private fun setupViewModelObservers() {
         sharedViewModel.plotText.observe(viewLifecycleOwner) { text ->
             if (binding.autoCompletePlot.text.toString() != text) {
@@ -740,49 +965,47 @@ class ArrangementFragment : Fragment() {
             }
         }
         sharedViewModel.isManualCustomer.observe(viewLifecycleOwner) { isChecked ->
-            binding.checkBoxManualCustomer.isChecked = isChecked
             binding.textInputLayoutAutoCustomer.visibility = if (isChecked) View.GONE else View.VISIBLE
-            binding.hiddenTextInputLayoutManualCustomer.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         sharedViewModel.isManualObject.observe(viewLifecycleOwner) { isChecked ->
-            binding.checkBoxManualObject.isChecked = isChecked
+
             binding.textInputLayoutAutoObject.visibility = if (isChecked) View.GONE else View.VISIBLE
-            binding.hiddenTextInputLayoutManualObject.visibility = if (isChecked) View.VISIBLE else View.GONE
+
         }
         sharedViewModel.isManualContractor.observe(viewLifecycleOwner) { isChecked ->
-            binding.checkBoxManualContractor.isChecked = isChecked
+
             binding.textInputLayoutAutoContractor.visibility = if (isChecked) View.GONE else View.VISIBLE
-            binding.hiddenTextInputLayoutManualContractor.visibility = if (isChecked) View.VISIBLE else View.GONE
+
         }
         sharedViewModel.isManualSubContractor.observe(viewLifecycleOwner) { isChecked ->
-            binding.checkBoxManualSubContractor.isChecked = isChecked
+
             binding.textInputLayoutAutoSubContractor.visibility = if (isChecked) View.GONE else View.VISIBLE
-            binding.hiddenTextInputLayoutManualSubContractor.visibility = if (isChecked) View.VISIBLE else View.GONE
+
         }
-        sharedViewModel.manualCustomer.observe(viewLifecycleOwner) { newValue ->
-            val current = binding.hiddenTextInputEditTextManualCustomer.text?.toString() ?: ""
-            if (current != newValue) {
-                binding.hiddenTextInputEditTextManualCustomer.setText(newValue)
-            }
-        }
-        sharedViewModel.manualObject.observe(viewLifecycleOwner) { newValue ->
-            val current = binding.hiddenTextInputEditTextManualObject.text?.toString() ?: ""
-            if (current != newValue) {
-                binding.hiddenTextInputEditTextManualObject.setText(newValue)
-            }
-        }
-        sharedViewModel.manualContractor.observe(viewLifecycleOwner) { newValue ->
-            val current = binding.hiddenTextInputEditTextManualContractor.text?.toString() ?: ""
-            if (current != newValue) {
-                binding.hiddenTextInputEditTextManualContractor.setText(newValue)
-            }
-        }
-        sharedViewModel.manualSubContractor.observe(viewLifecycleOwner) { newValue ->
-            val current = binding.hiddenTextInputEditTextManualSubContractor.text?.toString() ?: ""
-            if (current != newValue) {
-                binding.hiddenTextInputEditTextManualSubContractor.setText(newValue)
-            }
-        }
+////        sharedViewModel.manualCustomer.observe(viewLifecycleOwner) { newValue ->
+////            val current = binding.hiddenTextInputEditTextManualCustomer.text?.toString() ?: ""
+////            if (current != newValue) {
+////                binding.hiddenTextInputEditTextManualCustomer.setText(newValue)
+////            }
+////        }
+//        sharedViewModel.manualObject.observe(viewLifecycleOwner) { newValue ->
+//            val current = binding.hiddenTextInputEditTextManualObject.text?.toString() ?: ""
+//            if (current != newValue) {
+//                binding.hiddenTextInputEditTextManualObject.setText(newValue)
+//            }
+//        }
+//        sharedViewModel.manualContractor.observe(viewLifecycleOwner) { newValue ->
+//            val current = binding.hiddenTextInputEditTextManualContractor.text?.toString() ?: ""
+//            if (current != newValue) {
+//                binding.hiddenTextInputEditTextManualContractor.setText(newValue)
+//            }
+//        }
+//        sharedViewModel.manualSubContractor.observe(viewLifecycleOwner) { newValue ->
+//            val current = binding.hiddenTextInputEditTextManualSubContractor.text?.toString() ?: ""
+//            if (current != newValue) {
+//                binding.hiddenTextInputEditTextManualSubContractor.setText(newValue)
+//            }
+//        }
         sharedViewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
             Snackbar
                 .make(binding.root, errorMessage, Snackbar.LENGTH_LONG)
@@ -792,45 +1015,63 @@ class ArrangementFragment : Fragment() {
         }
     }
 
-    private fun setupToggleCheckbox(
-        checkbox: CheckBox,
-        autoInputLayout: View,
-        manualInputLayout: View,
-        manualEditText: EditText
-    ) {
-        // Устанавливаем начальное состояние из ViewModel
-        val isChecked = when (checkbox.id) {
-            R.id.checkBoxManualCustomer -> sharedViewModel.isManualCustomer.value ?: false
-            R.id.checkBoxManualObject -> sharedViewModel.isManualObject.value ?: false
-            R.id.checkBoxManualContractor -> sharedViewModel.isManualContractor.value ?: false
-            R.id.checkBoxManualSubContractor -> sharedViewModel.isManualSubContractor.value ?: false
-            else -> false
-        }
-        checkbox.isChecked = isChecked
-        autoInputLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
-        manualInputLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
+    // New code
+//    private fun setupViewModelObservers() {
+//        sharedViewModel.selectedCustomer.observe(viewLifecycleOwner) { customer ->
+//            val currentText = binding.autoCompleteCustomer.text?.toString() ?: ""
+//            if (currentText != customer) {
+//                binding.autoCompleteCustomer.setText(customer ?: "", false)
+//            }
+//        }
+//        sharedViewModel.selectedContractor.observe(viewLifecycleOwner) { contractor ->
+//            val currentText = binding.autoCompleteContractor.text?.toString() ?: ""
+//            if (currentText != contractor) {
+//                binding.autoCompleteContractor.setText(contractor ?: "", false)
+//            }
+//        }
+//        sharedViewModel.selectedObject.observe(viewLifecycleOwner) { objectName ->
+//            val currentText = binding.autoCompleteObject.text?.toString() ?: ""
+//            if (currentText != objectName) {
+//                binding.autoCompleteObject.setText(objectName ?: "", false)
+//            }
+//        }
+//        sharedViewModel.selectedPlot.observe(viewLifecycleOwner) { plot ->
+//            val currentText = binding.autoCompletePlot.text?.toString() ?: ""
+//            if (currentText != plot) {
+//                binding.autoCompletePlot.setText(plot ?: "", false)
+//            }
+//        }
+//        sharedViewModel.selectedSubContractor.observe(viewLifecycleOwner) { subContractor ->
+//            val currentText = binding.autoCompleteSubContractor.text?.toString() ?: ""
+//            if (currentText != subContractor) {
+//                binding.autoCompleteSubContractor.setText(subContractor ?: "", false)
+//            }
+//        }
+//        sharedViewModel.selectedWorkType.observe(viewLifecycleOwner) { workType ->
+//            val currentText = binding.autoCompleteWorkType.text?.toString() ?: ""
+//            if (currentText != workType) {
+//                binding.autoCompleteWorkType.setText(workType ?: "", false)
+//            }
+//        }
+//        sharedViewModel.selectedCustomerId.observe(viewLifecycleOwner) { customerId ->
+//            if (customerId != null) {
+//                updateDependentDropdowns(customerId, null, null)
+//            } else {
+//                updateDependentDropdowns(null, null, null)
+//            }
+//        }
+//        sharedViewModel.selectedObjectId.observe(viewLifecycleOwner) { objectId ->
+//            if (objectId != null) {
+//                updateDependentDropdowns(null, objectId, null)
+//            }
+//        }
+//        sharedViewModel.selectedContractorId.observe(viewLifecycleOwner) { contractorId ->
+//            if (contractorId != null) {
+//                updateDependentDropdowns(null, null, contractorId)
+//            }
+//        }
+//    }
 
-        // Привязываем слушатель после установки начального состояния
-        checkbox.setOnCheckedChangeListener { _, isChecked ->
-            autoInputLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
-            manualInputLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
-            if (isChecked) {
-                manualEditText.requestFocus()
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(manualEditText, InputMethodManager.SHOW_IMPLICIT)
-            } else {
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(manualEditText.windowToken, 0)
-            }
-            // Обновляем ViewModel
-            when (checkbox.id) {
-                R.id.checkBoxManualCustomer -> sharedViewModel.setIsManualCustomer(isChecked)
-                R.id.checkBoxManualObject -> sharedViewModel.setIsManualObject(isChecked)
-                R.id.checkBoxManualContractor -> sharedViewModel.setIsManualContractor(isChecked)
-                R.id.checkBoxManualSubContractor -> sharedViewModel.setIsManualSubContractor(isChecked)
-            }
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

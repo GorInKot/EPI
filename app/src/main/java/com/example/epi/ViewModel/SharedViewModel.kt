@@ -254,14 +254,14 @@ class SharedViewModel(
     fun validateArrangementInputs(
         contract: String?,
         customer: String?,
-        manualCustomer: String?,
+
         objectId: String?,
-        manualObject: String?,
+
         plotText: String?,
         contractor: String?,
-        manualContractor: String?,
+
         subContractor: String?,
-        manualSubContractor: String?,
+
         repSSKGpText: String?,
         subContractorText: String?,
         repSubcontractorText: String?,
@@ -269,11 +269,7 @@ class SharedViewModel(
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (contract.isNullOrBlank()) errors["contract"] = "Укажите Договор СК"
-        if (customer.isNullOrBlank() && manualCustomer.isNullOrBlank()) errors["customer"] = "Укажите заказчика"
-        if (objectId.isNullOrBlank() && manualObject.isNullOrBlank()) errors["object"] = "Укажите объект"
         if (plotText.isNullOrBlank()) errors["plotText"] = "Укажите участок"
-        if (contractor.isNullOrBlank() && manualContractor.isNullOrBlank()) errors["contractor"] = "Укажите генподрядчика"
-        if (subContractor.isNullOrBlank() && manualSubContractor.isNullOrBlank()) errors["subContractor"] = "Укажите представителя генподрядчика"
         if (repSSKGpText.isNullOrBlank()) errors["repSSKGpText"] = "Укажите представителя ССК ПО (ГП)"
         if (subContractorText.isNullOrBlank()) errors["subContractorText"] = "Укажите субподрядчика"
         if (repSubcontractorText.isNullOrBlank()) errors["repSubcontractorText"] = "Укажите представителя субподрядчика"
@@ -289,14 +285,14 @@ class SharedViewModel(
                 val arrangementErrors = validateArrangementInputs(
                     contract = _contractText.value,
                     customer = _selectedCustomer.value,
-                    manualCustomer = _manualCustomer.value,
+
                     objectId = _selectedObject.value,
-                    manualObject = _manualObject.value,
+
                     plotText = _plotText.value,
                     contractor = _selectedContractor.value,
-                    manualContractor = _manualContractor.value,
+
                     subContractor = _selectedSubContractor.value,
-                    manualSubContractor = _manualSubContractor.value,
+
                     repSSKGpText = _repSSKGpText.value,
                     subContractorText = _subContractorText.value,
                     repSubcontractorText = _repSubcontractorText.value,
@@ -373,14 +369,13 @@ class SharedViewModel(
                 val arrangementErrors = validateArrangementInputs(
                     contract = _contractText.value,
                     customer = _selectedCustomer.value,
-                    manualCustomer = _manualCustomer.value,
                     objectId = _selectedObject.value,
-                    manualObject = _manualObject.value,
+
                     plotText = _plotText.value,
                     contractor = _selectedContractor.value,
-                    manualContractor = _manualContractor.value,
+
                     subContractor = _selectedSubContractor.value,
-                    manualSubContractor = _manualSubContractor.value,
+
                     repSSKGpText = _repSSKGpText.value,
                     subContractorText = _subContractorText.value,
                     repSubcontractorText = _repSubcontractorText.value,
