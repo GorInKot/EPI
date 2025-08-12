@@ -139,7 +139,7 @@
             android:id="@+id/textInputLayout_Number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Укажите табельный номер:"
+            android:hint="Укажите уинкальный номер сотрудника:"
             style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_thirdName"
@@ -163,43 +163,13 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_Phone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Номер телефона: +7 "
-            style="@style/TextInputLayout"
-            app:layout_constraintEnd_toStartOf="@id/guideline_right"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
-            android:layout_marginTop="16dp"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEditText_Phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:minHeight="56dp"
-                android:paddingBottom="12dp"
-                android:textSize="14sp"
-                android:inputType="phone"
-                android:importantForAccessibility="yes"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Branch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Выберите филиал из списка"
             style="@style/TextInputLayout"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Phone"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Number"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:endIconMode="dropdown_menu"
@@ -336,22 +306,6 @@
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/btn_Register"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="0dp"
-
-            />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnMainMenu"
-            style="@style/SimpleButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Главное меню"
-            app:layout_constraintEnd_toStartOf="@id/guideline_right"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/btn_Auth"
             android:layout_marginTop="8dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"

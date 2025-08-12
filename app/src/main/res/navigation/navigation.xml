@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/StartFragment">
+    app:startDestination="@id/StartFragment"
+    >
 
     <fragment
         android:id="@+id/StartFragment"
@@ -27,57 +28,32 @@
         <action
             android:id="@+id/action_arrangementFragment_to_transportFragment"
             app:destination="@id/transportFragment">
-<!--            <argument-->
-<!--                android:name="customer"-->
-<!--                app:argType="string"-->
-<!--                app:nullable="true" />-->
-<!--            <argument-->
-<!--                android:name="reportId"-->
-<!--                app:argType="long" />-->
-<!--            <argument-->
-<!--                android:name="objectId"-->
-<!--                app:argType="string"-->
-<!--                app:nullable="true" />-->
+
         </action>
 
         <action
             android:id="@+id/action_arrangementFragment_to_startFragment"
-            app:destination="@id/StartFragment" />
+            app:destination="@id/StartFragment"
+            />
     </fragment>
 
     <fragment
         android:id="@+id/transportFragment"
         android:name="com.example.epi.Fragments.Transport.TransportFragment"
         android:label="TransportFragment"
-        tools:layout="@layout/fragment_transport">
-
-<!--        <argument-->
-<!--            android:name="customer"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
-<!--        <argument-->
-<!--            android:name="reportId"-->
-<!--            app:argType="long" />-->
-<!--        <argument-->
-<!--            android:name="objectId"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
+        tools:layout="@layout/fragment_transport"
+        >
 
         <action
             android:id="@+id/action_transportFragment_to_controlFragment"
-            app:destination="@id/controlFragment">
-<!--            <argument-->
-<!--                android:name="reportId"-->
-<!--                app:argType="long" />-->
-<!--            <argument-->
-<!--                android:name="objectId"-->
-<!--                app:argType="string"-->
-<!--                app:nullable="true" />-->
+            app:destination="@id/controlFragment"
+            >
         </action>
 
         <action
             android:id="@+id/action_transportFragment_to_arrangementFragment"
-            app:destination="@id/arrangementFragment" />
+            app:destination="@id/arrangementFragment"
+            />
     </fragment>
 
     <fragment
@@ -86,24 +62,10 @@
         android:label="Control"
         tools:layout="@layout/fragment_control">
 
-<!--        <argument-->
-<!--            android:name="reportId"-->
-<!--            app:argType="long" />-->
-<!--        <argument-->
-<!--            android:name="objectId"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
-
         <action
             android:id="@+id/action_controlFragment_to_fixVolumesFragment"
             app:destination="@id/fixFragment">
-<!--            <argument-->
-<!--                android:name="reportId"-->
-<!--                app:argType="long" />-->
-<!--            <argument-->
-<!--                android:name="objectId"-->
-<!--                app:argType="string"-->
-<!--                app:nullable="true" />-->
+
         </action>
 
         <action
@@ -180,7 +142,15 @@
         android:id="@+id/registrationFragment"
         android:name="com.example.epi.Fragments.General.Registration.RegistrationFragment"
         android:label="Registration"
-        tools:layout="@layout/fragment_registration" />
+        tools:layout="@layout/fragment_registration">
+
+        <action
+            android:id="@+id/action_registrationFragment_to_authFragment"
+            app:destination="@id/controlFragment"
+            >
+        </action>
+
+    </fragment>
 
     <fragment
         android:id="@+id/authFragment"

@@ -11,7 +11,7 @@ import com.example.epi.DataBase.Report.ReportDao
 import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class, User::class], version = 2, exportSchema = false)
+@Database(entities = [Report::class, User::class], version = 3, exportSchema = true)
 abstract class NewAppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao
@@ -22,38 +22,47 @@ abstract class NewAppDatabase : RoomDatabase() {
 
         fun getInstance(context: android.content.Context): NewAppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val dbFile = context.getDatabasePath("app_database")
+                val dbFile = context.getDatabasePath("new_app_database.db")
                 val builder = Room.databaseBuilder(
                     context.applicationContext,
                     NewAppDatabase::class.java,
-                    "new_app_database"
+                    "new_app_database.db"
                 )
-                    .fallbackToDestructiveMigration() // Добавляем для удаления старой
+                    .createFromAsset("myapp_database.db") // берем из assets
+                    .fallbackToDestructiveMigration()
                     .addCallback(object : RoomDatabase.Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            Log.d("Tagg", "Database created")
-                        }
-
                         override fun onOpen(db: SupportSQLiteDatabase) {
-                            Log.d("Tagg", "Database opened")
-                            val cursor =
-                                db.query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")
-                            if (cursor.moveToFirst()) {
-                                Log.d("Tagg", "Table users exists")
-                            } else {
-                                Log.e("Tagg", "Table users does NOT exist")
+                            Log.d("Tagg-Database", "Database opened")
+
+                            // 1. Вывод всех таблиц
+                            val tablesCursor = db.query(
+                                "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+                            )
+                            while (tablesCursor.moveToNext()) {
+                                val tableName = tablesCursor.getString(0)
+                                Log.d("Tagg-Database", "Table: $tableName")
                             }
-                            cursor.close()
+                            tablesCursor.close()
+
+                            // 2. Проверка конкретной таблицы Contract
+                            try {
+                                val contractCursor = db.query("SELECT * FROM Contract LIMIT 5")
+                                val columnNames = contractCursor.columnNames.joinToString(", ")
+                                Log.d("Tagg-Database", "Contract columns: $columnNames")
+
+                                while (contractCursor.moveToNext()) {
+                                    val row = (0 until contractCursor.columnCount).joinToString(", ") { i ->
+                                        contractCursor.getString(i) ?: "NULL"
+                                    }
+                                    Log.d("Tagg-Database", "Contract row: $row")
+                                }
+                                contractCursor.close()
+                            } catch (e: Exception) {
+                                Log.e("Tagg-Database", "Ошибка при чтении таблицы Contract: ${e.message}")
+                            }
                         }
                     })
 
-                // Если базы еще нет - подгружаем из assets
-                if (!dbFile.exists()) {
-                    Log.d("Tagg", "База данных не найдена, загружаем из assets")
-//                    builder.createFromAsset("assets/myapp_database")
-                } else {
-                    Log.d("Tagg", "Используем существующую базу данных")
-                }
                 builder.build().also { INSTANCE = it }
             }
         }

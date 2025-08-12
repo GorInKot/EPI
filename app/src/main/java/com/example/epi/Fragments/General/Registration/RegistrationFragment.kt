@@ -1,14 +1,12 @@
 package com.example.epi.Fragments.General.Registration
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -27,8 +25,6 @@ class RegistrationFragment : Fragment() {
             (requireActivity().application as App).userRepository
         )
     }
-    private val countryCodePrefix = "+7"
-    private val maxPhoneLength = 18
     private val maxNumberLength = 4
 
     private val branchesWithPu = mapOf(
@@ -71,87 +67,8 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Табельный номер
+        // Уникальный номер сотрудника
         binding.textInputEditTextNumber.filters = arrayOf(android.text.InputFilter.LengthFilter(maxNumberLength))
-
-        // Телефон
-        val phoneEditText = binding.textInputEditTextPhone
-        if (phoneEditText.text.isNullOrEmpty()) {
-            phoneEditText.setText(countryCodePrefix)
-            phoneEditText.setSelection(phoneEditText.text!!.length)
-        }
-        phoneEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && phoneEditText.text.isNullOrEmpty()) {
-                phoneEditText.setText(countryCodePrefix)
-                phoneEditText.setSelection(phoneEditText.text!!.length)
-            }
-        }
-        phoneEditText.addTextChangedListener(object : TextWatcher {
-            private var isFormatting = false
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (isFormatting) return
-                isFormatting = true
-                if (s == null) {
-                    isFormatting = false
-                    return
-                }
-                val text = s.toString()
-                val digitsAll = text.filter { it.isDigit() }
-                val digits = if (digitsAll.startsWith("7")) digitsAll.drop(1) else digitsAll
-                val formatted = StringBuilder()
-                var index = 0
-                formatted.append("+7 (")
-                for (i in 0 until 3) {
-                    if (index < digits.length) {
-                        formatted.append(digits[index])
-                        index++
-                    } else {
-                        formatted.append("_")
-                    }
-                }
-                formatted.append(") ")
-                for (i in 0 until 3) {
-                    if (index < digits.length) {
-                        formatted.append(digits[index])
-                        index++
-                    } else {
-                        formatted.append("_")
-                    }
-                }
-                formatted.append("-")
-                for (i in 0 until 2) {
-                    if (index < digits.length) {
-                        formatted.append(digits[index])
-                        index++
-                    } else {
-                        formatted.append("_")
-                    }
-                }
-                formatted.append("-")
-                for (i in 0 until 2) {
-                    if (index < digits.length) {
-                        formatted.append(digits[index])
-                        index++
-                    } else {
-                        formatted.append("_")
-                    }
-                }
-                if (formatted.length > maxPhoneLength) {
-                    formatted.setLength(maxPhoneLength)
-                }
-                val newText = formatted.toString()
-                if (newText != text) {
-                    phoneEditText.removeTextChangedListener(this)
-                    phoneEditText.setText(newText)
-                    phoneEditText.setSelection(minOf(newText.length, phoneEditText.text!!.length))
-                    phoneEditText.addTextChangedListener(this)
-                }
-                isFormatting = false
-            }
-        })
 
         // Филиал и ПУ
         val autoCompleteBranch = binding.autoCompleteTextViewBranch
@@ -168,107 +85,72 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-//    private fun observeAuthResult() {
-//        viewModel.authResult.observe(viewLifecycleOwner) { result ->
-//            when (result) {
-//                is SharedViewModel.AuthResult.RegistrationSuccess -> {
-//                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
-//                    binding.textInputEditTextSecondName.text?.clear()
-//                    binding.textInputEditTextFirstName.text?.clear()
-//                    binding.textInputEditTextThirdName.text?.clear()
-//                    binding.textInputEditTextNumber.text?.clear()
-//                    binding.textInputEditTextPhone.text?.clear()
-//                    binding.autoCompleteTextViewBranch.text?.clear()
-//                    binding.autoCompleteTextViewPU.text?.clear()
-//                    binding.textInputEditTextPassword.text?.clear()
-//                    binding.textInputEditTextConfirmPassword.text?.clear()
-//                    findNavController().navigate(R.id.authFragment)
-//                }
-//                is SharedViewModel.AuthResult.RegistrationError -> {
-//                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
-//                    if (result.message.contains("Табельный номер уже занят")) {
-//                        binding.textInputLayoutNumber.isErrorEnabled = true
-//                        binding.textInputLayoutNumber.error = result.message
-//                    } else {
-//                        // Общая ошибка, можно показать в любом поле или через диалог
-//                        binding.textInputLayoutPassword.isErrorEnabled = true
-//                        binding.textInputLayoutPassword.error = result.message
-//                    }
-//                }
-//                is SharedViewModel.AuthResult.Success,
-//                is SharedViewModel.AuthResult.Error,
-//                is SharedViewModel.AuthResult.Idle -> {
-//                    // Игнорируем состояния, связанные с авторизацией или сбросом
-//                }
-//            }
-//        }
-//    }
+
 
     private fun buttons() {
-        binding.btnMainMenu.setOnClickListener {
-            findNavController().navigate(R.id.StartFragment)
-        }
         binding.btnAuth.setOnClickListener {
             findNavController().navigate(R.id.authFragment)
         }
-//        binding.btnRegister.setOnClickListener {
-//            if (validateInputs()) {
-//                registerUser()
-//            }
-//        }
+        binding.btnRegister.setOnClickListener {
+            Log.e("Tagg", "Нажали кнопку регистрации")
+            if (validateInputs()) {
+                Log.e("Tagg", "Успешная регистрация")
+                registerUser()
+                findNavController().navigate(R.id.action_registrationFragment_to_authFragment)
+            } else {
+                Log.e("Tagg", "Ошибка регистрации")
+            }
+        }
     }
 
-//    private fun validateInputs(): Boolean {
-//        val secondName = binding.textInputEditTextSecondName.text?.toString()?.trim()
-//        val firstName = binding.textInputEditTextFirstName.text?.toString()?.trim()
-//        val thirdName = binding.textInputEditTextThirdName.text?.toString()?.trim()
-//        val number = binding.textInputEditTextNumber.text?.toString()?.trim()
-//        val phone = binding.textInputEditTextPhone.text?.toString()?.trim()
-//        val branch = binding.autoCompleteTextViewBranch.text?.toString()?.trim()
-//        val pu = binding.autoCompleteTextViewPU.text?.toString()?.trim()
-//        val password = binding.textInputEditTextPassword.text?.toString()?.trim()
-//        val confirmPassword = binding.textInputEditTextConfirmPassword.text?.toString()?.trim()
+    private fun validateInputs(): Boolean {
+        val secondName = binding.textInputEditTextSecondName.text?.toString()?.trim()
+        val firstName = binding.textInputEditTextFirstName.text?.toString()?.trim()
+        val thirdName = binding.textInputEditTextThirdName.text?.toString()?.trim()
+        val number = binding.textInputEditTextNumber.text?.toString()?.trim()
+        val branch = binding.autoCompleteTextViewBranch.text?.toString()?.trim()
+        val pu = binding.autoCompleteTextViewPU.text?.toString()?.trim()
+        val password = binding.textInputEditTextPassword.text?.toString()?.trim()
+        val confirmPassword = binding.textInputEditTextConfirmPassword.text?.toString()?.trim()
+
+        // Валидация через ViewModel
+        val errors = viewModel.validateRegistrationInputs(
+            secondName, firstName, thirdName, number, branch, pu, password, confirmPassword
+        )
+
+        binding.textInputLayoutSecondName.isErrorEnabled = !errors["secondName"].isNullOrBlank()
+        binding.textInputLayoutSecondName.error = errors["secondName"]
+        binding.textInputLayoutFirstName.isErrorEnabled = !errors["firstName"].isNullOrBlank()
+        binding.textInputLayoutFirstName.error = errors["firstName"]
+        binding.textInputLayoutThirdName.isErrorEnabled = !errors["thirdName"].isNullOrBlank()
+        binding.textInputLayoutThirdName.error = errors["thirdName"]
+        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
+        binding.textInputLayoutNumber.error = errors["number"]
+        binding.textInputLayoutBranch.isErrorEnabled = !errors["branch"].isNullOrBlank()
+        binding.textInputLayoutBranch.error = errors["branch"]
+        binding.textInputLayoutPU.isErrorEnabled = !errors["pu"].isNullOrBlank()
+        binding.textInputLayoutPU.error = errors["pu"]
+        binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
+        binding.textInputLayoutPassword.error = errors["password"]
+        binding.textInputLayoutConfirmPassword.isErrorEnabled = !errors["confirmPassword"].isNullOrBlank()
+        binding.textInputLayoutConfirmPassword.error = errors["confirmPassword"]
+
+        return errors.isEmpty()
+    }
 //
-//        // Валидация через ViewModel
-//        val errors = viewModel.validateRegistrationInputs(
-//            secondName, firstName, thirdName, number, phone, branch, pu, password, confirmPassword
-//        )
-//
-//        binding.textInputLayoutSecondName.isErrorEnabled = !errors["secondName"].isNullOrBlank()
-//        binding.textInputLayoutSecondName.error = errors["secondName"]
-//        binding.textInputLayoutFirstName.isErrorEnabled = !errors["firstName"].isNullOrBlank()
-//        binding.textInputLayoutFirstName.error = errors["firstName"]
-//        binding.textInputLayoutThirdName.isErrorEnabled = !errors["thirdName"].isNullOrBlank()
-//        binding.textInputLayoutThirdName.error = errors["thirdName"]
-//        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
-//        binding.textInputLayoutNumber.error = errors["number"]
-//        binding.textInputLayoutPhone.isErrorEnabled = !errors["phone"].isNullOrBlank()
-//        binding.textInputLayoutPhone.error = errors["phone"]
-//        binding.textInputLayoutBranch.isErrorEnabled = !errors["branch"].isNullOrBlank()
-//        binding.textInputLayoutBranch.error = errors["branch"]
-//        binding.textInputLayoutPU.isErrorEnabled = !errors["pu"].isNullOrBlank()
-//        binding.textInputLayoutPU.error = errors["pu"]
-//        binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
-//        binding.textInputLayoutPassword.error = errors["password"]
-//        binding.textInputLayoutConfirmPassword.isErrorEnabled = !errors["confirmPassword"].isNullOrBlank()
-//        binding.textInputLayoutConfirmPassword.error = errors["confirmPassword"]
-//
-//        return errors.isEmpty()
-//    }
-//
-//    private fun registerUser() {
-//        val secondName = binding.textInputEditTextSecondName.text.toString().trim()
-//        val firstName = binding.textInputEditTextFirstName.text.toString().trim()
-//        val thirdName = binding.textInputEditTextThirdName.text.toString().trim().takeIf { it.isNotBlank() }
-//        val number = binding.textInputEditTextNumber.text.toString().trim()
-//        val phone = binding.textInputEditTextPhone.text.toString().trim()
-//        val branch = binding.autoCompleteTextViewBranch.text.toString().trim()
-//        val pu = binding.autoCompleteTextViewPU.text.toString().trim()
-//        val password = binding.textInputEditTextPassword.text.toString().trim()
-//
-//        Log.d("Tagg", "Attempting registration with employeeNumber: $number")
-//        viewModel.registerUser(secondName, firstName, thirdName, number, phone, branch, pu, password)
-//    }
+    private fun registerUser() {
+        val secondName = binding.textInputEditTextSecondName.text.toString().trim()
+        val firstName = binding.textInputEditTextFirstName.text.toString().trim()
+        val thirdName = binding.textInputEditTextThirdName.text.toString().trim().takeIf { it.isNotBlank() }
+        val number = binding.textInputEditTextNumber.text.toString().trim()
+
+        val branch = binding.autoCompleteTextViewBranch.text.toString().trim()
+        val pu = binding.autoCompleteTextViewPU.text.toString().trim()
+        val password = binding.textInputEditTextPassword.text.toString().trim()
+
+        Log.d("Tagg", "Attempting registration with employeeNumber: $number")
+        viewModel.registerUser(secondName, firstName, thirdName, number, branch, pu, password)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

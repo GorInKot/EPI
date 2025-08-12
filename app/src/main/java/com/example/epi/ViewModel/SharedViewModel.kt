@@ -52,77 +52,125 @@ class SharedViewModel(
     private val _currentTime = MutableLiveData<String>(timeFormat.format(Date()))
     val currentTime: LiveData<String> get() = _currentTime
 
-    private val _isManualCustomer = MutableLiveData(false)
-    val isManualCustomer: LiveData<Boolean> get() = _isManualCustomer
-
-    private val _isManualObject = MutableLiveData(false)
-    val isManualObject: LiveData<Boolean> get() = _isManualObject
-
-    private val _isManualContractor = MutableLiveData(false)
-    val isManualContractor: LiveData<Boolean> get() = _isManualContractor
-
-    private val _isManualSubContractor = MutableLiveData(false)
-    val isManualSubContractor: LiveData<Boolean> get() = _isManualSubContractor
-
-    private val _manualCustomer = MutableLiveData<String>()
-    val manualCustomer: LiveData<String> get() = _manualCustomer
-
-    private val _manualObject = MutableLiveData<String>()
-    val manualObject: LiveData<String> get() = _manualObject
-
-    private val _manualContractor = MutableLiveData<String>()
-    val manualContractor: LiveData<String> get() = _manualContractor
-
-    private val _manualSubContractor = MutableLiveData<String>()
-    val manualSubContractor: LiveData<String> get() = _manualSubContractor
-
-    private val _plotText = MutableLiveData<String>()
-    val plotText: LiveData<String> get() = _plotText
-
-    private val _contractText = MutableLiveData<String>()
-    val contractText: LiveData<String> get() = _contractText
-
-    private val _repSSKGpText = MutableLiveData<String>()
-    val repSSKGpText: LiveData<String> get() = _repSSKGpText
-
-    private val _subContractorText = MutableLiveData<String>()
-    val subContractorText: LiveData<String> get() = _subContractorText
-
-    private val _repSubcontractorText = MutableLiveData<String>()
-    val repSubcontractorText: LiveData<String> get() = _repSubcontractorText
-
-    private val _repSSKSubText = MutableLiveData<String>()
-    val repSSKSubText: LiveData<String> get() = _repSSKSubText
-
-//    private val _selectedWorkType = MutableLiveData<String>()
-//    val selectedWorkType: LiveData<String> get() = _selectedWorkType
-
-    private val _selectedCustomer = MutableLiveData<String>()
-    val selectedCustomer: LiveData<String> get() = _selectedCustomer
-
-    private val _selectedObject = MutableLiveData<String>()
-    val selectedObject: LiveData<String> get() = _selectedObject
-
-    private val _selectedContractor = MutableLiveData<String>()
-    val selectedContractor: LiveData<String> get() = _selectedContractor
-
-    private val _selectedSubContractor = MutableLiveData<String>()
-    val selectedSubContractor: LiveData<String> get() = _selectedSubContractor
-
     private val _errorEvent = MutableLiveData<String>()
     val errorEvent: LiveData<String> get() = _errorEvent
 
-    // Списки выбора
+    // -------- РАССТАНОВКА - НАЧАЛО - ИНЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
+    // region методы для ArrangementFragment
+
+    // Временное решение: Договор СК
+    // region Временное решение: Договор СК
+
     companion object {
-//        val workTypes = listOf("Вахта", "Стандартный", "Суммированный")
-        val customers = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
-        val objects = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
-        val contractors = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
-        val subContractors = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2",
-            "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
+        val contractSK = listOf("Договор 1", "Договор 2", "Договор 3")
     }
 
+    private val _selectedContractSK = MutableLiveData<String>()
+    val selectedContractSK: LiveData<String> get() = _selectedContractSK
+
+    fun setSelectedContractSK(contract: String?) {
+        _selectedContractSK.value = contract
+    }
+    // endregion
+
+    // -------- Договор СК --------
+    private val _contractText = MutableLiveData<String>()
+    val contractText: LiveData<String> get() = _contractText
+
+    // Выбранный договор
+    private val _selectedContract = MutableLiveData<String>()
+    val selectedContract: LiveData<String> get() = _selectedContract
+
+    // -------- Заказчик --------
+    private val _customerText = MutableLiveData<String>()
+    val customerText: LiveData<String> get() = _customerText // Не используется
+
+    // Выбранный заказчик
+    private val _selectedCustomer = MutableLiveData<String>()
+    val selectedCustomer: LiveData<String> get() = _selectedCustomer
+
+    // -------- Объект --------
+    private val _objectText = MutableLiveData<String>()
+    val objectText: LiveData<String> get() = _objectText // Не используется
+
+    // Выбранный объект
+    private val _selectedObject = MutableLiveData<String>()
+    val selectedObject: LiveData<String> get() = _selectedObject
+
+    // -------- Участок --------
+    private val _plotText = MutableLiveData<String>()
+    val plotText: LiveData<String> get() = _plotText
+
+    // Выбранный участок
+    private val _selectedPlot = MutableLiveData<String>()
+    val selectedPlot: LiveData<String> get() = _selectedPlot // Не используется, можно объединить с _plotText
+
+    // Флаг для чекбокса "Объект не делится на участок"
+    private val _isManualPlot = MutableLiveData(false)
+    val isManualPlot: LiveData<Boolean> get() = _isManualPlot
+
+    // -------- Генподрядчик --------
+    private val _contractorText = MutableLiveData<String>()
+    val contractorText: LiveData<String> get() = _contractorText // Не используется
+
+    // Выбранный генподрядчик
+    private val _selectedContractor = MutableLiveData<String>()
+    val selectedContractor: LiveData<String> get() = _selectedContractor
+
+    // -------- Представитель Генподрядчика --------
+    private val _repContractorText = MutableLiveData<String>()
+    val repContractorText: LiveData<String> get() = _repContractorText // Не используется
+
+    // Выбранный Представитель Генподрядчика
+    private val _selectedRepContractor = MutableLiveData<String>()
+    val selectedRepContractor: LiveData<String> get() = _selectedRepContractor
+
+    // -------- Представитель ССК ПО (ГП) --------
+    private val _repSSKGpText = MutableLiveData<String>()
+    val repSSKGpText: LiveData<String> get() = _repSSKGpText
+
+    // Выбранный Представитель ССК ПО (ГП)
+    private val _selectedRepSSKGpText = MutableLiveData<String>()
+    val selectedRepSSKGpText: LiveData<String> get() = _selectedRepSSKGpText // Не используется
+
+    // -------- Субподрядчик --------
+    private val _SubContractorText = MutableLiveData<String>()
+    val subContractorText: LiveData<String> get() = _SubContractorText
+
+    // Выбранный субподрядчик
+    private val _selectedSubContractor = MutableLiveData<String>()
+    val selectedSubContractor: LiveData<String> get() = _selectedSubContractor
+
+    // Представитель субподрядчика
+    private val _RepSubContractorText = MutableLiveData<String>()
+    val repSubContractorText: LiveData<String> get() = _RepSubContractorText
+
+    // Выбранный представитель субподрядчика
+    private val _selectedRepSubContractor = MutableLiveData<String>()
+    val selectedRepSubContractor: LiveData<String> get() = _selectedRepSubContractor // Не используется
+
+    // Представитель ССК ПО (Суб)
+    private val _repSSKSubText = MutableLiveData<String>()
+    val repSSKSubText: LiveData<String> get() = _repSSKSubText
+
+    // Выбранный Представитель ССК ПО (Суб)
+    private val _selectedRepSSKSubText = MutableLiveData<String>()
+    val selectedRepSSKSubText: LiveData<String> get() = _selectedRepSSKSubText // Не используется
+
+    // endregion методы для ArrangementFragment
+
+    // Списки выбора
+//    companion object {
+////        val workTypes = listOf("Вахта", "Стандартный", "Суммированный")
+//        val customers = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
+//        val objects = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
+//        val contractors = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
+//        val subContractors = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2",
+//            "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
+//    }
+
     // Данные из TransportFragment
+    // region TransportFragment
     private val _isTransportAbsent = MutableLiveData(false)
     val isTransportAbsent: LiveData<Boolean> get() = _isTransportAbsent
 
@@ -153,7 +201,10 @@ class SharedViewModel(
     private val _transportInClearing = MutableLiveData(false)
     val transportInClearing: LiveData<Boolean> get() = _transportInClearing
 
+    // endregion TransportFragment
+
     // Данные из ControlFragment
+    // region ControlFragment
     private var orderCounter = 1
 //    private var extraOrderNumber = 1
 
@@ -187,8 +238,10 @@ class SharedViewModel(
             "Комплекс работ 10", "Комплекс работ 11", "Комплекс работ 12"
         )
     )
+    //endregion
 
     // Данные из FixVolumesFragment
+    //region
     private val _fixRows = MutableLiveData<List<FixVolumesRow>>(emptyList())
     val fixRows: LiveData<List<FixVolumesRow>> get() = _fixRows
 
@@ -207,6 +260,7 @@ class SharedViewModel(
             "м/ч", "м/с", "градусы", "%", "МПа", "ч", "сут."
         )
     )
+    //endregion
 
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
@@ -229,51 +283,73 @@ class SharedViewModel(
         _currentTime.postValue(timeFormat.format(now.time))
     }
 
-    // Методы для ArrangementFragment
-    fun setIsManualCustomer(value: Boolean) { _isManualCustomer.value = value }
-    fun setIsManualObject(value: Boolean) { _isManualObject.value = value }
-    fun setIsManualContractor(value: Boolean) { _isManualContractor.value = value }
-    fun setIsManualSubContractor(value: Boolean) { _isManualSubContractor.value = value }
+    // -------- РАССТАНОВКА - НАЧАЛО - МЕТОДЫ --------
+    // region методы для ArrangementFragment
 
-    fun setManualCustomer(value: String) { _manualCustomer.value = value }
-    fun setManualObject(value: String) { _manualObject.value = value }
-    fun setManualContractor(value: String) { _manualContractor.value = value }
-    fun setManualSubContractor(value: String) { _manualSubContractor.value = value }
-
-    fun setPlotText(value: String) { _plotText.value = value }
-    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value }
-    fun setSubContractorText(value: String) { _subContractorText.value = value }
-    fun setRepSubcontractorText(value: String) { _repSubcontractorText.value = value }
-    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
     fun setContractText(value: String) { _contractText.value = value }
+    fun setSelectedContract(value: String) { _selectedContract.value = value }
+    fun setCustomerText(value: String) { _customerText.value = value }
     fun setSelectedCustomer(value: String) { _selectedCustomer.value = value }
+    fun setObjectText(value: String) { _objectText.value = value }
     fun setSelectedObject(value: String) { _selectedObject.value = value }
+    fun setPlotText(value: String) { _plotText.value = value }
+    fun setSelectedPlot(value: String) { _selectedPlot.value = value }
+    fun setIsManualPlot(value: Boolean) { _isManualPlot.value = value }
+    fun setGetContractorText(value: String) { _contractorText.value = value }
     fun setSelectedContractor(value: String) { _selectedContractor.value = value }
+    fun setRepContractorText(value: String) { _repContractorText.value = value }
+    fun setSelectedRepContractor(value: String) { _selectedRepContractor.value = value }
+    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value }
+    fun setSubContractorText(value: String) { _SubContractorText.value = value }
     fun setSelectedSubContractor(value: String) { _selectedSubContractor.value = value }
+    fun setRepSubContractorText(value: String) { _RepSubContractorText.value = value }
+    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
+
+    // endregion методы для ArrangementFragment
+
+
+    // Методы для ArrangementFragment
+//    fun setIsManualCustomer(value: Boolean) { _isManualCustomer.value = value }
+//    fun setIsManualObject(value: Boolean) { _isManualObject.value = value }
+//    fun setIsManualContractor(value: Boolean) { _isManualContractor.value = value }
+//    fun setIsManualSubContractor(value: Boolean) { _isManualSubContractor.value = value }
+//
+////    fun setPlotText(value: String) { _plotText.value = value }
+//    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value }
+////    fun setSubContractorText(value: String) { _subContractorText.value = value }
+//    fun setRepSubcontractorText(value: String) { _repSubcontractorText.value = value }
+//    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
+//
+//    fun setSelectedCustomer(value: String) { _selectedCustomer.value = value }
+//    fun setSelectedObject(value: String) { _selectedObject.value = value }
+//    fun setSelectedContractor(value: String) { _selectedContractor.value = value }
+//    fun setSelectedSubContractor(value: String) { _selectedSubContractor.value = value }
 
     fun validateArrangementInputs(
         contract: String?,
         customer: String?,
-
         objectId: String?,
-
         plotText: String?,
-        contractor: String?,
-
-        subContractor: String?,
-
+        genContractor: String?,
+        repGenContractor: String?,
         repSSKGpText: String?,
-        subContractorText: String?,
-        repSubcontractorText: String?,
-        repSSKSubText: String?
+        subContractor: String?,
+        repSubcontractor: String?,
+        repSSKSubText: String?,
+        isManualPlot: Boolean
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (contract.isNullOrBlank()) errors["contract"] = "Укажите Договор СК"
-        if (plotText.isNullOrBlank()) errors["plotText"] = "Укажите участок"
-        if (repSSKGpText.isNullOrBlank()) errors["repSSKGpText"] = "Укажите представителя ССК ПО (ГП)"
-        if (subContractorText.isNullOrBlank()) errors["subContractorText"] = "Укажите субподрядчика"
-        if (repSubcontractorText.isNullOrBlank()) errors["repSubcontractorText"] = "Укажите представителя субподрядчика"
-        if (repSSKSubText.isNullOrBlank()) errors["repSSKSubText"] = "Укажите представителя ССК ПО (Суб)"
+        if (customer.isNullOrBlank()) errors["customer"] = "Укажите Заказчика"
+        if (objectId.isNullOrBlank()) errors["objectId"] = "Укажите Объект"
+        if (plotText.isNullOrBlank() && !isManualPlot) errors["plotText"] = "Укажите участок"
+        if (isManualPlot && plotText != "Объект не делится на участок") errors["plotText"] = "Некорректное значение участка при включенном чекбоксе"
+        if (genContractor.isNullOrBlank()) errors["genContractor"] = "Укажите Генподрядчика"
+        if (repGenContractor.isNullOrBlank()) errors["repGenContractor"] = "Укажите Представителя Генподрядчика"
+        if (repSSKGpText.isNullOrBlank()) errors["repSSKGpText"] = "Укажите Представителя ССК ПО (ГП)"
+        if (subContractor.isNullOrBlank()) errors["subContractor"] = "Укажите Субподрядчика"
+        if (repSubcontractor.isNullOrBlank()) errors["repSubcontractor"] = "Укажите Представителя Субподрядчика"
+        if (repSSKSubText.isNullOrBlank()) errors["repSSKSubText"] = "Укажите Представителя ССК ПО (Суб)"
         return errors
     }
 
@@ -283,20 +359,17 @@ class SharedViewModel(
             Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    contract = _contractText.value,
+                    contract = _selectedContract.value,
                     customer = _selectedCustomer.value,
-
                     objectId = _selectedObject.value,
-
                     plotText = _plotText.value,
-                    contractor = _selectedContractor.value,
-
-                    subContractor = _selectedSubContractor.value,
-
+                    genContractor = _selectedContractor.value,
+                    repGenContractor = _selectedSubContractor.value,
                     repSSKGpText = _repSSKGpText.value,
-                    subContractorText = _subContractorText.value,
-                    repSubcontractorText = _repSubcontractorText.value,
-                    repSSKSubText = _repSSKSubText.value
+                    subContractor = _SubContractorText.value,
+                    repSubcontractor = _RepSubContractorText.value,
+                    repSSKSubText = _repSSKSubText.value,
+                    isManualPlot = _isManualPlot.value ?: false
                 )
                 if (arrangementErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
@@ -311,15 +384,15 @@ class SharedViewModel(
 //                    userName = user?.let { "${it.firstName} ${it.secondName} ${it.thirdName}" } ?: "Неизвестный пользователь",
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
-                    contract = _contractText.value.orEmpty(),
-                    customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
-                    obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
+                    contract = _selectedContract.value.orEmpty(),
+                    customer = _selectedCustomer.value.orEmpty(),
+                    obj =  _selectedObject.value.orEmpty(),
                     plot = _plotText.value.orEmpty(),
-                    contractor = if (_isManualContractor.value == true) _manualContractor.value.orEmpty() else _selectedContractor.value.orEmpty(),
-                    repContractor = if (_isManualSubContractor.value == true) _manualSubContractor.value.orEmpty() else _selectedSubContractor.value.orEmpty(),
+                    genContractor = _selectedContractor.value.orEmpty(),
+                    repGenContractor =_selectedSubContractor.value.orEmpty(),
                     repSSKGp = _repSSKGpText.value.orEmpty(),
-                    subContractor = _subContractorText.value.orEmpty(),
-                    repSubContractor = _repSubcontractorText.value.orEmpty(),
+                    subContractor = _SubContractorText.value.orEmpty(),
+                    repSubContractor = _RepSubContractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
                     // Поля Transport, Control и FixVolumes остаются пустыми
 //                    contract = "",
@@ -367,19 +440,17 @@ class SharedViewModel(
             Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    contract = _contractText.value,
+                    contract = _selectedContract.value,
                     customer = _selectedCustomer.value,
                     objectId = _selectedObject.value,
-
                     plotText = _plotText.value,
-                    contractor = _selectedContractor.value,
-
-                    subContractor = _selectedSubContractor.value,
-
+                    genContractor = _selectedContractor.value,
+                    repGenContractor = _selectedSubContractor.value,
                     repSSKGpText = _repSSKGpText.value,
-                    subContractorText = _subContractorText.value,
-                    repSubcontractorText = _repSubcontractorText.value,
-                    repSSKSubText = _repSSKSubText.value
+                    subContractor = _SubContractorText.value,
+                    repSubcontractor = _RepSubContractorText.value,
+                    repSSKSubText = _repSSKSubText.value,
+                    isManualPlot = _isManualPlot.value ?: false
                 )
                 if (arrangementErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
@@ -424,16 +495,17 @@ class SharedViewModel(
                 val report = Report(
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
-                    contract = _contractText.value.orEmpty(),
-                    customer = if (_isManualCustomer.value == true) _manualCustomer.value.orEmpty() else _selectedCustomer.value.orEmpty(),
-                    obj = if (_isManualObject.value == true) _manualObject.value.orEmpty() else _selectedObject.value.orEmpty(),
+                    contract = _selectedContract.value.orEmpty(),
+                    customer = _selectedCustomer.value.orEmpty(),
+                    obj =  _selectedObject.value.orEmpty(),
                     plot = _plotText.value.orEmpty(),
-                    contractor = if (_isManualContractor.value == true) _manualContractor.value.orEmpty() else _selectedContractor.value.orEmpty(),
-                    repContractor = if (_isManualSubContractor.value == true) _manualSubContractor.value.orEmpty() else _selectedSubContractor.value.orEmpty(),
+                    genContractor = _selectedContractor.value.orEmpty(),
+                    repGenContractor =_selectedSubContractor.value.orEmpty(),
                     repSSKGp = _repSSKGpText.value.orEmpty(),
-                    subContractor = _subContractorText.value.orEmpty(),
-                    repSubContractor = _repSubcontractorText.value.orEmpty(),
+                    subContractor = _SubContractorText.value.orEmpty(),
+                    repSubContractor = _RepSubContractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
+
 //                    contract = _transportContractCustomer.value.orEmpty(),
                     executor = _transportExecutorName.value.orEmpty(),
                     contractTransport = _transportContractTransport.value.orEmpty(),
@@ -891,18 +963,17 @@ class SharedViewModel(
         return """
         Дата: ${_currentDate.value}
         Время: ${_currentTime.value}
-        Договор СК: ${_contractText.value}
-        Заказчик: ${if (_isManualCustomer.value == true) _manualCustomer.value else _selectedCustomer.value}
-        Объект: ${if (_isManualObject.value == true) _manualObject.value else _selectedObject.value}
+        Договор СК: ${_selectedContract.value}
+        Заказчик: ${_selectedCustomer.value}
+        Объект: ${_selectedObject.value}
         Участок: ${_plotText.value}
-        Подрядчик: ${if (_isManualContractor.value == true) _manualContractor.value else _selectedContractor.value}
-        Субподрядчик: ${if (_isManualSubContractor.value == true) _manualSubContractor.value else _selectedSubContractor.value}
+        Подрядчик: ${_selectedContractor.value}
+        Представитель Генподрядчика: ${_selectedSubContractor.value}
         Представитель ССК ГП: ${_repSSKGpText.value}
-        Текст субподрядчика: ${_subContractorText.value}
-        Представитель субподрядчика: ${_repSubcontractorText.value}
+        Субподрядчик: ${_SubContractorText.value}
+        Представитель субподрядчика: ${_RepSubContractorText.value}
         Представитель ССК субподрядчика: ${_repSSKSubText.value}
 
-//        Договор транспорта: ${_transportContractCustomer.value}
         Исполнитель по транспорту: ${_transportExecutorName.value}
         Транспорт по договору: ${_transportContractTransport.value}        
         Госномер транспорта: ${_transportStateNumber.value}
@@ -936,71 +1007,68 @@ class SharedViewModel(
             try {
                 val report = reportRepository.getLastUnsentReport()
                 report?.let {
-                    _contractText.value = it.contract
-                    if (it.customer in customers) {
-                        _selectedCustomer.value = it.customer
-                        _isManualCustomer.value = false
-                    } else {
-                        _manualCustomer.value = it.customer
-                        _isManualCustomer.value = true
-                    }
-                    if (it.obj in objects) {
-                        _selectedObject.value = it.obj
-                        _isManualObject.value = false
-                    } else {
-                        _manualObject.value = it.obj
-                        _isManualObject.value = true
-                    }
-                    _plotText.value = it.plot
-                    if (it.contractor in contractors) {
-                        _selectedContractor.value = it.contractor
-                        _isManualContractor.value = false
-                    } else {
-                        _manualContractor.value = it.contractor
-                        _isManualContractor.value = true
-                    }
-                    if (it.repContractor in subContractors) {
-                        _selectedSubContractor.value = it.repContractor
-                        _isManualSubContractor.value = false
-                    } else {
-                        _manualSubContractor.value = it.repContractor
-                        _isManualSubContractor.value = true
-                    }
-                    _repSSKGpText.value = it.repSSKGp
-                    _subContractorText.value = it.subContractor
-                    _repSubcontractorText.value = it.repSubContractor
-                    _repSSKSubText.value = it.repSSKSub
+                    setSelectedContract(it.contract)
+                    setSelectedCustomer(it.customer)
+                    setSelectedObject(it.obj)
+                    setPlotText(it.plot)
+                    setIsManualPlot(it.plot == "Объект не делится на участки")
+                    setSelectedContractor(it.genContractor)
+                    setSelectedRepContractor(it.repGenContractor)
+                    setRepSSKGpText(it.repSSKGp)
+                    setSubContractorText(it.subContractor)
+                    setRepSubContractorText(it.repSubContractor)
+                    setRepSSKSubText(it.repSSKSub)
                     _transportContractCustomer.value = it.contract
                     _transportExecutorName.value = it.executor
                     _transportContractTransport.value = it.contractTransport
                     _transportStateNumber.value = it.stateNumber
-
                 }
             } catch (e: Exception) {
                 _errorEvent.postValue("Ошибка при загрузке предыдущего отчета")
             }
         }
+//        viewModelScope.launch {
+//            try {
+//                val report = reportRepository.getLastUnsentReport()
+//                report?.let {
+//                    _selectedContract.value = it.contract
+//                    _selectedCustomer.value = it.customer
+//                    _selectedObject.value = it.obj
+//                    _plotText.value = it.plot
+//                    if (it.plot == "Объект не делится на участок") {
+//                        _isManualPlot.value = true
+//                    } else {
+//                        _isManualPlot.value = false
+//                    }
+////                    _selectedContract.value = it.contract
+//                    _selectedSubContractor.value = it.subContractor
+//                    _repSSKGpText.value = it.repSSKGp
+//                    _SubContractorText.value = it.subContractor
+//                    _RepSubContractorText.value = it.repSubContractor
+//                    _repSSKSubText.value = it.repSSKSub
+//                    _transportExecutorName.value = it.executor
+//                    _transportContractTransport.value = it.contractTransport
+//                    _transportStateNumber.value = it.stateNumber
+//                }
+//            } catch (e: Exception) {
+//                _errorEvent.postValue("Ошибка загрузки предыдущего отчета")
+//                Log.d("SharedViewModel", "Ошибка при загрузке предыдущего отчета: ${e.message}")
+//            }
+//        }
     }
 
     fun clearAllData() {
-        _contractText.value = ""
+        _selectedContract.value = ""
         _selectedCustomer.value = ""
         _selectedObject.value = ""
         _selectedContractor.value = ""
         _selectedSubContractor.value = ""
-        _manualCustomer.value = ""
-        _manualObject.value = ""
-        _manualContractor.value = ""
-        _manualSubContractor.value = ""
-        _isManualCustomer.value = false
-        _isManualObject.value = false
-        _isManualContractor.value = false
-        _isManualSubContractor.value = false
         _plotText.value = ""
         _repSSKGpText.value = ""
-        _subContractorText.value = ""
-        _repSubcontractorText.value = ""
+        _SubContractorText.value = ""
+        _RepSubContractorText.value = ""
         _repSSKSubText.value = ""
+        _isManualPlot.value = false
         _transportContractCustomer.value = ""
         _transportExecutorName.value = ""
         _transportContractTransport.value = ""
@@ -1020,188 +1088,182 @@ class SharedViewModel(
         _isReportSaved.postValue(false) // Используем postValue для безопасности
     }
 
-    // ------------ Блок Авторизации и Регистрации ------------
+    // ------------ Блок Авторизации ------------
+
+    // ------------ Блок Регистрации ------------
 
     // LiveData для данных текущего пользователя
-//    private val _currentUser = MutableLiveData<User?>(null)
-//    val currentUser: LiveData<User?> get() = _currentUser
-//
-//    // Загрузка данных пользователя
-//    fun loadCurrentUser(context: Context) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                // Получаем employeeNumber из SharedPreferences
-//                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-//                val employeeNumber = sharedPreferences.getString("current_user", null)
-//                if (employeeNumber != null) {
-//                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
-//                    withContext(Dispatchers.Main) {
-//                        _currentUser.value = user
-//                        Log.d("SharedViewModel", "Loaded user: $user")
-//                    }
-//                } else {
-//                    withContext(Dispatchers.Main) {
-//                        _errorEvent.postValue("Пользователь не авторизован")
-//                        Log.e("SharedViewModel", "No employeeNumber found in SharedPreferences")
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
-//                    Log.e("SharedViewModel", "Error loading user: ${e.message}", e)
-//                }
-//            }
-//        }
-//    }
+    private val _currentUser = MutableLiveData<User?>(null)
+    val currentUser: LiveData<User?> get() = _currentUser
+
+    // Загрузка данных пользователя
+    fun loadCurrentUser(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Получаем employeeNumber из SharedPreferences
+                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                val employeeNumber = sharedPreferences.getString("current_user", null)
+                if (employeeNumber != null) {
+                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = user
+                        Log.d("SharedViewModel", "Loaded user: $user")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e("SharedViewModel", "No employeeNumber found in SharedPreferences")
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
+                    Log.e("SharedViewModel", "Error loading user: ${e.message}", e)
+                }
+            }
+        }
+    }
 //
 //    // -------- Авторизация и Регистрация --------
 //
 //    // Авторизация
 //
 //    // LiveData для результатов авторизации
-//    private val _authResult = MutableLiveData<AuthResult>()
-//    val authResult: LiveData<AuthResult> get() = _authResult
-//
-//    fun loginUser(employeeNumber: String, password: String) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                Log.d("SharedViewModel", "Attempting login for employeeNumber: $employeeNumber, password: $password")
-//                val user = userRepository.getUserByCredentials(employeeNumber)
-//                Log.d("SharedViewModel", "User found: $user")
-//                if (user != null && BCrypt.checkpw(password, user.password)) {
-//                    withContext(Dispatchers.Main) {
-//                        _currentUser.value = user
-//                        _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
-//                    }
-//                } else {
-//                    withContext(Dispatchers.Main) {
-//                        _authResult.value = AuthResult.Error(
-//                            if (user == null) "Пользователь с таким номером не найден"
-//                            else "Неверный пароль"
-//                        )
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
-//                    Log.e("SharedViewModel", "Login error: ${e.message}", e)
-//                }
-//            }
-//        }
-//    }
+    private val _authResult = MutableLiveData<AuthResult>()
+    val authResult: LiveData<AuthResult> get() = _authResult
+
+    fun loginUser(employeeNumber: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                Log.d("SharedViewModel", "Attempting login for employeeNumber: $employeeNumber, password: $password")
+                val user = userRepository.getUserByCredentials(employeeNumber)
+                Log.d("SharedViewModel", "User found: $user")
+                if (user != null && BCrypt.checkpw(password, user.password)) {
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = user
+                        _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        _authResult.value = AuthResult.Error(
+                            if (user == null) "Пользователь с таким номером не найден"
+                            else "Неверный пароль"
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
+                    Log.e("SharedViewModel", "Login error: ${e.message}", e)
+                }
+            }
+        }
+    }
 //
 //    // Очистка сессии (выход из аккаунта)
-//    fun logout() {
-//        _currentUser.value = null
-//        _authResult.value = AuthResult.Idle
-//        clearAllData()
-//    }
+    fun logout() {
+        _currentUser.value = null
+        _authResult.value = AuthResult.Idle
+        clearAllData()
+    }
 //
-//    fun validateAuthInputs(
-//        number: String?,
-//        password: String?
-//    ): Map<String, String?> {
-//        val errors = mutableMapOf<String, String?>()
-//
-//        if (number.isNullOrBlank()) {
-//            errors["number"] = "Введите табельный номер"
-//        } else if (!number.all { it.isDigit() } || number.length > 4) {
-//            errors["number"] = "Табельный номер должен содержать 4 цифры"
-//        }
-//
-//        if (password.isNullOrBlank() || password.length != 12) {
-//            errors["password"] = "Введите корректный пароль"
-//        }
-//
-//        return errors
-//    }
+    fun validateAuthInputs(
+        number: String?,
+        password: String?
+    ): Map<String, String?> {
+        val errors = mutableMapOf<String, String?>()
+
+        if (number.isNullOrBlank()) {
+            errors["number"] = "Введите уникальный номер сотрудника"
+        } else if (!number.all { it.isDigit() } || number.length > 4) {
+            errors["number"] = "Уникальный номер должен содержать 4 цифры"
+        }
+
+        if (password.isNullOrBlank() || password.length != 12) {
+            errors["password"] = "Введите корректный пароль"
+        }
+
+        return errors
+    }
 //
 //
 //    // Регистрация
-//    fun registerUser(
-//        secondName: String,
-//        firstName: String,
-//        thirdName: String?,
-//        employeeNumber: String,
-//        phone: String,
-//        branch: String,
-//        pu: String,
-//        password: String
-//    ) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                if (userRepository.isEmployeeNumberTaken(employeeNumber)) {
-//                    withContext(Dispatchers.Main) {
-//                        _authResult.value = AuthResult.RegistrationError("Табельный номер уже занят")
-//                    }
-//                } else {
-//                    val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
-//                    Log.d("SharedViewModel", "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
-//                    val user = User(
-//                        id = 0,
-//                        secondName = secondName,
-//                        firstName = firstName,
-//                        thirdName = thirdName,
-//                        employeeNumber = employeeNumber,
-//                        phone = phone,
-//                        branch = branch,
-//                        pu = pu,
-//                        password = hashedPassword
-//                    )
-//                    userRepository.insertUser(user)
-//                    withContext(Dispatchers.Main) {
-//                        _currentUser.value = user
-//                        _authResult.value = AuthResult.RegistrationSuccess("Регистрация успешна")
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    _authResult.value = AuthResult.RegistrationError("Ошибка регистрации: ${e.message}")
-//                    Log.e("SharedViewModel", "Registration error: ${e.message}", e)
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    fun validateRegistrationInputs(
-//        secondName: String?,
-//        firstName: String?,
-//        thirdName: String?,
-//        number: String?,
-//        phone: String?,
-//        branch: String?,
-//        pu: String?,
-//        password: String?,
-//        confirmPassword: String?
-//    ): Map<String, String?> {
-//        val errors = mutableMapOf<String, String?>()
-//
-//        if (secondName.isNullOrBlank()) errors["secondName"] = "Введите фамилию"
-//        if (firstName.isNullOrBlank()) errors["firstName"] = "Введите имя"
-//        if (thirdName.isNullOrBlank()) errors["thirdName"] = "Введите отчество"
-//        // Отчество необязательное, поэтому проверка отсутствует
-//        if (number.isNullOrBlank()) errors["number"] = "Введите табельный номер"
-//        else if (number.length > 4 || !number.all { it.isDigit() }) errors["number"] = "Табельный номер должен содержать до 4 цифр"
-//
-//        val phoneDigits = phone?.filter { it.isDigit() }
-//        if (phoneDigits.isNullOrBlank()) {
-//            errors["phone"] = "Введите корректный номер телефона"
-//        }
-//
-//        if (branch.isNullOrBlank()) errors["branch"] = "Выберите филиал"
-//        if (pu.isNullOrBlank()) errors["pu"] = "Выберите ПУ"
-//
-//        if (password.isNullOrBlank()) {
-//            errors["password"] = "Пароль не может быть пустым"
-//        } else if (password.length < 6) {
-//            errors["password"] = "Пароль должен содержать не менее 6 символов"
-//        } else if (password != confirmPassword) {
-//            errors["confirmPassword"] = "Пароли не совпадают"
-//        }
-//
-//        return errors
-//    }
+    fun registerUser(
+        secondName: String,
+        firstName: String,
+        thirdName: String?,
+        employeeNumber: String,
+        branch: String,
+        pu: String,
+        password: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (userRepository.isEmployeeNumberTaken(employeeNumber)) {
+                    withContext(Dispatchers.Main) {
+                        _authResult.value = AuthResult.RegistrationError("Табельный номер уже занят")
+                    }
+                } else {
+                    val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
+                    Log.d("SharedViewModel", "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
+                    val user = User(
+                        id = 0,
+                        secondName = secondName,
+                        firstName = firstName,
+                        thirdName = thirdName,
+                        employeeNumber = employeeNumber,
+                        branch = branch,
+                        pu = pu,
+                        password = hashedPassword
+                    )
+                    userRepository.insertUser(user)
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = user
+                        _authResult.value = AuthResult.RegistrationSuccess("Регистрация успешна")
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _authResult.value = AuthResult.RegistrationError("Ошибка регистрации: ${e.message}")
+                    Log.e("SharedViewModel", "Registration error: ${e.message}", e)
+                }
+            }
+        }
+    }
+
+
+    fun validateRegistrationInputs(
+        secondName: String?,
+        firstName: String?,
+        thirdName: String?,
+        number: String?,
+        branch: String?,
+        pu: String?,
+        password: String?,
+        confirmPassword: String?
+    ): Map<String, String?> {
+        val errors = mutableMapOf<String, String?>()
+
+        if (secondName.isNullOrBlank()) errors["secondName"] = "Введите фамилию"
+        if (firstName.isNullOrBlank()) errors["firstName"] = "Введите имя"
+        if (thirdName.isNullOrBlank()) errors["thirdName"] = "Введите отчество"
+        // Отчество необязательное, поэтому проверка отсутствует
+        if (number.isNullOrBlank()) errors["number"] = "Введите табельный номер"
+        else if (number.length > 4 || !number.all { it.isDigit() }) errors["number"] = "Табельный номер должен содержать до 4 цифр"
+
+        if (branch.isNullOrBlank()) errors["branch"] = "Выберите филиал"
+        if (pu.isNullOrBlank()) errors["pu"] = "Выберите ПУ"
+
+        if (password.isNullOrBlank()) {
+            errors["password"] = "Пароль не может быть пустым"
+        } else if (password.length < 6) {
+            errors["password"] = "Пароль должен содержать не менее 6 символов"
+        } else if (password != confirmPassword) {
+            errors["confirmPassword"] = "Пароли не совпадают"
+        }
+
+        return errors
+    }
 //
 //    private val _isLoading = MutableStateFlow(true)
 //    val isLoading = _isLoading.asStateFlow()
@@ -1211,16 +1273,14 @@ class SharedViewModel(
 //    }
 
     // Класс для результатов авторизации
-//    sealed class AuthResult {
-//        data class Success(val message: String) : AuthResult()
-//        data class Error(val message: String) : AuthResult()
-//        data class RegistrationSuccess(val message: String) : AuthResult() // Для успешной регистрации
-//        data class RegistrationError(val message: String) : AuthResult() // Для ошибок регистрации
-//        object Idle : AuthResult() // Новое состояние для сброса
-//    }
+    sealed class AuthResult {
+        data class Success(val message: String) : AuthResult()
+        data class Error(val message: String) : AuthResult()
+        data class RegistrationSuccess(val message: String) : AuthResult() // Для успешной регистрации
+        data class RegistrationError(val message: String) : AuthResult() // Для ошибок регистрации
+        object Idle : AuthResult() // Новое состояние для сброса
+    }
 }
-
-
 
 sealed class RowValidationResult {
     data class Valid(val remainingVolume: Double? = null): RowValidationResult()

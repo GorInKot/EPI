@@ -99,11 +99,7 @@ class FixingVolumesFragment : Fragment() {
 
         // Добавить запись
         binding.btnAdd.setOnClickListener {
-            val objectId = if (sharedViewModel.isManualObject.value == true) {
-                sharedViewModel.manualObject.value.orEmpty()
-            } else {
-                sharedViewModel.selectedObject.value.orEmpty()
-            }
+            val objectId = sharedViewModel.selectedObject.value.orEmpty()
             val newRow = FixVolumesRow(
                 ID_object = objectId,
                 projectWorkType = binding.AutoCompleteTextViewWorkType.text.toString().trim(),

@@ -3,6 +3,7 @@ package com.example.epi.DataBase.ExtraDatabase
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -10,7 +11,7 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     companion object {
         private const val DATABASE_NAME = "myapp_database.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
     }
 
     private val context: Context = context.applicationContext
@@ -42,21 +43,26 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     override fun onCreate(db: SQLiteDatabase?) {
         // Не требуется, так как база данных уже создана
+        Log.d("Tagg", "myapp_database created")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        // Реализуйте логику обновления базы данных, если потребуется
+        val dbFile = context.getDatabasePath(DATABASE_NAME)
+        if (dbFile.exists()) {
+            dbFile.delete()
+        }
+        copyDatabaseFromAssets()
     }
 
     // Contract (Договор) TODO
     fun getContract(): List<String> {
         val db = readableDatabase
         val contracts = mutableListOf<String>()
-        val cursor = db.rawQuery("SELECT name FROM Contract", null)
+        val cursor = db.rawQuery("SELECT contract FROM Contract", null)
 
         try {
             while (cursor.moveToNext()) {
-                val contract = cursor.getString(cursor.getColumnIndexOrThrow("number"))
+                val contract = cursor.getString(cursor.getColumnIndexOrThrow("contract"))
                 contracts.add(contract)
             }
         } finally {

@@ -41,21 +41,11 @@ class ArrangementFragment : Fragment() {
         )
     }
 
-    // Old code
-    private lateinit var contractTextWatcher: TextWatcher
-//    private lateinit var plotTextWatcher: TextWatcher
+    // Text Watchers для полей с ручным вводом
     private lateinit var repSSKGpTextWatcher: TextWatcher
     private lateinit var subContractorTextWatcher: TextWatcher
     private lateinit var repSubContractorTextWatcher: TextWatcher
     private lateinit var repSSKSubTextWatcher: TextWatcher
-
-    // New code (TextWatchers)
-//    private lateinit var customerTextWatcher: TextWatcher
-//    private lateinit var contractorTextWatcher: TextWatcher
-//    private lateinit var objectTextWatcher: TextWatcher
-//    private lateinit var plotTextWatcher: TextWatcher
-//    private lateinit var subContractorTextWatcher: TextWatcher
-//    private lateinit var workTypeTextWatcher: TextWatcher
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +63,7 @@ class ArrangementFragment : Fragment() {
         setupRightBlock()
         setupButtons()
         setupViewModelObservers()
+        setupPlotCheckbox()
     }
 
     override fun onResume() {
@@ -91,62 +82,62 @@ class ArrangementFragment : Fragment() {
 
     private fun setupLeftBlock() {
 
-        // -------- Договор СК
-        contractTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextContract.selectionStart}")
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextContract.selectionStart}")
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextContract.selectionStart}")
-                sharedViewModel.setContractText(s.toString())
-            }
-        }
-        binding.textInputEditTextContract.addTextChangedListener(contractTextWatcher)
-
-        // TODO - из ExtraDatabae
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val dbHelper = ExtraDatabaseHelper(requireContext())
-//            val contract = withContext(Dispatchers.IO) {
-//                dbHelper.getContract()
-//            }
-//
-//            if (contract.isEmpty()) {
-//                Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
-//                Log.d("Tagg", "Список объектов пуст")
-//            }
-//
-//            val customerListAdapter = ArrayAdapter(
-//                requireContext(),
-//                android.R.layout.simple_spinner_dropdown_item,
-//                contract
-//            )
-
-
-        // -------- Заказчик
-        // Старый код
-//        val customerListAdapter = ArrayAdapter(
+        // -------- Договор СК --------
+//        val contractListAdapter = ArrayAdapter(
 //            requireContext(),
 //            android.R.layout.simple_spinner_dropdown_item,
-//            SharedViewModel.customers
+//            SharedViewModel.contractSK
 //        )
-//        binding.autoCompleteCustomer.setAdapter(customerListAdapter)
-//        binding.autoCompleteCustomer.inputType = InputType.TYPE_NULL
-//        binding.autoCompleteCustomer.keyListener = null
-//        binding.autoCompleteCustomer.setOnTouchListener { _, _ ->
-//            binding.autoCompleteCustomer.showDropDown()
+//        binding.autoCompleteContract.setAdapter(contractListAdapter)
+//        binding.autoCompleteContract.inputType = InputType.TYPE_NULL
+//        binding.autoCompleteContract.keyListener = null
+//        binding.autoCompleteContract.setOnTouchListener { _, _ ->
+//            binding.autoCompleteContract.showDropDown()
 //            false
 //        }
-//        binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
-//            val selectedCustomer = parent.getItemAtPosition(position).toString()
-//            sharedViewModel.setSelectedCustomer(selectedCustomer)
-//            sharedViewModel.setIsManualCustomer(false)
+//        binding.autoCompleteContract.setOnItemClickListener { parent, _, position, _ ->
+//            val selectedContractSK = parent.getItemAtPosition(position).toString()
+//            sharedViewModel.setSelectedContract(selectedContractSK)
 //        }
-        // Новый код ( ТЕСТ - Работает !!! )
+//        sharedViewModel.selectedContractSK.observe(viewLifecycleOwner) { selectedContract ->
+//            val currentText = binding.autoCompleteContract.text?.toString() ?: ""
+//            if (currentText != selectedContract) {
+//                binding.autoCompleteContract.setText(selectedContract ?: "", false)
+//            }
+//        }
+
+        //region Договор СК
+        CoroutineScope(Dispatchers.Main).launch {
+            val dbHelper = ExtraDatabaseHelper(requireContext())
+            val contract = withContext(Dispatchers.IO) {
+                dbHelper.getContract()
+            }
+            if (contract.isEmpty()) {
+                Toast.makeText(requireContext(), "Список договоров пуст", Toast.LENGTH_SHORT).show()
+                Log.d("Tagg", "Список договоров пуст")
+            }
+            val contractListAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                contract
+            )
+            binding.autoCompleteContract.setAdapter(contractListAdapter)
+            binding.autoCompleteContract.inputType = InputType.TYPE_NULL
+            binding.autoCompleteContract.keyListener = null
+            binding.autoCompleteContract.setOnTouchListener { _, _ ->
+                binding.autoCompleteContract.showDropDown()
+                false
+            }
+            binding.autoCompleteContract.setOnItemClickListener { parent, _, position, _ ->
+                val selectedContract = parent.getItemAtPosition(position).toString()
+                sharedViewModel.setSelectedContract(selectedContract)
+
+            }
+        }
+        // endregion
+
+        // -------- Заказчик --------
+        //region Заказчик
         CoroutineScope(Dispatchers.Main).launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
             val customer = withContext(Dispatchers.IO) {
@@ -154,8 +145,8 @@ class ArrangementFragment : Fragment() {
             }
 
             if (customer.isEmpty()) {
-                Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
-                Log.d("Tagg", "Список объектов пуст")
+                Toast.makeText(requireContext(), "Список Заказчиков пуст", Toast.LENGTH_SHORT).show()
+                Log.d("Tagg", "Список Заказчиков пуст")
             }
 
             val customerListAdapter = ArrayAdapter(
@@ -173,36 +164,30 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
                 val selectedCustomer = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedCustomer(selectedCustomer)
-                sharedViewModel.setIsManualCustomer(false)
             }
         }
+        // endregion
 
-        // -------- Объект
-        // Old code
-//        val objectListAdapter = ArrayAdapter(
-//            requireContext(),
-//            android.R.layout.simple_spinner_dropdown_item,
-//            SharedViewModel.objects
-//        )
-        // New code
+        // -------- Объект --------
+        // region Объект
         CoroutineScope(Dispatchers.Main).launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
-            val objectt = withContext(Dispatchers.IO) {
+            val obj = withContext(Dispatchers.IO) {
                 dbHelper.getObject()
             }
 
-            if (objectt.isEmpty()) {
+            if (obj.isEmpty()) {
                 Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
                 Log.d("Tagg", "Список объектов пуст")
             }
 
-            val objecttListAdapter = ArrayAdapter(
+            val objListAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                objectt
+                obj
             )
 
-            binding.autoCompleteObject.setAdapter(objecttListAdapter)
+            binding.autoCompleteObject.setAdapter(objListAdapter)
             binding.autoCompleteObject.inputType = InputType.TYPE_NULL
             binding.autoCompleteObject.keyListener = null
             binding.autoCompleteObject.setOnTouchListener { _, _ ->
@@ -212,183 +197,95 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
                 val selectedObject = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedObject(selectedObject)
-                sharedViewModel.setIsManualObject(false)
+
             }
         }
+        // endregion
 
-
-        // Участок
-
-        // Old code
-//        plotTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextPlot.selectionStart}")
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                Log.d("TextWatcher", "OnChanged: $s, Cursor: ${binding.textInputEditTextPlot.selectionStart}")
-//            }
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextPlot.selectionStart}")
-//                sharedViewModel.setPlotText(s.toString())
-//            }
-//        }
-        // New code
+        // -------- Участок --------
+        // region Участок
         CoroutineScope(Dispatchers.Main).launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
             val plot = withContext(Dispatchers.IO) {
                 dbHelper.getPlot()
             }
-
             if (plot.isEmpty()) {
-                Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
-                Log.d("Tagg", "Список объектов пуст")
+                Toast.makeText(requireContext(), "Список участков пуст", Toast.LENGTH_SHORT).show()
+                Log.d("Tagg", "Список участков пуст")
             }
-
             val plotListAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 plot
             )
-
             binding.autoCompletePlot.setAdapter(plotListAdapter)
             binding.autoCompletePlot.inputType = InputType.TYPE_NULL
             binding.autoCompletePlot.keyListener = null
             binding.autoCompletePlot.setOnTouchListener { _, _ ->
-                binding.autoCompletePlot.showDropDown()
+                if (!sharedViewModel.isManualPlot.value!!) {
+                    binding.autoCompletePlot.showDropDown()
+                }
                 false
             }
             binding.autoCompletePlot.setOnItemClickListener { parent, _, position, _ ->
                 val selectedPlot = parent.getItemAtPosition(position).toString()
-                sharedViewModel.setSelectedObject(selectedPlot)
-                sharedViewModel.setIsManualObject(false)
+                sharedViewModel.setPlotText(selectedPlot)
+                sharedViewModel.setIsManualPlot(false)
             }
+        }
+        // endregion
 
-//            binding.autoCompletePlot.addTextChangedListener(plotTextWatcher)
-        }
-
-        // Генподрядчик
-        val contractorListAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            SharedViewModel.contractors
-        )
-        binding.autoCompleteContractor.setAdapter(contractorListAdapter)
-        binding.autoCompleteContractor.inputType = InputType.TYPE_NULL
-        binding.autoCompleteContractor.keyListener = null
-        binding.autoCompleteContractor.setOnTouchListener { _, _ ->
-            binding.autoCompleteContractor.showDropDown()
-            false
-        }
-        binding.autoCompleteContractor.setOnItemClickListener { parent, _, position, _ ->
-            val selectedContractor = parent.getItemAtPosition(position).toString()
-            sharedViewModel.setSelectedContractor(selectedContractor)
-            sharedViewModel.setIsManualContractor(false)
-        }
     }
 
-    // New Code (Left block)
-//    private fun setupLeftBlock() {
-//        // Customer
-//        customerTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setSelectedCustomer(s.toString())
-//            }
-//        }
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val dbHelper = ExtraDatabaseHelper(requireContext())
-//                val customers = withContext(Dispatchers.IO) {
-//                    dbHelper.getCustomer()
-//                }
-//                val customerListAdapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    customers.map { it.name }
-//                )
-//                binding.autoCompleteCustomer.setAdapter(customerListAdapter)
-//                binding.autoCompleteCustomer.inputType = InputType.TYPE_NULL
-//                binding.autoCompleteCustomer.keyListener = null
-//                binding.autoCompleteCustomer.setOnTouchListener { _, _ ->
-//                    binding.autoCompleteCustomer.showDropDown()
-//                    false
-//                }
-//                binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
-//                    val selectedCustomer = customers[position]
-//                    sharedViewModel.setSelectedCustomer(selectedCustomer.name)
-//                    sharedViewModel.setSelectedCustomerId(selectedCustomer.id)
-//                    updateDependentDropdowns(selectedCustomer.id, null, null)
-//                }
-//            } catch (e: Exception) {
-//                Log.e("ArrangementFragment", "Ошибка загрузки заказчиков: ${e.message}")
-//                Toast.makeText(requireContext(), "Ошибка загрузки заказчиков", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        binding.autoCompleteCustomer.addTextChangedListener(customerTextWatcher)
-//
-//        // Contractor
-//        contractorTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setSelectedContractor(s.toString())
-//            }
-//        }
-//        setupContractorDropdown(null)
-//
-//        // Object
-//        objectTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setSelectedObject(s.toString())
-//            }
-//        }
-//        setupObjectDropdown(null)
-//
-//        // Plot
-//        plotTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setSelectedPlot(s.toString())
-//            }
-//        }
-//        setupPlotDropdown(null)
-//    }
-
-    // Old Code
     private fun setupRightBlock() {
-        // Представитель Генподрядчика
-        // Old code
-//        val subContractorListAdapter = ArrayAdapter(
-//            requireContext(),
-//            android.R.layout.simple_spinner_dropdown_item,
-//            SharedViewModel.subContractors
-//        )
 
-        // New code
+        // -------- Генподрядчик --------
+        // region Генподрядчик
         CoroutineScope(Dispatchers.Main).launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
-            val subContractor = withContext(Dispatchers.IO) {
-                dbHelper.getSubContractor()
+            val contractors = withContext(Dispatchers.IO) {
+                dbHelper.getContractor()
             }
-
-            if (subContractor.isEmpty()) {
-                Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
-                Log.d("Tagg", "Список объектов пуст")
+            if (contractors.isEmpty()) {
+                Toast.makeText(requireContext(), "Список генподрядчиков пуст", Toast.LENGTH_SHORT).show()
+                Log.d("Tagg", "Список генподрядчиков пуст")
             }
-
-            val subContractorListAdapter = ArrayAdapter(
+            val contractorListAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                subContractor
+                contractors
             )
+            binding.autoCompleteContractor.setAdapter(contractorListAdapter)
+            binding.autoCompleteContractor.inputType = InputType.TYPE_NULL
+            binding.autoCompleteContractor.keyListener = null
+            binding.autoCompleteContractor.setOnTouchListener { _, _ ->
+                binding.autoCompleteContractor.showDropDown()
+                false
+            }
+            binding.autoCompleteContractor.setOnItemClickListener { parent, _, position, _ ->
+                val selectedContractor = parent.getItemAtPosition(position).toString()
+                sharedViewModel.setSelectedContractor(selectedContractor)
+            }
+        }
+        // endregion
 
-            binding.autoCompleteSubContractor.setAdapter(subContractorListAdapter)
+        // -------- Представитель Генподрядчика --------
+        // region Представитель Генподрядчика
+        CoroutineScope(Dispatchers.Main).launch {
+            val dbHelper = ExtraDatabaseHelper(requireContext())
+            val genContractors = withContext(Dispatchers.IO) {
+                dbHelper.getSubContractor()
+            }
+            if (genContractors.isEmpty()) {
+                Toast.makeText(requireContext(), "Список представителей генподрядчика пуст", Toast.LENGTH_SHORT).show()
+                Log.d("Tagg", "Список представителей генподрядчика пуст")
+            }
+            val repContractorListAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                genContractors
+            )
+            binding.autoCompleteSubContractor.setAdapter(repContractorListAdapter)
             binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
             binding.autoCompleteSubContractor.keyListener = null
             binding.autoCompleteSubContractor.setOnTouchListener { _, _ ->
@@ -396,13 +293,14 @@ class ArrangementFragment : Fragment() {
                 false
             }
             binding.autoCompleteSubContractor.setOnItemClickListener { parent, _, position, _ ->
-                val selectedSubContractor = parent.getItemAtPosition(position).toString()
-                sharedViewModel.setSelectedSubContractor(selectedSubContractor)
-                sharedViewModel.setIsManualSubContractor(false)
+                val selectedRepContractor = parent.getItemAtPosition(position).toString()
+                sharedViewModel.setSelectedRepContractor(selectedRepContractor)
             }
         }
+        // endregion
 
-        // Представитель ССК ПО (ГП)
+        // -------- Представитель ССК ПО (ГП) --------
+        // region Представитель ССК ПО (ГП)
         repSSKGpTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSSKGp.selectionStart}")
@@ -419,8 +317,10 @@ class ArrangementFragment : Fragment() {
             }
         }
         binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
+        // endregion
 
-        // Субподрядчик
+        // -------- Субподрядчик --------
+        // region Субподрядчик
         subContractorTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextSubcontractor.selectionStart}")
@@ -436,8 +336,10 @@ class ArrangementFragment : Fragment() {
             }
         }
         binding.textInputEditTextSubcontractor.addTextChangedListener(subContractorTextWatcher)
+        // endregion
 
-        // Представитель субподрядчика
+        // -------- Представитель субподрядчика --------
+        // region
         repSubContractorTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSubContractor.selectionStart}")
@@ -449,12 +351,14 @@ class ArrangementFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 Log.d("TextWatcher", "After: $s, Cursor: ${binding.textInputEditTextRepSubContractor.selectionStart}")
-                sharedViewModel.setRepSubcontractorText(s.toString())
+                sharedViewModel.setRepSubContractorText(s.toString())
             }
         }
         binding.textInputEditTextRepSubContractor.addTextChangedListener(repSubContractorTextWatcher)
+        // endregion
 
-        // Представитель ССК ПО (Суб)
+        // -------- Представитель ССК ПО (Суб) --------
+        // region Представитель ССК ПО (Суб)
         repSSKSubTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 Log.d("TextWatcher", "Before: $s, Cursor: ${binding.textInputEditTextRepSSKSub.selectionStart}")
@@ -470,210 +374,39 @@ class ArrangementFragment : Fragment() {
             }
         }
         binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
+        // endregion
     }
 
-    // New code (Right block)
-//    private fun setupRightBlock() {
-//        // SubContractor
-//        subContractorTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setSelectedSubContractor(s.toString())
-//            }
-//        }
-//        setupSubContractorDropdown(null)
-//
-//        // WorkType
-//        workTypeTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setSelectedWorkType(s.toString())
-//            }
-//        }
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val dbHelper = ExtraDatabaseHelper(requireContext())
-//                val workTypes = withContext(Dispatchers.IO) {
-//                    dbHelper.getWorkTypes()
-//                }
-//                val workTypeListAdapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    workTypes
-//                )
-//                binding.autoCompleteWorkType.setAdapter(workTypeListAdapter)
-//                binding.autoCompleteWorkType.inputType = InputType.TYPE_NULL
-//                binding.autoCompleteWorkType.keyListener = null
-//                binding.autoCompleteWorkType.setOnTouchListener { _, _ ->
-//                    binding.autoCompleteWorkType.showDropDown()
-//                    false
-//                }
-//                binding.autoCompleteWorkType.setOnItemClickListener { parent, _, position, _ ->
-//                    val selectedWorkType = parent.getItemAtPosition(position).toString()
-//                    sharedViewModel.setSelectedWorkType(selectedWorkType)
-//                }
-//            } catch (e: Exception) {
-//                Log.e("ArrangementFragment", "Ошибка загрузки видов работ: ${e.message}")
-//                Toast.makeText(requireContext(), "Ошибка загрузки видов работ", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        binding.autoCompleteWorkType.addTextChangedListener(workTypeTextWatcher)
-//    }
+    private fun setupPlotCheckbox() {
+        binding.checkBoxManualPlot.setOnCheckedChangeListener { _, isChecked ->
+            sharedViewModel.setIsManualPlot(isChecked)
+            if (isChecked) {
+                binding.autoCompletePlot.setText("Объект не делится на участки")
+                binding.autoCompletePlot.isEnabled = false
+                binding.autoCompletePlot.inputType = InputType.TYPE_NULL
+                binding.autoCompletePlot.keyListener = null
+            } else {
+                binding.autoCompletePlot.setText("")
+                binding.autoCompletePlot.isEnabled = true
+                binding.autoCompletePlot.inputType = InputType.TYPE_NULL
+                binding.autoCompletePlot.keyListener = null
+                binding.autoCompletePlot.showDropDown()
+            }
+        }
 
-    // New code (setUpContractorDropdown)
-//    private fun setupContractorDropdown(customerId: Long?) {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val dbHelper = ExtraDatabaseHelper(requireContext())
-//                val contractors = withContext(Dispatchers.IO) {
-//                    customerId?.let { dbHelper.getContractor(it) } ?: emptyList()
-//                }
-//                val contractorListAdapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    contractors
-//                )
-//                binding.autoCompleteContractor.setAdapter(contractorListAdapter)
-//                binding.autoCompleteContractor.inputType = InputType.TYPE_NULL
-//                binding.autoCompleteContractor.keyListener = null
-//                binding.autoCompleteContractor.setOnTouchListener { _, _ ->
-//                    binding.autoCompleteContractor.showDropDown()
-//                    false
-//                }
-//                binding.autoCompleteContractor.setOnItemClickListener { parent, _, position, _ ->
-//                    val selectedContractor = parent.getItemAtPosition(position).toString()
-//                    sharedViewModel.setSelectedContractor(selectedContractor)
-//                    // Здесь можно добавить логику для получения contractorId, если нужно
-//                    updateDependentDropdowns(null, null, null) // Пока без фильтрации по contractorId
-//                }
-//                if (contractors.isEmpty()) {
-//                    binding.autoCompleteContractor.setText("", false)
-//                    sharedViewModel.setSelectedContractor(null)
-//                }
-//            } catch (e: Exception) {
-//                Log.e("ArrangementFragment", "Ошибка загрузки подрядчиков: ${e.message}")
-//                Toast.makeText(requireContext(), "Ошибка загрузки подрядчиков", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
+        // Observe
+        sharedViewModel.isManualPlot.observe(viewLifecycleOwner) { isChecked ->
+            binding.checkBoxManualPlot.isChecked = isChecked
+            if (isChecked && binding.autoCompletePlot.text.toString() != "Объект не делится на участки") {
+                binding.autoCompletePlot.setText("Объект не делится на участки")
+                binding.autoCompletePlot.isEnabled = false
+            } else if (!isChecked && binding.autoCompletePlot.text.toString() == "Объект не делится на участки") {
+                binding.autoCompletePlot.setText("")
+                binding.autoCompletePlot.isEnabled = true
+            }
+        }
 
-    // New code (setUpObjectDropdown)
-//    private fun setupObjectDropdown(customerId: Long?) {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val dbHelper = ExtraDatabaseHelper(requireContext())
-//                val objects = withContext(Dispatchers.IO) {
-//                    customerId?.let { dbHelper.getObject(it) } ?: emptyList()
-//                }
-//                val objectListAdapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    objects
-//                )
-//                binding.autoCompleteObject.setAdapter(objectListAdapter)
-//                binding.autoCompleteObject.inputType = InputType.TYPE_NULL
-//                binding.autoCompleteObject.keyListener = null
-//                binding.autoCompleteObject.setOnTouchListener { _, _ ->
-//                    binding.autoCompleteObject.showDropDown()
-//                    false
-//                }
-//                binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
-//                    val selectedObject = parent.getItemAtPosition(position).toString()
-//                    sharedViewModel.setSelectedObject(selectedObject)
-//                    // Здесь можно добавить логику для получения objectId, если нужно
-//                    updateDependentDropdowns(null, null, null) // Пока без фильтрации по objectId
-//                }
-//                if (objects.isEmpty()) {
-//                    binding.autoCompleteObject.setText("", false)
-//                    sharedViewModel.setSelectedObject(null)
-//                }
-//            } catch (e: Exception) {
-//                Log.e("ArrangementFragment", "Ошибка загрузки объектов: ${e.message}")
-//                Toast.makeText(requireContext(), "Ошибка загрузки объектов", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
-    // New code (setUpPlotDropdown)
-//    private fun setupPlotDropdown(objectId: Long?) {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val dbHelper = ExtraDatabaseHelper(requireContext())
-//                val plots = withContext(Dispatchers.IO) {
-//                    objectId?.let { dbHelper.getPlots(it) } ?: emptyList()
-//                }
-//                val plotListAdapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    plots
-//                )
-//                binding.autoCompletePlot.setAdapter(plotListAdapter)
-//                binding.autoCompletePlot.inputType = InputType.TYPE_NULL
-//                binding.autoCompletePlot.keyListener = null
-//                binding.autoCompletePlot.setOnTouchListener { _, _ ->
-//                    binding.autoCompletePlot.showDropDown()
-//                    false
-//                }
-//                binding.autoCompletePlot.setOnItemClickListener { parent, _, position, _ ->
-//                    val selectedPlot = parent.getItemAtPosition(position).toString()
-//                    sharedViewModel.setSelectedPlot(selectedPlot)
-//                }
-//                if (plots.isEmpty()) {
-//                    binding.autoCompletePlot.setText("", false)
-//                    sharedViewModel.setSelectedPlot(null)
-//                }
-//            } catch (e: Exception) {
-//                Log.e("ArrangementFragment", "Ошибка загрузки участков: ${e.message}")
-//                Toast.makeText(requireContext(), "Ошибка загрузки участков", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
-    // New code (setUpSubContractorDropdown)
-//    private fun setupSubContractorDropdown(contractorId: Long?) {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            try {
-//                val dbHelper = ExtraDatabaseHelper(requireContext())
-//                val subContractors = withContext(Dispatchers.IO) {
-//                    contractorId?.let { dbHelper.getSubContractors(it) } ?: emptyList()
-//                }
-//                val subContractorListAdapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    subContractors
-//                )
-//                binding.autoCompleteSubContractor.setAdapter(subContractorListAdapter)
-//                binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
-//                binding.autoCompleteSubContractor.keyListener = null
-//                binding.autoCompleteSubContractor.setOnTouchListener { _, _ ->
-//                    binding.autoCompleteSubContractor.showDropDown()
-//                    false
-//                }
-//                binding.autoCompleteSubContractor.setOnItemClickListener { parent, _, position, _ ->
-//                    val selectedSubContractor = parent.getItemAtPosition(position).toString()
-//                    sharedViewModel.setSelectedSubContractor(selectedSubContractor)
-//                }
-//                if (subContractors.isEmpty()) {
-//                    binding.autoCompleteSubContractor.setText("", false)
-//                    sharedViewModel.setSelectedSubContractor(null)
-//                }
-//            } catch (e: Exception) {
-//                Log.e("ArrangementFragment", "Ошибка загрузки субподрядчиков: ${e.message}")
-//                Toast.makeText(requireContext(), "Ошибка загрузки субподрядчиков", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
-    // New code (updateDependentDropdowns)
-//    private fun updateDependentDropdowns(customerId: Long?, objectId: Long?, contractorId: Long?) {
-//        setupContractorDropdown(customerId)
-//        setupObjectDropdown(customerId)
-//        setupPlotDropdown(objectId)
-//        setupSubContractorDropdown(contractorId)
-//    }
-
+    }
 
     private fun setupButtons() {
         // Кнопка "Далее"
@@ -682,14 +415,14 @@ class ArrangementFragment : Fragment() {
                 Log.d("Tagg", "Валидация прошла")
                 // Логирование значений
                 Log.d("Tagg", "Contract: ${sharedViewModel.contractText.value}")
-                Log.d("Tagg", "Customer: ${sharedViewModel.selectedCustomer.value}, ManualCustomer: ${sharedViewModel.manualCustomer.value}")
-                Log.d("Tagg", "Object: ${sharedViewModel.selectedObject.value}, ManualObject: ${sharedViewModel.manualObject.value}")
+                Log.d("Tagg", "Customer: ${sharedViewModel.selectedCustomer.value}")
+                Log.d("Tagg", "Object: ${sharedViewModel.selectedObject.value}")
                 Log.d("Tagg", "Plot: ${sharedViewModel.plotText.value}")
-                Log.d("Tagg", "Contractor: ${sharedViewModel.selectedContractor.value}, ManualContractor: ${sharedViewModel.manualContractor.value}")
-                Log.d("Tagg", "SubContractor: ${sharedViewModel.selectedSubContractor.value}, ManualSubContractor: ${sharedViewModel.manualSubContractor.value}")
+                Log.d("Tagg", "Contractor: ${sharedViewModel.selectedContractor.value}")
+                Log.d("Tagg", "SubContractor: ${sharedViewModel.selectedSubContractor.value}")
                 Log.d("Tagg", "RepSSKGp: ${sharedViewModel.repSSKGpText.value}")
                 Log.d("Tagg", "SubContractorText: ${sharedViewModel.subContractorText.value}")
-                Log.d("Tagg", "RepSubContractor: ${sharedViewModel.repSubcontractorText.value}")
+                Log.d("Tagg", "RepSubContractor: ${sharedViewModel.repSubContractorText.value}")
                 Log.d("Tagg", "RepSSKSub: ${sharedViewModel.repSSKSubText.value}")
 
                 CoroutineScope(Dispatchers.Main).launch {
@@ -752,7 +485,7 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun validateInputs(): Boolean {
-        val contract = binding.textInputEditTextContract.text?.toString()?.trim()
+        val contract = binding.autoCompleteContract.text?.toString()?.trim()
         val customers = binding.autoCompleteCustomer.text?.toString()?.trim()
         val objects = binding.autoCompleteObject.text?.toString()?.trim()
         val plotText = binding.autoCompletePlot.text?.toString()?.trim()
@@ -763,11 +496,20 @@ class ArrangementFragment : Fragment() {
         val subContractorText = binding.textInputEditTextSubcontractor.text?.toString()?.trim()
         val repSubcontractorText = binding.textInputEditTextRepSubContractor.text?.toString()?.trim()
         val repSSKSubText = binding.textInputEditTextRepSSKSub.text?.toString()?.trim()
+        val isManualPlot = binding.checkBoxManualPlot.isChecked
 
         val errors = sharedViewModel.validateArrangementInputs(
-            contract, customers, objects, plotText,
-            contractors, subContractors,
-            repSSKGpText, subContractorText, repSubcontractorText, repSSKSubText
+            contract,
+            customers,
+            objects,
+            plotText,
+            contractors,
+            subContractors,
+            repSSKGpText,
+            subContractorText,
+            repSubcontractorText,
+            repSSKSubText,
+            isManualPlot
         )
 
         if (errors.isNotEmpty()) {
@@ -856,7 +598,7 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun clearUiFields() {
-        binding.textInputEditTextContract.setText("")
+        binding.autoCompleteContract.setText("")
         binding.autoCompletePlot.setText("")
         binding.textInputEditTextRepSSKGp.setText("")
         binding.textInputEditTextSubcontractor.setText("")
@@ -869,24 +611,12 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun addAllTextWatchers() {
-
-        // Old code
-//        binding.autoCompletePlot.addTextChangedListener(plotTextWatcher)
-
         binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
         binding.textInputEditTextSubcontractor.addTextChangedListener(subContractorTextWatcher)
         binding.textInputEditTextRepSubContractor.addTextChangedListener(repSubContractorTextWatcher)
         binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
-
-        // New code
-//        binding.autoCompleteCustomer.addTextChangedListener(customerTextWatcher)
-//        binding.autoCompleteContractor.addTextChangedListener(contractorTextWatcher)
-//        binding.autoCompleteObject.addTextChangedListener(objectTextWatcher)
-//        binding.autoCompletePlot.addTextChangedListener(plotTextWatcher)
-//        binding.autoCompleteSubContractor.addTextChangedListener(subContractorTextWatcher)
     }
 
-    // Old code
     private fun setupViewModelObservers() {
         sharedViewModel.plotText.observe(viewLifecycleOwner) { text ->
             if (binding.autoCompletePlot.text.toString() != text) {
@@ -920,7 +650,7 @@ class ArrangementFragment : Fragment() {
                 binding.textInputEditTextSubcontractor.addTextChangedListener(subContractorTextWatcher)
             }
         }
-        sharedViewModel.repSubcontractorText.observe(viewLifecycleOwner) { text ->
+        sharedViewModel.repSubContractorText.observe(viewLifecycleOwner) { text ->
             if (binding.textInputEditTextRepSubContractor.text.toString() != text) {
                 binding.textInputEditTextRepSubContractor.removeTextChangedListener(repSubContractorTextWatcher)
                 binding.textInputEditTextRepSubContractor.setText(text)
@@ -963,24 +693,6 @@ class ArrangementFragment : Fragment() {
             if (currentText != subContractor) {
                 binding.autoCompleteSubContractor.setText(subContractor ?: "", false)
             }
-        }
-        sharedViewModel.isManualCustomer.observe(viewLifecycleOwner) { isChecked ->
-            binding.textInputLayoutAutoCustomer.visibility = if (isChecked) View.GONE else View.VISIBLE
-        }
-        sharedViewModel.isManualObject.observe(viewLifecycleOwner) { isChecked ->
-
-            binding.textInputLayoutAutoObject.visibility = if (isChecked) View.GONE else View.VISIBLE
-
-        }
-        sharedViewModel.isManualContractor.observe(viewLifecycleOwner) { isChecked ->
-
-            binding.textInputLayoutAutoContractor.visibility = if (isChecked) View.GONE else View.VISIBLE
-
-        }
-        sharedViewModel.isManualSubContractor.observe(viewLifecycleOwner) { isChecked ->
-
-            binding.textInputLayoutAutoSubContractor.visibility = if (isChecked) View.GONE else View.VISIBLE
-
         }
 ////        sharedViewModel.manualCustomer.observe(viewLifecycleOwner) { newValue ->
 ////            val current = binding.hiddenTextInputEditTextManualCustomer.text?.toString() ?: ""
