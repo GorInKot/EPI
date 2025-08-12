@@ -54,43 +54,8 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         copyDatabaseFromAssets()
     }
 
-    // Contract (Договор) TODO
-    fun getContract(): List<String> {
-        val db = readableDatabase
-        val contracts = mutableListOf<String>()
-        val cursor = db.rawQuery("SELECT contract FROM Contract", null)
-
-        try {
-            while (cursor.moveToNext()) {
-                val contract = cursor.getString(cursor.getColumnIndexOrThrow("contract"))
-                contracts.add(contract)
-            }
-        } finally {
-            cursor.close()
-            db.close()
-        }
-        return contracts
-    }
-
-    // Contractor (Подрядчик)
-    fun getContractor(): List<String> {
-        val db = readableDatabase
-        val numbers = mutableListOf<String>()
-        val cursor = db.rawQuery("SELECT name FROM Contractor", null)
-
-        try {
-            while (cursor.moveToNext()) {
-                val number = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                numbers.add(number)
-            }
-        } finally {
-            cursor.close()
-            db.close()
-        }
-        return numbers
-    }
-
     // Customer (Заказчик)
+    // region Customer
     fun getCustomer(): List<String> {
         val db = readableDatabase
         val customers = mutableListOf<String>()
@@ -107,8 +72,136 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return customers
     }
+    // endregion
+
+    // Получение данных из Customer с связанными Contractor
+    fun getCustomerWithContractor(): List<Pair<String, String?>> {
+        val db = readableDatabase
+        val result = mutableListOf<Pair<String, String?>>()
+        val query = """
+            SELECT c.name AS customer_name, co.name AS contractor_name
+            FROM Customer c
+            LEFT JOIN Contractor co On c.id = co.customer_id
+        """.trimIndent()
+        val cursor = db.rawQuery(query, null)
+        try {
+            while (cursor.moveToNext()) {
+                val customerIndex = cursor.getColumnIndex("customer_name")
+                val contractorIndex = cursor.getColumnIndex("contractor_name")
+                if (customerIndex >= 0 && contractorIndex >= 0) {
+                    val customerName = cursor.getString(customerIndex)
+                    val contractorName = cursor.getString(contractorIndex)
+                    result.add(Pair(customerName, contractorName))
+                }
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return result
+    }
+
+    // Получение данных из Customer с связанными Object
+    fun getCustomerWithObject(): List<Pair<String, String?>> {
+        val db = readableDatabase
+        val result = mutableListOf<Pair<String, String?>>()
+        val query = """
+        SELECT c.name AS customer_name, o.name AS object_name
+        FROM Customer c
+        LEFT JOIN Object o ON c.id = o.customer_id
+    """.trimIndent()
+        val cursor = db.rawQuery(query, null)
+
+        try {
+            while (cursor.moveToNext()) {
+                val customerIndex = cursor.getColumnIndex("customer_name")
+                val objectIndex = cursor.getColumnIndex("object_name")
+                if (customerIndex >= 0 && objectIndex >= 0) {
+                    val customerName = cursor.getString(customerIndex)
+                    val objectName = cursor.getString(objectIndex)
+                    result.add(Pair(customerName, objectName))
+                }
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return result
+    }
+
+    // Получение данных из Customer с связанными SubContractor
+    fun getCustomerWithSubContractor(): List<Pair<String, String?>> {
+        val db = readableDatabase
+        val result = mutableListOf<Pair<String, String?>>()
+        val query = """
+            SELECT c.name AS customer_name, sc.name AS sub_contractor_name
+            FROM Customer c
+            LEFT JOIN SubContractor sc ON c.id = sc.customer_id
+        """.trimIndent()
+        val cursor = db.rawQuery(query, null)
+
+        try {
+            while (cursor.moveToNext()) {
+                val customerIndex = cursor.getColumnIndex("customer_name")
+                val subContractorIndex = cursor.getColumnIndex("sub_contractor_name")
+                if (customerIndex >= 0 && subContractorIndex >= 0) {
+                    val customerName = cursor.getString(customerIndex)
+                    val objectName = cursor.getString(subContractorIndex)
+                    result.add(Pair(customerName, objectName))
+                }
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return result
+    }
+
+
+    // Contract (Договор) TODO
+    // region Contract
+    fun getContract(): List<String> {
+        val db = readableDatabase
+        val contracts = mutableListOf<String>()
+        val cursor = db.rawQuery("SELECT contract FROM Contract", null)
+
+        try {
+            while (cursor.moveToNext()) {
+                val contract = cursor.getString(cursor.getColumnIndexOrThrow("contract"))
+                contracts.add(contract)
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return contracts
+    }
+    // endregion
+
+    // Contractor (Подрядчик)
+    // region Contractor
+    fun getContractor(): List<String> {
+        val db = readableDatabase
+        val numbers = mutableListOf<String>()
+        val cursor = db.rawQuery("SELECT name FROM Contractor", null)
+
+        try {
+            while (cursor.moveToNext()) {
+                val number = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                numbers.add(number)
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return numbers
+    }
+    // endregion
+
+
 
     // Object (Объект)
+    // region object
     fun getObject(): List<String> {
         val db = readableDatabase
         val objects = mutableListOf<String>()
@@ -125,8 +218,10 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return objects
     }
+    // endregion
 
     // Plot (Участок)
+    // region Plot
     fun getPlot(): List<String> {
         val db = readableDatabase
         val plots = mutableListOf<String>()
@@ -143,10 +238,12 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return plots
     }
+    // endregion
 
     // Report
 
     // SubContractor (Субподрядчик)
+    // region SubContractor
     fun getSubContractor(): List<String> {
         val db = readableDatabase
         val subContractors = mutableListOf<String>()
@@ -163,6 +260,7 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return subContractors
     }
+    // endregion
 
     // TODO - WorkType ( Вид работ(ы) ) Уточнить !!!
 

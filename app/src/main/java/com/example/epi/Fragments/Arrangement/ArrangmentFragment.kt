@@ -137,23 +137,24 @@ class ArrangementFragment : Fragment() {
         // endregion
 
         // -------- Заказчик --------
-        //region Заказчик
+        // region Заказчик (вариант со связями)
         CoroutineScope(Dispatchers.Main).launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
-            val customer = withContext(Dispatchers.IO) {
-                dbHelper.getCustomer()
+            val customerWithObject = withContext(Dispatchers.IO) {
+                dbHelper.getCustomerWithObject() // Используем связанный метод
             }
 
-            if (customer.isEmpty()) {
+            if (customerWithObject.isEmpty()) {
                 Toast.makeText(requireContext(), "Список Заказчиков пуст", Toast.LENGTH_SHORT).show()
                 Log.d("Tagg", "Список Заказчиков пуст")
             }
 
+            val customerList = customerWithObject.map { it.first } // Берем только имена заказчиков
             val customerListAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-                customer
-        )
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                customerList
+            )
             binding.autoCompleteCustomer.setAdapter(customerListAdapter)
             binding.autoCompleteCustomer.inputType = InputType.TYPE_NULL
             binding.autoCompleteCustomer.keyListener = null
@@ -162,32 +163,63 @@ class ArrangementFragment : Fragment() {
                 false
             }
             binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
-                val selectedCustomer = parent.getItemAtPosition(position).toString()
+                val selectedCustomer = customerWithObject[position].first // Выбранный заказчик
+                val selectedObject = customerWithObject[position].second // Связанный объект
                 sharedViewModel.setSelectedCustomer(selectedCustomer)
+                if (selectedObject != null) {
+                    sharedViewModel.setSelectedObject(selectedObject)
+                    binding.autoCompleteObject.setText(selectedObject, false)
+                }
+                updateObjectDropdown(selectedCustomer) // Обновляем объекты для выбранного заказчика
             }
         }
         // endregion
 
+        //region Заказчик (Вариант без связей)
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val dbHelper = ExtraDatabaseHelper(requireContext())
+//            val customer = withContext(Dispatchers.IO) {
+//                dbHelper.getCustomer()
+//            }
+//
+//            if (customer.isEmpty()) {
+//                Toast.makeText(requireContext(), "Список Заказчиков пуст", Toast.LENGTH_SHORT).show()
+//                Log.d("Tagg", "Список Заказчиков пуст")
+//            }
+//
+//            val customerListAdapter = ArrayAdapter(
+//            requireContext(),
+//            android.R.layout.simple_spinner_dropdown_item,
+//                customer
+//        )
+//            binding.autoCompleteCustomer.setAdapter(customerListAdapter)
+//            binding.autoCompleteCustomer.inputType = InputType.TYPE_NULL
+//            binding.autoCompleteCustomer.keyListener = null
+//            binding.autoCompleteCustomer.setOnTouchListener { _, _ ->
+//                binding.autoCompleteCustomer.showDropDown()
+//                false
+//            }
+//            binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
+//                val selectedCustomer = parent.getItemAtPosition(position).toString()
+//                sharedViewModel.setSelectedCustomer(selectedCustomer)
+//            }
+//        }
+        // endregion
+
         // -------- Объект --------
-        // region Объект
+        // region Объект (вариант со связями)
         CoroutineScope(Dispatchers.Main).launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
-            val obj = withContext(Dispatchers.IO) {
-                dbHelper.getObject()
+            val customerWithObject = withContext(Dispatchers.IO) {
+                dbHelper.getCustomerWithObject()
             }
-
-            if (obj.isEmpty()) {
-                Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
-                Log.d("Tagg", "Список объектов пуст")
-            }
-
-            val objListAdapter = ArrayAdapter(
+            val objectList = customerWithObject.mapNotNull { it.second }.distinct() // Берем уникальные объекты
+            val objectListAdapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                obj
+                objectList
             )
-
-            binding.autoCompleteObject.setAdapter(objListAdapter)
+            binding.autoCompleteObject.setAdapter(objectListAdapter)
             binding.autoCompleteObject.inputType = InputType.TYPE_NULL
             binding.autoCompleteObject.keyListener = null
             binding.autoCompleteObject.setOnTouchListener { _, _ ->
@@ -197,9 +229,41 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
                 val selectedObject = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedObject(selectedObject)
-
             }
         }
+        // endregion
+
+        // region Объект (Вариант без связей)
+//        CoroutineScope(Dispatchers.Main).launch {
+//            val dbHelper = ExtraDatabaseHelper(requireContext())
+//            val obj = withContext(Dispatchers.IO) {
+//                dbHelper.getObject()
+//            }
+//
+//            if (obj.isEmpty()) {
+//                Toast.makeText(requireContext(), "Список объектов пуст", Toast.LENGTH_SHORT).show()
+//                Log.d("Tagg", "Список объектов пуст")
+//            }
+//
+//            val objListAdapter = ArrayAdapter(
+//                requireContext(),
+//                android.R.layout.simple_spinner_dropdown_item,
+//                obj
+//            )
+//
+//            binding.autoCompleteObject.setAdapter(objListAdapter)
+//            binding.autoCompleteObject.inputType = InputType.TYPE_NULL
+//            binding.autoCompleteObject.keyListener = null
+//            binding.autoCompleteObject.setOnTouchListener { _, _ ->
+//                binding.autoCompleteObject.showDropDown()
+//                false
+//            }
+//            binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
+//                val selectedObject = parent.getItemAtPosition(position).toString()
+//                sharedViewModel.setSelectedObject(selectedObject)
+//
+//            }
+//        }
         // endregion
 
         // -------- Участок --------
@@ -235,6 +299,23 @@ class ArrangementFragment : Fragment() {
         }
         // endregion
 
+    }
+
+    private fun updateObjectDropdown(selectedCustomer: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val dbHelper = ExtraDatabaseHelper(requireContext())
+            val customerWithObject = withContext(Dispatchers.IO) {
+                dbHelper.getCustomerWithObject().filter { it.first == selectedCustomer }
+            }
+            val objectList = customerWithObject.mapNotNull { it.second }.distinct()
+            val objectListAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                objectList
+            )
+            binding.autoCompleteObject.setAdapter(objectListAdapter)
+            binding.autoCompleteObject.setText("", false) // Сбрасываем текущее значение
+        }
     }
 
     private fun setupRightBlock() {
