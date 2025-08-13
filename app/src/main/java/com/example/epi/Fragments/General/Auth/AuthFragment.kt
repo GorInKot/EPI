@@ -36,7 +36,7 @@ class AuthFragment : Fragment() {
     ): View {
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
         buttons()
-        // observeAuthResult()
+         observeAuthResult()
         return binding.root
     }
 
@@ -46,43 +46,43 @@ class AuthFragment : Fragment() {
         binding.textInputEditTextPassword.filters = arrayOf(android.text.InputFilter.LengthFilter(maxPasswordLength))
     }
 
-//    private fun observeAuthResult() {
-//        viewModel.authResult.observe(viewLifecycleOwner) { result ->
-//            when (result) {
-//                is SharedViewModel.AuthResult.Success -> {
-//                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
-//                    binding.textInputEditTextNumber.text?.clear()
-//                    binding.textInputEditTextPassword.text?.clear()
-//                    findNavController().navigate(R.id.StartFragment)
-//                }
-//                is SharedViewModel.AuthResult.Error -> {
-//                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
-//                    if (result.message.contains("Неверный пароль")) {
-//                        binding.textInputLayoutPassword.isErrorEnabled = true
-//                        binding.textInputLayoutPassword.error = result.message
-//                    } else {
-//                        binding.textInputLayoutNumber.isErrorEnabled = true
-//                        binding.textInputLayoutNumber.error = result.message
-//                    }
-//                }
-//                is SharedViewModel.AuthResult.RegistrationSuccess,
-//                is SharedViewModel.AuthResult.RegistrationError,
-//                is SharedViewModel.AuthResult.Idle -> {
-//                    // Игнорируем состояния, связанные с регистрацией или сбросом
-//                }
-//            }
-//        }
-//    }
+    private fun observeAuthResult() {
+        viewModel.authResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is SharedViewModel.AuthResult.Success -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    binding.textInputEditTextNumber.text?.clear()
+                    binding.textInputEditTextPassword.text?.clear()
+                    findNavController().navigate(R.id.StartFragment)
+                }
+                is SharedViewModel.AuthResult.Error -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    if (result.message.contains("Неверный пароль")) {
+                        binding.textInputLayoutPassword.isErrorEnabled = true
+                        binding.textInputLayoutPassword.error = result.message
+                    } else {
+                        binding.textInputLayoutNumber.isErrorEnabled = true
+                        binding.textInputLayoutNumber.error = result.message
+                    }
+                }
+                is SharedViewModel.AuthResult.RegistrationSuccess,
+                is SharedViewModel.AuthResult.RegistrationError,
+                is SharedViewModel.AuthResult.Idle -> {
+                    // Игнорируем состояния, связанные с регистрацией или сбросом
+                }
+            }
+        }
+    }
 
     private fun buttons() {
         binding.btnLogin.setOnClickListener {
-            findNavController().navigate(R.id.StartFragment)
-//            if (validateInputs()) {
-//                Log.d("Tagg", "Validation passed")
-//                loginUser()
-//            } else {
-//                Log.d("Tagg", "Validation failed")
-//            }
+            if (validateInputs()) {
+                Log.d("Tagg-Auth", "Validation passed")
+                loginUser()
+                findNavController().navigate(R.id.StartFragment)
+            } else {
+                Log.d("Tagg-Auth", "Validation failed")
+            }
         }
 
         binding.tvRegister.setOnClickListener {
@@ -90,29 +90,34 @@ class AuthFragment : Fragment() {
         }
     }
 
-//    private fun validateInputs(): Boolean {
-//        val number = binding.textInputEditTextNumber.text?.toString()?.trim()
-//        val password = binding.textInputEditTextPassword.text?.toString()?.trim()
-//
-//        val errors = viewModel.validateAuthInputs(number, password)
-//        binding.textInputLayoutNumber.error = null
-//        binding.textInputLayoutPassword.error = null
-//
-//        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
-//        binding.textInputLayoutNumber.error = errors["number"]
-//
-//        binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
-//        binding.textInputLayoutPassword.error = errors["password"]
-//
-//        return errors.isEmpty()
-//    }
+    private fun validateInputs(): Boolean {
+        val number = binding.textInputEditTextNumber.text?.toString()?.trim()
+        val password = binding.textInputEditTextPassword.text?.toString()?.trim()
 
-//    private fun loginUser() {
-//        val employeeNumber = binding.textInputEditTextNumber.text.toString().trim()
-//        val password = binding.textInputEditTextPassword.text.toString().trim()
-//        Log.d("Tagg", "Attempting login with employeeNumber: $employeeNumber")
-//        viewModel.loginUser(employeeNumber, password)
-//    }
+        try {
+            val errors = viewModel.validateAuthInputs(number, password)
+            binding.textInputLayoutNumber.error = null
+            binding.textInputLayoutPassword.error = null
+
+            binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
+            binding.textInputLayoutNumber.error = errors["number"]
+
+            binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
+            binding.textInputLayoutPassword.error = errors["password"]
+            return errors.isEmpty()
+
+        } catch (e: Exception) {
+            Log.e("Tagg-Auth", "Something goes wrong: ${e.message}")
+            return false
+        }
+    }
+
+    private fun loginUser() {
+        val employeeNumber = binding.textInputEditTextNumber.text.toString().trim()
+        val password = binding.textInputEditTextPassword.text.toString().trim()
+        Log.d("Tagg-Auth", "Попытка входа для сотрудника с номером: $employeeNumber")
+        viewModel.loginUser(employeeNumber, password)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

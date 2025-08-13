@@ -92,13 +92,13 @@ class RegistrationFragment : Fragment() {
             findNavController().navigate(R.id.authFragment)
         }
         binding.btnRegister.setOnClickListener {
-            Log.e("Tagg", "Нажали кнопку регистрации")
+            Log.d("Tagg", "Нажали кнопку регистрации")
             if (validateInputs()) {
-                Log.e("Tagg", "Успешная регистрация")
+                Log.d("Tagg", "Успешная регистрация")
                 registerUser()
-                findNavController().navigate(R.id.action_registrationFragment_to_authFragment)
+                findNavController().navigate(R.id.authFragment)
             } else {
-                Log.e("Tagg", "Ошибка регистрации")
+                Log.d("Tagg", "Ошибка регистрации")
             }
         }
     }
