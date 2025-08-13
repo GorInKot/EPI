@@ -12,7 +12,7 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     companion object {
         private const val DATABASE_NAME = "extra_db.db"
-        private const val DATABASE_VERSION = 4 // Увеличена версия для новой структуры
+        private const val DATABASE_VERSION = 5 // Увеличена версия для новой структуры
     }
 
     private val context: Context = context.applicationContext
