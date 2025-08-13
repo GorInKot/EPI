@@ -94,16 +94,12 @@
                 app:layout_constraintGuide_percent="0.72"
                 />
 
-
-
             <!-- Здесь начинается основная разметка -->
-
-
 
             <!-- Договор СК -->
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_Contract"
-                android:text="Договор СК"
+                android:id="@+id/tv_Customer"
+                android:text="Заказчик:"
                 android:layout_width="0dp"
                 style="@style/ArrangementText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +111,7 @@
                 />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_Contract"
+                android:id="@+id/textInputLayout_autoCustomer"
                 style="@style/TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_marginTop="24dp"
@@ -125,7 +121,7 @@
                 app:endIconMode="dropdown_menu"
                 >
                 <AutoCompleteTextView
-                    android:id="@+id/autoCompleteContract"
+                    android:id="@+id/autoCompleteCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
@@ -144,30 +140,30 @@
 
             <!--  Заказчик -->
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_Customer"
-                android:text="Заказчик:"
+                android:id="@+id/tv_Contract"
+                android:text="Договор СК"
                 android:layout_width="0dp"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_Contract"
+                app:layout_constraintTop_toBottomOf="@id/tv_Customer"
                 app:layout_constraintEnd_toStartOf="@id/guideline_left"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_autoCustomer"
+                android:id="@+id/textInputLayout_Contract"
                 style="@style/TextInputLayout"
                 android:layout_width="0dp"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
                 app:layout_constraintEnd_toStartOf="@id/guideline_middle"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_Contract"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoCustomer"
                 android:layout_marginTop="24dp"
                 app:endIconMode="dropdown_menu"
                 >
                 <AutoCompleteTextView
-                    android:id="@+id/autoCompleteCustomer"
+                    android:id="@+id/autoCompleteContract"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"

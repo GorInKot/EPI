@@ -58,104 +58,89 @@ class SharedViewModel(
     // -------- РАССТАНОВКА - НАЧАЛО - ИНЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
     // region методы для ArrangementFragment
 
-    // Временное решение: Договор СК
-    // region Временное решение: Договор СК
-
-    companion object {
-        val contractSK = listOf("Договор 1", "Договор 2", "Договор 3")
-    }
-
-    private val _selectedContractSK = MutableLiveData<String>()
-    val selectedContractSK: LiveData<String> get() = _selectedContractSK
-
-    fun setSelectedContractSK(contract: String?) {
-        _selectedContractSK.value = contract
-    }
-    // endregion
-
     // -------- Договор СК --------
-    private val _contractText = MutableLiveData<String>()
-    val contractText: LiveData<String> get() = _contractText
+    private val _contractText = MutableLiveData<String?>()
+    val contractText: LiveData<String?> get() = _contractText
 
     // Выбранный договор
-    private val _selectedContract = MutableLiveData<String>()
-    val selectedContract: LiveData<String> get() = _selectedContract
+    private val _selectedContract = MutableLiveData<String?>()
+    val selectedContract: LiveData<String?> get() = _selectedContract
 
     // -------- Заказчик --------
-    private val _customerText = MutableLiveData<String>()
-    val customerText: LiveData<String> get() = _customerText // Не используется
+    private val _customerText = MutableLiveData<String?>()
+    val customerText: LiveData<String?> get() = _customerText // Не используется
 
     // Выбранный заказчик
-    private val _selectedCustomer = MutableLiveData<String>()
-    val selectedCustomer: LiveData<String> get() = _selectedCustomer
+    private val _selectedCustomer = MutableLiveData<String?>()
+    val selectedCustomer: LiveData<String?> get() = _selectedCustomer
 
     // -------- Объект --------
-    private val _objectText = MutableLiveData<String>()
-    val objectText: LiveData<String> get() = _objectText // Не используется
+    private val _objectText = MutableLiveData<String?>()
+    val objectText: LiveData<String?> get() = _objectText // Не используется
 
     // Выбранный объект
-    private val _selectedObject = MutableLiveData<String>()
-    val selectedObject: LiveData<String> get() = _selectedObject
+    private val _selectedObject = MutableLiveData<String?>()
+    val selectedObject: LiveData<String?> get() = _selectedObject
 
     // -------- Участок --------
-    private val _plotText = MutableLiveData<String>()
-    val plotText: LiveData<String> get() = _plotText
+    private val _plotText = MutableLiveData<String?>()
+    val plotText: LiveData<String?> get() = _plotText
 
     // Выбранный участок
-    private val _selectedPlot = MutableLiveData<String>()
-    val selectedPlot: LiveData<String> get() = _selectedPlot // Не используется, можно объединить с _plotText
+    private val _selectedPlot = MutableLiveData<String?>()
+    val selectedPlot: LiveData<String?> get() = _selectedPlot // Не используется, можно объединить с _plotText
 
     // Флаг для чекбокса "Объект не делится на участок"
     private val _isManualPlot = MutableLiveData(false)
     val isManualPlot: LiveData<Boolean> get() = _isManualPlot
 
     // -------- Генподрядчик --------
-    private val _contractorText = MutableLiveData<String>()
-    val contractorText: LiveData<String> get() = _contractorText // Не используется
+    private val _contractorText = MutableLiveData<String?>()
+    val contractorText: LiveData<String?> get() = _contractorText // Не используется
 
     // Выбранный генподрядчик
-    private val _selectedContractor = MutableLiveData<String>()
-    val selectedContractor: LiveData<String> get() = _selectedContractor
+    private val _selectedContractor = MutableLiveData<String?>()
+    val selectedContractor: LiveData<String?> get() = _selectedContractor
 
     // -------- Представитель Генподрядчика --------
-    private val _repContractorText = MutableLiveData<String>()
-    val repContractorText: LiveData<String> get() = _repContractorText // Не используется
+    private val _repContractorText = MutableLiveData<String?>()
+    val repContractorText: LiveData<String?> get() = _repContractorText // Не используется
 
     // Выбранный Представитель Генподрядчика
-    private val _selectedRepContractor = MutableLiveData<String>()
-    val selectedRepContractor: LiveData<String> get() = _selectedRepContractor
+    private val _selectedRepContractor = MutableLiveData<String?>()
+    val selectedRepContractor: LiveData<String?> get() = _selectedRepContractor
 
     // -------- Представитель ССК ПО (ГП) --------
-    private val _repSSKGpText = MutableLiveData<String>()
-    val repSSKGpText: LiveData<String> get() = _repSSKGpText
+    private val _repSSKGpText = MutableLiveData<String?>()
+    val repSSKGpText: LiveData<String?> get() = _repSSKGpText
 
     // Выбранный Представитель ССК ПО (ГП)
-    private val _selectedRepSSKGpText = MutableLiveData<String>()
-    val selectedRepSSKGpText: LiveData<String> get() = _selectedRepSSKGpText // Не используется
+    private val _selectedRepSSKGpText = MutableLiveData<String?>()
+    val selectedRepSSKGpText: LiveData<String?> get() = _selectedRepSSKGpText // Не используется
 
     // -------- Субподрядчик --------
-    private val _SubContractorText = MutableLiveData<String>()
-    val subContractorText: LiveData<String> get() = _SubContractorText
+    private val _SubContractorText = MutableLiveData<String?>()
+    val subContractorText: LiveData<String?> get() = _SubContractorText
 
     // Выбранный субподрядчик
-    private val _selectedSubContractor = MutableLiveData<String>()
-    val selectedSubContractor: LiveData<String> get() = _selectedSubContractor
+    private val _selectedSubContractor = MutableLiveData<String?>()
+    val selectedSubContractor: LiveData<String?> get() = _selectedSubContractor
 
     // Представитель субподрядчика
-    private val _RepSubContractorText = MutableLiveData<String>()
-    val repSubContractorText: LiveData<String> get() = _RepSubContractorText
+    private val _RepSubContractorText = MutableLiveData<String?>()
+    val repSubContractorText: LiveData<String?> get() = _RepSubContractorText
 
     // Выбранный представитель субподрядчика
-    private val _selectedRepSubContractor = MutableLiveData<String>()
-    val selectedRepSubContractor: LiveData<String> get() = _selectedRepSubContractor // Не используется
+    private val _selectedRepSubContractor = MutableLiveData<String?>()
+    val selectedRepSubContractor: LiveData<String?> get() = _selectedRepSubContractor // Не используется
 
     // Представитель ССК ПО (Суб)
-    private val _repSSKSubText = MutableLiveData<String>()
-    val repSSKSubText: LiveData<String> get() = _repSSKSubText
+    private val _repSSKSubText = MutableLiveData<String?>()
+    val repSSKSubText: LiveData<String?> get() = _repSSKSubText
 
     // Выбранный Представитель ССК ПО (Суб)
-    private val _selectedRepSSKSubText = MutableLiveData<String>()
-    val selectedRepSSKSubText: LiveData<String> get() = _selectedRepSSKSubText // Не используется
+    private val _selectedRepSSKSubText = MutableLiveData<String?>()
+    val selectedRepSSKSubText: LiveData<String?> get() = _selectedRepSSKSubText // Не используется
 
     // endregion методы для ArrangementFragment
 
@@ -286,24 +271,24 @@ class SharedViewModel(
     // -------- РАССТАНОВКА - НАЧАЛО - МЕТОДЫ --------
     // region методы для ArrangementFragment
 
-    fun setContractText(value: String) { _contractText.value = value }
-    fun setSelectedContract(value: String) { _selectedContract.value = value }
-    fun setCustomerText(value: String) { _customerText.value = value }
-    fun setSelectedCustomer(value: String) { _selectedCustomer.value = value }
-    fun setObjectText(value: String) { _objectText.value = value }
-    fun setSelectedObject(value: String) { _selectedObject.value = value }
-    fun setPlotText(value: String) { _plotText.value = value }
-    fun setSelectedPlot(value: String) { _selectedPlot.value = value }
+    fun setContractText(value: String?) { _contractText.value = value }
+    fun setSelectedContract(value: String?) { _selectedContract.value = value }
+    fun setCustomerText(value: String?) { _customerText.value = value }
+    fun setSelectedCustomer(value: String?) { _selectedCustomer.value = value }
+    fun setObjectText(value: String?) { _objectText.value = value }
+    fun setSelectedObject(value: String?) { _selectedObject.value = value }
+    fun setPlotText(value: String?) { _plotText.value = value }
+    fun setSelectedPlot(value: String?) { _selectedPlot.value = value }
     fun setIsManualPlot(value: Boolean) { _isManualPlot.value = value }
-    fun setGetContractorText(value: String) { _contractorText.value = value }
-    fun setSelectedContractor(value: String) { _selectedContractor.value = value }
-    fun setRepContractorText(value: String) { _repContractorText.value = value }
-    fun setSelectedRepContractor(value: String) { _selectedRepContractor.value = value }
-    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value }
-    fun setSubContractorText(value: String) { _SubContractorText.value = value }
-    fun setSelectedSubContractor(value: String) { _selectedSubContractor.value = value }
-    fun setRepSubContractorText(value: String) { _RepSubContractorText.value = value }
-    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
+    fun setGetContractorText(value: String?) { _contractorText.value = value }
+    fun setSelectedContractor(value: String?) { _selectedContractor.value = value }
+    fun setRepContractorText(value: String?) { _repContractorText.value = value }
+    fun setSelectedRepContractor(value: String?) { _selectedRepContractor.value = value }
+    fun setRepSSKGpText(value: String?) { _repSSKGpText.value = value }
+    fun setSubContractorText(value: String?) { _SubContractorText.value = value }
+    fun setSelectedSubContractor(value: String?) { _selectedSubContractor.value = value }
+    fun setRepSubContractorText(value: String?) { _RepSubContractorText.value = value }
+    fun setRepSSKSubText(value: String?) { _repSSKSubText.value = value }
 
     // endregion методы для ArrangementFragment
 
