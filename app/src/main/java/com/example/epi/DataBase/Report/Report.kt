@@ -15,38 +15,38 @@ data class Report(
     val date: String = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()),
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
 
-    // Расстановка
-    val contract: String = "",
-    val customer: String = "",
-    val obj: String = "",
-    val plot: String = "",
-    val genContractor: String = "",
-    val repGenContractor: String = "",
-    val repSSKGp: String = "",
-    val subContractor: String = "",
-    val repSubContractor: String = "",
-    val repSSKSub: String = "",
+    // -------- Расстановка --------
+    val customer: String = "", // Заказчик
+    val contract: String = "", // Договор СК
+    val obj: String = "", // Объект
+    val plot: String = "", // Участок
+    val genContractor: String = "", // Генподрядчик
+    val repGenContractor: String = "", // Представитель генподрядчика
+    val repSSKGp: String = "", // Представитель ССК ПО (ГП)
+    val subContractor: String = "", // Субподрядчик
+    val repSubContractor: String = "", // Представитель Субподрядчика
+    val repSSKSub: String = "", // Представитель ССК ПО (Суб)
 
-    // Транспорт
-    val isEmpty: Boolean = false,
-    val executor: String = "",
-    val startDate: String = "",
-    val startTime: String = "",
-    val stateNumber: String = "",
-    val contractTransport: String = "",
-    val endDate: String = "",
-    val endTime: String = "",
-    val inViolation: Boolean = false,
+    // -------- Транспорт --------
+    val isEmpty: Boolean = false, // Транспорт отсутствует
+    val executor: String = "", // Исполнитель по транспорту
+    val startDate: String = "", // Дата начала поездки
+    val startTime: String = "", // Время начала поездки
+    val stateNumber: String = "", // Госномер
+    val contractTransport: String = "", // Договор по транспорту
+    val endDate: String = "", // Дата завершения поездки
+    val endTime: String = "", // Время начала поездки
 
-    // Контроль
-    val equipment: String = "",
-    val complexWork: String = "",
-    val orderNumber: String = "",
-    val report: String = "",
-    val remarks: String = "",
+    // -------- Контроль --------
+    val inViolation: Boolean = false, //
+    val equipment: String = "", // Название прибора / оборудования
+    val complexWork: String = "",  // Комплекс работ
+    val orderNumber: String = "", // Номер предписания
+    val report: String = "", // Отчет о результатах инспекции
+    val remarks: String = "", // Замечания к документации
     val controlRows: String = "", // Поле для хранения JSON списка ControlRow
 
-    // Объемы
+    // -------- Фиксация объемов --------
     val fixVolumesRows: String = "", // Поле для хранения JSON списка FixVolumesRow
 
     val isSend: Boolean = false

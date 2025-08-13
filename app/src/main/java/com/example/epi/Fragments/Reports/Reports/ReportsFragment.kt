@@ -152,8 +152,8 @@ class ReportsFragment : Fragment() {
             .setTitle("Выберите формат экспорта")
             .setItems(formats) { _, which ->
                 when (which) {
-                    0 -> checkStoragePermission("csv")
-                    1 -> checkStoragePermission("xlsx")
+                    0 -> checkStoragePermission("xlsx")
+                    1 -> checkStoragePermission("csv")
                 }
             }
             .setNegativeButton("Отмена", null)
@@ -243,13 +243,13 @@ class ReportsFragment : Fragment() {
     private suspend fun exportToCsv(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
         val separator = ";"
         val csvHeader = listOf(
-            "ИД", "Дата", "Время", "Договор СК", "Заказчик", "Объект", "Участок",
-            "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)",
-            "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
-            "Отсутствие транспорта", "Исполнитель", "Дата начала", "Время начала",
-            "Госномер", "Договор", "Договор транспорта", "Дата окончания", "Время окончания",
-            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания",
-            "Отчет", "Примечания", "Отправлено"
+            "№ п/п", "Дата", "Время", "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+
+            "Транспорт отсутствует", "Исполнитель по транспорту", "Дата начала поездки", "Время начала поездки", "Госномер", "Договор по транспорту", "Дата окончания поездки", "Время окончания поездки",
+
+            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
+
+            // TODO - "Фиксация объемов"
         ).joinToString(separator) { it.escapeCsv() } + "\n"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -270,8 +270,8 @@ class ReportsFragment : Fragment() {
                             report.id.toString(),
                             report.date,
                             report.time,
-                            report.contract,
                             report.customer,
+                            report.contract,
                             report.obj,
                             report.plot,
                             report.genContractor,
@@ -285,7 +285,6 @@ class ReportsFragment : Fragment() {
                             report.startDate,
                             report.startTime,
                             report.stateNumber,
-//                            report.contract,
                             report.contractTransport,
                             report.endDate,
                             report.endTime,
@@ -295,7 +294,7 @@ class ReportsFragment : Fragment() {
                             report.orderNumber,
                             report.report,
                             report.remarks,
-                            report.isSend.toString()
+                            // TODO - фиксация объемов
                         ).joinToString(separator) { it.escapeCsv() } + "\n"
                         outputStream.write(line.toByteArray(Charsets.UTF_8))
                     }
@@ -324,8 +323,8 @@ class ReportsFragment : Fragment() {
                             report.id.toString(),
                             report.date,
                             report.time,
-                            report.contract,
                             report.customer,
+                            report.contract,
                             report.obj,
                             report.plot,
                             report.genContractor,
@@ -339,7 +338,6 @@ class ReportsFragment : Fragment() {
                             report.startDate,
                             report.startTime,
                             report.stateNumber,
-//                            report.contract,
                             report.contractTransport,
                             report.endDate,
                             report.endTime,
@@ -349,7 +347,7 @@ class ReportsFragment : Fragment() {
                             report.orderNumber,
                             report.report,
                             report.remarks,
-                            report.isSend.toString()
+                            // TODO - фиксация объемов
                         ).joinToString(separator) { it.escapeCsv() } + "\n"
                         writer.append(line)
                     }
@@ -373,13 +371,13 @@ class ReportsFragment : Fragment() {
 
         // Заголовки
         val headers = listOf(
-            "ИД", "Дата", "Время", "Договор СК", "Заказчик", "Объект", "Участок",
-            "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)",
-            "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
-            "Отсутствие транспорта", "Исполнитель", "Дата начала", "Время начала",
-            "Госномер", "Договор", "Договор транспорта", "Дата окончания", "Время окончания",
-            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания",
-            "Отчет", "Примечания", "Отправлено"
+            "№ п/п", "Дата", "Время", "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+
+            "Транспорт отсутствует", "Исполнитель по транспорту", "Дата начала поездки", "Время начала поездки", "Госномер", "Договор по транспорту", "Дата окончания поездки", "Время окончания поездки",
+
+            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
+
+            // TODO - "Фиксация объемов"
         )
         val headerRow = sheet.createRow(0)
         headers.forEachIndexed { index, header ->
