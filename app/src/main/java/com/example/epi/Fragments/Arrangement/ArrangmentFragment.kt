@@ -613,11 +613,11 @@ class ArrangementFragment : Fragment() {
                 Log.d("Tagg-Arrangement", "Валидация прошла")
                 // Логирование значений
                 Log.d("Tagg-Arrangement",
-                    "Contract: ${sharedViewModel.contractText.value}\nCustomer: ${sharedViewModel.selectedCustomer.value}\n" +
-                            "Object: ${sharedViewModel.selectedObject.value}\nPlot: ${sharedViewModel.plotText.value}\n" +
-                            "Contractor: ${sharedViewModel.selectedContractor.value}\nSubContractor: ${sharedViewModel.selectedSubContractor.value}\n" +
-                            "RepSSKGp: ${sharedViewModel.repSSKGpText.value}\nSubContractorText: ${sharedViewModel.subContractorText.value}\n" +
-                            "RepSubContractor: ${sharedViewModel.repSubContractorText.value}\nRepSSKSub: ${sharedViewModel.repSSKSubText.value}")
+                    "Заказчик: ${sharedViewModel.selectedCustomer.value}\nДоговор СК: ${sharedViewModel.selectedContract.value}\n" +
+                            "Объект: ${sharedViewModel.selectedObject.value}\nУчасток: ${sharedViewModel.plotText.value}\n" +
+                            "Генподрядчик: ${sharedViewModel.selectedContractor.value}\nПредставитель Генподрядчика: ${sharedViewModel.selectedSubContractor.value}\n" +
+                            "Представитель ССК ГП (ПО): ${sharedViewModel.repSSKGpText.value}\nСубподрядчик: ${sharedViewModel.selectedSubContractor.value}\n" +
+                            "Представитель Субподрядчика: ${sharedViewModel.repSubContractorText.value}\nПредставитель ССК ГП (Суб): ${sharedViewModel.repSSKSubText.value}")
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val reportId = withContext(Dispatchers.IO) {

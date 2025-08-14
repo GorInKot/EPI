@@ -59,26 +59,14 @@ class SharedViewModel(
     // region методы для ArrangementFragment
 
     // -------- Договор СК --------
-    private val _contractText = MutableLiveData<String?>()
-    val contractText: LiveData<String?> get() = _contractText
-
-    // Выбранный договор
     private val _selectedContract = MutableLiveData<String?>()
     val selectedContract: LiveData<String?> get() = _selectedContract
 
     // -------- Заказчик --------
-    private val _customerText = MutableLiveData<String?>()
-    val customerText: LiveData<String?> get() = _customerText // Не используется
-
-    // Выбранный заказчик
     private val _selectedCustomer = MutableLiveData<String?>()
     val selectedCustomer: LiveData<String?> get() = _selectedCustomer
 
     // -------- Объект --------
-    private val _objectText = MutableLiveData<String?>()
-    val objectText: LiveData<String?> get() = _objectText // Не используется
-
-    // Выбранный объект
     private val _selectedObject = MutableLiveData<String?>()
     val selectedObject: LiveData<String?> get() = _selectedObject
 
@@ -86,27 +74,15 @@ class SharedViewModel(
     private val _plotText = MutableLiveData<String?>()
     val plotText: LiveData<String?> get() = _plotText
 
-    // Выбранный участок
-    private val _selectedPlot = MutableLiveData<String?>()
-    val selectedPlot: LiveData<String?> get() = _selectedPlot // Не используется, можно объединить с _plotText
-
     // Флаг для чекбокса "Объект не делится на участок"
     private val _isManualPlot = MutableLiveData(false)
     val isManualPlot: LiveData<Boolean> get() = _isManualPlot
 
     // -------- Генподрядчик --------
-    private val _contractorText = MutableLiveData<String?>()
-    val contractorText: LiveData<String?> get() = _contractorText // Не используется
-
-    // Выбранный генподрядчик
     private val _selectedContractor = MutableLiveData<String?>()
     val selectedContractor: LiveData<String?> get() = _selectedContractor
 
     // -------- Представитель Генподрядчика --------
-    private val _repContractorText = MutableLiveData<String?>()
-    val repContractorText: LiveData<String?> get() = _repContractorText // Не используется
-
-    // Выбранный Представитель Генподрядчика
     private val _selectedRepContractor = MutableLiveData<String?>()
     val selectedRepContractor: LiveData<String?> get() = _selectedRepContractor
 
@@ -114,33 +90,17 @@ class SharedViewModel(
     private val _repSSKGpText = MutableLiveData<String?>()
     val repSSKGpText: LiveData<String?> get() = _repSSKGpText
 
-    // Выбранный Представитель ССК ПО (ГП)
-    private val _selectedRepSSKGpText = MutableLiveData<String?>()
-    val selectedRepSSKGpText: LiveData<String?> get() = _selectedRepSSKGpText // Не используется
-
     // -------- Субподрядчик --------
-    private val _SubContractorText = MutableLiveData<String?>()
-    val subContractorText: LiveData<String?> get() = _SubContractorText
-
-    // Выбранный субподрядчик
     private val _selectedSubContractor = MutableLiveData<String?>()
     val selectedSubContractor: LiveData<String?> get() = _selectedSubContractor
 
-    // Представитель субподрядчика
-    private val _RepSubContractorText = MutableLiveData<String?>()
-    val repSubContractorText: LiveData<String?> get() = _RepSubContractorText
+    // -------- Представитель субподрядчика --------
+    private val _repSubContractorText = MutableLiveData<String?>()
+    val repSubContractorText: LiveData<String?> get() = _repSubContractorText
 
-    // Выбранный представитель субподрядчика
-    private val _selectedRepSubContractor = MutableLiveData<String?>()
-    val selectedRepSubContractor: LiveData<String?> get() = _selectedRepSubContractor // Не используется
-
-    // Представитель ССК ПО (Суб)
+    // -------- Представитель ССК ПО (Суб) --------
     private val _repSSKSubText = MutableLiveData<String?>()
     val repSSKSubText: LiveData<String?> get() = _repSSKSubText
-
-    // Выбранный Представитель ССК ПО (Суб)
-    private val _selectedRepSSKSubText = MutableLiveData<String?>()
-    val selectedRepSSKSubText: LiveData<String?> get() = _selectedRepSSKSubText // Не используется
 
     // Состояние чекбокса "Отсутствует субподрядчик"
     private val _isManualSubContractor = MutableLiveData<Boolean>(false)
@@ -148,6 +108,15 @@ class SharedViewModel(
 
     fun setIsManualSubContractor(isChecked: Boolean) {
         _isManualSubContractor.value = isChecked
+        if (isChecked) {
+            _selectedSubContractor.value = "Отсутствует субподрядчик"
+            _repSubContractorText.value = "Отсутствует субподрядчик"
+            _repSSKSubText.value = "Отсутствует субподрядчик"
+        } else {
+            _selectedSubContractor.value = null
+            _repSubContractorText.value = null
+            _repSSKSubText.value = null
+        }
     }
 
     // endregion методы для ArrangementFragment
@@ -157,29 +126,29 @@ class SharedViewModel(
     private val _isTransportAbsent = MutableLiveData(false)
     val isTransportAbsent: LiveData<Boolean> get() = _isTransportAbsent
 
-    private val _transportContractCustomer = MutableLiveData<String>()
-    val transportContractCustomer: LiveData<String> get() = _transportContractCustomer
+    private val _transportContractCustomer = MutableLiveData<String?>()
+    val transportContractCustomer: LiveData<String?> get() = _transportContractCustomer
 
-    private val _transportExecutorName = MutableLiveData<String>()
-    val transportExecutorName: LiveData<String> get() = _transportExecutorName
+    private val _transportExecutorName = MutableLiveData<String?>()
+    val transportExecutorName: LiveData<String?> get() = _transportExecutorName
 
-    private val _transportContractTransport = MutableLiveData<String>()
-    val transportContractTransport: LiveData<String> get() = _transportContractTransport
+    private val _transportContractTransport = MutableLiveData<String?>()
+    val transportContractTransport: LiveData<String?> get() = _transportContractTransport
 
-    private val _transportStateNumber = MutableLiveData<String>()
-    val transportStateNumber: LiveData<String> get() = _transportStateNumber
+    private val _transportStateNumber = MutableLiveData<String?>()
+    val transportStateNumber: LiveData<String?> get() = _transportStateNumber
 
-    private val _transportStartDate = MutableLiveData<String>()
-    val transportStartDate: LiveData<String> get() = _transportStartDate
+    private val _transportStartDate = MutableLiveData<String?>()
+    val transportStartDate: LiveData<String?> get() = _transportStartDate
 
-    private val _transportStartTime = MutableLiveData<String>()
-    val transportStartTime: LiveData<String> get() = _transportStartTime
+    private val _transportStartTime = MutableLiveData<String?>()
+    val transportStartTime: LiveData<String?> get() = _transportStartTime
 
-    private val _transportEndDate = MutableLiveData<String>()
-    val transportEndDate: LiveData<String> get() = _transportEndDate
+    private val _transportEndDate = MutableLiveData<String?>()
+    val transportEndDate: LiveData<String?> get() = _transportEndDate
 
-    private val _transportEndTime = MutableLiveData<String>()
-    val transportEndTime: LiveData<String> get() = _transportEndTime
+    private val _transportEndTime = MutableLiveData<String?>()
+    val transportEndTime: LiveData<String?> get() = _transportEndTime
 
     private val _transportInClearing = MutableLiveData(false)
     val transportInClearing: LiveData<Boolean> get() = _transportInClearing
@@ -191,8 +160,8 @@ class SharedViewModel(
     private var orderCounter = 1
 //    private var extraOrderNumber = 1
 
-    private val _orderNumber = MutableLiveData<String>("")
-    val orderNumber: LiveData<String> get() = _orderNumber
+    private val _orderNumber = MutableLiveData<String?>("")
+    val orderNumber: LiveData<String?> get() = _orderNumber
 
     private val _isViolation = MutableLiveData<Boolean>(false)
     val isViolation: LiveData<Boolean> get() = _isViolation
@@ -200,11 +169,11 @@ class SharedViewModel(
     private val _controlRows = MutableLiveData<List<ControlRow>>(emptyList())
     val controlRows: LiveData<List<ControlRow>> get() = _controlRows
 
-    private val _controlStartDate = MutableLiveData<String>()
-    val controlStartDate: LiveData<String> get() = _controlStartDate
+    private val _controlStartDate = MutableLiveData<String?>()
+    val controlStartDate: LiveData<String?> get() = _controlStartDate
 
-    private val _controlStartTime = MutableLiveData<String>()
-    val controlStartTime: LiveData<String> get() = _controlStartTime
+    private val _controlStartTime = MutableLiveData<String?>()
+    val controlStartTime: LiveData<String?> get() = _controlStartTime
 
     val equipmentNames = MutableLiveData<List<String>>(
         listOf(
@@ -269,23 +238,17 @@ class SharedViewModel(
     // -------- РАССТАНОВКА - НАЧАЛО - МЕТОДЫ --------
     // region методы для ArrangementFragment
 
-    fun setContractText(value: String?) { _contractText.value = value }
+    // Методы для установки значений
     fun setSelectedContract(value: String?) { _selectedContract.value = value }
-    fun setCustomerText(value: String?) { _customerText.value = value }
     fun setSelectedCustomer(value: String?) { _selectedCustomer.value = value }
-    fun setObjectText(value: String?) { _objectText.value = value }
     fun setSelectedObject(value: String?) { _selectedObject.value = value }
     fun setPlotText(value: String?) { _plotText.value = value }
-    fun setSelectedPlot(value: String?) { _selectedPlot.value = value }
     fun setIsManualPlot(value: Boolean) { _isManualPlot.value = value }
-    fun setGetContractorText(value: String?) { _contractorText.value = value }
     fun setSelectedContractor(value: String?) { _selectedContractor.value = value }
-    fun setRepContractorText(value: String?) { _repContractorText.value = value }
     fun setSelectedRepContractor(value: String?) { _selectedRepContractor.value = value }
     fun setRepSSKGpText(value: String?) { _repSSKGpText.value = value }
-    fun setSubContractorText(value: String?) { _SubContractorText.value = value }
     fun setSelectedSubContractor(value: String?) { _selectedSubContractor.value = value }
-    fun setRepSubContractorText(value: String?) { _RepSubContractorText.value = value }
+    fun setRepSubContractorText(value: String?) { _repSubContractorText.value = value }
     fun setRepSSKSubText(value: String?) { _repSSKSubText.value = value }
 
     // endregion методы для ArrangementFragment
@@ -331,15 +294,15 @@ class SharedViewModel(
             Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    contract = _selectedContract.value ?: "",
-                    customers = _selectedCustomer.value ?: "",
-                    objects = _selectedObject.value ?: "",
-                    plotText = if (isManualPlot.value == true) "Объект не делится на участки" else plotText.value,
-                    contractors = _selectedContractor.value ?: "",
+                    contract = _selectedContract.value,
+                    customers = _selectedCustomer.value,
+                    objects = _selectedObject.value,
+                    plotText = if (_isManualPlot.value == true) "Объект не делится на участки" else _plotText.value,
+                    contractors = _selectedContractor.value,
                     subContractors = _selectedSubContractor.value,
                     repSSKGpText = _repSSKGpText.value,
-                    repContractor = _SubContractorText.value,
-                    repSubContractorText = _RepSubContractorText.value,
+                    repContractor = _selectedRepContractor.value,
+                    repSubContractorText = _repSubContractorText.value,
                     repSSKSubText = _repSSKSubText.value,
                     isManualPlot = _isManualPlot.value ?: false
                 )
@@ -361,10 +324,10 @@ class SharedViewModel(
                     obj =  _selectedObject.value.orEmpty(),
                     plot = _plotText.value.orEmpty(),
                     genContractor = _selectedContractor.value.orEmpty(),
-                    repGenContractor =_selectedSubContractor.value.orEmpty(),
+                    repGenContractor =_selectedRepContractor.value.orEmpty(),
                     repSSKGp = _repSSKGpText.value.orEmpty(),
-                    subContractor = _SubContractorText.value.orEmpty(),
-                    repSubContractor = _RepSubContractorText.value.orEmpty(),
+                    subContractor = _selectedSubContractor.value.orEmpty(),
+                    repSubContractor = _repSubContractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
                     // Поля Transport, Control и FixVolumes остаются пустыми
 //                    contract = "",
@@ -412,15 +375,15 @@ class SharedViewModel(
             Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    contract = _selectedContract.value ?: "",
-                    customers = _selectedCustomer.value ?: "",
-                    objects = _selectedObject.value ?: "",
-                    plotText = if (isManualPlot.value == true) "Объект не делится на участки" else plotText.value,
-                    contractors = _selectedContractor.value ?: "",
+                    contract = _selectedContract.value,
+                    customers = _selectedCustomer.value,
+                    objects = _selectedObject.value,
+                    plotText = if (_isManualPlot.value == true) "Объект не делится на участки" else _plotText.value,
+                    contractors = _selectedContractor.value,
                     subContractors = _selectedSubContractor.value,
                     repSSKGpText = _repSSKGpText.value,
-                    repContractor = _SubContractorText.value,
-                    repSubContractorText = _RepSubContractorText.value,
+                    repContractor = _selectedRepContractor.value,
+                    repSubContractorText = _repSubContractorText.value,
                     repSSKSubText = _repSSKSubText.value,
                     isManualPlot = _isManualPlot.value ?: false
                 )
@@ -474,8 +437,8 @@ class SharedViewModel(
                     genContractor = _selectedContractor.value.orEmpty(),
                     repGenContractor =_selectedSubContractor.value.orEmpty(),
                     repSSKGp = _repSSKGpText.value.orEmpty(),
-                    subContractor = _SubContractorText.value.orEmpty(),
-                    repSubContractor = _RepSubContractorText.value.orEmpty(),
+                    subContractor = _selectedSubContractor.value.orEmpty(),
+                    repSubContractor = _repSubContractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
 
 //                    contract = _transportContractCustomer.value.orEmpty(),
@@ -841,7 +804,9 @@ class SharedViewModel(
         }
 
         val planValue = input.plan.toDouble()
+        Log.d("Tagg-SVM", "План: $planValue")
         val factValue = input.fact.toDouble()
+        Log.d("Tagg-SVM", "Факт: $factValue")
 
         val matchingRows = _fixRows.value?.filter {
             it != excludeRow &&
@@ -852,6 +817,7 @@ class SharedViewModel(
 
         val totalFact = matchingRows.sumOf { it.fact.toDoubleOrNull() ?: 0.0 } + factValue
         val remainingVolume = planValue - totalFact
+        Log.d("Tagg-SVM", "Разница: $remainingVolume")
 
         if (remainingVolume < 0) {
             return RowValidationResult.Invalid("Сумма фактических значений превышает плановое")
@@ -942,8 +908,8 @@ class SharedViewModel(
         Подрядчик: ${_selectedContractor.value}
         Представитель Генподрядчика: ${_selectedSubContractor.value}
         Представитель ССК ГП: ${_repSSKGpText.value}
-        Субподрядчик: ${_SubContractorText.value}
-        Представитель субподрядчика: ${_RepSubContractorText.value}
+        Субподрядчик: ${_selectedSubContractor.value}
+        Представитель субподрядчика: ${_repSubContractorText.value}
         Представитель ССК субподрядчика: ${_repSSKSubText.value}
 
         Исполнитель по транспорту: ${_transportExecutorName.value}
@@ -979,85 +945,61 @@ class SharedViewModel(
             try {
                 val report = reportRepository.getLastUnsentReport()
                 report?.let {
-                    setSelectedContract(it.contract)
-                    setSelectedCustomer(it.customer)
-                    setSelectedObject(it.obj)
-                    setPlotText(it.plot)
-                    setIsManualPlot(it.plot == "Объект не делится на участки")
-                    setSelectedContractor(it.genContractor)
-                    setSelectedRepContractor(it.repGenContractor)
-                    setRepSSKGpText(it.repSSKGp)
-                    setSubContractorText(it.subContractor)
-                    setRepSubContractorText(it.repSubContractor)
-                    setRepSSKSubText(it.repSSKSub)
+                    _selectedContract.value = it.contract
+                    _selectedCustomer.value = it.customer
+                    _selectedObject.value = it.obj
+                    _plotText.value = it.plot
+                    _isManualPlot.value = it.plot == "Объект не делится на участки"
+                    _selectedContractor.value = it.genContractor
+                    _selectedRepContractor.value = it.repGenContractor
+                    _repSSKGpText.value = it.repSSKGp
+                    _selectedSubContractor.value = it.subContractor
+                    _repSubContractorText.value = it.repSubContractor
+                    _repSSKSubText.value = it.repSSKSub
+                    _isManualSubContractor.value = it.subContractor == "Отсутствует субподрядчик"
                     _transportContractCustomer.value = it.contract
                     _transportExecutorName.value = it.executor
                     _transportContractTransport.value = it.contractTransport
                     _transportStateNumber.value = it.stateNumber
-                }
+                    Log.d("Tagg-SVM", "Loaded previous report: $it")
+                } ?: Log.d("Tagg-SVM", "No previous unsent report found")
             } catch (e: Exception) {
-                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета")
+                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета: ${e.message}")
+                Log.e("Tagg-SVM", "Error loading previous report: ${e.message}", e)
             }
         }
-//        viewModelScope.launch {
-//            try {
-//                val report = reportRepository.getLastUnsentReport()
-//                report?.let {
-//                    _selectedContract.value = it.contract
-//                    _selectedCustomer.value = it.customer
-//                    _selectedObject.value = it.obj
-//                    _plotText.value = it.plot
-//                    if (it.plot == "Объект не делится на участок") {
-//                        _isManualPlot.value = true
-//                    } else {
-//                        _isManualPlot.value = false
-//                    }
-////                    _selectedContract.value = it.contract
-//                    _selectedSubContractor.value = it.subContractor
-//                    _repSSKGpText.value = it.repSSKGp
-//                    _SubContractorText.value = it.subContractor
-//                    _RepSubContractorText.value = it.repSubContractor
-//                    _repSSKSubText.value = it.repSSKSub
-//                    _transportExecutorName.value = it.executor
-//                    _transportContractTransport.value = it.contractTransport
-//                    _transportStateNumber.value = it.stateNumber
-//                }
-//            } catch (e: Exception) {
-//                _errorEvent.postValue("Ошибка загрузки предыдущего отчета")
-//                Log.d("SharedViewModel", "Ошибка при загрузке предыдущего отчета: ${e.message}")
-//            }
-//        }
     }
 
     fun clearAllData() {
-        _selectedContract.value = ""
-        _selectedCustomer.value = ""
-        _selectedObject.value = ""
-        _selectedContractor.value = ""
-        _selectedSubContractor.value = ""
-        _plotText.value = ""
-        _repSSKGpText.value = ""
-        _SubContractorText.value = ""
-        _RepSubContractorText.value = ""
-        _repSSKSubText.value = ""
+        _selectedContract.value = null
+        _selectedCustomer.value = null
+        _selectedObject.value = null
+        _plotText.value = null
         _isManualPlot.value = false
-        _transportContractCustomer.value = ""
-        _transportExecutorName.value = ""
-        _transportContractTransport.value = ""
-        _transportStateNumber.value = ""
-        _transportStartDate.value = ""
-        _transportStartTime.value = ""
-        _transportEndDate.value = ""
-        _transportEndTime.value = ""
-        _orderNumber.value = ""
+        _selectedContractor.value = null
+        _selectedRepContractor.value = null
+        _repSSKGpText.value = null
+        _selectedSubContractor.value = null
+        _repSubContractorText.value = null
+        _repSSKSubText.value = null
+        _isManualSubContractor.value = false
+        _transportContractCustomer.value = null
+        _transportExecutorName.value = null
+        _transportContractTransport.value = null
+        _transportStateNumber.value = null
+        _transportStartDate.value = null
+        _transportStartTime.value = null
+        _transportEndDate.value = null
+        _transportEndTime.value = null
+        _orderNumber.value = null
         _isViolation.value = false
-        _controlStartDate.value = ""
-        _controlStartTime.value = ""
+        _controlStartDate.value = null
+        _controlStartTime.value = null
         _controlRows.value = emptyList()
         _fixRows.value = emptyList()
         _isTransportAbsent.value = false
         updateDateTime()
-        _isReportSaved.postValue(false) // Используем postValue для безопасности
+        _isReportSaved.postValue(false)
     }
 
     // ------------ Блок Авторизации ------------
