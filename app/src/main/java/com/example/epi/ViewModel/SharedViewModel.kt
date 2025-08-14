@@ -142,17 +142,15 @@ class SharedViewModel(
     private val _selectedRepSSKSubText = MutableLiveData<String?>()
     val selectedRepSSKSubText: LiveData<String?> get() = _selectedRepSSKSubText // Не используется
 
-    // endregion методы для ArrangementFragment
+    // Состояние чекбокса "Отсутствует субподрядчик"
+    private val _isManualSubContractor = MutableLiveData<Boolean>(false)
+    val isManualSubContractor: LiveData<Boolean> get() = _isManualSubContractor
 
-    // Списки выбора
-//    companion object {
-////        val workTypes = listOf("Вахта", "Стандартный", "Суммированный")
-//        val customers = listOf("Заказчик 1", "Заказчик 2", "Заказчик 3", "Заказчик 4", "Заказчик 5")
-//        val objects = listOf("Объект 1", "Объект 2", "Объект 3", "Объект 4", "Объект 5")
-//        val contractors = listOf("Генподрядчик 1", "Генподрядчик 2", "Генподрядчик 3", "Генподрядчик 4", "Генподрядчик 5")
-//        val subContractors = listOf("Представитель Генподрядчика 1", "Представитель Генподрядчика 2",
-//            "Представитель Генподрядчика 3", "Представитель Генподрядчика 4", "Представитель Генподрядчика 5")
-//    }
+    fun setIsManualSubContractor(isChecked: Boolean) {
+        _isManualSubContractor.value = isChecked
+    }
+
+    // endregion методы для ArrangementFragment
 
     // Данные из TransportFragment
     // region TransportFragment
@@ -292,74 +290,63 @@ class SharedViewModel(
 
     // endregion методы для ArrangementFragment
 
-
-    // Методы для ArrangementFragment
-//    fun setIsManualCustomer(value: Boolean) { _isManualCustomer.value = value }
-//    fun setIsManualObject(value: Boolean) { _isManualObject.value = value }
-//    fun setIsManualContractor(value: Boolean) { _isManualContractor.value = value }
-//    fun setIsManualSubContractor(value: Boolean) { _isManualSubContractor.value = value }
-//
-////    fun setPlotText(value: String) { _plotText.value = value }
-//    fun setRepSSKGpText(value: String) { _repSSKGpText.value = value }
-////    fun setSubContractorText(value: String) { _subContractorText.value = value }
-//    fun setRepSubcontractorText(value: String) { _repSubcontractorText.value = value }
-//    fun setRepSSKSubText(value: String) { _repSSKSubText.value = value }
-//
-//    fun setSelectedCustomer(value: String) { _selectedCustomer.value = value }
-//    fun setSelectedObject(value: String) { _selectedObject.value = value }
-//    fun setSelectedContractor(value: String) { _selectedContractor.value = value }
-//    fun setSelectedSubContractor(value: String) { _selectedSubContractor.value = value }
-
     fun validateArrangementInputs(
         contract: String?,
-        customer: String?,
-        objectId: String?,
+        customers: String?,
+        objects: String?,
         plotText: String?,
-        genContractor: String?,
-        repGenContractor: String?,
+        contractors: String?,
+        subContractors: String?,
         repSSKGpText: String?,
-        subContractor: String?,
-        repSubcontractor: String?,
+        repContractor: String?,
+        repSubContractorText: String?,
         repSSKSubText: String?,
         isManualPlot: Boolean
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
-        if (contract.isNullOrBlank()) errors["contract"] = "Укажите Договор СК"
-        if (customer.isNullOrBlank()) errors["customer"] = "Укажите Заказчика"
-        if (objectId.isNullOrBlank()) errors["objectId"] = "Укажите Объект"
-        if (plotText.isNullOrBlank() && !isManualPlot) errors["plotText"] = "Укажите участок"
-        if (isManualPlot && plotText != "Объект не делится на участок") errors["plotText"] = "Некорректное значение участка при включенном чекбоксе"
-        if (genContractor.isNullOrBlank()) errors["genContractor"] = "Укажите Генподрядчика"
-        if (repGenContractor.isNullOrBlank()) errors["repGenContractor"] = "Укажите Представителя Генподрядчика"
-        if (repSSKGpText.isNullOrBlank()) errors["repSSKGpText"] = "Укажите Представителя ССК ПО (ГП)"
-        if (subContractor.isNullOrBlank()) errors["subContractor"] = "Укажите Субподрядчика"
-        if (repSubcontractor.isNullOrBlank()) errors["repSubcontractor"] = "Укажите Представителя Субподрядчика"
-        if (repSSKSubText.isNullOrBlank()) errors["repSSKSubText"] = "Укажите Представителя ССК ПО (Суб)"
+        if (contract.isNullOrBlank()) errors["contract"] = "Выберите договор"
+        if (customers.isNullOrBlank()) errors["customers"] = "Выберите заказчика"
+        if (objects.isNullOrBlank()) errors["objects"] = "Выберите объект"
+        if (plotText.isNullOrBlank() && !isManualPlot) errors["plotText"] = "Выберите участок"
+        if (contractors.isNullOrBlank()) errors["contractors"] = "Выберите генподрядчика"
+        if (subContractors.isNullOrBlank() && subContractors != "Отсутствует субподрядчик") {
+            errors["subContractors"] = "Выберите субподрядчика"
+        }
+        if (repSSKGpText.isNullOrBlank()) errors["repSSKGpText"] = "Введите представителя ССК ПО (ГП)"
+        if (repContractor.isNullOrBlank() && repContractor != "Отсутствует субподрядчик") {
+            errors["repContractor"] = "Выберите представителя генподрядчика"
+        }
+        if (repSubContractorText.isNullOrBlank() && repSubContractorText != "Отсутствует субподрядчик") {
+            errors["repSubContractorText"] = "Введите представителя субподрядчика"
+        }
+        if (repSSKSubText.isNullOrBlank() && repSSKSubText != "Отсутствует субподрядчик") {
+            errors["repSSKSubText"] = "Введите представителя ССК ПО (Суб)"
+        }
         return errors
     }
 
     // Новое
     suspend fun saveArrangementData(): Long {
         return withContext(Dispatchers.IO) {
-            Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
+            Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    contract = _selectedContract.value,
-                    customer = _selectedCustomer.value,
-                    objectId = _selectedObject.value,
-                    plotText = _plotText.value,
-                    genContractor = _selectedContractor.value,
-                    repGenContractor = _selectedSubContractor.value,
+                    contract = _selectedContract.value ?: "",
+                    customers = _selectedCustomer.value ?: "",
+                    objects = _selectedObject.value ?: "",
+                    plotText = if (isManualPlot.value == true) "Объект не делится на участки" else plotText.value,
+                    contractors = _selectedContractor.value ?: "",
+                    subContractors = _selectedSubContractor.value,
                     repSSKGpText = _repSSKGpText.value,
-                    subContractor = _SubContractorText.value,
-                    repSubcontractor = _RepSubContractorText.value,
+                    repContractor = _SubContractorText.value,
+                    repSubContractorText = _RepSubContractorText.value,
                     repSSKSubText = _repSSKSubText.value,
                     isManualPlot = _isManualPlot.value ?: false
                 )
                 if (arrangementErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
-                        Log.d("Taag", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                        Log.d("Tagg-SVM", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -398,19 +385,19 @@ class SharedViewModel(
                     fixVolumesRows = "",
                     isEmpty = false
                 )
-//                Log.d("Tagg", "UserName: ${report.userName}")
-                Log.d("Tagg", "Saving full report: $report")
+//                Log.d("Tagg-SVM", "UserName: ${report.userName}")
+                Log.d("Tagg-SVM", "Saving full report: $report")
                 val reportId = reportRepository.saveReport(report)
-                Log.d("Tagg", "Saved report ID: $reportId")
+                Log.d("Tagg-SVM", "Saved report ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
                         _isReportSaved.postValue(true)
-                        Log.d("Tagg", "Report saved successfully, isReportSaved set to true")
+                        Log.d("Tagg-SVM", "Report saved successfully, isReportSaved set to true")
                     }
                 }
                 reportId
             } catch (e: Exception) {
-                Log.e("Tagg", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                Log.e("Tagg-SVM", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
                 }
@@ -422,18 +409,18 @@ class SharedViewModel(
     // Старое
     suspend fun saveOrUpdateReport(): Long {
         return withContext(Dispatchers.IO) {
-            Log.d("Tagg", "Saving report on thread: ${Thread.currentThread().name}")
+            Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
-                    contract = _selectedContract.value,
-                    customer = _selectedCustomer.value,
-                    objectId = _selectedObject.value,
-                    plotText = _plotText.value,
-                    genContractor = _selectedContractor.value,
-                    repGenContractor = _selectedSubContractor.value,
+                    contract = _selectedContract.value ?: "",
+                    customers = _selectedCustomer.value ?: "",
+                    objects = _selectedObject.value ?: "",
+                    plotText = if (isManualPlot.value == true) "Объект не делится на участки" else plotText.value,
+                    contractors = _selectedContractor.value ?: "",
+                    subContractors = _selectedSubContractor.value,
                     repSSKGpText = _repSSKGpText.value,
-                    subContractor = _SubContractorText.value,
-                    repSubcontractor = _RepSubContractorText.value,
+                    repContractor = _SubContractorText.value,
+                    repSubContractorText = _RepSubContractorText.value,
                     repSSKSubText = _repSSKSubText.value,
                     isManualPlot = _isManualPlot.value ?: false
                 )
@@ -459,7 +446,7 @@ class SharedViewModel(
                 if (transportErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${transportErrors.values.joinToString()}")
-                        Log.d("Tagg", "Transport validation errors: ${transportErrors.values.joinToString()}")
+                        Log.d("Tagg-SVM", "Transport validation errors: ${transportErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -472,7 +459,7 @@ class SharedViewModel(
                 if (controlErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля контроля заполнены корректно: ${controlErrors.values.joinToString()}")
-                        Log.d("Tagg", "Control validation errors: ${controlErrors.values.joinToString()}")
+                        Log.d("Tagg-SVM", "Control validation errors: ${controlErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -509,18 +496,18 @@ class SharedViewModel(
                     fixVolumesRows = gson.toJson(_fixRows.value),
                     isEmpty = _isTransportAbsent.value ?: false
                 )
-                Log.d("Tagg", "Saving full report: $report")
+                Log.d("Tagg-SVM", "Saving full report: $report")
                 val reportId = reportRepository.saveReport(report)
-                Log.d("Tagg", "Saved report ID: $reportId")
+                Log.d("Tagg-SVM", "Saved report ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
                         _isReportSaved.postValue(true)
-                        Log.d("Tagg", "Report saved successfully, isReportSaved set to true")
+                        Log.d("Tagg-SVM", "Report saved successfully, isReportSaved set to true")
                     }
                 }
                 reportId
             } catch (e: Exception) {
-                Log.e("Tagg", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                Log.e("Tagg-SVM", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
                 }
@@ -629,13 +616,13 @@ class SharedViewModel(
                 if (errors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${errors.values.joinToString()}")
-                        Log.e("Tagg", "Transport: Validation failed in updateTransportReport: $errors")
+                        Log.e("Tagg-SVM", "Transport: Validation failed in updateTransportReport: $errors")
                     }
                     return@withContext 0L
                 }
                 val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
-                    Log.e("Tagg", "Transport: No unsent report found to update")
+                    Log.e("Tagg-SVM", "Transport: No unsent report found to update")
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Ошибка: нет незавершенного отчета для обновления")
                     }
@@ -652,12 +639,12 @@ class SharedViewModel(
                     endTime = if (_isTransportAbsent.value == true) "" else _transportEndTime.value.orEmpty(),
                     isEmpty = _isTransportAbsent.value ?: false
                 )
-                Log.d("Tagg", "Transport: Updating Report: $updatedReport")
+                Log.d("Tagg-SVM", "Transport: Updating Report: $updatedReport")
                 reportRepository.updateReport(updatedReport)
-                Log.d("Tagg", "Transport: Report updated successfully with ID: ${updatedReport.id}")
+                Log.d("Tagg-SVM", "Transport: Report updated successfully with ID: ${updatedReport.id}")
                 updatedReport.id
             } catch (e: Exception) {
-                Log.e("Tagg", "Transport: Error in updateTransportReport: ${e.message}", e)
+                Log.e("Tagg-SVM", "Transport: Error in updateTransportReport: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
                 }
@@ -708,7 +695,7 @@ class SharedViewModel(
             currentList[index] = newRow
             _controlRows.value = currentList
         } else {
-            Log.w("Tagg", "ControlFragment: Row not found: $oldRow")
+            Log.w("Tagg-SVM", "ControlFragment: Row not found: $oldRow")
         }
     }
 
@@ -760,14 +747,14 @@ class SharedViewModel(
                     controlRows = _controlRows.value
                 )
                 if (errors.isNotEmpty()) {
-                    Log.e("Tagg", "Control: Validation failed: $errors")
+                    Log.e("Tagg-SVM", "Control: Validation failed: $errors")
                     _errorEvent.postValue("Не все поля заполнены корректно")
                     return@withContext 0L
                 }
 
                 val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
-                    Log.e("Tagg", "Control: No unsent report found")
+                    Log.e("Tagg-SVM", "Control: No unsent report found")
                     _errorEvent.postValue("Ошибка: нет незавершенного отчета")
                     return@withContext 0L
                 }
@@ -786,12 +773,12 @@ class SharedViewModel(
                     remarks = firstRow?.remarks ?: "",
                     controlRows = controlRowsJson
                 )
-                Log.d("Tagg", "Control: Updating Report: $updatedReport")
+                Log.d("Tagg-SVM", "Control: Updating Report: $updatedReport")
                 reportRepository.updateReport(updatedReport)
-                Log.d("Tagg", "Control: Report updated successfully with ID: ${updatedReport.id}")
+                Log.d("Tagg-SVM", "Control: Report updated successfully with ID: ${updatedReport.id}")
                 updatedReport.id
             } catch (e: Exception) {
-                Log.e("Tagg", "Control: Error in updateControlReport: ${e.message}", e)
+                Log.e("Tagg-SVM", "Control: Error in updateControlReport: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
                 }
@@ -820,23 +807,23 @@ class SharedViewModel(
             current[index] = newRow
             _fixRows.value = current
         } else {
-            Log.w("Tagg", "FixVolumesFragment:Row not found: $oldRow")
+            Log.w("Tagg-SVM", "FixVolumesFragment:Row not found: $oldRow")
         }
     }
 
     private fun recalculateFixRows(rows: List<FixVolumesRow>): List<FixVolumesRow> {
-        Log.d("Tagg", "Recalculating rows: $rows")
+        Log.d("Tagg-SVM", "Recalculating rows: $rows")
         val result = rows.groupBy { Triple(it.projectWorkType, it.measure, it.plan) }
             .flatMap { (key, group) ->
                 val totalFact = group.sumOf { it.fact.toDoubleOrNull() ?: 0.0 }
                 val planValue = group.first().plan.toDoubleOrNull() ?: 0.0
                 val remainingVolume = planValue - totalFact
-                Log.d("Tagg", "Group: $key, totalFact: $totalFact, planValue: $planValue, remainingVolume: $remainingVolume")
+                Log.d("Tagg-SVM", "Group: $key, totalFact: $totalFact, planValue: $planValue, remainingVolume: $remainingVolume")
                 group.map { row ->
                     row.copy(result = if (remainingVolume >= 0) remainingVolume.toString() else "0.0")
                 }
             }
-        Log.d("Tagg", "Recalculated rows: $result")
+        Log.d("Tagg-SVM", "Recalculated rows: $result")
         return result
     }
 
@@ -895,13 +882,13 @@ class SharedViewModel(
             try {
                 val errors = validateFixVolumesInputs(fixRows = _fixRows.value)
                 if (errors.isNotEmpty()) {
-                    Log.e("Tagg", "FixVolumes: Validation failed: $errors")
+                    Log.e("Tagg-SVM", "FixVolumes: Validation failed: $errors")
                     _errorEvent.postValue("Не все поля заполнены корректно")
                     return@withContext 0L
                 }
                 val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
-                    Log.e("Tagg", "FixVolumes: No unsent report found")
+                    Log.e("Tagg-SVM", "FixVolumes: No unsent report found")
                     _errorEvent.postValue("Ошибка: нет незавершенного отчета")
                     return@withContext 0L
                 }
@@ -909,15 +896,15 @@ class SharedViewModel(
                 val updatedReport = existingReport.copy(
                     fixVolumesRows = fixRowsJson
                 )
-                Log.d("Tagg", "FixVolumes: Updating Report: $updatedReport")
+                Log.d("Tagg-SVM", "FixVolumes: Updating Report: $updatedReport")
                 reportRepository.updateReport(updatedReport)
                 Log.d(
-                    "Tagg",
+                    "Tagg-SVM",
                     "FixVolumes: Report updated successfully with ID: ${updatedReport.id}"
                 )
                 updatedReport.id
             } catch (e: Exception) {
-                Log.e("Tagg", "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
+                Log.e("Tagg-SVM", "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
                 }

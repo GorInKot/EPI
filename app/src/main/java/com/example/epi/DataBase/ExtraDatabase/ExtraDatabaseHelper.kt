@@ -169,6 +169,7 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             cursor.close()
             db.close()
         }
+        Log.d("Tagg", "SubContractors: $subContractors")
         return subContractors
     }
     // RepSubContractor (Представитель субподрядчика)

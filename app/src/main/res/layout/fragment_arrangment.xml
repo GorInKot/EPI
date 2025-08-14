@@ -333,7 +333,7 @@
                 app:endIconMode="dropdown_menu"
                 >
                 <AutoCompleteTextView
-                    android:id="@+id/autoCompleteSubContractor"
+                    android:id="@+id/autoComplete_RepContractor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
@@ -411,7 +411,7 @@
                 >
 
                 <AutoCompleteTextView
-                    android:id="@+id/textInputEditText_Subcontractor"
+                    android:id="@+id/autoComplete_SubContractor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
