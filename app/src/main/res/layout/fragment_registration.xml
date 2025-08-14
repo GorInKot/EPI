@@ -235,6 +235,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:hint="Пароль"
             android:layout_marginTop="16dp"
+            app:passwordToggleEnabled="true"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -246,7 +247,7 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
+                android:inputType="textPassword"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -263,6 +264,7 @@
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             android:hint="Подтвердите пароль"
             android:layout_marginTop="16dp"
+            app:passwordToggleEnabled="true"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -274,10 +276,10 @@
                 android:minHeight="56dp"
                 android:paddingBottom="12dp"
                 android:textSize="14sp"
-                android:inputType="text"
                 android:importantForAccessibility="yes"
                 android:gravity="center_vertical"
                 android:padding="10dp"
+                android:inputType="textPassword"
                 />
         </com.google.android.material.textfield.TextInputLayout>
         

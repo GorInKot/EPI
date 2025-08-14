@@ -1,5 +1,6 @@
 package com.example.epi.Fragments.General.Auth
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,9 +20,9 @@ import kotlin.getValue
 class AuthFragment : Fragment() {
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
-
-    private val maxNumberLength = 4
     private val maxPasswordLength = 12
+
+    private var isLoggingIn = false
 
     private val viewModel: SharedViewModel by activityViewModels {
         SharedViewModelFactory(
@@ -42,8 +43,14 @@ class AuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textInputEditTextNumber.filters = arrayOf(android.text.InputFilter.LengthFilter(maxNumberLength))
         binding.textInputEditTextPassword.filters = arrayOf(android.text.InputFilter.LengthFilter(maxPasswordLength))
+
+        // Автозаполнение уникального номера (логина) и пароля
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            binding.textInputEditTextNumber.setAutofillHints(View.AUTOFILL_HINT_USERNAME)
+            binding.textInputEditTextPassword.setAutofillHints(View.AUTOFILL_HINT_PASSWORD)
+        }
+
     }
 
     private fun observeAuthResult() {
@@ -71,17 +78,18 @@ class AuthFragment : Fragment() {
                     // Игнорируем состояния, связанные с регистрацией или сбросом
                 }
             }
+            isLoggingIn = false
         }
     }
 
     private fun buttons() {
         binding.btnLogin.setOnClickListener {
+            if(isLoggingIn) return@setOnClickListener
             if (validateInputs()) {
-                Log.d("Tagg-Auth", "Validation passed")
+                Log.d("Tagg-Auth", "Валидация пройдена")
                 loginUser()
-                findNavController().navigate(R.id.StartFragment)
             } else {
-                Log.d("Tagg-Auth", "Validation failed")
+                Log.d("Tagg-Auth", "Валидация НЕ пройдена")
             }
         }
 
@@ -91,25 +99,24 @@ class AuthFragment : Fragment() {
     }
 
     private fun validateInputs(): Boolean {
+        binding.textInputLayoutNumber.error = null
+        binding.textInputLayoutPassword.error = null
+
         val number = binding.textInputEditTextNumber.text?.toString()?.trim()
         val password = binding.textInputEditTextPassword.text?.toString()?.trim()
 
-        try {
-            val errors = viewModel.validateAuthInputs(number, password)
-            binding.textInputLayoutNumber.error = null
-            binding.textInputLayoutPassword.error = null
+        val errors = viewModel.validateAuthInputs(number, password)
+//        binding.textInputLayoutNumber.error = null
+//        binding.textInputLayoutPassword.error = null
 
-            binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
-            binding.textInputLayoutNumber.error = errors["number"]
+        binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
+        binding.textInputLayoutNumber.error = errors["number"]
 
-            binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
-            binding.textInputLayoutPassword.error = errors["password"]
-            return errors.isEmpty()
+        binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
+        binding.textInputLayoutPassword.error = errors["password"]
 
-        } catch (e: Exception) {
-            Log.e("Tagg-Auth", "Something goes wrong: ${e.message}")
-            return false
-        }
+        return errors.isEmpty()
+
     }
 
     private fun loginUser() {
