@@ -119,19 +119,6 @@
         app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
         />
 
-    <!-- Авторизация -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/btn_Auth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Авторизоваться"
-        style="@style/ArrangementText"
-        app:layout_constraintTop_toBottomOf="@id/guideline_bottom"
-        app:layout_constraintStart_toEndOf="@id/guideline_left"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        />
-
     <ImageButton
         android:id="@+id/imb_Settings"
         android:layout_height="wrap_content"

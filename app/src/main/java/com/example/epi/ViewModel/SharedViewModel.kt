@@ -1050,7 +1050,8 @@ class SharedViewModel(
 
     fun validateAuthInputs(
         number: String?,
-        password: String?
+        password: String?,
+        typeOfWork: String?
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
 
@@ -1062,6 +1063,10 @@ class SharedViewModel(
 
         if (password.isNullOrBlank() || password.length != 12) {
             errors["password"] = "Введите корректный пароль"
+        }
+
+        if (typeOfWork.isNullOrBlank()) {
+            errors["typeOfWork"] = "Выберите тип работы"
         }
 
         return errors

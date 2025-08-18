@@ -23,7 +23,6 @@ class AuthFragment : Fragment() {
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
     private val maxPasswordLength = 12
-
     private var isLoggingIn = false
 
     private val viewModel: SharedViewModel by activityViewModels {
@@ -113,7 +112,12 @@ class AuthFragment : Fragment() {
                 Log.d("Tagg-Auth", "Валидация пройдена")
                 loginUser()
             } else {
-                Log.d("Tagg-Auth", "Валидация НЕ пройдена")
+                Log.d("Tagg-Auth",
+                    "Валидация НЕ пройдена: ${viewModel.validateAuthInputs(
+                    binding.textInputEditTextNumber.text?.toString()?.trim(),
+                    binding.textInputEditTextPassword.text?.toString()?.trim(),
+                    binding.autoCompleteWorkType.text?.toString()?.trim()
+                )}")
             }
         }
 
@@ -128,16 +132,18 @@ class AuthFragment : Fragment() {
 
         val number = binding.textInputEditTextNumber.text?.toString()?.trim()
         val password = binding.textInputEditTextPassword.text?.toString()?.trim()
+        val typeOfWork = binding.autoCompleteWorkType.text?.toString()?.trim()
 
-        val errors = viewModel.validateAuthInputs(number, password)
-//        binding.textInputLayoutNumber.error = null
-//        binding.textInputLayoutPassword.error = null
+        val errors = viewModel.validateAuthInputs(number, password, typeOfWork)
 
         binding.textInputLayoutNumber.isErrorEnabled = !errors["number"].isNullOrBlank()
         binding.textInputLayoutNumber.error = errors["number"]
 
         binding.textInputLayoutPassword.isErrorEnabled = !errors["password"].isNullOrBlank()
         binding.textInputLayoutPassword.error = errors["password"]
+
+        binding.textInputLayoutWorkType.isErrorEnabled = !errors["typeOfWork"].isNullOrBlank()
+        binding.textInputLayoutWorkType.error = errors["typeOfWork"]
 
         return errors.isEmpty()
 

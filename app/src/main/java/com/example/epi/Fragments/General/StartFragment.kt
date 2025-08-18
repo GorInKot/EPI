@@ -6,11 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.epi.App
 import com.example.epi.R
+import com.example.epi.SharedViewModel
+import com.example.epi.ViewModel.SharedViewModelFactory
 import com.example.epi.databinding.FragmentStartBinding
+import kotlin.getValue
 
 class StartFragment : Fragment() {
+
+    private val viewModel: SharedViewModel by activityViewModels {
+        SharedViewModelFactory(
+            (requireActivity().application as App).reportRepository,
+            (requireActivity().application as App).userRepository
+        )
+    }
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
 
@@ -33,10 +45,6 @@ class StartFragment : Fragment() {
             findNavController().navigate(R.id.arrangementFragment)
         }
 
-        binding.btnAuth.setOnClickListener {
-            findNavController().navigate(R.id.authFragment)
-        }
-
         binding.btnReports.setOnClickListener {
             findNavController().navigate(R.id.reportsFragment)
         }
@@ -51,6 +59,7 @@ class StartFragment : Fragment() {
             .setTitle("Выход")
             .setMessage("Вы уверены, что хотите выйти?")
             .setPositiveButton("Да") { _, _ ->
+                viewModel.logout()
                 // Очистка сессии при подтверждении
                 val sharedPreferences = requireContext().getSharedPreferences("User_session", android.content.Context.MODE_PRIVATE)
                 sharedPreferences.edit().clear().apply()
