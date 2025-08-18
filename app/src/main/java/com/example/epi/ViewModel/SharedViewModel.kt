@@ -330,7 +330,6 @@ class SharedViewModel(
                     return@withContext 0L
                 }
 
-//                val user = _currentUser.value
                 val report = Report(
                     userName = employeeNumber, // Сохраняем уникальный номер сотрудника
                     typeOfWork = _selectedTypeOfWork.value.orEmpty(), // Добавляем Режим работы
