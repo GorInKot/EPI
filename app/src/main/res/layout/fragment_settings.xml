@@ -10,7 +10,7 @@
         style="@style/mainLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Настройки темы"
+        android:text="Настройки приложения"
         android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"

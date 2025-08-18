@@ -11,7 +11,7 @@ import com.example.epi.DataBase.Report.ReportDao
 import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class, User::class], version = 5, exportSchema = true)
+@Database(entities = [Report::class, User::class], version = 6, exportSchema = true)
 abstract class NewAppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao
@@ -30,6 +30,7 @@ abstract class NewAppDatabase : RoomDatabase() {
                 )
                     .createFromAsset("myapp_database.db") // берем из assets
                     .fallbackToDestructiveMigration()
+
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onOpen(db: SupportSQLiteDatabase) {
                             Log.d("Tagg-Database", "Database opened")
@@ -44,21 +45,36 @@ abstract class NewAppDatabase : RoomDatabase() {
                             }
                             tablesCursor.close()
 
-                            // 2. Проверка конкретной таблицы Contract
+                            // Проверка таблицы Report
                             try {
-                                val contractCursor = db.query("SELECT * FROM Contract LIMIT 5")
-                                val columnNames = contractCursor.columnNames.joinToString(", ")
-                                Log.d("Tagg-Database", "Contract columns: $columnNames")
-
-                                while (contractCursor.moveToNext()) {
-                                    val row = (0 until contractCursor.columnCount).joinToString(", ") { i ->
-                                        contractCursor.getString(i) ?: "NULL"
+                                val reportCursor = db.query("SELECT * FROM Report LIMIT 5")
+                                val columnNames = reportCursor.columnNames.joinToString(", ")
+                                Log.d("Tagg-Database", "Report columns: $columnNames")
+                                while (reportCursor.moveToNext()) {
+                                    val row = (0 until reportCursor.columnCount).joinToString(", ") { i ->
+                                        reportCursor.getString(i) ?: "NULL"
                                     }
-                                    Log.d("Tagg-Database", "Contract row: $row")
+                                    Log.d("Tagg-Database", "Report row: $row")
                                 }
-                                contractCursor.close()
+                                reportCursor.close()
                             } catch (e: Exception) {
-                                Log.e("Tagg-Database", "Ошибка при чтении таблицы Contract: ${e.message}")
+                                Log.e("Tagg-Database", "Ошибка при чтении таблицы Report: ${e.message}")
+                            }
+
+                            // Проверка таблицы User
+                            try {
+                                val userCursor = db.query("SELECT * FROM user LIMIT 5")
+                                val columnNames = userCursor.columnNames.joinToString(", ")
+                                Log.d("Tagg-Database", "User columns: $columnNames")
+                                while (userCursor.moveToNext()) {
+                                    val row = (0 until userCursor.columnCount).joinToString(", ") { i ->
+                                        userCursor.getString(i) ?: "NULL"
+                                    }
+                                    Log.d("Tagg-Database", "User row: $row")
+                                }
+                                userCursor.close()
+                            } catch (e: Exception) {
+                                Log.e("Tagg-Database", "Ошибка при чтении таблицы User: ${e.message}")
                             }
                         }
                     })

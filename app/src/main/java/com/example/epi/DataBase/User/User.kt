@@ -15,7 +15,6 @@ data class User(
     val firstName: String, // Имя
     val thirdName: String?, // Отчество (может быть необязательным)
     val employeeNumber: String, // Уникальный номер сотрудника
-
     val branch: String, // Филиал
     val pu: String, // ПУ
     val password: String // Пароль (хранить в зашифрованном виде в реальном приложении)

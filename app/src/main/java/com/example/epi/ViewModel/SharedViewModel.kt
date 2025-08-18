@@ -349,18 +349,18 @@ class SharedViewModel(
                     isEmpty = false
                 )
 //                Log.d("Tagg-SVM", "UserName: ${report.userName}")
-                Log.d("Tagg-SVM", "Saving full report: $report")
+                Log.d("Tagg-SVM", "Сохранение полного отчета: $report")
                 val reportId = reportRepository.saveReport(report)
-                Log.d("Tagg-SVM", "Saved report ID: $reportId")
+                Log.d("Tagg-SVM", "Сохранение отчета с ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
                         _isReportSaved.postValue(true)
-                        Log.d("Tagg-SVM", "Report saved successfully, isReportSaved set to true")
+                        Log.d("Tagg-SVM", "Отчет успешно сохранен, isReportSaved изменен на true")
                     }
                 }
                 reportId
             } catch (e: Exception) {
-                Log.e("Tagg-SVM", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                Log.e("Tagg-SVM", "Ошибка сохранения отчета: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
                 }
@@ -945,8 +945,8 @@ class SharedViewModel(
             try {
                 val report = reportRepository.getLastUnsentReport()
                 report?.let {
-                    _selectedContract.value = it.contract
                     _selectedCustomer.value = it.customer
+                    _selectedContract.value = it.contract
                     _selectedObject.value = it.obj
                     _plotText.value = it.plot
                     _isManualPlot.value = it.plot == "Объект не делится на участки"
@@ -1003,12 +1003,90 @@ class SharedViewModel(
     }
 
     // ------------ Блок Авторизации ------------
+    // region Authentification Block
+
+
+    private val _authResult = MutableLiveData<AuthResult>()
+    val authResult: LiveData<AuthResult> get() = _authResult
+
+    // Поле для хранения выбранного типа работы
+    private val _selectedTypeOfWork = MutableLiveData<String?>()
+    val selectedTypeOfWork: LiveData<String?> get() = _selectedTypeOfWork
+
+    fun validateAuthInputs(
+        number: String?,
+        password: String?
+    ): Map<String, String?> {
+        val errors = mutableMapOf<String, String?>()
+
+        if (number.isNullOrBlank()) {
+            errors["number"] = "Введите уникальный номер сотрудника"
+        } else if (!number.all { it.isDigit() } || number.length > 4) {
+            errors["number"] = "Уникальный номер должен содержать 4 цифры"
+        }
+
+        if (password.isNullOrBlank() || password.length != 12) {
+            errors["password"] = "Введите корректный пароль"
+        }
+
+        return errors
+    }
+
+    fun loginUser(employeeNumber: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                Log.d("SharedViewModel", "Attempting login for employeeNumber: $employeeNumber, password: $password")
+                val user = userRepository.getUserByCredentials(employeeNumber)
+                Log.d("SharedViewModel", "User found: $user")
+                if (user != null && BCrypt.checkpw(password, user.password)) {
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = user
+                        _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        _authResult.value = AuthResult.Error(
+                            if (user == null) "Пользователь с таким номером не найден"
+                            else "Неверный пароль"
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
+                    Log.e("SharedViewModel", "Login error: ${e.message}", e)
+                }
+            }
+        }
+    }
+
+    fun setSelectedTypeOfWork(typeOfWork: String?) {
+        _selectedTypeOfWork.value = typeOfWork
+    }
+
+    // Класс для результатов авторизации
+    sealed class AuthResult {
+        data class Success(val message: String) : AuthResult()
+        data class Error(val message: String) : AuthResult()
+        data class RegistrationSuccess(val message: String) : AuthResult() // Для успешной регистрации
+        data class RegistrationError(val message: String) : AuthResult() // Для ошибок регистрации
+        object Idle : AuthResult() // Новое состояние для сброса
+    }
+
+    // endregion
 
     // ------------ Блок Регистрации ------------
+    // region Registration Block
+
+    // endregion
 
     // LiveData для данных текущего пользователя
     private val _currentUser = MutableLiveData<User?>(null)
     val currentUser: LiveData<User?> get() = _currentUser
+
+
+
+
 
     // Загрузка данных пользователя
     fun loadCurrentUser(context: Context) {
@@ -1043,36 +1121,8 @@ class SharedViewModel(
 //    // Авторизация
 //
 //    // LiveData для результатов авторизации
-    private val _authResult = MutableLiveData<AuthResult>()
-    val authResult: LiveData<AuthResult> get() = _authResult
 
-    fun loginUser(employeeNumber: String, password: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                Log.d("SharedViewModel", "Attempting login for employeeNumber: $employeeNumber, password: $password")
-                val user = userRepository.getUserByCredentials(employeeNumber)
-                Log.d("SharedViewModel", "User found: $user")
-                if (user != null && BCrypt.checkpw(password, user.password)) {
-                    withContext(Dispatchers.Main) {
-                        _currentUser.value = user
-                        _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        _authResult.value = AuthResult.Error(
-                            if (user == null) "Пользователь с таким номером не найден"
-                            else "Неверный пароль"
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
-                    Log.e("SharedViewModel", "Login error: ${e.message}", e)
-                }
-            }
-        }
-    }
+
 //
 //    // Очистка сессии (выход из аккаунта)
     fun logout() {
@@ -1081,24 +1131,7 @@ class SharedViewModel(
         clearAllData()
     }
 //
-    fun validateAuthInputs(
-        number: String?,
-        password: String?
-    ): Map<String, String?> {
-        val errors = mutableMapOf<String, String?>()
 
-        if (number.isNullOrBlank()) {
-            errors["number"] = "Введите уникальный номер сотрудника"
-        } else if (!number.all { it.isDigit() } || number.length > 4) {
-            errors["number"] = "Уникальный номер должен содержать 4 цифры"
-        }
-
-        if (password.isNullOrBlank() || password.length != 12) {
-            errors["password"] = "Введите корректный пароль"
-        }
-
-        return errors
-    }
 //
 //
 //    // Регистрация
@@ -1186,14 +1219,7 @@ class SharedViewModel(
 //        _isLoading.value = isLoading
 //    }
 
-    // Класс для результатов авторизации
-    sealed class AuthResult {
-        data class Success(val message: String) : AuthResult()
-        data class Error(val message: String) : AuthResult()
-        data class RegistrationSuccess(val message: String) : AuthResult() // Для успешной регистрации
-        data class RegistrationError(val message: String) : AuthResult() // Для ошибок регистрации
-        object Idle : AuthResult() // Новое состояние для сброса
-    }
+
 }
 
 sealed class RowValidationResult {

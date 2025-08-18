@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.epi.App
 import com.example.epi.DataBase.Report.Report
+import com.example.epi.DataBase.User.User
 import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
@@ -58,7 +59,7 @@ class ReportsFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE_STORAGE_PERMISSION = 100
-        private const val TAG = "ReportsFragment"
+        private const val TAG = "Tagg-Reports"
     }
 
     override fun onCreateView(
@@ -147,7 +148,7 @@ class ReportsFragment : Fragment() {
     }
 
     private fun showExportFormatDialog() {
-        val formats = arrayOf("CSV", "Excel (XLSX)")
+        val formats = arrayOf("Excel (XLSX)", "CSV")
         AlertDialog.Builder(requireContext())
             .setTitle("Выберите формат экспорта")
             .setItems(formats) { _, which ->
@@ -188,7 +189,8 @@ class ReportsFragment : Fragment() {
             grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
             if (selectedStartDate != null && selectedEndDate != null) {
-                exportData(selectedStartDate!!, selectedEndDate!!, "csv") // По умолчанию CSV
+//                exportData(selectedStartDate!!, selectedEndDate!!, "csv") // По умолчанию CSV
+                exportData(selectedStartDate!!, selectedEndDate!!, "xlsx") // По умолчанию XLSX
             }
         } else {
             Toast.makeText(requireContext(), "Разрешение на запись не предоставлено", Toast.LENGTH_SHORT).show()
@@ -221,12 +223,11 @@ class ReportsFragment : Fragment() {
 
                 Log.d(TAG, "Exporting ${reports.size} reports to $format")
                 val fileName = "Сводный отчет за ${startDate}-${endDate}.${format.lowercase()}"
-//                val fileName = "Сводный отчет_${System.currentTimeMillis()}.${format.lowercase()}"
 
-                if (format == "csv") {
-                    exportToCsv(startDate, endDate, reports, fileName)
-                } else if (format == "xlsx") {
+                if (format == "xlsx") {
                     exportToExcel(startDate, endDate, reports, fileName)
+                } else if (format == "csv") {
+                    exportToCsv(startDate, endDate, reports, fileName)
                 }
 
             } catch (e: Exception) {
@@ -243,13 +244,19 @@ class ReportsFragment : Fragment() {
     private suspend fun exportToCsv(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
         val separator = ";"
         val csvHeader = listOf(
-            "№ п/п", "Дата", "Время", "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+            "№ п/п", "Дата", "Время", "Сотрудник",
 
-            "Транспорт отсутствует", "Исполнитель по транспорту", "Дата начала поездки", "Время начала поездки", "Госномер", "Договор по транспорту", "Дата окончания поездки", "Время окончания поездки",
+            "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 
-            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
+            "Транспорт отсутствует",
+            "Исполнитель по транспорту", "Договор по транспорту", "Госномер",
+            "Дата начала поездки", "Время начала поездки",
+            "Дата окончания поездки", "Время окончания поездки",
+
+            "Название прибора /\nоборудования", "Комплекс работ", "Нарушение", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
 
             // TODO - "Фиксация объемов"
+            "Вид работ", "Единицы измерения", "Значение по плану", "Значение по факту"
         ).joinToString(separator) { it.escapeCsv() } + "\n"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -371,13 +378,19 @@ class ReportsFragment : Fragment() {
 
         // Заголовки
         val headers = listOf(
-            "№ п/п", "Дата", "Время", "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+            "№ п/п", "Дата", "Время", "Сотрудник",
 
-            "Транспорт отсутствует", "Исполнитель по транспорту", "Дата начала поездки", "Время начала поездки", "Госномер", "Договор по транспорту", "Дата окончания поездки", "Время окончания поездки",
+            "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 
-            "Нарушение", "Оборудование", "Комплекс работ", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
+            "Транспорт отсутствует",
+            "Исполнитель по транспорту", "Договор по транспорту", "Госномер",
+            "Дата начала поездки", "Время начала поездки",
+            "Дата окончания поездки", "Время окончания поездки",
+
+            "Название прибора /\nоборудования", "Комплекс работ", "Нарушение", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
 
             // TODO - "Фиксация объемов"
+            "Вид работ", "Единицы измерения", "Значение по плану", "Значение по факту"
         )
         val headerRow = sheet.createRow(0)
         headers.forEachIndexed { index, header ->
@@ -393,6 +406,7 @@ class ReportsFragment : Fragment() {
                 report.id.toString(),
                 report.date,
                 report.time,
+                report.userName ?: "userName is null",
                 report.contract,
                 report.customer,
                 report.obj,

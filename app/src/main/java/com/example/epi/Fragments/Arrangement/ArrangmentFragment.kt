@@ -394,6 +394,7 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteContractor.inputType = InputType.TYPE_NULL
             binding.autoCompleteContractor.keyListener = null
             binding.autoCompleteContractor.setOnTouchListener { _, _ ->
+                Log.d("Tagg-Arrangement", "Touch on autoCompleteContractor, enable: ${binding.autoCompleteContractor.isEnabled}")
                 binding.autoCompleteContractor.showDropDown()
                 false
             }
@@ -401,6 +402,7 @@ class ArrangementFragment : Fragment() {
                 val selectedContractor = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedContractor(selectedContractor)
                 updateRepSSKGpDropdown(selectedContractor)
+                Log.d("Tagg-Arrangement", "Selected contractor: $selectedContractor")
             }
         }
 
@@ -423,12 +425,14 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteRepContractor.inputType = InputType.TYPE_NULL
             binding.autoCompleteRepContractor.keyListener = null
             binding.autoCompleteRepContractor.setOnTouchListener { _, _ ->
+                Log.d("Tagg-Arrangement", "Touch on autoCompleteRepContractor, enabled: ${binding.autoCompleteRepContractor.isEnabled}")
                 binding.autoCompleteRepContractor.showDropDown()
                 false
             }
             binding.autoCompleteRepContractor.setOnItemClickListener { parent, _, position, _ ->
                 val selectedRepSSKGp = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedRepContractor(selectedRepSSKGp)
+                Log.d("Tagg-Arrangement", "Selected repSSKGp: $selectedRepSSKGp")
             }
         }
 
@@ -451,7 +455,10 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
             binding.autoCompleteSubContractor.keyListener = null
             binding.autoCompleteSubContractor.setOnTouchListener { _, _ ->
-                if (!sharedViewModel.isManualSubContractor.value!!) {
+                Log.d("Tagg-Arrangement", "Touch on autoCompleteSubContractor, enabled: ${binding.autoCompleteSubContractor.isEnabled}, " +
+                        "manualSubContractor: ${sharedViewModel.isManualSubContractor.value}, " +
+                        "text: ${binding.autoCompleteSubContractor.text}")
+                if (!sharedViewModel.isManualSubContractor.value!! && binding.autoCompleteSubContractor.isEnabled) {
                     binding.autoCompleteSubContractor.showDropDown()
                 }
                 false
@@ -459,6 +466,7 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteSubContractor.setOnItemClickListener { parent, _, position, _ ->
                 val selectedSubContractor = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedSubContractor(selectedSubContractor)
+                Log.d("Tagg-Arrangement", "Selected subContractor: $selectedSubContractor")
             }
         }
 
@@ -478,6 +486,7 @@ class ArrangementFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 sharedViewModel.setSelectedSubContractor(s.toString())
+                Log.d("Tagg-Arrangement", "TextWatcher subContractor changed to: ${s.toString()}")
             }
         }
         binding.autoCompleteSubContractor.addTextChangedListener(subContractorTextWatcher)
@@ -511,34 +520,30 @@ class ArrangementFragment : Fragment() {
                 binding.autoCompleteSubContractor.isEnabled = false
                 binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
                 binding.autoCompleteSubContractor.keyListener = null
-
-                binding.textInputEditTextRepSubContractor.setText("Отсутствует субподрядчик")
-                binding.textInputEditTextRepSubContractor.isEnabled = false
-                binding.textInputEditTextRepSubContractor.inputType = InputType.TYPE_NULL
-                binding.textInputEditTextRepSubContractor.keyListener = null
-
-                binding.textInputEditTextRepSSKSub.setText("Отсутствует субподрядчик")
-                binding.textInputEditTextRepSSKSub.isEnabled = false
-                binding.textInputEditTextRepSSKSub.inputType = InputType.TYPE_NULL
-                binding.textInputEditTextRepSSKSub.keyListener = null
-
-                sharedViewModel.setSelectedSubContractor("Отсутствует субподрядчик")
-                sharedViewModel.setRepSubContractorText("Отсутствует субподрядчик")
-                sharedViewModel.setRepSSKSubText("Отсутствует субподрядчик")
+                Log.d("Tagg-Arrangement", "Manual subContractor enabled, autoComplete disabled")
             } else {
                 binding.autoCompleteSubContractor.setText("", false)
                 binding.autoCompleteSubContractor.isEnabled = true
                 binding.autoCompleteSubContractor.inputType = InputType.TYPE_NULL
                 binding.autoCompleteSubContractor.keyListener = null
+                Log.d("Tagg-Arrangement", "Manual subContractor disabled, autoComplete enabled")
+            }
 
-                binding.textInputEditTextRepSubContractor.setText("")
-                binding.textInputEditTextRepSubContractor.isEnabled = true
-                binding.textInputEditTextRepSubContractor.inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            binding.textInputEditTextRepSubContractor.setText(if (isChecked) "Отсутствует субподрядчик" else "")
+            binding.textInputEditTextRepSubContractor.isEnabled = !isChecked
+            binding.textInputEditTextRepSubContractor.inputType = if (isChecked) InputType.TYPE_NULL else InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            binding.textInputEditTextRepSubContractor.keyListener = if (isChecked) null else binding.textInputEditTextRepSubContractor.keyListener
 
-                binding.textInputEditTextRepSSKSub.setText("")
-                binding.textInputEditTextRepSSKSub.isEnabled = true
-                binding.textInputEditTextRepSSKSub.inputType = InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            binding.textInputEditTextRepSSKSub.setText(if (isChecked) "Отсутствует субподрядчик" else "")
+            binding.textInputEditTextRepSSKSub.isEnabled = !isChecked
+            binding.textInputEditTextRepSSKSub.inputType = if (isChecked) InputType.TYPE_NULL else InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            binding.textInputEditTextRepSSKSub.keyListener = if (isChecked) null else binding.textInputEditTextRepSSKSub.keyListener
 
+            if (isChecked) {
+                sharedViewModel.setSelectedSubContractor("Отсутствует субподрядчик")
+                sharedViewModel.setRepSubContractorText("Отсутствует субподрядчик")
+                sharedViewModel.setRepSSKSubText("Отсутствует субподрядчик")
+            } else {
                 sharedViewModel.setSelectedSubContractor(null)
                 sharedViewModel.setRepSubContractorText("")
                 sharedViewModel.setRepSSKSubText("")
@@ -551,6 +556,7 @@ class ArrangementFragment : Fragment() {
                 if (binding.autoCompleteSubContractor.text.toString() != "Отсутствует субподрядчик") {
                     binding.autoCompleteSubContractor.setText("Отсутствует субподрядчик", false)
                     binding.autoCompleteSubContractor.isEnabled = false
+                    Log.d("Tagg-Arrangement", "Manual subContractor observed, autoComplete disabled")
                 }
                 if (binding.textInputEditTextRepSubContractor.text.toString() != "Отсутствует субподрядчик") {
                     binding.textInputEditTextRepSubContractor.setText("Отсутствует субподрядчик")
@@ -564,6 +570,7 @@ class ArrangementFragment : Fragment() {
                 if (binding.autoCompleteSubContractor.text.toString() == "Отсутствует субподрядчик") {
                     binding.autoCompleteSubContractor.setText("", false)
                     binding.autoCompleteSubContractor.isEnabled = true
+                    Log.d("Tagg-Arrangement", "Manual subContractor observed, autoComplete enabled")
                 }
                 if (binding.textInputEditTextRepSubContractor.text.toString() == "Отсутствует субподрядчик") {
                     binding.textInputEditTextRepSubContractor.setText("")
@@ -801,64 +808,100 @@ class ArrangementFragment : Fragment() {
 
     private fun setupViewModelObservers() {
         sharedViewModel.plotText.observe(viewLifecycleOwner) { text ->
-            if (binding.autoCompletePlot.text.toString() != text) {
+            if (text != null && binding.autoCompletePlot.text.toString() != text) {
                 binding.autoCompletePlot.setText(text)
+            } else if (text == null) {
+                binding.autoCompletePlot.setText("")
             }
         }
         sharedViewModel.repSSKGpText.observe(viewLifecycleOwner) { text ->
-            if (text != binding.textInputEditTextRepSSKGp.text.toString()) {
+            if (text != null && text != binding.textInputEditTextRepSSKGp.text.toString()) {
                 binding.textInputEditTextRepSSKGp.removeTextChangedListener(repSSKGpTextWatcher)
                 val cursorPosition = binding.textInputEditTextRepSSKGp.selectionStart
                 binding.textInputEditTextRepSSKGp.setText(text)
-                binding.textInputEditTextRepSSKGp.setSelection(cursorPosition.coerceAtMost(text!!.length))
+                binding.textInputEditTextRepSSKGp.setSelection(cursorPosition.coerceAtMost(text.length))
+                binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
+                Log.d("Tagg-Arr", "repSSKGp-LiveData-Updated text: '$text', Cursor: $cursorPosition")
+            } else if (text == null) {
+                binding.textInputEditTextRepSSKGp.removeTextChangedListener(repSSKGpTextWatcher)
+                binding.textInputEditTextRepSSKGp.setText("")
                 binding.textInputEditTextRepSSKGp.addTextChangedListener(repSSKGpTextWatcher)
             }
         }
+
         sharedViewModel.selectedSubContractor.observe(viewLifecycleOwner) { subContractor ->
-            if (binding.autoCompleteSubContractor.text.toString() != subContractor) {
+            val currentText = binding.autoCompleteSubContractor.text.toString()
+            if (subContractor != null && currentText != subContractor) {
                 binding.autoCompleteSubContractor.removeTextChangedListener(subContractorTextWatcher)
-                binding.autoCompleteSubContractor.setText(subContractor ?: "", false)
+                binding.autoCompleteSubContractor.setText(subContractor, false)
+                binding.autoCompleteSubContractor.addTextChangedListener(subContractorTextWatcher)
+            } else if (subContractor == null) {
+                binding.autoCompleteSubContractor.removeTextChangedListener(subContractorTextWatcher)
+                binding.autoCompleteSubContractor.setText("", false)
                 binding.autoCompleteSubContractor.addTextChangedListener(subContractorTextWatcher)
             }
         }
+
         sharedViewModel.repSubContractorText.observe(viewLifecycleOwner) { text ->
-            if (binding.textInputEditTextRepSubContractor.text.toString() != text) {
+            if (text != null && binding.textInputEditTextRepSubContractor.text.toString() != text) {
                 binding.textInputEditTextRepSubContractor.removeTextChangedListener(repSubContractorTextWatcher)
                 binding.textInputEditTextRepSubContractor.setText(text)
                 binding.textInputEditTextRepSubContractor.addTextChangedListener(repSubContractorTextWatcher)
+            } else if (text == null) {
+                binding.textInputEditTextRepSubContractor.removeTextChangedListener(repSubContractorTextWatcher)
+                binding.textInputEditTextRepSubContractor.setText("")
+                binding.textInputEditTextRepSubContractor.addTextChangedListener(repSubContractorTextWatcher)
             }
         }
+
         sharedViewModel.repSSKSubText.observe(viewLifecycleOwner) { text ->
-            if (binding.textInputEditTextRepSSKSub.text.toString() != text) {
+            if (text != null && binding.textInputEditTextRepSSKSub.text.toString() != text) {
                 binding.textInputEditTextRepSSKSub.removeTextChangedListener(repSSKSubTextWatcher)
                 binding.textInputEditTextRepSSKSub.setText(text)
                 binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
+            } else if (text == null) {
+                binding.textInputEditTextRepSSKSub.removeTextChangedListener(repSSKSubTextWatcher)
+                binding.textInputEditTextRepSSKSub.setText("")
+                binding.textInputEditTextRepSSKSub.addTextChangedListener(repSSKSubTextWatcher)
             }
         }
+
         sharedViewModel.selectedCustomer.observe(viewLifecycleOwner) { customer ->
             val currentText = binding.autoCompleteCustomer.text?.toString() ?: ""
-            if (currentText != customer) {
-                binding.autoCompleteCustomer.setText(customer ?: "", false)
+            if (customer != null && currentText != customer) {
+                binding.autoCompleteCustomer.setText(customer, false)
+            } else if (customer == null) {
+                binding.autoCompleteCustomer.setText("", false)
             }
         }
+
         sharedViewModel.selectedObject.observe(viewLifecycleOwner) { objectId ->
             val currentText = binding.autoCompleteObject.text?.toString() ?: ""
-            if (currentText != objectId) {
-                binding.autoCompleteObject.setText(objectId ?: "", false)
+            if (objectId != null && currentText != objectId) {
+                binding.autoCompleteObject.setText(objectId, false)
+            } else if (objectId == null) {
+                binding.autoCompleteObject.setText("", false)
             }
         }
+
         sharedViewModel.selectedContractor.observe(viewLifecycleOwner) { contractor ->
             val currentText = binding.autoCompleteContractor.text?.toString() ?: ""
-            if (currentText != contractor) {
-                binding.autoCompleteContractor.setText(contractor ?: "", false)
+            if (contractor != null && currentText != contractor) {
+                binding.autoCompleteContractor.setText(contractor, false)
+            } else if (contractor == null) {
+                binding.autoCompleteContractor.setText("", false)
             }
         }
+
         sharedViewModel.selectedRepContractor.observe(viewLifecycleOwner) { repContractor ->
             val currentText = binding.autoCompleteRepContractor.text?.toString() ?: ""
-            if (currentText != repContractor) {
-                binding.autoCompleteRepContractor.setText(repContractor ?: "", false)
+            if (repContractor != null && currentText != repContractor) {
+                binding.autoCompleteRepContractor.setText(repContractor, false)
+            } else if (repContractor == null) {
+                binding.autoCompleteRepContractor.setText("", false)
             }
         }
+
         sharedViewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
             Snackbar
                 .make(binding.root, errorMessage, Snackbar.LENGTH_LONG)

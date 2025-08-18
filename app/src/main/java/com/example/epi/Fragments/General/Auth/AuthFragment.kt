@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.App
+import com.example.epi.DataBase.ExtraDatabase.ExtraDatabaseHelper
 import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
@@ -37,7 +39,8 @@ class AuthFragment : Fragment() {
     ): View {
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
         buttons()
-         observeAuthResult()
+        observeAuthResult()
+        setupTypeOfWorkDropdown()
         return binding.root
     }
 
@@ -53,11 +56,32 @@ class AuthFragment : Fragment() {
 
     }
 
+    private fun setupTypeOfWorkDropdown() {
+        // Получение данных из таблицы TypeOfWork
+        val dbHelper = ExtraDatabaseHelper(requireContext())
+        val typeOfWorks = dbHelper.getTypeOfWorks()
+        // Настройка адаптера для AutoCompleteTextView
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, // Используйте стандартный layout для выпадающего списка или создайте свой
+            typeOfWorks
+        )
+        binding.autoCompleteWorkType.setAdapter(adapter)
+
+        // Обработка выбора элемента
+        binding.autoCompleteWorkType.setOnItemClickListener { _, _, position, _ ->
+            val selectedType = typeOfWorks[position]
+            viewModel.setSelectedTypeOfWork(selectedType)
+            Log.d("Tagg-Auth", "Выбран тип работы: $selectedType")
+        }
+    }
+
     private fun observeAuthResult() {
         viewModel.authResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is SharedViewModel.AuthResult.Success -> {
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                    Log.d("Tagg-Auth", "result.message: ${result.message}")
                     binding.textInputEditTextNumber.text?.clear()
                     binding.textInputEditTextPassword.text?.clear()
                     findNavController().navigate(R.id.StartFragment)

@@ -12,9 +12,10 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     companion object {
         private const val DATABASE_NAME = "extra_db.db"
-        private const val DATABASE_VERSION = 5 // Увеличена версия для новой структуры
-    }
+        private const val DATABASE_VERSION = 6 // Увеличена версия для новой структуры
 
+        private val TAG = "Tagg-ExtraDatabaseHelper"
+    }
     private val context: Context = context.applicationContext
 
     init {
@@ -37,18 +38,18 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                         inputStream.copyTo(outputStream)
                     }
                 }
-                Log.d("Tagg", "База данных успешно скопирована из assets")
+                Log.d(TAG, "База данных успешно скопирована из assets")
             } catch (e: IOException) {
-                Log.e("Tagg", "Ошибка при копировании базы данных: ${e.message}")
+                Log.e(TAG, "Ошибка при копировании базы данных: ${e.message}")
                 throw RuntimeException("Ошибка при копировании базы данных из assets", e)
             }
         } else {
-            Log.d("Tagg", "База данных уже существует: $dbPath")
+            Log.d(TAG, "База данных уже существует: $dbPath")
         }
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        Log.d("Tagg", "extra_db.db created")
+        Log.d(TAG, "extra_db.db created")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -413,4 +414,83 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return result
     }
+
+    // Новые методы для таблицы TransportContract
+    fun getTransportContractExecutors(): List<String> {
+        val db = readableDatabase
+        val executors = mutableListOf<String>()
+        val cursor = db.rawQuery("SELECT DISTINCT executor FROM TransportContract", null)
+        try {
+            while (cursor.moveToNext()) {
+                val executor = cursor.getString(cursor.getColumnIndexOrThrow("executor"))
+                executors.add(executor)
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return executors
+    }
+
+    fun getTransportContractNames(): List<String> {
+        val db = readableDatabase
+        val names = mutableListOf<String>()
+        val cursor = db.rawQuery("SELECT DISTINCT name FROM TransportContract", null)
+        try {
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                names.add(name)
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return names
+    }
+
+    // Необязательный метод для связи с Customer (если нужен)
+    fun getTransportContractsWithCustomers(): List<Pair<String, String?>> {
+        val db = readableDatabase
+        val result = mutableListOf<Pair<String, String?>>()
+        val query = """
+            SELECT tc.name AS contract_name, c.name AS customer_name
+            FROM TransportContract tc
+            LEFT JOIN Customer c ON tc.customer_id = c.id
+            """.trimIndent()
+        val cursor = db.rawQuery(query, null)
+        try {
+            while (cursor.moveToNext()) {
+                val contractIndex = cursor.getColumnIndex("contract_name")
+                val customerIndex = cursor.getColumnIndex("customer_name")
+                if (contractIndex >= 0 && customerIndex >= 0) {
+                    val contractName = cursor.getString(contractIndex)
+                    val customerName = cursor.getString(customerIndex)
+                    result.add(Pair(contractName, customerName))
+                }
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return result
+    }
+
+    // Методы для таблицы TypeOfWork
+    fun getTypeOfWorks(): List<String> {
+        val db = readableDatabase
+        val typeOfWorks = mutableListOf<String>()
+        val cursor = db.rawQuery("SELECT name FROM TypeOfWork", null)
+        try {
+            while (cursor.moveToNext()) {
+                val typeOfWork = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                typeOfWorks.add(typeOfWork)
+            }
+        } finally {
+            Log.d(TAG, "TypeOfWorks: $typeOfWorks")
+            cursor.close()
+            db.close()
+        }
+        return typeOfWorks
+    }
+
 }

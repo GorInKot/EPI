@@ -9,11 +9,12 @@ import java.util.Locale
 @Entity(tableName = "reports")
 data class Report(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    // Имя сотрудника
-//    val userName: String = " ",
 
     val date: String = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()),
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
+
+
+    val userName: String = " ", // Имя сотрудника
 
     // -------- Расстановка --------
     val customer: String = "", // Заказчик
@@ -30,15 +31,16 @@ data class Report(
     // -------- Транспорт --------
     val isEmpty: Boolean = false, // Транспорт отсутствует
     val executor: String = "", // Исполнитель по транспорту
+    val contractTransport: String = "", // Договор по транспорту
+    val stateNumber: String = "", // Госномер
+
     val startDate: String = "", // Дата начала поездки
     val startTime: String = "", // Время начала поездки
-    val stateNumber: String = "", // Госномер
-    val contractTransport: String = "", // Договор по транспорту
     val endDate: String = "", // Дата завершения поездки
     val endTime: String = "", // Время начала поездки
 
     // -------- Контроль --------
-    val inViolation: Boolean = false, //
+    val inViolation: Boolean = false, // Нарушение
     val equipment: String = "", // Название прибора / оборудования
     val complexWork: String = "",  // Комплекс работ
     val orderNumber: String = "", // Номер предписания
