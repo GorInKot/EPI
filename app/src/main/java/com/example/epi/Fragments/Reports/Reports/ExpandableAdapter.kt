@@ -66,15 +66,17 @@ class ExpandableAdapter(private val data: MutableList<Any>) : RecyclerView.Adapt
     }
 
     inner class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val workType: TextView = itemView.findViewById(R.id.textView_workType)
         private val customer: TextView = itemView.findViewById(R.id.textView_customer)
-        private val contractor: TextView = itemView.findViewById(R.id.textView_contractor)
+        private val contract: TextView = itemView.findViewById(R.id.textView_contract)
+        private val genContractor: TextView = itemView.findViewById(R.id.textView_genContractor)
+        private val subContractor: TextView = itemView.findViewById(R.id.textView_subContractor)
         private val transportCustomer: TextView = itemView.findViewById(R.id.textView_transportCustomer)
 
         fun bind(item: ChildItem) {
-            workType.text = "Тип работ: ${item.workType}"
             customer.text = "Заказчик: ${item.customer}"
-            contractor.text = "Генподрядчик: ${item.contractor}"
+            contract.text = "Договор СК: ${item.contract}"
+            genContractor.text = "Генподрядчик: ${item.genContractor}"
+            subContractor.text = "Субподрядчик: ${item.subContractor}"
             transportCustomer.text = "Транспорт заказчика: ${item.transportCustomer}"
         }
     }

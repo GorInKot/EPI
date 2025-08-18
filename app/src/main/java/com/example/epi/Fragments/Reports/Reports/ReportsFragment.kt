@@ -85,15 +85,16 @@ class ReportsFragment : Fragment() {
                 adapter = ExpandableAdapter(mutableListOf<Any>().apply {
                     addAll(reports.map { report ->
                         ParentItem(
-                            date = report.date,
-                            time = report.time,
-                            obj = report.obj,
+                            date = report.date, // дата
+                            time = report.time, // время
+                            obj = report.obj, // объект
                             children = listOf(
                                 ChildItem(
-                                    workType = report.contract,
-                                    customer = report.customer,
-                                    contractor = "report.contractor",
-                                    transportCustomer = report.executor
+                                    customer = report.customer, // заказчик
+                                    contract = report.contract, // договор
+                                    genContractor = report.genContractor, // генподрядчик
+                                    subContractor = report.subContractor, // субподрядчик                                     \
+                                    transportCustomer = report.contractTransport // договор по транспорту
                                 )
                             ),
                             isExpanded = false
@@ -244,7 +245,7 @@ class ReportsFragment : Fragment() {
     private suspend fun exportToCsv(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
         val separator = ";"
         val csvHeader = listOf(
-            "№ п/п", "Дата", "Время", "Сотрудник",
+            "№ п/п", "Дата", "Время", "Сотрудник", "Режим работы",
 
             "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 
@@ -278,6 +279,7 @@ class ReportsFragment : Fragment() {
                             report.date,
                             report.time,
                             report.customer,
+                            report.typeOfWork,
                             report.contract,
                             report.obj,
                             report.plot,
@@ -330,6 +332,7 @@ class ReportsFragment : Fragment() {
                             report.id.toString(),
                             report.date,
                             report.time,
+                            report.typeOfWork,
                             report.customer,
                             report.contract,
                             report.obj,
@@ -378,7 +381,7 @@ class ReportsFragment : Fragment() {
 
         // Заголовки
         val headers = listOf(
-            "№ п/п", "Дата", "Время", "Сотрудник",
+            "№ п/п", "Дата", "Время", "Сотрудник", "Режим работы",
 
             "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 

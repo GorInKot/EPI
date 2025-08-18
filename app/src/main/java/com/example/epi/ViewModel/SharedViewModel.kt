@@ -314,9 +314,26 @@ class SharedViewModel(
                     return@withContext 0L
                 }
 
+                val employeeNumber = _currentEmployeeNumber.value ?: run {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e("Tagg-SVM", "No employeeNumber available")
+                    }
+                    return@withContext 0L
+                }
+
+                if (_selectedTypeOfWork.value.isNullOrBlank()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Режим работы не выбран")
+                        Log.e("Tagg-SVM", "typeOfWork is not set")
+                    }
+                    return@withContext 0L
+                }
+
 //                val user = _currentUser.value
                 val report = Report(
-//                    userName = user?.let { "${it.firstName} ${it.secondName} ${it.thirdName}" } ?: "Неизвестный пользователь",
+                    userName = employeeNumber, // Сохраняем уникальный номер сотрудника
+                    typeOfWork = _selectedTypeOfWork.value.orEmpty(), // Добавляем Режим работы
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
                     contract = _selectedContract.value.orEmpty(),
@@ -369,7 +386,10 @@ class SharedViewModel(
         }
     }
 
+
+
     // Старое
+    // Обновляем saveOrUpdateReport
     suspend fun saveOrUpdateReport(): Long {
         return withContext(Dispatchers.IO) {
             Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
@@ -390,14 +410,13 @@ class SharedViewModel(
                 if (arrangementErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
-                        Log.d("Taag", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                        Log.d("Tagg-SVM", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
 
                 val transportErrors = validateTransportInputs(
                     isTransportAbsent = _isTransportAbsent.value ?: false,
-//                    contractCustomer = _transportContractCustomer.value,
                     executorName = _transportExecutorName.value,
                     contractTransport = _transportContractTransport.value,
                     stateNumber = _transportStateNumber.value,
@@ -427,21 +446,37 @@ class SharedViewModel(
                     return@withContext 0L
                 }
 
+                val employeeNumber = _currentEmployeeNumber.value ?: run {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e("Tagg-SVM", "No employeeNumber available")
+                    }
+                    return@withContext 0L
+                }
+
+                if (_selectedTypeOfWork.value.isNullOrBlank()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Режим работы не выбран")
+                        Log.e("Tagg-SVM", "typeOfWork is not set")
+                    }
+                    return@withContext 0L
+                }
+
                 val report = Report(
+                    userName = employeeNumber, // Сохраняем employeeNumber
+                    typeOfWork = _selectedTypeOfWork.value.orEmpty(), // Добавляем typeOfWork
                     date = _currentDate.value.orEmpty(),
                     time = _currentTime.value.orEmpty(),
                     contract = _selectedContract.value.orEmpty(),
                     customer = _selectedCustomer.value.orEmpty(),
-                    obj =  _selectedObject.value.orEmpty(),
+                    obj = _selectedObject.value.orEmpty(),
                     plot = _plotText.value.orEmpty(),
                     genContractor = _selectedContractor.value.orEmpty(),
-                    repGenContractor =_selectedSubContractor.value.orEmpty(),
+                    repGenContractor = _selectedRepContractor.value.orEmpty(),
                     repSSKGp = _repSSKGpText.value.orEmpty(),
                     subContractor = _selectedSubContractor.value.orEmpty(),
                     repSubContractor = _repSubContractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
-
-//                    contract = _transportContractCustomer.value.orEmpty(),
                     executor = _transportExecutorName.value.orEmpty(),
                     contractTransport = _transportContractTransport.value.orEmpty(),
                     stateNumber = _transportStateNumber.value.orEmpty(),
@@ -1032,15 +1067,22 @@ class SharedViewModel(
         return errors
     }
 
+    // region EmployeeNumber
+    // Добавляем поле для хранения employeeNumber текущего пользователя
+    private val _currentEmployeeNumber = MutableLiveData<String?>()
+    val currentEmployeeNumber: LiveData<String?> get() = _currentEmployeeNumber
+    // endregion
+
     fun loginUser(employeeNumber: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("SharedViewModel", "Attempting login for employeeNumber: $employeeNumber, password: $password")
-                val user = userRepository.getUserByCredentials(employeeNumber)
-                Log.d("SharedViewModel", "User found: $user")
+                Log.d("Tagg-SVM", "Attempting login for employeeNumber: $employeeNumber, password: $password")
+                val user = userRepository.getUserByEmployeeNumber(employeeNumber)
+                Log.d("Tagg-SVM", "User found: $user")
                 if (user != null && BCrypt.checkpw(password, user.password)) {
                     withContext(Dispatchers.Main) {
                         _currentUser.value = user
+                        _currentEmployeeNumber.value = employeeNumber // сохраняем уникальный номер сотрудника
                         _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
                     }
                 } else {
@@ -1054,7 +1096,7 @@ class SharedViewModel(
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
-                    Log.e("SharedViewModel", "Login error: ${e.message}", e)
+                    Log.e("Tagg-SVM", "Login error: ${e.message}", e)
                 }
             }
         }
@@ -1099,18 +1141,18 @@ class SharedViewModel(
                     val user = userRepository.getUserByEmployeeNumber(employeeNumber)
                     withContext(Dispatchers.Main) {
                         _currentUser.value = user
-                        Log.d("SharedViewModel", "Loaded user: $user")
+                        Log.d("Tagg-SVM", "Loaded user: $user")
                     }
                 } else {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e("SharedViewModel", "No employeeNumber found in SharedPreferences")
+                        Log.e("Tagg-SVM", "No employeeNumber found in SharedPreferences")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
-                    Log.e("SharedViewModel", "Error loading user: ${e.message}", e)
+                    Log.e("Tagg-SVM", "Error loading user: ${e.message}", e)
                 }
             }
         }
@@ -1152,7 +1194,7 @@ class SharedViewModel(
                     }
                 } else {
                     val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
-                    Log.d("SharedViewModel", "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
+                    Log.d("Tagg-SVM", "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
                     val user = User(
                         id = 0,
                         secondName = secondName,
@@ -1172,7 +1214,7 @@ class SharedViewModel(
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _authResult.value = AuthResult.RegistrationError("Ошибка регистрации: ${e.message}")
-                    Log.e("SharedViewModel", "Registration error: ${e.message}", e)
+                    Log.e("Tagg-SVM", "Registration error: ${e.message}", e)
                 }
             }
         }
@@ -1211,15 +1253,6 @@ class SharedViewModel(
 
         return errors
     }
-//
-//    private val _isLoading = MutableStateFlow(true)
-//    val isLoading = _isLoading.asStateFlow()
-//
-//    fun setLoading(isLoading: Boolean) {
-//        _isLoading.value = isLoading
-//    }
-
-
 }
 
 sealed class RowValidationResult {

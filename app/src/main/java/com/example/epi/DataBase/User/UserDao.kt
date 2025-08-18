@@ -11,9 +11,6 @@ interface UserDao {
     suspend fun insertUser(user: User)
 
     @Query("SELECT * FROM users WHERE employeeNumber = :employeeNumber")
-    suspend fun getUserByCredentials(employeeNumber: String): User?
-
-    @Query("SELECT * FROM users WHERE employeeNumber = :employeeNumber")
     suspend fun getUserByEmployeeNumber(employeeNumber: String): User?
 
     @Query("SELECT EXISTS(SELECT 1 FROM users WHERE employeeNumber = :employeeNumber)")
@@ -21,7 +18,4 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE id = :id")
     suspend fun getUserById(id: Long): User?
-
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertUser(user: User)
 }

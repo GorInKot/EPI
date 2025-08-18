@@ -9,8 +9,9 @@ data class ParentItem(
 )
 
 data class ChildItem(
-    val workType: String,
-    val customer: String,
-    val contractor: String,
-    val transportCustomer: String
+    val customer: String, // заказчик
+    val contract: String, // договор СК
+    val genContractor: String, // генподрядчик
+    val subContractor: String, // субподрядчик
+    val transportCustomer: String, // договор по транспорту
 )

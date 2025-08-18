@@ -13,8 +13,8 @@ data class Report(
     val date: String = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date()),
     val time: String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date()),
 
-
     val userName: String = " ", // Имя сотрудника
+    val typeOfWork: String = "", // Режим работы
 
     // -------- Расстановка --------
     val customer: String = "", // Заказчик

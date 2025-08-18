@@ -41,7 +41,7 @@ class SendReportFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "SendReportFragment"
+        private const val TAG = "Tagg-SendReport"
     }
 
     override fun onCreateView(

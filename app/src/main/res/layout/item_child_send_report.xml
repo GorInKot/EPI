@@ -14,8 +14,8 @@
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_workType"
-        android:text="workType:"
+        android:id="@+id/textView_customer"
+        android:text="Заказчик:"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,18 +24,8 @@
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_customer"
-        android:text="customer:"
-        style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_workType"
-        android:layout_marginStart="0dp"
-        android:maxLines="1"
-        />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_contractor"
-        android:text="contractor:"
+        android:id="@+id/textView_contract"
+        android:text="Договор СК:"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_customer"
@@ -44,11 +34,31 @@
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_transportCustomer"
-        android:text="transportCustomer:"
+        android:id="@+id/textView_genContractor"
+        android:text="Генподрядчик:"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_contractor"
+        app:layout_constraintTop_toBottomOf="@id/textView_contract"
+        android:layout_marginStart="0dp"
+        android:maxLines="1"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_subContractor"
+        android:text="Субподрядчик:"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
+        android:layout_marginStart="0dp"
+        android:maxLines="1"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_transportCustomer"
+        android:text="Договор по транспорту:"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/textView_subContractor"
         android:layout_marginStart="0dp"
         android:maxLines="1"
         />
