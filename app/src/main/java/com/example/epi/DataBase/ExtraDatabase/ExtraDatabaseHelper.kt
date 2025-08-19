@@ -493,4 +493,72 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return typeOfWorks
     }
 
+
+    // -------- для TransportFragment --------
+    // В ExtraDatabaseHelper
+    fun getTransportContractExecutorsByContract(contractId: String): List<String> {
+        val db = readableDatabase
+        val executors = mutableListOf<String>()
+        Log.d("Tagg-ExtraDatabaseHelper", "Querying executors for contract_id: $contractId")
+        val cursor = db.rawQuery(
+            "SELECT DISTINCT executor FROM TransportContract WHERE contract_id = ?",
+            arrayOf(contractId)
+        )
+        try {
+            Log.d("Tagg-ExtraDatabaseHelper", "Cursor count: ${cursor.count}")
+            while (cursor.moveToNext()) {
+                val executor = cursor.getString(cursor.getColumnIndexOrThrow("executor"))
+                executors.add(executor)
+                Log.d("Tagg-ExtraDatabaseHelper", "Found executor: $executor")
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        Log.d("Tagg-ExtraDatabaseHelper", "Executors: $executors")
+        return executors
+    }
+
+    fun getTransportContractNamesByContract(contractId: String): List<String> {
+        val db = readableDatabase
+        val names = mutableListOf<String>()
+        Log.d("Tagg-ExtraDatabaseHelper", "Querying names for contract_id: $contractId")
+        val cursor = db.rawQuery(
+            "SELECT DISTINCT name FROM TransportContract WHERE contract_id = ?",
+            arrayOf(contractId)
+        )
+        try {
+            Log.d("Tagg-ExtraDatabaseHelper", "Cursor count: ${cursor.count}")
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                names.add(name)
+                Log.d("Tagg-ExtraDatabaseHelper", "Found name: $name")
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        Log.d("Tagg-ExtraDatabaseHelper", "Names: $names")
+        return names
+    }
+
+    // Получение contract_id по имени
+    fun getContractIdByName(contractName: String): String? {
+        val db = readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT id FROM Contract WHERE name = ?",
+            arrayOf(contractName)
+        )
+        var contractId: String? = null
+        try {
+            if (cursor.moveToFirst()) {
+                contractId = cursor.getString(cursor.getColumnIndexOrThrow("id"))
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        return contractId
+    }
+
 }

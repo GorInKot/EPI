@@ -155,10 +155,11 @@
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintEnd_toStartOf="@id/guideline_middle"
             app:layout_constraintTop_toBottomOf="@id/tv_Executor"
+            app:endIconMode="dropdown_menu"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInput_EditText_Executor"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteExecutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
@@ -195,10 +196,11 @@
             app:layout_constraintTop_toBottomOf="@id/tv_ContractTransport"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:endIconMode="dropdown_menu"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInput_EditText_ContractTransport"
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteContractTransport"
                 android:gravity="center|center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

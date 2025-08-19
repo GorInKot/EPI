@@ -935,26 +935,31 @@ class SharedViewModel(
         return """
         Дата: ${_currentDate.value}
         Время: ${_currentTime.value}
-        Договор СК: ${_selectedContract.value}
+        Сотрудник: ${_currentUser.value}
+        Режим работы: ${_selectedTypeOfWork.value}
+        
         Заказчик: ${_selectedCustomer.value}
+        Договор СК: ${_selectedContract.value}
         Объект: ${_selectedObject.value}
         Участок: ${_plotText.value}
-        Подрядчик: ${_selectedContractor.value}
+        Генподрядчик: ${_selectedContractor.value}
         Представитель Генподрядчика: ${_selectedSubContractor.value}
         Представитель ССК ГП: ${_repSSKGpText.value}
         Субподрядчик: ${_selectedSubContractor.value}
         Представитель субподрядчика: ${_repSubContractorText.value}
         Представитель ССК субподрядчика: ${_repSSKSubText.value}
 
+        Транспорт отсутсвует: ${if(_isTransportAbsent.value == true) return "Да" else "Нет"}
         Исполнитель по транспорту: ${_transportExecutorName.value}
-        Транспорт по договору: ${_transportContractTransport.value}        
-        Госномер транспорта: ${_transportStateNumber.value}
+        Договор по транспорту: ${_transportContractTransport.value}        
+        Госномер: ${_transportStateNumber.value}
         Дата начала поездки: ${_transportStartDate.value}
         Время начала поездки: ${_transportStartTime.value}
         Дата окончания поездки: ${_transportEndDate.value}
         Время окончания поездки: ${_transportEndTime.value}
+        
         Номер предписания: ${_orderNumber.value}
-        Нарушение: ${_isViolation.value}
+        Нарушение: ${if(_isViolation.value == true) return "Нет нарушений" else "Есть нарушения"}
         
         Полевой контроль: ${gson.toJson(_controlRows.value)}
         
