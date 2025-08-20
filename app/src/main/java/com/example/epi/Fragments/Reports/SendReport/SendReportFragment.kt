@@ -73,7 +73,7 @@ class SendReportFragment : Fragment() {
                     val reportId = sharedViewModel.saveOrUpdateReport()
                     if (reportId > 0) {
                         sharedViewModel.clearAllData()
-                        findNavController().navigate(R.id.action_sendReportFragment_to_reportsFragment, null, navOptions {
+                        findNavController().navigate(R.id.action_SendReportFragment_to_ReportsFragment, null, navOptions {
                             popUpTo(R.id.StartFragment) { inclusive = false }
                         })
                     } else {
@@ -86,7 +86,7 @@ class SendReportFragment : Fragment() {
         }
 
         binding.SeRFrBtnBack.setOnClickListener {
-            findNavController().navigate(R.id.fixFragment)
+            findNavController().navigate(R.id.action_SendReportFragment_to_FixVolumesFragment)
         }
     }
 

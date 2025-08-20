@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                         "Name: $savedFirstName $savedThirdName, " +
                         "Authenticated: $isAuthenticated")
                 if (!isAuthenticated) {
-                    navController.navigate(R.id.authFragment)
+                    navController.navigate(R.id.AuthFragment)
                 } else {
                     navController.navigate(R.id.StartFragment)
                 }

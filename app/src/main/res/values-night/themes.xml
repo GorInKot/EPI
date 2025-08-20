@@ -6,7 +6,7 @@
     </style>
 
     <style name="Theme.EPI" parent="Base.Theme.EPI">
-        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
+
     </style>
 
     <style name="mainLabel">

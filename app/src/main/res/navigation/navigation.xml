@@ -58,6 +58,11 @@
             android:id="@+id/action_StartFragment_to_ArrangementFragment"
             app:destination="@id/ArrangementFragment"
             />
+        <!-- Навигация к фрагменту "Отчеты -->
+        <action
+            android:id="@+id/action_StartFragment_to_ReportsFragment"
+            app:destination="@id/ReportsFragment"
+            />
         <!-- Навигация к фрагменту "Настройки -->
         <action
             android:id="@+id/action_StartFragment_to_SettingFragment"
@@ -194,7 +199,7 @@
         >
         <!-- Навигация к фрагменту "Отчеты" -->
         <action
-            android:id="@+id/action_sendReportFragment_to_ReportsFragment"
+            android:id="@+id/action_SendReportFragment_to_ReportsFragment"
             app:destination="@id/ReportsFragment"
             />
         <!-- Навигация к фрагменту "Фиксация объемов" -->
@@ -213,7 +218,7 @@
         >
         <!-- Навигация к фрагменту "Меню" -->
         <action
-            android:id="@+id/action_sendReportFragment_to_StartFragment"
+            android:id="@+id/action_ReportsFragment_to_StartFragment"
             app:destination="@id/StartFragment"
             />
     </fragment>

@@ -121,7 +121,7 @@ class ReportsFragment : Fragment() {
 
         // Кнопка перехода к главному меню
         binding.RepFrMainMenuBtn.setOnClickListener {
-            findNavController().navigate(R.id.StartFragment)
+            findNavController().navigate(R.id.action_ReportsFragment_to_StartFragment)
         }
     }
 

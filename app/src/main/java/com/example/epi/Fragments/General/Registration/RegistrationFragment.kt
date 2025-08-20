@@ -89,14 +89,14 @@ class RegistrationFragment : Fragment() {
 
     private fun buttons() {
         binding.btnAuth.setOnClickListener {
-            findNavController().navigate(R.id.authFragment)
+            findNavController().navigate(R.id.action_RegistrationFragment_to_AuthFragment)
         }
         binding.btnRegister.setOnClickListener {
             Log.d("Tagg", "Нажали кнопку регистрации")
             if (validateInputs()) {
                 Log.d("Tagg", "Успешная регистрация")
                 registerUser()
-                findNavController().navigate(R.id.authFragment)
+                findNavController().navigate(R.id.action_RegistrationFragment_to_AuthFragment)
             } else {
                 Log.d("Tagg", "Ошибка регистрации")
             }

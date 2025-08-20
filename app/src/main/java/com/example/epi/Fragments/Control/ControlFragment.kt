@@ -161,7 +161,7 @@ class ControlFragment : Fragment() {
 
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_controlFragment_to_transportFragment)
+            findNavController().navigate(R.id.action_ControlFragment_to_TransportFragment)
         }
     }
 

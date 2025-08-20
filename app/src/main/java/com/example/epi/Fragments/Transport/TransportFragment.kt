@@ -218,7 +218,7 @@ class TransportFragment : Fragment() {
 
         // Назад
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_transportFragment_to_arrangementFragment)
+            findNavController().navigate(R.id.action_TransportFragment_to_ArrangementFragment)
         }
 
         // Выбор даты начала поездки

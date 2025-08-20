@@ -122,7 +122,7 @@ class AuthFragment : Fragment() {
         }
 
         binding.tvRegister.setOnClickListener {
-            findNavController().navigate(R.id.registrationFragment)
+            findNavController().navigate(R.id.action_AuthFragment_to_RegistrationFragment)
         }
     }
 

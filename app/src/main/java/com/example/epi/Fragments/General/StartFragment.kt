@@ -42,11 +42,11 @@ class StartFragment : Fragment() {
         }
 
         binding.btnArrangement.setOnClickListener {
-            findNavController().navigate(R.id.arrangementFragment)
+            findNavController().navigate(R.id.action_StartFragment_to_ArrangementFragment)
         }
 
         binding.btnReports.setOnClickListener {
-            findNavController().navigate(R.id.reportsFragment)
+            findNavController().navigate(R.id.action_StartFragment_to_ReportsFragment)
         }
 
         binding.btnLogOut.setOnClickListener {
@@ -63,7 +63,7 @@ class StartFragment : Fragment() {
                 // Очистка сессии при подтверждении
                 val sharedPreferences = requireContext().getSharedPreferences("User_session", android.content.Context.MODE_PRIVATE)
                 sharedPreferences.edit().clear().apply()
-                findNavController().navigate(R.id.authFragment)
+                findNavController().navigate(R.id.action_StartFragment_to_AuthFragment)
             }
             .setNegativeButton("Нет", null) // Ничего не делаем при отказе
             .setCancelable(true) // Позволяет закрыть диалог по кнопке "Назад"

@@ -143,12 +143,12 @@ class FixingVolumesFragment : Fragment() {
 
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_fixVolumesFragment_to_controlFragment)
+            findNavController().navigate(R.id.action_FixVolumesFragment_to_ControlFragment)
         }
 
         // Кнопка "Добавить плановые значения
         binding.btnAddPlanValues.setOnClickListener {
-            findNavController().navigate(R.id.dialogAddPlanValuesRoot)
+            findNavController().navigate(R.id.action_FixVolumesFragment_to_AddPlanValue)
         }
     }
 

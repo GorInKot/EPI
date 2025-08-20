@@ -652,7 +652,7 @@ class ArrangementFragment : Fragment() {
 
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_arrangementFragment_to_startFragment)
+            findNavController().navigate(R.id.action_ArrangementFragment_to_StartFragment)
         }
 
         // Кнопка "Копия предыдущего отчета"

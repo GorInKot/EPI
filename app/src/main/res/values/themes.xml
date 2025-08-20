@@ -7,7 +7,7 @@
     </style>
 
     <style name="Theme.EPI" parent="Base.Theme.EPI">
-        <item name="android:textCursorDrawable">@drawable/drawable_cursor</item>
+
     </style>
 
     <style name="mainLabel">
@@ -297,10 +297,6 @@
         <item name="boxCornerRadiusTopEnd">12dp</item>
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusBottomEnd">12dp</item>
-    </style>
-
-    <style name="rounded_header_background" parent="android:Widget">
-        <item name="android:background">@drawable/rounded_background</item>
     </style>
 
 </resources>
