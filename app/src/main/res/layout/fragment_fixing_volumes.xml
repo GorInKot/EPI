@@ -53,6 +53,18 @@
             android:maxLines="1"
             />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_AddPlanValues"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Добавить Плановые значения"
+            style="@style/SimpleButton"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+
+            />
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_secondLabel"

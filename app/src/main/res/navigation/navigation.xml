@@ -1,160 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/StartFragment"
     >
 
-    <fragment
-        android:id="@+id/StartFragment"
-        android:name="com.example.epi.Fragments.General.StartFragment"
-        android:label="Start Fragment"
-        tools:layout="@layout/fragment_start" />
+    <!--
+    Начальный экран - AuthFragment - настроен через бизнес-логику приложения
 
-    <fragment
-        android:id="@+id/SettingFragment"
-        android:name="com.example.epi.Fragments.General.SettingsFragment"
-        android:label="Swttings Fragment"
-        tools:layout="@layout/fragment_settings"/>
+    Начальный экран в данном файле - navigation.xml - StartFragment
+    -->
 
-    <!-- Расстановка: Начало -->
+    <!-- Фрагмент Регистрации: RegistrationFragment -->
     <fragment
-        android:id="@+id/arrangementFragment"
-        android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
-        android:label="ArrangementFragment"
-        tools:layout="@layout/fragment_arrangment">
-
+        android:id="@+id/RegistrationFragment"
+        android:name="com.example.epi.Fragments.General.Registration.RegistrationFragment"
+        android:label="Registration"
+        tools:layout="@layout/fragment_registration"
+        >
+        <!-- Навигация к фрагменту "Авторизация -->
         <action
-            android:id="@+id/action_arrangementFragment_to_transportFragment"
-            app:destination="@id/transportFragment">
+            android:id="@+id/action_RegistrationFragment_to_AuthFragment"
+            app:destination="@id/AuthFragment"
+            />
+    </fragment>
 
-        </action>
-
+    <!-- Фрагмент Авторизация: AuthFragment -->
+    <fragment
+        android:id="@+id/AuthFragment"
+        android:name="com.example.epi.Fragments.General.Auth.AuthFragment"
+        android:label="Auth"
+        tools:layout="@layout/fragment_auth"
+        >
+        <!-- Навигация к фрагменту "Регистрация -->
         <action
-            android:id="@+id/action_arrangementFragment_to_startFragment"
+            android:id="@+id/action_AuthFragment_to_RegistrationFragment"
+            app:destination="@id/RegistrationFragment"
+            />
+        <!-- Навигация к фрагменту "Меню -->
+        <action
+            android:id="@+id/action_AuthFragment_to_StartFragment"
             app:destination="@id/StartFragment"
             />
     </fragment>
 
+    <!-- Фрагмент Меню: StartFragment -->
     <fragment
-        android:id="@+id/transportFragment"
+        android:id="@+id/StartFragment"
+        android:name="com.example.epi.Fragments.General.StartFragment"
+        android:label="Start Fragment"
+        tools:layout="@layout/fragment_start"
+        >
+        <!-- Навигация к фрагменту "Расстановка -->
+        <action
+            android:id="@+id/action_StartFragment_to_ArrangementFragment"
+            app:destination="@id/ArrangementFragment"
+            />
+        <!-- Навигация к фрагменту "Настройки -->
+        <action
+            android:id="@+id/action_StartFragment_to_SettingFragment"
+            app:destination="@id/SettingFragment"
+            />
+
+        <!-- Навигация к фрагменту "Авторизация -->
+        <action
+            android:id="@+id/action_StartFragment_to_AuthFragment"
+            app:destination="@id/AuthFragment"
+            />
+
+    </fragment>
+
+    <!-- Фрагмент Настройки: SettingFragment -->
+    <fragment
+        android:id="@+id/SettingFragment"
+        android:name="com.example.epi.Fragments.General.SettingsFragment"
+        android:label="Swttings Fragment"
+        tools:layout="@layout/fragment_settings"
+        >
+        <!-- Навигация к фрагменту "Расстановка -->
+        <action
+            android:id="@+id/action_SettingFragment_to_StartFragment"
+            app:destination="@id/StartFragment"
+            />
+
+    </fragment>
+
+    <!-- Фрагмент Расстановка: ArrangementFragment -->
+    <fragment
+        android:id="@+id/ArrangementFragment"
+        android:name="com.example.epi.Fragments.Arrangement.ArrangementFragment"
+        android:label="ArrangementFragment"
+        tools:layout="@layout/fragment_arrangment"
+        >
+
+        <!-- Навигация к фрагменту "Транспорт" -->
+        <action
+            android:id="@+id/action_ArrangementFragment_to_TransportFragment"
+            app:destination="@id/TransportFragment"
+            />
+        <!-- Навигация к фрагменту "Меню" -->
+        <action
+            android:id="@+id/action_ArrangementFragment_to_StartFragment"
+            app:destination="@id/StartFragment"
+            />
+    </fragment>
+
+    <!-- Фрагмент Транспорт: TransportFragment -->
+    <fragment
+        android:id="@+id/TransportFragment"
         android:name="com.example.epi.Fragments.Transport.TransportFragment"
         android:label="TransportFragment"
         tools:layout="@layout/fragment_transport"
         >
-
+        <!-- Навигация к фрагменту "Полевой контроль" -->
         <action
-            android:id="@+id/action_transportFragment_to_controlFragment"
-            app:destination="@id/controlFragment"
-            >
-        </action>
+            android:id="@+id/action_TransportFragment_to_ControlFragment"
+            app:destination="@id/ControlFragment"
+            />
 
+        <!-- Навигация к фрагменту "Расстановка -->
         <action
-            android:id="@+id/action_transportFragment_to_arrangementFragment"
-            app:destination="@id/arrangementFragment"
+            android:id="@+id/action_TransportFragment_to_ArrangementFragment"
+            app:destination="@id/ArrangementFragment"
             />
     </fragment>
 
+    <!-- Фрагмент Полевой контроль: ControlFragment -->
     <fragment
-        android:id="@+id/controlFragment"
+        android:id="@+id/ControlFragment"
         android:name="com.example.epi.Fragments.Control.ControlFragment"
         android:label="Control"
-        tools:layout="@layout/fragment_control">
-
+        tools:layout="@layout/fragment_control"
+        >
+        <!-- Навигация к фрагменту "Фиксация объемов" -->
         <action
-            android:id="@+id/action_controlFragment_to_fixVolumesFragment"
-            app:destination="@id/fixFragment">
-
-        </action>
-
+            android:id="@+id/action_ControlFragment_to_FixVolumesFragment"
+            app:destination="@id/FixFragment"
+            />
+        <!-- Навигация к фрагменту "Транспорт" -->
         <action
-            android:id="@+id/action_controlFragment_to_transportFragment"
-            app:destination="@id/transportFragment" />
+            android:id="@+id/action_ControlFragment_to_TransportFragment"
+            app:destination="@id/TransportFragment"
+            />
     </fragment>
 
+    <!-- Фрагмент Фиксация объемов: FixFragment -->
     <fragment
-        android:id="@+id/fixFragment"
+        android:id="@+id/FixFragment"
         android:name="com.example.epi.Fragments.FixingVolumes.FixingVolumesFragment"
         android:label="Fix"
-        tools:layout="@layout/fragment_fixing_volumes">
-<!--        <argument-->
-<!--            android:name="reportId"-->
-<!--            app:argType="long" />-->
-<!--        <argument-->
-<!--            android:name="objectId"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
+        tools:layout="@layout/fragment_fixing_volumes"
+        >
+        <!-- Навигация к фрагменту "Текущий отчет" -->
         <action
-            android:id="@+id/action_fixVolumesFragment_to_sendReportFragment"
-            app:destination="@id/sendReportFragment">
-<!--            <argument-->
-<!--                android:name="reportId"-->
-<!--                app:argType="long"-->
-<!--                />-->
-<!--            <argument-->
-<!--                android:name="objectId"-->
-<!--                app:argType="string"-->
-<!--                app:nullable="true" />-->
-        </action>
+            android:id="@+id/action_FixVolumesFragment_to_SendReportFragment"
+            app:destination="@id/SendReportFragment"
+            />
+        <!-- Навигация к фрагменту "Контроль" -->
         <action
-            android:id="@+id/action_fixVolumesFragment_to_controlFragment"
-            app:destination="@id/controlFragment" />
+            android:id="@+id/action_FixVolumesFragment_to_ControlFragment"
+            app:destination="@id/ControlFragment"
+            />
+
+        <!-- Навигация к фрагменту "Добавление плановых значений" -->
+        <action
+            android:id="@+id/action_FixVolumesFragment_to_AddPlanValue"
+            app:destination="@id/AddPlanValue"
+            />
     </fragment>
 
+    <!-- Фрагмент Добавление Плановых значений: AddPlanValue -->
     <fragment
-        android:id="@+id/sendReportFragment"
+        android:id="@+id/AddPlanValue"
+        android:name="com.example.epi.Fragments.FixingVolumes.AddPlanValues.AddPlanValuesFragment"
+        android:label="AddPlanValue"
+        tools:layout="@layout/fragment_add_plan_values"
+        >
+        <!-- Навигация к фрагменту "Фиксация объемов" -->
+        <action
+            android:id="@+id/action_AddPlanValue_to_FixFragment"
+            app:destination="@id/FixFragment"
+            />
+    </fragment>
+
+    <!-- Фрагмент Текущий отчет: SendReportFragment -->
+    <fragment
+        android:id="@+id/SendReportFragment"
         android:name="com.example.epi.Fragments.Reports.SendReport.SendReportFragment"
         android:label="SendReport"
-        tools:layout="@layout/fragment_send_report">
-<!--        <argument-->
-<!--            android:name="reportId"-->
-<!--            app:argType="long"-->
-<!--            />-->
-<!--        <argument-->
-<!--            android:name="objectId"-->
-<!--            app:argType="string"-->
-<!--            app:nullable="true" />-->
+        tools:layout="@layout/fragment_send_report"
+        >
+        <!-- Навигация к фрагменту "Отчеты" -->
         <action
-            android:id="@+id/action_sendReportFragment_to_reportsFragment"
-            app:destination="@id/reportsFragment" />
+            android:id="@+id/action_sendReportFragment_to_ReportsFragment"
+            app:destination="@id/ReportsFragment"
+            />
+        <!-- Навигация к фрагменту "Фиксация объемов" -->
         <action
-            android:id="@+id/action_sendReportFragment_to_fixVolumesFragment"
-            app:destination="@id/fixFragment">
-<!--            <argument-->
-<!--                android:name="reportId"-->
-<!--                app:argType="long"-->
-<!--                />-->
-<!--            <argument-->
-<!--                android:name="objectId"-->
-<!--                app:argType="string"-->
-<!--                app:nullable="true" />-->
-        </action>
+            android:id="@+id/action_SendReportFragment_to_FixVolumesFragment"
+            app:destination="@id/FixFragment"
+            />
     </fragment>
 
+    <!-- Фрагмент Отчеты: ReportsFragment -->
     <fragment
-        android:id="@+id/reportsFragment"
+        android:id="@+id/ReportsFragment"
         android:name="com.example.epi.Fragments.Reports.Reports.ReportsFragment"
         android:label="Reports"
-        tools:layout="@layout/fragment_reports" />
-
-    <fragment
-        android:id="@+id/registrationFragment"
-        android:name="com.example.epi.Fragments.General.Registration.RegistrationFragment"
-        android:label="Registration"
-        tools:layout="@layout/fragment_registration">
-
+        tools:layout="@layout/fragment_reports"
+        >
+        <!-- Навигация к фрагменту "Меню" -->
         <action
-            android:id="@+id/action_registrationFragment_to_authFragment"
-            app:destination="@id/controlFragment"
-            >
-        </action>
-
+            android:id="@+id/action_sendReportFragment_to_StartFragment"
+            app:destination="@id/StartFragment"
+            />
     </fragment>
-
-    <fragment
-        android:id="@+id/authFragment"
-        android:name="com.example.epi.Fragments.General.Auth.AuthFragment"
-        android:label="Auth"
-        tools:layout="@layout/fragment_auth" />
 </navigation>

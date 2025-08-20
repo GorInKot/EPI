@@ -37,6 +37,10 @@ class SharedViewModel(
     private val reportRepository: ReportRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
+    
+    companion object {
+        private val TAG = "Tagg-SVM"
+    }
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     private val gson = Gson()
@@ -291,7 +295,7 @@ class SharedViewModel(
     // Новое
     suspend fun saveArrangementData(): Long {
         return withContext(Dispatchers.IO) {
-            Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
+            Log.d(TAG, "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
                     contract = _selectedContract.value,
@@ -309,7 +313,7 @@ class SharedViewModel(
                 if (arrangementErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
-                        Log.d("Tagg-SVM", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                        Log.d(TAG, "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -317,7 +321,7 @@ class SharedViewModel(
                 val employeeNumber = _currentEmployeeNumber.value ?: run {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e("Tagg-SVM", "No employeeNumber available")
+                        Log.e(TAG, "No employeeNumber available")
                     }
                     return@withContext 0L
                 }
@@ -325,7 +329,7 @@ class SharedViewModel(
                 if (_selectedTypeOfWork.value.isNullOrBlank()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Режим работы не выбран")
-                        Log.e("Tagg-SVM", "typeOfWork is not set")
+                        Log.e(TAG, "typeOfWork is not set")
                     }
                     return@withContext 0L
                 }
@@ -364,19 +368,19 @@ class SharedViewModel(
                     fixVolumesRows = "",
                     isEmpty = false
                 )
-//                Log.d("Tagg-SVM", "UserName: ${report.userName}")
-                Log.d("Tagg-SVM", "Сохранение полного отчета: $report")
+//                Log.d(TAG, "UserName: ${report.userName}")
+                Log.d(TAG, "Сохранение полного отчета: $report")
                 val reportId = reportRepository.saveReport(report)
-                Log.d("Tagg-SVM", "Сохранение отчета с ID: $reportId")
+                Log.d(TAG, "Сохранение отчета с ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
                         _isReportSaved.postValue(true)
-                        Log.d("Tagg-SVM", "Отчет успешно сохранен, isReportSaved изменен на true")
+                        Log.d(TAG, "Отчет успешно сохранен, isReportSaved изменен на true")
                     }
                 }
                 reportId
             } catch (e: Exception) {
-                Log.e("Tagg-SVM", "Ошибка сохранения отчета: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                Log.e(TAG, "Ошибка сохранения отчета: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
                 }
@@ -391,7 +395,7 @@ class SharedViewModel(
     // Обновляем saveOrUpdateReport
     suspend fun saveOrUpdateReport(): Long {
         return withContext(Dispatchers.IO) {
-            Log.d("Tagg-SVM", "Saving report on thread: ${Thread.currentThread().name}")
+            Log.d(TAG, "Saving report on thread: ${Thread.currentThread().name}")
             try {
                 val arrangementErrors = validateArrangementInputs(
                     contract = _selectedContract.value,
@@ -409,7 +413,7 @@ class SharedViewModel(
                 if (arrangementErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
-                        Log.d("Tagg-SVM", "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                        Log.d(TAG, "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -427,7 +431,7 @@ class SharedViewModel(
                 if (transportErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${transportErrors.values.joinToString()}")
-                        Log.d("Tagg-SVM", "Transport validation errors: ${transportErrors.values.joinToString()}")
+                        Log.d(TAG, "Transport validation errors: ${transportErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -440,7 +444,7 @@ class SharedViewModel(
                 if (controlErrors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля контроля заполнены корректно: ${controlErrors.values.joinToString()}")
-                        Log.d("Tagg-SVM", "Control validation errors: ${controlErrors.values.joinToString()}")
+                        Log.d(TAG, "Control validation errors: ${controlErrors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -448,7 +452,7 @@ class SharedViewModel(
                 val employeeNumber = _currentEmployeeNumber.value ?: run {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e("Tagg-SVM", "No employeeNumber available")
+                        Log.e(TAG, "No employeeNumber available")
                     }
                     return@withContext 0L
                 }
@@ -456,7 +460,7 @@ class SharedViewModel(
                 if (_selectedTypeOfWork.value.isNullOrBlank()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Режим работы не выбран")
-                        Log.e("Tagg-SVM", "typeOfWork is not set")
+                        Log.e(TAG, "typeOfWork is not set")
                     }
                     return@withContext 0L
                 }
@@ -493,18 +497,18 @@ class SharedViewModel(
                     fixVolumesRows = gson.toJson(_fixRows.value),
                     isEmpty = _isTransportAbsent.value ?: false
                 )
-                Log.d("Tagg-SVM", "Saving full report: $report")
+                Log.d(TAG, "Saving full report: $report")
                 val reportId = reportRepository.saveReport(report)
-                Log.d("Tagg-SVM", "Saved report ID: $reportId")
+                Log.d(TAG, "Saved report ID: $reportId")
                 if (reportId > 0) {
                     withContext(Dispatchers.Main) {
                         _isReportSaved.postValue(true)
-                        Log.d("Tagg-SVM", "Report saved successfully, isReportSaved set to true")
+                        Log.d(TAG, "Report saved successfully, isReportSaved set to true")
                     }
                 }
                 reportId
             } catch (e: Exception) {
-                Log.e("Tagg-SVM", "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                Log.e(TAG, "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
                 }
@@ -613,13 +617,13 @@ class SharedViewModel(
                 if (errors.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${errors.values.joinToString()}")
-                        Log.e("Tagg-SVM", "Transport: Validation failed in updateTransportReport: $errors")
+                        Log.e(TAG, "Transport: Validation failed in updateTransportReport: $errors")
                     }
                     return@withContext 0L
                 }
                 val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
-                    Log.e("Tagg-SVM", "Transport: No unsent report found to update")
+                    Log.e(TAG, "Transport: No unsent report found to update")
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Ошибка: нет незавершенного отчета для обновления")
                     }
@@ -636,12 +640,12 @@ class SharedViewModel(
                     endTime = if (_isTransportAbsent.value == true) "" else _transportEndTime.value.orEmpty(),
                     isEmpty = _isTransportAbsent.value ?: false
                 )
-                Log.d("Tagg-SVM", "Transport: Updating Report: $updatedReport")
+                Log.d(TAG, "Transport: Updating Report: $updatedReport")
                 reportRepository.updateReport(updatedReport)
-                Log.d("Tagg-SVM", "Transport: Report updated successfully with ID: ${updatedReport.id}")
+                Log.d(TAG, "Transport: Report updated successfully with ID: ${updatedReport.id}")
                 updatedReport.id
             } catch (e: Exception) {
-                Log.e("Tagg-SVM", "Transport: Error in updateTransportReport: ${e.message}", e)
+                Log.e(TAG, "Transport: Error in updateTransportReport: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
                 }
@@ -692,7 +696,7 @@ class SharedViewModel(
             currentList[index] = newRow
             _controlRows.value = currentList
         } else {
-            Log.w("Tagg-SVM", "ControlFragment: Row not found: $oldRow")
+            Log.w(TAG, "ControlFragment: Row not found: $oldRow")
         }
     }
 
@@ -744,14 +748,14 @@ class SharedViewModel(
                     controlRows = _controlRows.value
                 )
                 if (errors.isNotEmpty()) {
-                    Log.e("Tagg-SVM", "Control: Validation failed: $errors")
+                    Log.e(TAG, "Control: Validation failed: $errors")
                     _errorEvent.postValue("Не все поля заполнены корректно")
                     return@withContext 0L
                 }
 
                 val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
-                    Log.e("Tagg-SVM", "Control: No unsent report found")
+                    Log.e(TAG, "Control: No unsent report found")
                     _errorEvent.postValue("Ошибка: нет незавершенного отчета")
                     return@withContext 0L
                 }
@@ -770,12 +774,12 @@ class SharedViewModel(
                     remarks = firstRow?.remarks ?: "",
                     controlRows = controlRowsJson
                 )
-                Log.d("Tagg-SVM", "Control: Updating Report: $updatedReport")
+                Log.d(TAG, "Control: Updating Report: $updatedReport")
                 reportRepository.updateReport(updatedReport)
-                Log.d("Tagg-SVM", "Control: Report updated successfully with ID: ${updatedReport.id}")
+                Log.d(TAG, "Control: Report updated successfully with ID: ${updatedReport.id}")
                 updatedReport.id
             } catch (e: Exception) {
-                Log.e("Tagg-SVM", "Control: Error in updateControlReport: ${e.message}", e)
+                Log.e(TAG, "Control: Error in updateControlReport: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
                 }
@@ -804,23 +808,23 @@ class SharedViewModel(
             current[index] = newRow
             _fixRows.value = current
         } else {
-            Log.w("Tagg-SVM", "FixVolumesFragment:Row not found: $oldRow")
+            Log.w(TAG, "FixVolumesFragment:Row not found: $oldRow")
         }
     }
 
     private fun recalculateFixRows(rows: List<FixVolumesRow>): List<FixVolumesRow> {
-        Log.d("Tagg-SVM", "Recalculating rows: $rows")
+        Log.d(TAG, "Recalculating rows: $rows")
         val result = rows.groupBy { Triple(it.projectWorkType, it.measure, it.plan) }
             .flatMap { (key, group) ->
                 val totalFact = group.sumOf { it.fact.toDoubleOrNull() ?: 0.0 }
                 val planValue = group.first().plan.toDoubleOrNull() ?: 0.0
                 val remainingVolume = planValue - totalFact
-                Log.d("Tagg-SVM", "Group: $key, totalFact: $totalFact, planValue: $planValue, remainingVolume: $remainingVolume")
+                Log.d(TAG, "Group: $key, totalFact: $totalFact, planValue: $planValue, remainingVolume: $remainingVolume")
                 group.map { row ->
                     row.copy(result = if (remainingVolume >= 0) remainingVolume.toString() else "0.0")
                 }
             }
-        Log.d("Tagg-SVM", "Recalculated rows: $result")
+        Log.d(TAG, "Recalculated rows: $result")
         return result
     }
 
@@ -838,9 +842,9 @@ class SharedViewModel(
         }
 
         val planValue = input.plan.toDouble()
-        Log.d("Tagg-SVM", "План: $planValue")
+        Log.d(TAG, "План: $planValue")
         val factValue = input.fact.toDouble()
-        Log.d("Tagg-SVM", "Факт: $factValue")
+        Log.d(TAG, "Факт: $factValue")
 
         val matchingRows = _fixRows.value?.filter {
             it != excludeRow &&
@@ -851,7 +855,7 @@ class SharedViewModel(
 
         val totalFact = matchingRows.sumOf { it.fact.toDoubleOrNull() ?: 0.0 } + factValue
         val remainingVolume = planValue - totalFact
-        Log.d("Tagg-SVM", "Разница: $remainingVolume")
+        Log.d(TAG, "Разница: $remainingVolume")
 
         if (remainingVolume < 0) {
             return RowValidationResult.Invalid("Сумма фактических значений превышает плановое")
@@ -882,13 +886,13 @@ class SharedViewModel(
             try {
                 val errors = validateFixVolumesInputs(fixRows = _fixRows.value)
                 if (errors.isNotEmpty()) {
-                    Log.e("Tagg-SVM", "FixVolumes: Validation failed: $errors")
+                    Log.e(TAG, "FixVolumes: Validation failed: $errors")
                     _errorEvent.postValue("Не все поля заполнены корректно")
                     return@withContext 0L
                 }
                 val existingReport = reportRepository.getLastUnsentReport()
                 if (existingReport == null) {
-                    Log.e("Tagg-SVM", "FixVolumes: No unsent report found")
+                    Log.e(TAG, "FixVolumes: No unsent report found")
                     _errorEvent.postValue("Ошибка: нет незавершенного отчета")
                     return@withContext 0L
                 }
@@ -896,15 +900,15 @@ class SharedViewModel(
                 val updatedReport = existingReport.copy(
                     fixVolumesRows = fixRowsJson
                 )
-                Log.d("Tagg-SVM", "FixVolumes: Updating Report: $updatedReport")
+                Log.d(TAG, "FixVolumes: Updating Report: $updatedReport")
                 reportRepository.updateReport(updatedReport)
                 Log.d(
-                    "Tagg-SVM",
+                    TAG,
                     "FixVolumes: Report updated successfully with ID: ${updatedReport.id}"
                 )
                 updatedReport.id
             } catch (e: Exception) {
-                Log.e("Tagg-SVM", "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
+                Log.e(TAG, "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
                 }
@@ -935,7 +939,7 @@ class SharedViewModel(
         return """
         Дата: ${_currentDate.value}
         Время: ${_currentTime.value}
-        Сотрудник: ${_currentUser.value}
+        Сотрудник: ${_currentUser.value!!.firstName} ${_currentUser.value!!.secondName} ${_currentUser.value!!.thirdName}
         Режим работы: ${_selectedTypeOfWork.value}
         
         Заказчик: ${_selectedCustomer.value}
@@ -949,7 +953,6 @@ class SharedViewModel(
         Представитель субподрядчика: ${_repSubContractorText.value}
         Представитель ССК субподрядчика: ${_repSSKSubText.value}
 
-        Транспорт отсутсвует: ${if(_isTransportAbsent.value == true) return "Да" else "Нет"}
         Исполнитель по транспорту: ${_transportExecutorName.value}
         Договор по транспорту: ${_transportContractTransport.value}        
         Госномер: ${_transportStateNumber.value}
@@ -959,7 +962,6 @@ class SharedViewModel(
         Время окончания поездки: ${_transportEndTime.value}
         
         Номер предписания: ${_orderNumber.value}
-        Нарушение: ${if(_isViolation.value == true) return "Нет нарушений" else "Есть нарушения"}
         
         Полевой контроль: ${gson.toJson(_controlRows.value)}
         
@@ -984,27 +986,55 @@ class SharedViewModel(
             try {
                 val report = reportRepository.getLastUnsentReport()
                 report?.let {
+                    // ArrangementFragment
                     _selectedCustomer.value = it.customer
+                    Log.d(TAG, "Предыдущий заказчик: ${it.customer}")
+
                     _selectedContract.value = it.contract
+                    Log.d(TAG, "Предыдущий Договор СК: ${it.contract}")
+
                     _selectedObject.value = it.obj
+                    Log.d(TAG, "Предыдущий объект: ${it.obj}")
+
                     _plotText.value = it.plot
+                    Log.d(TAG, "Предыдущий участок: ${it.plot}")
+
                     _isManualPlot.value = it.plot == "Объект не делится на участки"
+
                     _selectedContractor.value = it.genContractor
+                    Log.d(TAG, "Предыдущий генподрядчик: ${it.genContractor}")
+
                     _selectedRepContractor.value = it.repGenContractor
+                    Log.d(TAG, "Предыдущий представитель генподрядчика: ${it.repGenContractor}")
+
                     _repSSKGpText.value = it.repSSKGp
+                    Log.d(TAG, "Предыдущий ССК ПО (ГП): ${it.repSSKGp}")
+
                     _selectedSubContractor.value = it.subContractor
+                    Log.d(TAG, "Предыдущий субподрядчик: ${it.subContractor}")
+
                     _repSubContractorText.value = it.repSubContractor
+                    Log.d(TAG, "Предыдущий представитель субподрядчика: ${it.repSubContractor}")
+
                     _repSSKSubText.value = it.repSSKSub
+                    Log.d(TAG, "Предыдущий ССК ПО (Суб): ${it.repSSKSub}")
                     _isManualSubContractor.value = it.subContractor == "Отсутствует субподрядчик"
-                    _transportContractCustomer.value = it.contract
+
+                    // TransportFragment
                     _transportExecutorName.value = it.executor
+                    Log.d(TAG, "Предыдущий исполнитель по транспорту: ${it.executor}")
+
                     _transportContractTransport.value = it.contractTransport
+
+                    Log.d(TAG, "Предыдущий договор по транспорту: ${it.contractTransport}")
+
                     _transportStateNumber.value = it.stateNumber
-                    Log.d("Tagg-SVM", "Loaded previous report: $it")
-                } ?: Log.d("Tagg-SVM", "No previous unsent report found")
+                    Log.d(TAG, "Предыдущий госномер: ${it.stateNumber}")
+
+                } ?: Log.d(TAG, "Предыдущий неотправленный отчет не найден.")
             } catch (e: Exception) {
                 _errorEvent.postValue("Ошибка при загрузке предыдущего отчета: ${e.message}")
-                Log.e("Tagg-SVM", "Error loading previous report: ${e.message}", e)
+                Log.e(TAG, "Error loading previous report: ${e.message}", e)
             }
         }
     }
@@ -1043,8 +1073,6 @@ class SharedViewModel(
 
     // ------------ Блок Авторизации ------------
     // region Authentification Block
-
-
     private val _authResult = MutableLiveData<AuthResult>()
     val authResult: LiveData<AuthResult> get() = _authResult
 
@@ -1085,9 +1113,9 @@ class SharedViewModel(
     fun loginUser(employeeNumber: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("Tagg-SVM", "Attempting login for employeeNumber: $employeeNumber, password: $password")
+                Log.d(TAG, "Attempting login for employeeNumber: $employeeNumber, password: $password")
                 val user = userRepository.getUserByEmployeeNumber(employeeNumber)
-                Log.d("Tagg-SVM", "User found: $user")
+                Log.d(TAG, "User found: $user")
                 if (user != null && BCrypt.checkpw(password, user.password)) {
                     withContext(Dispatchers.Main) {
                         _currentUser.value = user
@@ -1105,7 +1133,7 @@ class SharedViewModel(
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _authResult.value = AuthResult.Error("Ошибка авторизации: ${e.message}")
-                    Log.e("Tagg-SVM", "Login error: ${e.message}", e)
+                    Log.e(TAG, "Login error: ${e.message}", e)
                 }
             }
         }
@@ -1150,18 +1178,18 @@ class SharedViewModel(
                     val user = userRepository.getUserByEmployeeNumber(employeeNumber)
                     withContext(Dispatchers.Main) {
                         _currentUser.value = user
-                        Log.d("Tagg-SVM", "Loaded user: $user")
+                        Log.d(TAG, "Loaded user: $user")
                     }
                 } else {
                     withContext(Dispatchers.Main) {
                         _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e("Tagg-SVM", "No employeeNumber found in SharedPreferences")
+                        Log.e(TAG, "No employeeNumber found in SharedPreferences")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
-                    Log.e("Tagg-SVM", "Error loading user: ${e.message}", e)
+                    Log.e(TAG, "Error loading user: ${e.message}", e)
                 }
             }
         }
@@ -1203,7 +1231,7 @@ class SharedViewModel(
                     }
                 } else {
                     val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
-                    Log.d("Tagg-SVM", "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
+                    Log.d(TAG, "Registering user: $employeeNumber, hashedPassword: $hashedPassword")
                     val user = User(
                         id = 0,
                         secondName = secondName,
@@ -1223,7 +1251,7 @@ class SharedViewModel(
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     _authResult.value = AuthResult.RegistrationError("Ошибка регистрации: ${e.message}")
-                    Log.e("Tagg-SVM", "Registration error: ${e.message}", e)
+                    Log.e(TAG, "Registration error: ${e.message}", e)
                 }
             }
         }

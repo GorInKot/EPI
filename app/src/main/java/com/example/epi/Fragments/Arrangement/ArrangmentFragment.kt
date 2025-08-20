@@ -807,6 +807,22 @@ class ArrangementFragment : Fragment() {
     }
 
     private fun setupViewModelObservers() {
+
+        sharedViewModel.selectedContract.observe(viewLifecycleOwner) { contract ->
+            val currentText = binding.autoCompleteContract.text?.toString() ?: ""
+            Log.d(
+                "Tagg-Arrangement",
+                "Observed selectedContract: $contract, currentText: $currentText, isEnabled: ${binding.autoCompleteContract.isEnabled}"
+            )
+            if (contract != null && currentText != contract) {
+                binding.autoCompleteContract.setText(contract, false)
+                Log.d("Tagg-Arrangement", "Set autoCompleteContract text to: $contract")
+            } else if (contract == null) {
+                binding.autoCompleteContract.setText("", false)
+                Log.d("Tagg-Arrangement", "Cleared autoCompleteContract text")
+            }
+        }
+
         sharedViewModel.plotText.observe(viewLifecycleOwner) { text ->
             if (text != null && binding.autoCompletePlot.text.toString() != text) {
                 binding.autoCompletePlot.setText(text)

@@ -113,7 +113,7 @@ class FixingVolumesFragment : Fragment() {
                 is RowValidationResult.Valid -> {
                     sharedViewModel.addFixRow(newRow)
                     clearInputFields()
-                    Toast.makeText(requireContext(), "Строка добавлена", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "Строка добавлена", Toast.LENGTH_SHORT).show()
                 }
                 is RowValidationResult.Invalid -> {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_LONG).show()
@@ -144,6 +144,11 @@ class FixingVolumesFragment : Fragment() {
         // Кнопка "Назад"
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.action_fixVolumesFragment_to_controlFragment)
+        }
+
+        // Кнопка "Добавить плановые значения
+        binding.btnAddPlanValues.setOnClickListener {
+            findNavController().navigate(R.id.dialogAddPlanValuesRoot)
         }
     }
 
