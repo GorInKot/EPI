@@ -7,7 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Dao
 import com.example.epi.DataBase.ExtraDatabase.ExtraDatabaseHelper
+import com.example.epi.DataBase.PlanValue.PlanValue
+import com.example.epi.DataBase.PlanValue.PlanValueRepository
 import com.example.epi.DataBase.Report.Report
 import com.example.epi.DataBase.Report.ReportRepository
 import com.example.epi.DataBase.User.User
@@ -37,21 +40,21 @@ import kotlin.contracts.contract
 class SharedViewModel(
     private val reportRepository: ReportRepository,
     private val userRepository: UserRepository,
-    private val context: Context
+    private val context: Context,
+    private val planValueRepository: PlanValueRepository
 ) : ViewModel() {
     
     companion object {
         private val TAG = "Tagg-SVM"
     }
+
+    // region Инициализация даты и времени
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    // endregion
     private val gson = Gson()
 
-    // Флаг для отслеживания сохраненного отчета
-    private val _isReportSaved = MutableLiveData<Boolean>(false)
-    val isReportSaved: LiveData<Boolean> get() = _isReportSaved
-
-    // Данные из ArrangementFragment
+    // region Данные общие для всех фрагментов
     private val _currentDate = MutableLiveData<String>(dateFormat.format(Date()))
     val currentDate: LiveData<String> get() = _currentDate
 
@@ -60,6 +63,12 @@ class SharedViewModel(
 
     private val _errorEvent = MutableLiveData<String>()
     val errorEvent: LiveData<String> get() = _errorEvent
+
+    // Флаг для отслеживания сохраненного отчета
+    private val _isReportSaved = MutableLiveData<Boolean>(false)
+    val isReportSaved: LiveData<Boolean> get() = _isReportSaved
+
+    // endregion
 
     // -------- РАССТАНОВКА - НАЧАЛО - ИНЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
     // region методы для ArrangementFragment
@@ -164,7 +173,7 @@ class SharedViewModel(
     // Данные из ControlFragment
     // region ControlFragment
     private var orderCounter = 1
-//    private var extraOrderNumber = 1
+
 
     private val _orderNumber = MutableLiveData<String?>("")
     val orderNumber: LiveData<String?> get() = _orderNumber
@@ -199,8 +208,14 @@ class SharedViewModel(
 //    )
 
     // New ControlWorkTypes
-    private val _controlsWorkTypes = MutableLiveData<List<String>>()
-    val controlsWorkTypes: LiveData<List<String>> get() = _controlsWorkTypes
+//    private val _controlsWorkTypes = MutableLiveData<List<String>>()
+//    val controlsWorkTypes: LiveData<List<String>> get() = _controlsWorkTypes
+
+    private val _controlsComplexOfWork = MutableLiveData<List<String>>()
+    val controlsComplexOfWork: LiveData<List<String>> get() = _controlsComplexOfWork
+
+    private val _controlTypesOfWork = MutableLiveData<List<String>>()
+    val controlTypesOfWork: LiveData<List<String>> get() = _controlTypesOfWork
 
     // Инициализация extra_db.db
     private val extraDbHelper: ExtraDatabaseHelper by lazy {
@@ -213,14 +228,14 @@ class SharedViewModel(
     private val _fixRows = MutableLiveData<List<FixVolumesRow>>(emptyList())
     val fixRows: LiveData<List<FixVolumesRow>> get() = _fixRows
 
-    val fixWorkType = MutableLiveData<List<String>>(
-        listOf(
-            "Вид работ 1", "Вид работ 2", "Вид работ 3",
-            "Вид работ 4", "Вид работ 5", "Вид работ 6",
-            "Вид работ 7", "Вид работ 8", "Вид работ 9",
-            "Вид работ 10", "Вид работ 11", "Вид работ 12"
-        )
-    )
+//    val fixWorkType = MutableLiveData<List<String>>(
+//        listOf(
+//            "Вид работ 1", "Вид работ 2", "Вид работ 3",
+//            "Вид работ 4", "Вид работ 5", "Вид работ 6",
+//            "Вид работ 7", "Вид работ 8", "Вид работ 9",
+//            "Вид работ 10", "Вид работ 11", "Вид работ 12"
+//        )
+//    )
 
     val fixMeasures = MutableLiveData<List<String>>(
         listOf(
@@ -233,10 +248,20 @@ class SharedViewModel(
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
 
+    // region Инициализация значений План
+    private val _planValues = MutableLiveData<List<PlanValue>>(emptyList())
+    val planValues: LiveData<List<PlanValue>> get() = _planValues
+    // endregion
+
     init {
         //
         updateDateTime()
         loadComplexOfWorks()
+
+        viewModelScope.launch {
+            planValueRepository.getAllPlanValues().collect { values ->
+                _planValues.value = values}
+        }
 
         // загрузка всех отчетов
         viewModelScope.launch {
@@ -246,13 +271,40 @@ class SharedViewModel(
         }
     }
 
+    suspend fun loadPlanValues(objectId: String? = null)  {
+        withContext(Dispatchers.IO) {
+            val values = if (objectId != null) {
+                planValueRepository.getPlanValuesByObjectId(objectId)
+            } else {
+                planValueRepository.getAllPlanValues().first() // Берем первое значение из потока
+            }
+            withContext(Dispatchers.Main) {
+                _planValues.value = values
+            }
+        }
+    }
+
+    suspend fun addPlanValue(planValue: PlanValue) {
+        withContext(Dispatchers.IO) {
+            planValueRepository.insert(planValue)
+            loadPlanValues(planValue.objectId)
+        }
+    }
+
+    private val _selectedComplex = MutableLiveData<String>()
+    val selectedComplex: LiveData<String> get() = _selectedComplex
+
     fun loadComplexOfWorks() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val complexOfWorks = extraDbHelper.getComplexOfWorks()
                 withContext(Dispatchers.Main) {
-                    _controlsWorkTypes.value = complexOfWorks
+                    _controlsComplexOfWork.value = complexOfWorks
                     Log.d(TAG, "Loaded ComplexOfWorks: $complexOfWorks")
+                    if (complexOfWorks.isNotEmpty()) {
+                        _selectedComplex.value = complexOfWorks[0] // Устанавливаем первый комплекс по умолчанию
+                        loadTypesOfWork(complexOfWorks[0]) // Загружаем виды работ для первого комплекса
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading ComplexOfWorks: ${e.message}", e)
@@ -261,6 +313,30 @@ class SharedViewModel(
                 }
             }
         }
+    }
+
+    fun loadTypesOfWork(complexOfWorkName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val typesOfWork = extraDbHelper.getTypesOfWork(complexOfWorkName)
+                withContext(Dispatchers.Main) {
+                    _controlTypesOfWork.value = typesOfWork // Обновляем список видов работ
+                    _selectedComplex.value = complexOfWorkName // Синхронизируем выбранный комплекс
+                    Log.d(TAG, "Loaded TypesOfWork for $complexOfWorkName: $typesOfWork")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading TypesOfWork: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных из TypesOfWork: ${e.message}")
+                }
+            }
+        }
+    }
+
+    // Метод для обновления выбранного комплекса (вызывается при выборе пользователем)
+    fun setSelectedComplex(complexName: String) {
+        _selectedComplex.value = complexName
+        loadTypesOfWork(complexName)
     }
 
     fun updateDateTime() {

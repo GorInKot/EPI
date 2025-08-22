@@ -6,19 +6,31 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import android.util.Log
+import com.example.epi.DataBase.PlanValue.PlanValue
+import com.example.epi.DataBase.PlanValue.PlanValueDao
 import com.example.epi.DataBase.Report.Report
 import com.example.epi.DataBase.Report.ReportDao
 import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class, User::class], version = 6, exportSchema = true)
+@Database(entities = [Report::class, User::class, PlanValue::class], version = 7, exportSchema = true)
 abstract class NewAppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao
+    abstract fun planValueDao(): PlanValueDao
 
     companion object {
         @Volatile
         private var INSTANCE: NewAppDatabase? = null
+
+//        val MIGRATION_6_7 = object : Migration(6, 7) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                database.execSQL(
+//                    "CREATE TABLE IF NOT EXISTS plan_values " +
+//                            "(id INTEGER PRIMARY KEY AUTOINCREMENT, objectId TEXT, complexWork TEXT, workType TEXT, planValue REAL)"
+//                )
+//            }
+//        }
 
         fun getInstance(context: android.content.Context): NewAppDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -30,6 +42,7 @@ abstract class NewAppDatabase : RoomDatabase() {
                 )
                     .createFromAsset("myapp_database.db") // берем из assets
                     .fallbackToDestructiveMigration()
+//                    .addMigrations(MIGRATION_6_7)
 
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onOpen(db: SupportSQLiteDatabase) {

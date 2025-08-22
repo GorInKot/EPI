@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.App
 import com.example.epi.DataBase.ExtraDatabase.ExtraDatabaseHelper
+import com.example.epi.DataBase.PlanValue.PlanValueRepository
 import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
@@ -38,7 +39,8 @@ class ArrangementFragment : Fragment() {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
             (requireActivity().application as App).userRepository,
-            requireActivity().applicationContext
+            requireActivity().applicationContext,
+            (requireActivity().application as App).planValueRepository,
         )
     }
 

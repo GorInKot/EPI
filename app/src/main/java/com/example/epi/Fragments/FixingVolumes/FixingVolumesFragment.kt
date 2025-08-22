@@ -35,7 +35,8 @@ class FixingVolumesFragment : Fragment() {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
             (requireActivity().application as App).userRepository,
-            requireActivity().applicationContext
+            requireActivity().applicationContext,
+            (requireActivity().application as App).planValueRepository,
         )
     }
     private lateinit var adapter: FixVolumesRowAdapter
@@ -70,7 +71,7 @@ class FixingVolumesFragment : Fragment() {
         }
 
         // Подписка на списки автодополнения
-        sharedViewModel.fixWorkType.observe(viewLifecycleOwner) { workTypeList ->
+        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypeList ->
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
@@ -184,10 +185,12 @@ class FixingVolumesFragment : Fragment() {
         editFact.setText(row.fact)
 
         // Настройка автодополнения
-        sharedViewModel.fixWorkType.value?.let { workTypeList ->
+        sharedViewModel.controlsComplexOfWork.value?.let { workTypeList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeList)
             editWorkProject.setAdapter(adapter)
-            editWorkProject.setOnClickListener { editWorkProject.showDropDown() }
+            editWorkProject.setOnClickListener {
+                editWorkProject.showDropDown()
+            }
         }
         sharedViewModel.fixMeasures.value?.let { measuresList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, measuresList)

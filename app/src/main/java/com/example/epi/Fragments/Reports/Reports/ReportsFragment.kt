@@ -51,7 +51,8 @@ class ReportsFragment : Fragment() {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
             (requireActivity().application as App).userRepository,
-            requireActivity().applicationContext
+            requireActivity().applicationContext,
+            (requireActivity().application as App).planValueRepository,
         )
     }
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())

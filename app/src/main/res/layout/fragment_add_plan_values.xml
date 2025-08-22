@@ -243,13 +243,13 @@
                     android:minHeight="56dp"
                     android:paddingBottom="12dp"
                     android:textSize="14sp"
-                    android:inputType="text"
                     android:textColor="@color/color_black"
                     android:importantForAccessibility="yes"
                     android:gravity="center_vertical"
                     android:padding="10dp"
                     android:hint="Укажите Плановое значение"
                     android:textColorHint="@color/background"
+                    android:inputType="numberDecimal"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

@@ -37,7 +37,8 @@ class ControlFragment : Fragment() {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
             (requireActivity().application as App).userRepository,
-            requireActivity().applicationContext
+            requireActivity().applicationContext,
+            (requireActivity().application as App).planValueRepository,
         )
     }
 
@@ -105,7 +106,7 @@ class ControlFragment : Fragment() {
             }
         }
 
-        sharedViewModel.controlsWorkTypes.observe(viewLifecycleOwner) { workTypesList ->
+        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypesList ->
             if (!workTypesList.isNullOrEmpty()) {
                 val adapter = ArrayAdapter(
                     requireContext(),

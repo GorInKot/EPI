@@ -173,7 +173,12 @@
         <action
             android:id="@+id/action_FixVolumesFragment_to_AddPlanValue"
             app:destination="@id/AddPlanValue"
-            />
+            >
+            <argument
+                android:name="objectId"
+                app:argType="string"
+                />
+        </action>
     </fragment>
 
     <!-- Фрагмент Добавление Плановых значений: AddPlanValue -->
@@ -183,6 +188,10 @@
         android:label="AddPlanValue"
         tools:layout="@layout/fragment_add_plan_values"
         >
+        <argument
+            android:name="objectId"
+            app:argType="string"
+            />
         <!-- Навигация к фрагменту "Фиксация объемов" -->
         <action
             android:id="@+id/action_AddPlanValue_to_FixFragment"
