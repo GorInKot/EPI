@@ -12,7 +12,7 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     companion object {
         private const val DATABASE_NAME = "extra_db.db"
-        private const val DATABASE_VERSION = 6 // Увеличена версия для новой структуры
+        private const val DATABASE_VERSION = 6
 
         private val TAG = "Tagg-ExtraDatabaseHelper"
     }
@@ -560,5 +560,47 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         return contractId
     }
+
+    // Метод для таблицы ComplexOfWork
+    fun getComplexOfWorks(): List<String> {
+        val db = readableDatabase
+        val complexOfWorks = mutableListOf<String>()
+        val cursor = db.rawQuery("SELECT name FROM ComplexOfWork", null)
+        try {
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                complexOfWorks.add(name)
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        Log.d(TAG, "ComplexOfWorks: $complexOfWorks")
+        return complexOfWorks
+    }
+
+    // Метод для таблицы TypesOfWork
+    fun getTypesOfWork(complexOfWorkName: String): List<String> {
+        val db = readableDatabase
+        val typesOfWork = mutableListOf<String>()
+        val cursor = db.rawQuery(
+            "SELECT t.name FROM TypesOfWork t " +
+                    "JOIN ComplexOfWork c ON t.complexofwork_id = c.id " +
+                    "WHERE c.name = ?",
+            arrayOf(complexOfWorkName)
+        )
+        try {
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                typesOfWork.add(name)
+            }
+        } finally {
+            cursor.close()
+            db.close()
+        }
+        Log.d(TAG, "TypesOfWork for $complexOfWorkName: $typesOfWork")
+        return typesOfWork
+    }
+
 
 }

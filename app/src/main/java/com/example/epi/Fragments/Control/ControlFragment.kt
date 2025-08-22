@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,13 @@ class ControlFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
-            (requireActivity().application as App).userRepository
+            (requireActivity().application as App).userRepository,
+            requireActivity().applicationContext
         )
+    }
+
+    companion object {
+        private val TAG = "Tagg-ControlFragment"
     }
 
     private lateinit var adapter: ControlRowAdapter
@@ -99,18 +105,24 @@ class ControlFragment : Fragment() {
             }
         }
 
-        sharedViewModel.controlWorkTypes.observe(viewLifecycleOwner) { workTypesList ->
-            val adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                workTypesList
-            )
-            binding.AutoCompleteTextViewType.setAdapter(adapter)
-            binding.AutoCompleteTextViewType.inputType = InputType.TYPE_NULL
-            binding.AutoCompleteTextViewType.keyListener = null
-            binding.AutoCompleteTextViewType.setOnClickListener {
-                binding.AutoCompleteTextViewType.showDropDown()
+        sharedViewModel.controlsWorkTypes.observe(viewLifecycleOwner) { workTypesList ->
+            if (!workTypesList.isNullOrEmpty()) {
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    workTypesList
+                )
+                binding.AutoCompleteTextViewType.setAdapter(adapter)
+                binding.AutoCompleteTextViewType.inputType = InputType.TYPE_NULL
+                binding.AutoCompleteTextViewType.keyListener = null
+                binding.AutoCompleteTextViewType.setOnClickListener {
+                    binding.AutoCompleteTextViewType.showDropDown()
+                }
+            }else {
+                Toast.makeText(requireContext(), "Не удалось загрузить список видов работ", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Не удалось загрузить список видов работ")
             }
+
         }
 
         // Добавить строку

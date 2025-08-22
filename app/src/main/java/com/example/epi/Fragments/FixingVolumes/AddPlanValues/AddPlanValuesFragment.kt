@@ -23,7 +23,8 @@ class AddPlanValuesFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
-            (requireActivity().application as App).userRepository
+            (requireActivity().application as App).userRepository,
+            requireActivity().applicationContext
         )
     }
 

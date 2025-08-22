@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.epi.DataBase.ExtraDatabase.ExtraDatabaseHelper
 import com.example.epi.DataBase.Report.Report
 import com.example.epi.DataBase.Report.ReportRepository
 import com.example.epi.DataBase.User.User
@@ -35,7 +36,8 @@ import kotlin.contracts.contract
 
 class SharedViewModel(
     private val reportRepository: ReportRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val context: Context
 ) : ViewModel() {
     
     companion object {
@@ -186,14 +188,24 @@ class SharedViewModel(
         )
     )
 
-    val controlWorkTypes = MutableLiveData<List<String>>(
-        listOf(
-            "Комплекс работ 1", "Комплекс работ 2", "Комплекс работ 3",
-            "Комплекс работ 4", "Комплекс работ 5", "Комплекс работ 6",
-            "Комплекс работ 7", "Комплекс работ 7", "Комплекс работ 9",
-            "Комплекс работ 10", "Комплекс работ 11", "Комплекс работ 12"
-        )
-    )
+    // Old ControlWorkTypes
+//    val controlWorkTypes = MutableLiveData<List<String>>(
+//        listOf(
+//            "Комплекс работ 1", "Комплекс работ 2", "Комплекс работ 3",
+//            "Комплекс работ 4", "Комплекс работ 5", "Комплекс работ 6",
+//            "Комплекс работ 7", "Комплекс работ 7", "Комплекс работ 9",
+//            "Комплекс работ 10", "Комплекс работ 11", "Комплекс работ 12"
+//        )
+//    )
+
+    // New ControlWorkTypes
+    private val _controlsWorkTypes = MutableLiveData<List<String>>()
+    val controlsWorkTypes: LiveData<List<String>> get() = _controlsWorkTypes
+
+    // Инициализация extra_db.db
+    private val extraDbHelper: ExtraDatabaseHelper by lazy {
+        ExtraDatabaseHelper(context = context.applicationContext)
+    }
     //endregion
 
     // Данные из FixVolumesFragment
@@ -224,11 +236,29 @@ class SharedViewModel(
     init {
         //
         updateDateTime()
+        loadComplexOfWorks()
 
         // загрузка всех отчетов
         viewModelScope.launch {
             reportRepository.getAllReports().collectLatest { reports ->
                 _reports.value = reports
+            }
+        }
+    }
+
+    fun loadComplexOfWorks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val complexOfWorks = extraDbHelper.getComplexOfWorks()
+                withContext(Dispatchers.Main) {
+                    _controlsWorkTypes.value = complexOfWorks
+                    Log.d(TAG, "Loaded ComplexOfWorks: $complexOfWorks")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading ComplexOfWorks: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных из ComplexOfWork: ${e.message}")
+                }
             }
         }
     }

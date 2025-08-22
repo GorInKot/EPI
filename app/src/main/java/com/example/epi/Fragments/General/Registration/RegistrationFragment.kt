@@ -22,7 +22,8 @@ class RegistrationFragment : Fragment() {
     private val viewModel: SharedViewModel by activityViewModels {
         SharedViewModelFactory(
             (requireActivity().application as App).reportRepository,
-            (requireActivity().application as App).userRepository
+            (requireActivity().application as App).userRepository,
+            requireActivity().applicationContext
         )
     }
     private val maxNumberLength = 4
