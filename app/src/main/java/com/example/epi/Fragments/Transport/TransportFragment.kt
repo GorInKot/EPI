@@ -558,6 +558,22 @@ class TransportFragment : Fragment() {
         layout.error = errorMessage
     }
 
+    // Старая версия
+//    private fun setFieldsEnabled(enabled: Boolean) {
+//        binding.autoCompleteExecutor.isEnabled = enabled // Исполнитель по транспорту
+//        binding.autoCompleteContractTransport.isEnabled = enabled // Договор по транспорту
+//        binding.textInputEditTextStateNumber.isEnabled = enabled // Госномер
+//        binding.btnStartDate.isEnabled = enabled // Кнопка - Дата начала поездкт
+//        binding.btnStartTime.isEnabled = enabled // Кнопка - Время начала поездки
+//        binding.btnEndDate.isEnabled = enabled // Кнопка - Дата завершения поездки
+//        binding.btnEndTime.isEnabled = enabled // Кнопка - Время завершения поездки
+//        binding.textInputEditTextStartDate.isEnabled = false
+//        binding.textInputEditTextEndDate.isEnabled = false
+//        binding.textInputEditTextStartDateHours.isEnabled = false
+//        binding.textInputEditTextEndDateHours.isEnabled = false
+//    }
+
+    // Новая версия
     private fun setFieldsEnabled(enabled: Boolean) {
         binding.autoCompleteExecutor.isEnabled = enabled
         binding.autoCompleteContractTransport.isEnabled = enabled
@@ -566,12 +582,98 @@ class TransportFragment : Fragment() {
         binding.btnStartTime.isEnabled = enabled
         binding.btnEndDate.isEnabled = enabled
         binding.btnEndTime.isEnabled = enabled
-        binding.textInputEditTextStartDate.isEnabled = false
-        binding.textInputEditTextEndDate.isEnabled = false
-        binding.textInputEditTextStartDateHours.isEnabled = false
-        binding.textInputEditTextEndDateHours.isEnabled = false
+        binding.textInputEditTextStartDate.isEnabled = enabled
+        binding.textInputEditTextEndDate.isEnabled = enabled
+        binding.textInputEditTextStartDateHours.isEnabled = enabled
+        binding.textInputEditTextEndDateHours.isEnabled = enabled
+
+        // Визуальная индикация
+        // TODO - Поработать с цветами для темной и светлой тем
+        val textColor = if (enabled) ContextCompat.getColor(requireContext(), R.color.color_black) else ContextCompat.getColor(requireContext(), R.color.color_two)
+        binding.autoCompleteExecutor.setTextColor(textColor)
+        binding.autoCompleteContractTransport.setTextColor(textColor)
+        binding.textInputEditTextStateNumber.setTextColor(textColor)
+        binding.textInputEditTextStartDate.setTextColor(textColor)
+        binding.textInputEditTextEndDate.setTextColor(textColor)
+        binding.textInputEditTextStartDateHours.setTextColor(textColor)
+        binding.textInputEditTextEndDateHours.setTextColor(textColor)
     }
 
+    // Старый код
+//    private fun loadTransportData() {
+//        sharedViewModel.selectedContract.observe(viewLifecycleOwner) { contract ->
+//            Log.d("Tagg-Transport", "Selected contract: $contract")
+//            if (contract != null) {
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    val dbHelper = ExtraDatabaseHelper(requireContext())
+//                    val contractId = dbHelper.getContractIdByName(contract) ?: contract // Fallback if mapping fails
+//                    Log.d("Tagg-Transport", "Mapped contract ID: $contractId")
+//                    val executors = withContext(Dispatchers.IO) {
+//                        dbHelper.getTransportContractExecutorsByContract(contractId)
+//                    }
+//                    val names = withContext(Dispatchers.IO) {
+//                        dbHelper.getTransportContractNamesByContract(contractId)
+//                    }
+//                    Log.d("Tagg-Transport", "Executors loaded: $executors")
+//                    Log.d("Tagg-Transport", "Names loaded: $names")
+//
+//                    if (executors.isEmpty()) {
+//                        Toast.makeText(requireContext(), "Список исполнителей пуст", Toast.LENGTH_SHORT).show()
+//                        Log.d("Tagg-Transport", "Список исполнителей пуст для контракта: $contract")
+//                    }
+//                    val executorAdapter = ArrayAdapter(
+//                        requireContext(),
+//                        android.R.layout.simple_spinner_dropdown_item,
+//                        executors
+//                    )
+//                    binding.autoCompleteExecutor.setAdapter(executorAdapter)
+//                    binding.autoCompleteExecutor.inputType = InputType.TYPE_NULL
+//                    binding.autoCompleteExecutor.keyListener = null
+//                    binding.autoCompleteExecutor.setOnTouchListener { _, _ ->
+//                        if (binding.autoCompleteExecutor.isEnabled) {
+//                            binding.autoCompleteExecutor.showDropDown()
+//                        }
+//                        false
+//                    }
+//                    binding.autoCompleteExecutor.setOnItemClickListener { parent, _, position, _ ->
+//                        val selectedExecutor = parent.getItemAtPosition(position).toString()
+//                        sharedViewModel.setTransportExecutorName(selectedExecutor)
+//                        Log.d("Tagg-Transport", "Selected executor: $selectedExecutor")
+//                    }
+//
+//                    if (names.isEmpty()) {
+//                        Toast.makeText(requireContext(), "Список контрактов пуст", Toast.LENGTH_SHORT).show()
+//                        Log.d("Tagg-Transport", "Список контрактов пуст для контракта: $contract")
+//                    }
+//                    val nameAdapter = ArrayAdapter(
+//                        requireContext(),
+//                        android.R.layout.simple_spinner_dropdown_item,
+//                        names
+//                    )
+//                    binding.autoCompleteContractTransport.setAdapter(nameAdapter)
+//                    binding.autoCompleteContractTransport.inputType = InputType.TYPE_NULL
+//                    binding.autoCompleteContractTransport.keyListener = null
+//                    binding.autoCompleteContractTransport.setOnTouchListener { _, _ ->
+//                        if (binding.autoCompleteContractTransport.isEnabled) {
+//                            binding.autoCompleteContractTransport.showDropDown()
+//                        }
+//                        false
+//                    }
+//                    binding.autoCompleteContractTransport.setOnItemClickListener { parent, _, position, _ ->
+//                        val selectedName = parent.getItemAtPosition(position).toString()
+//                        sharedViewModel.setTransportContractTransport(selectedName)
+//                        Log.d("Tagg-Transport", "Selected contract transport: $selectedName")
+//                    }
+//                }
+//            } else {
+//                Log.d("Tagg-Transport", "Нет выбранного контракта")
+//                binding.autoCompleteExecutor.setAdapter(null)
+//                binding.autoCompleteContractTransport.setAdapter(null)
+//            }
+//        }
+//    }
+
+    // Новый код
     private fun loadTransportData() {
         sharedViewModel.selectedContract.observe(viewLifecycleOwner) { contract ->
             Log.d("Tagg-Transport", "Selected contract: $contract")
@@ -608,9 +710,11 @@ class TransportFragment : Fragment() {
                         false
                     }
                     binding.autoCompleteExecutor.setOnItemClickListener { parent, _, position, _ ->
-                        val selectedExecutor = parent.getItemAtPosition(position).toString()
-                        sharedViewModel.setTransportExecutorName(selectedExecutor)
-                        Log.d("Tagg-Transport", "Selected executor: $selectedExecutor")
+                        if (binding.autoCompleteExecutor.isEnabled) {
+                            val selectedExecutor = parent.getItemAtPosition(position).toString()
+                            sharedViewModel.setTransportExecutorName(selectedExecutor)
+                            Log.d("Tagg-Transport", "Selected executor: $selectedExecutor")
+                        }
                     }
 
                     if (names.isEmpty()) {
@@ -632,9 +736,11 @@ class TransportFragment : Fragment() {
                         false
                     }
                     binding.autoCompleteContractTransport.setOnItemClickListener { parent, _, position, _ ->
-                        val selectedName = parent.getItemAtPosition(position).toString()
-                        sharedViewModel.setTransportContractTransport(selectedName)
-                        Log.d("Tagg-Transport", "Selected contract transport: $selectedName")
+                        if (binding.autoCompleteContractTransport.isEnabled) {
+                            val selectedName = parent.getItemAtPosition(position).toString()
+                            sharedViewModel.setTransportContractTransport(selectedName)
+                            Log.d("Tagg-Transport", "Selected contract transport: $selectedName")
+                        }
                     }
                 }
             } else {
