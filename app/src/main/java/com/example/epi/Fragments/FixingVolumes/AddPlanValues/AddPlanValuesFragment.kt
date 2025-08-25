@@ -1,6 +1,7 @@
 package com.example.epi.Fragments.FixingVolumes.AddPlanValues
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,10 @@ class AddPlanValuesFragment : Fragment() {
         )
     }
 
+    companion object {
+        private val TAG = "Tagg-APVF"
+    }
+
     private val args by lazy {
         AddPlanValuesFragmentArgs.fromBundle(requireArguments())
     }
@@ -63,7 +68,9 @@ class AddPlanValuesFragment : Fragment() {
                     val selectedComplex = parent.getItemAtPosition(position) as String
                     sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
                 }
-                binding.autoCompleteComplexOfWorks.setOnClickListener { binding.autoCompleteComplexOfWorks.showDropDown() }
+                binding.autoCompleteComplexOfWorks.setOnClickListener {
+                    binding.autoCompleteComplexOfWorks.showDropDown()
+                }
             }
         }
 
@@ -99,6 +106,7 @@ class AddPlanValuesFragment : Fragment() {
             val complexWork = binding.autoCompleteComplexOfWorks.text.toString().trim()
             val workType = binding.autoCompleteTypeOfWork.text.toString().trim()
             val planValueStr = binding.TextInputEditTextPlanValues.text.toString().trim()
+            val measures = binding.autoCompleteMeasures.text.toString().trim()
             val objectId = args.objectId
 
             if (complexWork.isNotEmpty() && workType.isNotEmpty() && planValueStr.isNotEmpty()) {
@@ -108,8 +116,10 @@ class AddPlanValuesFragment : Fragment() {
                         objectId = objectId,
                         complexWork = complexWork,
                         typeOfWork = workType,
-                        planValue = planValue
+                        planValue = planValue,
+                        measures = measures ?: "Не указано"
                     )
+                    Log.d(TAG, "Added parameters:\nObjectId: ${objectId}\nComplexOfWork:${complexWork}\nTypeOfWork:${workType}\nPlanValue:${planValue}\nMeasures:${measures}")
                     CoroutineScope(Dispatchers.Main).launch {
                         sharedViewModel.addPlanValue(newPlanValue)
                         Toast.makeText(requireContext(), "Плановое значение добавлено", Toast.LENGTH_SHORT).show()

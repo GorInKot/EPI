@@ -150,7 +150,13 @@ class FixingVolumesFragment : Fragment() {
 
         // Кнопка "Добавить плановые значения
         binding.btnAddPlanValues.setOnClickListener {
-            findNavController().navigate(R.id.action_FixVolumesFragment_to_AddPlanValue)
+            val objectId = sharedViewModel.selectedObject.value ?: run {
+                Toast.makeText(requireContext(), "Не выбран объект", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
+            findNavController().navigate(action)
+//            findNavController().navigate(R.id.action_FixVolumesFragment_to_AddPlanValue)
         }
     }
 

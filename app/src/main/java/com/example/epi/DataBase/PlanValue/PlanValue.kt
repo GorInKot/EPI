@@ -9,5 +9,6 @@ data class PlanValue(
     val objectId: String, // Ссылка на объект из ArrangementFragment (selectedObject в sharedViewModel)
     val complexWork: String, // Комплекс работ
     val typeOfWork: String, // Вид работ
-    val planValue: Double // Значение План
-)
+    val planValue: Double, // Значение План
+    val measures: String
+    )
