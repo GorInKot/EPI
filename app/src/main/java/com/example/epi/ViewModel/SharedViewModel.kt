@@ -1186,6 +1186,13 @@ class SharedViewModel(
     private val _selectedTypeOfWork = MutableLiveData<String?>()
     val selectedTypeOfWork: LiveData<String?> get() = _selectedTypeOfWork
 
+    private fun isPasswordValid(password: String): Boolean {
+        return password.length >= 6 &&
+                password.any { it.isUpperCase() && it.isLetter() } && // Минимум 1 заглавная буква
+                password.any { it.isDigit() } && // Минимум 1 цифра
+                password.all { it.isLetterOrDigit() } // Только цифры и буквы
+    }
+
     fun validateAuthInputs(
         number: String?,
         password: String?,
@@ -1195,12 +1202,15 @@ class SharedViewModel(
 
         if (number.isNullOrBlank()) {
             errors["number"] = "Введите уникальный номер сотрудника"
-        } else if (!number.all { it.isDigit() } || number.length > 4) {
-            errors["number"] = "Уникальный номер должен содержать 4 цифры"
+        } else if (!number.all { it.isDigit() } || number.length != 4) {
+            errors["number"] = "Уникальный номер должен содержать ровно 4 цифры"
         }
 
-        if (password.isNullOrBlank() || password.length != 12) {
-            errors["password"] = "Введите корректный пароль"
+        if (password.isNullOrBlank()) {
+            errors["password"] = "Введите пароль"
+        } else if (!isPasswordValid(password)) {
+            errors["password"] = "Пароль должен содержать не менее 6 символов, " +
+                    "хотя бы 1 заглавную букву, 1 цифру и только английские буквы/цифры"
         }
 
         if (typeOfWork.isNullOrBlank()) {
@@ -1209,12 +1219,6 @@ class SharedViewModel(
 
         return errors
     }
-
-    // region EmployeeNumber
-    // Добавляем поле для хранения employeeNumber текущего пользователя
-    private val _currentEmployeeNumber = MutableLiveData<String?>()
-    val currentEmployeeNumber: LiveData<String?> get() = _currentEmployeeNumber
-    // endregion
 
     fun loginUser(employeeNumber: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -1225,7 +1229,7 @@ class SharedViewModel(
                 if (user != null && BCrypt.checkpw(password, user.password)) {
                     withContext(Dispatchers.Main) {
                         _currentUser.value = user
-                        _currentEmployeeNumber.value = employeeNumber // сохраняем уникальный номер сотрудника
+                        _currentEmployeeNumber.value = employeeNumber
                         _authResult.value = AuthResult.Success("Добро пожаловать, ${user.firstName} ${user.thirdName}!")
                     }
                 } else {
@@ -1245,6 +1249,12 @@ class SharedViewModel(
         }
     }
 
+    // region EmployeeNumber
+    // Добавляем поле для хранения employeeNumber текущего пользователя
+    private val _currentEmployeeNumber = MutableLiveData<String?>()
+    val currentEmployeeNumber: LiveData<String?> get() = _currentEmployeeNumber
+    // endregion
+
     fun setSelectedTypeOfWork(typeOfWork: String?) {
         _selectedTypeOfWork.value = typeOfWork
     }
@@ -1262,64 +1272,43 @@ class SharedViewModel(
 
     // ------------ Блок Регистрации ------------
     // region Registration Block
+    fun validateRegistrationInputs(
+        secondName: String?,
+        firstName: String?,
+        thirdName: String?,
+        number: String?,
+        branch: String?,
+        pu: String?,
+        password: String?,
+        confirmPassword: String?
+    ): Map<String, String?> {
+        val errors = mutableMapOf<String, String?>()
 
-    // endregion
+        if (secondName.isNullOrBlank()) errors["secondName"] = "Введите фамилию"
+        if (firstName.isNullOrBlank()) errors["firstName"] = "Введите имя"
+        if (thirdName.isNullOrBlank()) errors["thirdName"] = "Введите отчество"
+        if (number.isNullOrBlank()) errors["number"] = "Введите табельный номер"
+        else if (number.length != 4 || !number.all { it.isDigit() }) errors["number"] = "Табельный номер должен содержать ровно 4 цифры"
 
-    // LiveData для данных текущего пользователя
-    private val _currentUser = MutableLiveData<User?>(null)
-    val currentUser: LiveData<User?> get() = _currentUser
+        if (branch.isNullOrBlank()) errors["branch"] = "Выберите филиал"
+        if (pu.isNullOrBlank()) errors["pu"] = "Выберите ПУ"
 
-
-
-
-
-    // Загрузка данных пользователя
-    fun loadCurrentUser(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                // Получаем employeeNumber из SharedPreferences
-                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-                val employeeNumber = sharedPreferences.getString("current_user", null)
-                if (employeeNumber != null) {
-                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
-                    withContext(Dispatchers.Main) {
-                        _currentUser.value = user
-                        Log.d(TAG, "Loaded user: $user")
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e(TAG, "No employeeNumber found in SharedPreferences")
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
-                    Log.e(TAG, "Error loading user: ${e.message}", e)
-                }
-            }
+        if (password.isNullOrBlank()) {
+            errors["password"] = "Пароль не может быть пустым"
+        } else if (!isPasswordValid(password)) {
+            errors["password"] = "Пароль должен содержать не менее 6 символов, " +
+                    "хотя бы 1 заглавную букву, 1 цифру и только английские буквы/цифры"
         }
+
+        if (confirmPassword.isNullOrBlank()) {
+            errors["confirmPassword"] = "Подтвердите пароль"
+        } else if (password != confirmPassword) {
+            errors["confirmPassword"] = "Пароли не совпадают"
+        }
+
+        return errors
     }
-//
-//    // -------- Авторизация и Регистрация --------
-//
-//    // Авторизация
-//
-//    // LiveData для результатов авторизации
 
-
-//
-//    // Очистка сессии (выход из аккаунта)
-    fun logout() {
-        _currentUser.value = null
-        _authResult.value = AuthResult.Idle
-        clearAllData()
-    }
-//
-
-//
-//
-//    // Регистрация
     fun registerUser(
         secondName: String,
         firstName: String,
@@ -1362,39 +1351,46 @@ class SharedViewModel(
             }
         }
     }
+    // endregion
+
+    // LiveData для данных текущего пользователя
+    private val _currentUser = MutableLiveData<User?>(null)
+    val currentUser: LiveData<User?> get() = _currentUser
 
 
-    fun validateRegistrationInputs(
-        secondName: String?,
-        firstName: String?,
-        thirdName: String?,
-        number: String?,
-        branch: String?,
-        pu: String?,
-        password: String?,
-        confirmPassword: String?
-    ): Map<String, String?> {
-        val errors = mutableMapOf<String, String?>()
-
-        if (secondName.isNullOrBlank()) errors["secondName"] = "Введите фамилию"
-        if (firstName.isNullOrBlank()) errors["firstName"] = "Введите имя"
-        if (thirdName.isNullOrBlank()) errors["thirdName"] = "Введите отчество"
-        // Отчество необязательное, поэтому проверка отсутствует
-        if (number.isNullOrBlank()) errors["number"] = "Введите табельный номер"
-        else if (number.length > 4 || !number.all { it.isDigit() }) errors["number"] = "Табельный номер должен содержать до 4 цифр"
-
-        if (branch.isNullOrBlank()) errors["branch"] = "Выберите филиал"
-        if (pu.isNullOrBlank()) errors["pu"] = "Выберите ПУ"
-
-        if (password.isNullOrBlank()) {
-            errors["password"] = "Пароль не может быть пустым"
-        } else if (password.length < 6) {
-            errors["password"] = "Пароль должен содержать не менее 6 символов"
-        } else if (password != confirmPassword) {
-            errors["confirmPassword"] = "Пароли не совпадают"
+    // Загрузка данных пользователя
+    fun loadCurrentUser(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Получаем employeeNumber из SharedPreferences
+                val sharedPreferences = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                val employeeNumber = sharedPreferences.getString("current_user", null)
+                if (employeeNumber != null) {
+                    val user = userRepository.getUserByEmployeeNumber(employeeNumber)
+                    withContext(Dispatchers.Main) {
+                        _currentUser.value = user
+                        Log.d(TAG, "Loaded user: $user")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e(TAG, "No employeeNumber found in SharedPreferences")
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных пользователя: ${e.message}")
+                    Log.e(TAG, "Error loading user: ${e.message}", e)
+                }
+            }
         }
+    }
 
-        return errors
+//    // Очистка сессии (выход из аккаунта)
+    fun logout() {
+        _currentUser.value = null
+        _authResult.value = AuthResult.Idle
+        clearAllData()
     }
 }
 

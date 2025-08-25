@@ -22,7 +22,7 @@ import kotlin.getValue
 class AuthFragment : Fragment() {
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
-    private val maxPasswordLength = 12
+    private val minPasswordLength = 6
     private var isLoggingIn = false
 
     private val viewModel: SharedViewModel by activityViewModels {
@@ -32,6 +32,10 @@ class AuthFragment : Fragment() {
             requireActivity().applicationContext,
             (requireActivity().application as App).planValueRepository,
         )
+    }
+
+    companion object {
+        private val TAG = "Tagg-Auth"
     }
 
     override fun onCreateView(
@@ -47,7 +51,7 @@ class AuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textInputEditTextPassword.filters = arrayOf(android.text.InputFilter.LengthFilter(maxPasswordLength))
+//        binding.textInputEditTextPassword.filters = arrayOf(android.text.InputFilter.LengthFilter(minPasswordLength))
 
         // Автозаполнение уникального номера (логина) и пароля
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -73,7 +77,7 @@ class AuthFragment : Fragment() {
         binding.autoCompleteWorkType.setOnItemClickListener { _, _, position, _ ->
             val selectedType = typeOfWorks[position]
             viewModel.setSelectedTypeOfWork(selectedType)
-            Log.d("Tagg-Auth", "Выбран тип работы: $selectedType")
+            Log.d(TAG, "Выбран тип работы: $selectedType")
         }
     }
 
@@ -82,7 +86,7 @@ class AuthFragment : Fragment() {
             when (result) {
                 is SharedViewModel.AuthResult.Success -> {
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
-                    Log.d("Tagg-Auth", "result.message: ${result.message}")
+                    Log.d(TAG, "result.message: ${result.message}")
                     binding.textInputEditTextNumber.text?.clear()
                     binding.textInputEditTextPassword.text?.clear()
                     findNavController().navigate(R.id.StartFragment)
@@ -111,10 +115,10 @@ class AuthFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
             if(isLoggingIn) return@setOnClickListener
             if (validateInputs()) {
-                Log.d("Tagg-Auth", "Валидация пройдена")
+                Log.d(TAG, "Валидация пройдена")
                 loginUser()
             } else {
-                Log.d("Tagg-Auth",
+                Log.d(TAG,
                     "Валидация НЕ пройдена: ${viewModel.validateAuthInputs(
                     binding.textInputEditTextNumber.text?.toString()?.trim(),
                     binding.textInputEditTextPassword.text?.toString()?.trim(),
@@ -154,7 +158,7 @@ class AuthFragment : Fragment() {
     private fun loginUser() {
         val employeeNumber = binding.textInputEditTextNumber.text.toString().trim()
         val password = binding.textInputEditTextPassword.text.toString().trim()
-        Log.d("Tagg-Auth", "Попытка входа для сотрудника с номером: $employeeNumber")
+        Log.d(TAG, "Попытка входа для сотрудника с номером: $employeeNumber")
         viewModel.loginUser(employeeNumber, password)
     }
 

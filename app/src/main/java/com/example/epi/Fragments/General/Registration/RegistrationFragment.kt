@@ -57,6 +57,10 @@ class RegistrationFragment : Fragment() {
         )
     )
 
+    companion object {
+        private val TAG = "Tagg-Registration"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -94,13 +98,13 @@ class RegistrationFragment : Fragment() {
             findNavController().navigate(R.id.action_RegistrationFragment_to_AuthFragment)
         }
         binding.btnRegister.setOnClickListener {
-            Log.d("Tagg", "Нажали кнопку регистрации")
+            Log.d(TAG, "Нажали кнопку регистрации")
             if (validateInputs()) {
-                Log.d("Tagg", "Успешная регистрация")
+                Log.d(TAG, "Успешная регистрация")
                 registerUser()
                 findNavController().navigate(R.id.action_RegistrationFragment_to_AuthFragment)
             } else {
-                Log.d("Tagg", "Ошибка регистрации")
+                Log.d(TAG, "Ошибка регистрации")
             }
         }
     }
@@ -139,7 +143,7 @@ class RegistrationFragment : Fragment() {
 
         return errors.isEmpty()
     }
-//
+
     private fun registerUser() {
         val secondName = binding.textInputEditTextSecondName.text.toString().trim()
         val firstName = binding.textInputEditTextFirstName.text.toString().trim()
@@ -150,7 +154,7 @@ class RegistrationFragment : Fragment() {
         val pu = binding.autoCompleteTextViewPU.text.toString().trim()
         val password = binding.textInputEditTextPassword.text.toString().trim()
 
-        Log.d("Tagg", "Attempting registration with employeeNumber: $number")
+        Log.d(TAG, "Попытка регистрации для сотрудника с номером: $number")
         viewModel.registerUser(secondName, firstName, thirdName, number, branch, pu, password)
     }
 

@@ -13,7 +13,7 @@ data class User(
     val id: Int = 0,
     val secondName: String, // Фамилия
     val firstName: String, // Имя
-    val thirdName: String?, // Отчество (может быть необязательным)
+    val thirdName: String?, // Отчество
     val employeeNumber: String, // Уникальный номер сотрудника
     val branch: String, // Филиал
     val pu: String, // ПУ
