@@ -124,10 +124,28 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_bottom_of_equipmentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="textInputLayout_equipmentName"
+            />
+
+        <CheckBox
+            android:id="@+id/checkBoxManualEquipmentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Прибор / Оборудование отсутствует"
+            style="@style/checkBox"
+            app:layout_constraintTop_toBottomOf="@id/barrier_bottom_of_equipmentName"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Type"
             android:text="Комплекс работ"
-            app:layout_constraintTop_toBottomOf="@id/tv_equipmentName"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxManualEquipmentName"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -139,7 +157,7 @@
             android:id="@+id/textInputLayout_Type"
             style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_equipmentName"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxManualEquipmentName"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:endIconMode="dropdown_menu"
             android:layout_marginTop="24dp"
@@ -182,7 +200,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_orderNumber"
             android:text="Получить № предписания"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             style="@style/SimpleButton"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/tv_orderNumber"
@@ -195,7 +213,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout_Report"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             style="@style/ArrangementText"
             android:gravity="center"
             android:maxLines="1"
@@ -243,7 +261,7 @@
             android:text="Замечания к документации"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_Report"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Report"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             style="@style/ArrangementText"
@@ -327,7 +345,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Вид работ"
+                android:text="Комплекс\nработ"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

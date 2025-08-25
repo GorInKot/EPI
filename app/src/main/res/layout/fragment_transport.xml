@@ -72,16 +72,6 @@
             android:maxLines="1"
             />
 
-        <!--  Специалист СК  -->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_Specialist"
-            android:text="Специалист СК:"
-            style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
-            android:maxLines="1"
-            />
-
         <!-- Чекбокс -->
         <CheckBox
             android:id="@+id/chBoxM_Customer"
@@ -92,46 +82,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
             android:layout_marginTop="12dp"
             />
-
-        <!--  Заголовок: Договор  -->
-<!--        <com.google.android.material.textview.MaterialTextView-->
-<!--            android:id="@+id/tv_Contract"-->
-<!--            android:text="Договор СК"-->
-<!--            style="@style/ArrangementText"-->
-<!--            app:layout_constraintStart_toEndOf="@id/guideline_middle"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/guideline_right"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/chBoxM_Customer"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            />-->
-
-<!--        &lt;!&ndash;  Текстовое поле: Договор  &ndash;&gt;-->
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/textInput_Layout_Contract"-->
-<!--            android:layout_marginEnd="56dp"-->
-<!--            android:layout_marginStart="56dp"-->
-<!--            android:layout_marginBottom="0dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            style="@style/TextInputLayout"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/tv_Contract"-->
-<!--            app:layout_constraintStart_toEndOf="@id/guideline_middle"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/guideline_right"-->
-<!--            >-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/textInput_EditText_Contract"-->
-<!--                android:gravity="center|center_vertical"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:paddingStart="10dp"-->
-<!--                android:paddingEnd="10dp"-->
-<!--                android:minHeight="56dp"-->
-<!--                android:paddingBottom="12dp"-->
-<!--                android:textSize="14sp"-->
-<!--                android:importantForAccessibility="yes"-->
-<!--                android:padding="10dp"-->
-<!--                android:textColor="@color/color_black"-->
-<!--                />-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <!--  Заголовок: Исполнитель по транспорту  -->
         <com.google.android.material.textview.MaterialTextView
