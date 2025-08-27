@@ -2,6 +2,7 @@ package com.example.epi
 
 import android.app.Application
 import com.example.epi.DataBase.NewAppDatabase
+import com.example.epi.DataBase.OrderNumber.OrderNumberRepository
 import com.example.epi.DataBase.PlanValue.PlanValueRepository
 import com.example.epi.DataBase.Report.ReportRepository
 import com.example.epi.DataBase.User.UserRepository
@@ -18,5 +19,9 @@ class App : Application() {
 
     val planValueRepository: PlanValueRepository by lazy {
         PlanValueRepository(NewAppDatabase.getInstance(this).planValueDao())
+    }
+
+    val orderNumberRepository: OrderNumberRepository by lazy {
+        OrderNumberRepository(NewAppDatabase.getInstance(this).orderNumberDao())
     }
 }

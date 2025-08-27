@@ -39,6 +39,7 @@ class ControlFragment : Fragment() {
             (requireActivity().application as App).userRepository,
             requireActivity().applicationContext,
             (requireActivity().application as App).planValueRepository,
+            (requireActivity().application as App).orderNumberRepository
         )
     }
 
@@ -84,16 +85,30 @@ class ControlFragment : Fragment() {
             binding.tvDate.text = "Дата: $it"
         }
 
-        // Чекбокс
+        // Чекбокс Комплекс работ
         binding.checkBoxManualType.setOnCheckedChangeListener { _, isChecked ->
             sharedViewModel.setViolation(isChecked)
         }
 
-        // TODO - в разработке - Получить номер предписания
+        // Чекбокс Оборудование отсутствует
+        // Обработчик чекбокса "Оборудование отсутствует"
+        binding.checkBoxManualEquipmentName.setOnCheckedChangeListener { _, isChecked ->
+            sharedViewModel.setEquipmentAbsent(isChecked)
+        }
+
+        // Подписка на состояние чекбокса "Оборудование отсутствует"
+        sharedViewModel.isEquipmentAbsent.observe(viewLifecycleOwner) { isChecked ->
+            binding.AutoCompleteTextViewEquipmentName.isEnabled = !isChecked
+            if (isChecked) {
+                binding.AutoCompleteTextViewEquipmentName.setText("Оборудование отсутствует")
+            } else {
+                binding.AutoCompleteTextViewEquipmentName.setText("")
+            }
+        }
+
         binding.btnOrderNumber.setOnClickListener {
-            Toast.makeText(requireContext(), "Номер предписания в разработке", Toast.LENGTH_SHORT).show()
-        //            sharedViewModel.generateOrderNumber()
-//            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
+            sharedViewModel.generateOrderNumber()
+            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
         }
 
         // Подписка на списки для AutoCompleteTextView
@@ -130,12 +145,13 @@ class ControlFragment : Fragment() {
         // Добавить строку
         binding.btnAddRow.setOnClickListener {
             val input = RowInput(
-                equipmentName = binding.AutoCompleteTextViewEquipmentName.text.toString().trim(),
+                equipmentName = if (sharedViewModel.isEquipmentAbsent.value == true) "Оборудование отсутствует" else binding.AutoCompleteTextViewEquipmentName.text.toString().trim(),
                 workType = binding.AutoCompleteTextViewType.text.toString().trim(),
                 orderNumber = binding.tvOrderNumber.text.toString().trim(),
                 report = binding.InputEditTextReport.text.toString().trim(),
                 remarks = binding.InputEditTextRemarks.text.toString().trim(),
-                isViolationChecked = binding.checkBoxManualType.isChecked
+                isViolationChecked = binding.checkBoxManualType.isChecked,
+                isEquipmentAbsent = sharedViewModel.isEquipmentAbsent.value == true
             )
 
             when (val result = sharedViewModel.validateRowInput(input)) {
@@ -146,7 +162,8 @@ class ControlFragment : Fragment() {
                             input.workType,
                             input.orderNumber,
                             input.report,
-                            input.remarks
+                            input.remarks,
+                            input.isEquipmentAbsent // Сохраняем состояние
                         )
                     )
                     clearInputFields()
@@ -209,6 +226,9 @@ class ControlFragment : Fragment() {
         editReport.setText(row.report)
         editRemarks.setText(row.remarks)
 
+        // Отключаем поле оборудования, если isEquipmentAbsent == true
+        editEquipment.isEnabled = !row.isEquipmentAbsent
+
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -224,7 +244,8 @@ class ControlFragment : Fragment() {
                 workType = editType.text.toString(),
                 orderNumber = editOrder.text.toString(),
                 report = editReport.text.toString(),
-                remarks = editRemarks.text.toString()
+                remarks = editRemarks.text.toString(),
+                isEquipmentAbsent = row.isEquipmentAbsent // Сохраняем исходное состояние
             )
             sharedViewModel.updateRow(oldRow = row, newRow = updatedRow)
             Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
@@ -234,7 +255,9 @@ class ControlFragment : Fragment() {
     }
 
     private fun clearInputFields() {
-        binding.AutoCompleteTextViewEquipmentName.setText("")
+        if (sharedViewModel.isEquipmentAbsent.value != true) {
+            binding.AutoCompleteTextViewEquipmentName.setText("")
+            }
         binding.AutoCompleteTextViewType.setText("")
         binding.InputEditTextReport.setText("")
         binding.InputEditTextRemarks.setText("")

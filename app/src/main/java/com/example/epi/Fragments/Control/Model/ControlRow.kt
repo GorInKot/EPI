@@ -5,6 +5,7 @@ data class ControlRow(
     val workType: String,
     val orderNumber: String,
     val report: String,
-    val remarks: String
+    val remarks: String,
+    val isEquipmentAbsent: Boolean = false // Новое поле для хранения состояния чекбокса для каждой строки
 )
 

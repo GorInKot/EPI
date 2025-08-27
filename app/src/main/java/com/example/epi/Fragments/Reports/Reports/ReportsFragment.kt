@@ -54,6 +54,7 @@ class ReportsFragment : Fragment() {
             (requireActivity().application as App).userRepository,
             requireActivity().applicationContext,
             (requireActivity().application as App).planValueRepository,
+            (requireActivity().application as App).orderNumberRepository
         )
     }
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())

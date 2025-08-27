@@ -25,6 +25,7 @@ class RegistrationFragment : Fragment() {
             (requireActivity().application as App).userRepository,
             requireActivity().applicationContext,
             (requireActivity().application as App).planValueRepository,
+            (requireActivity().application as App).orderNumberRepository
         )
     }
     private val maxNumberLength = 4

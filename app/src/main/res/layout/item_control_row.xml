@@ -18,8 +18,7 @@
         android:autoSizeStepGranularity="2sp"
         style="@style/ArrangementText"
         android:gravity="center"
-        android:padding="4dp"
-        />
+        android:padding="4dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvWorkType"
@@ -32,8 +31,7 @@
         android:autoSizeStepGranularity="2sp"
         style="@style/ArrangementText"
         android:gravity="center"
-        android:padding="4dp"
-        />
+        android:padding="4dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvOrderNumber"
@@ -46,8 +44,7 @@
         android:autoSizeStepGranularity="2sp"
         style="@style/ArrangementText"
         android:gravity="center"
-        android:padding="4dp"
-        />
+        android:padding="4dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvReport"
@@ -60,8 +57,7 @@
         android:autoSizeStepGranularity="2sp"
         style="@style/ArrangementText"
         android:gravity="center"
-        android:padding="4dp"
-        />
+        android:padding="4dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvRemarks"
@@ -74,15 +70,16 @@
         android:autoSizeStepGranularity="2sp"
         style="@style/ArrangementText"
         android:gravity="center"
-        android:padding="4dp"
-        />
+        android:padding="4dp" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:padding="4dp"
+        >
 
         <ImageButton
             android:id="@+id/btnEdit"
@@ -91,8 +88,7 @@
             android:src="@drawable/edit_32"
             android:background="@android:color/transparent"
             android:padding="4dp"
-            android:layout_marginEnd="32dp"
-            />
+            android:layout_marginEnd="8dp" />
 
         <ImageButton
             android:id="@+id/btnDelete"
@@ -101,9 +97,7 @@
             android:src="@drawable/delete_24"
             android:background="@android:color/transparent"
             android:padding="4dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            />
+            android:layout_marginStart="8dp" />
 
     </LinearLayout>
 </LinearLayout>

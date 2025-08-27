@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Dao
 import com.example.epi.DataBase.ExtraDatabase.ExtraDatabaseHelper
+import com.example.epi.DataBase.OrderNumber.OrderNumber
+import com.example.epi.DataBase.OrderNumber.OrderNumberRepository
 import com.example.epi.DataBase.PlanValue.PlanValue
 import com.example.epi.DataBase.PlanValue.PlanValueRepository
 import com.example.epi.DataBase.Report.Report
@@ -41,7 +43,8 @@ class SharedViewModel(
     private val reportRepository: ReportRepository,
     private val userRepository: UserRepository,
     private val context: Context,
-    private val planValueRepository: PlanValueRepository
+    private val planValueRepository: PlanValueRepository,
+    private val orderNumberRepository: OrderNumberRepository
 ) : ViewModel() {
     
     companion object {
@@ -205,6 +208,10 @@ class SharedViewModel(
     private val _isViolation = MutableLiveData<Boolean>(false)
     val isViolation: LiveData<Boolean> get() = _isViolation
 
+    // чекбокс оборудование (отсутсвует или нет)
+    private val _isEquipmentAbsent = MutableLiveData<Boolean>(false)
+    val isEquipmentAbsent: LiveData<Boolean> get() = _isEquipmentAbsent
+
     // строки для recyclerView
     private val _controlRows = MutableLiveData<List<ControlRow>>(emptyList())
     val controlRows: LiveData<List<ControlRow>> get() = _controlRows
@@ -216,6 +223,18 @@ class SharedViewModel(
             "Прибор 7", "Прибор 8", "Прибор 9", "Прибор 10", "Прибор 11", "Прибор 12"
         )
     )
+
+    fun setEquipmentAbsent(checked: Boolean) {
+        _isEquipmentAbsent.value = checked
+        if (checked) {
+            equipmentNames.value = listOf("Оборудование отсутствует")
+        } else {
+            equipmentNames.value = listOf(
+                "Прибор 1", "Прибор 2", "Прибор 3", "Прибор 4", "Прибор 5", "Прибор 6",
+                "Прибор 7", "Прибор 8", "Прибор 9", "Прибор 10", "Прибор 11", "Прибор 12"
+            )
+        }
+    }
 
     // данные из extra_db.db из таблицы ComplexOfWork
     private val _controlsComplexOfWork = MutableLiveData<List<String>>()
@@ -866,12 +885,64 @@ class SharedViewModel(
 
     // region ControlFragment
     // Методы для ControlFragment
-    // TODO - изменить логику выдачи номера предписания
-    // TODO - создать отдельную таблицу в Room
-    // TODO - в которой будут храниться номера предписаний для пользователей
+
+    // Функция создания номера предписания
+    fun generateOrderNumber() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (_isViolation.value == true) {
+                    withContext(Dispatchers.Main) {
+                        _orderNumber.value = "Нет нарушения"
+                    }
+                    return@launch
+                }
+
+                val employeeNumber = _currentEmployeeNumber.value ?: run {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        _orderNumber.value = "Ошибка: нет номера сотрудника"
+                    }
+                    return@launch
+                }
+
+                val dateStr = _currentDate.value.takeIf { !it.isNullOrBlank() }
+                    ?: dateFormat.format(Date())
+                val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                val date = LocalDate.parse(dateStr, formatterInputDate)
+                val formattedDate = date.format(DateTimeFormatter.ofPattern("MMdd"))
+
+                // Получаем последний счётчик для сотрудника и даты
+                val lastCounter = orderNumberRepository.getLastOrderCounter(employeeNumber, dateStr)
+                val newCounter = (lastCounter ?: 0) + 1 // Используем 0, если lastCouner == null
+
+                // Формируем новый номер предписания
+                val generatedNumber = "$employeeNumber.$formattedDate.$newCounter"
+
+                // Сохраняем новый номер в базу
+                val orderNumber = OrderNumber(
+                    employeeNumber = employeeNumber,
+                    date = dateStr,
+                    orderCounter = newCounter
+                )
+                orderNumberRepository.saveOrderNumber(orderNumber)
+
+                withContext(Dispatchers.Main) {
+                    _orderNumber.value = generatedNumber
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _orderNumber.value = "Ошибка генерации номера"
+                    _errorEvent.postValue("Ошибка генерации номера: ${e.message}")
+                }
+                Log.e(TAG, "Ошибка при создании номера предписания: ${e.message}", e)
+            }
+        }
+    }
+
+    // Old Version
 //    fun generateOrderNumber() {
 //        try {
-//            val dateStr = _controlStartDate.value.takeIf { !it.isNullOrBlank() }
+//            val dateStr = _currentDate.value.takeIf { !it.isNullOrBlank() }
 //                ?: dateFormat.format(Date())
 //            val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 //            val date = LocalDate.parse(dateStr, formatterInputDate)
@@ -914,9 +985,13 @@ class SharedViewModel(
         }
     }
 
+    // Валидация строк для ControlFragment
     fun validateRowInput(input: RowInput): RowValidationResult {
         return when {
-            input.equipmentName.isBlank() -> RowValidationResult.Invalid("Оборудование не указано")
+            input.equipmentName.isBlank() && !input.isEquipmentAbsent ->
+                RowValidationResult.Invalid("Оборудование не указано")
+            input.equipmentName == "Оборудование отсутствует" && !input.isEquipmentAbsent ->
+                RowValidationResult.Invalid("Оборудование не указано, снимите галочку 'Оборудование отсутствует'")
             input.workType.isBlank() -> RowValidationResult.Invalid("Вид работ не указан")
             input.report.isBlank() -> RowValidationResult.Invalid("Отчет не заполнен")
             input.remarks.isBlank() -> RowValidationResult.Invalid("Примечание не заполнено")
@@ -942,7 +1017,8 @@ class SharedViewModel(
                     report = row.report,
                     remarks = row.remarks,
                     orderNumber = row.orderNumber,
-                    isViolationChecked = isViolation
+                    isViolationChecked = isViolation,
+                    isEquipmentAbsent = row.isEquipmentAbsent // Используем состояние из строки
                 )
                 when (val result = validateRowInput(input)) {
                     is RowValidationResult.Invalid -> errors["row_$index"] = result.reason
