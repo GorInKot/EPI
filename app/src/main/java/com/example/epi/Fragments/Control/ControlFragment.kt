@@ -89,9 +89,10 @@ class ControlFragment : Fragment() {
             sharedViewModel.setViolation(isChecked)
         }
 
-        // Получить номер предписания
+        // TODO - в разработке - Получить номер предписания
         binding.btnOrderNumber.setOnClickListener {
-            sharedViewModel.generateOrderNumber()
+            Toast.makeText(requireContext(), "Номер предписания в разработке", Toast.LENGTH_SHORT).show()
+        //            sharedViewModel.generateOrderNumber()
 //            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
         }
 

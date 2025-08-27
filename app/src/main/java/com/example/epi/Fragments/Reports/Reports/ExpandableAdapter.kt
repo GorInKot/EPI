@@ -69,15 +69,26 @@ class ExpandableAdapter(private val data: MutableList<Any>) : RecyclerView.Adapt
         private val customer: TextView = itemView.findViewById(R.id.textView_customer)
         private val contract: TextView = itemView.findViewById(R.id.textView_contract)
         private val genContractor: TextView = itemView.findViewById(R.id.textView_genContractor)
+        private val repGenContractor: TextView = itemView.findViewById(R.id.textView_repGenContractor)
+        private val repSSKGp: TextView = itemView.findViewById(R.id.textView_repSSKGp)
         private val subContractor: TextView = itemView.findViewById(R.id.textView_subContractor)
-        private val transportCustomer: TextView = itemView.findViewById(R.id.textView_transportCustomer)
+        private val repSubContractor: TextView = itemView.findViewById(R.id.textView_repSubContractor)
+        private val repSSKSub: TextView = itemView.findViewById(R.id.textView_repSSKSub)
+        private val transportContract: TextView = itemView.findViewById(R.id.textView_transportContract)
+        private val transportExecutor: TextView = itemView.findViewById(R.id.textView_transportExecutor)
 
         fun bind(item: ChildItem) {
-            customer.text = "Заказчик: ${item.customer}"
-            contract.text = "Договор СК: ${item.contract}"
-            genContractor.text = "Генподрядчик: ${item.genContractor}"
-            subContractor.text = "Субподрядчик: ${item.subContractor}"
-            transportCustomer.text = "Транспорт заказчика: ${item.transportCustomer}"
+            customer.text = "Заказчик:\n${item.customer}"
+            contract.text = "Договор СК:\n${item.contract}"
+            genContractor.text = "Генподрядчик:\n${item.genContractor}"
+            repGenContractor.text = "Представитель генподрядчика:\n${item.repGenContractor}"
+            repSSKGp.text = "Представитель ССК ПО (ГП):\n${item.repSSKGp}"
+            subContractor.text = "Субподрядчик:\n${item.subContractor}"
+            repSubContractor.text = "Представитель субподрядчика:\n${item.repSubContractor}"
+            repSSKSub.text = "Представитель ССК ПО (Суб):\n${item.repSSKSub}"
+            transportContract.text = "Договор по транспорту:\n${item.transportCustomer}"
+            transportExecutor.text = "Исполнитель по транспорту:\n${item.transportExecutor}"
+
         }
     }
 

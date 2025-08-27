@@ -42,6 +42,7 @@ import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.String
 
 class ReportsFragment : Fragment() {
     private var _binding: FragmentReportsBinding? = null
@@ -95,8 +96,13 @@ class ReportsFragment : Fragment() {
                                     customer = report.customer, // заказчик
                                     contract = report.contract, // договор
                                     genContractor = report.genContractor, // генподрядчик
-                                    subContractor = report.subContractor, // субподрядчик                                     \
-                                    transportCustomer = report.contractTransport // договор по транспорту
+                                    repGenContractor = report.repGenContractor, // представитель генподрядчика
+                                    repSSKGp = report.repSSKGp, // представитель ССК ПО (ГП)
+                                    subContractor = report.subContractor, // субподрядчик
+                                    repSubContractor = report.repSubContractor, // представитель субподрядчика
+                                    repSSKSub= report.repSSKSub, // представитель ССК ПО (Суб)
+                                    transportCustomer = report.contractTransport, // договор по транспорту
+                                    transportExecutor= report.executor, // исполнитель по транспорту
                                 )
                             ),
                             isExpanded = false

@@ -73,6 +73,10 @@
             />
 
         <!-- Чекбокс -->
+        <!-- TODO - изменить id для чекбокса
+        с последующим изменение логики в sharedViewModel
+        и TransportFragment
+        -->
         <CheckBox
             android:id="@+id/chBoxM_Customer"
             android:layout_width="wrap_content"

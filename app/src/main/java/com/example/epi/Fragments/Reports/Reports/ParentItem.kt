@@ -12,6 +12,11 @@ data class ChildItem(
     val customer: String, // заказчик
     val contract: String, // договор СК
     val genContractor: String, // генподрядчик
+    val repGenContractor: String, // представитель генподрядчика
+    val repSSKGp: String, // представитель ССК ПО (ГП)
     val subContractor: String, // субподрядчик
+    val repSubContractor: String, // представитель субподрядчика
+    val repSSKSub: String, // представитель ССК ПО (Суб)
     val transportCustomer: String, // договор по транспорту
+    val transportExecutor: String, // исполнитель по транспорту
 )

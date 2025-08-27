@@ -41,6 +41,7 @@ data class Report(
 
     // -------- Контроль --------
     val inViolation: Boolean = false, // Нарушение
+    val noEquipmentName: Boolean = false, // Прибор/Оборудование отсутствует
     val equipment: String = "", // Название прибора / оборудования
     val complexWork: String = "",  // Комплекс работ
     val orderNumber: String = "", // Номер предписания

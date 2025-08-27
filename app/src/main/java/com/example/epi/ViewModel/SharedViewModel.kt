@@ -48,11 +48,19 @@ class SharedViewModel(
         private val TAG = "Tagg-SVM"
     }
 
-    // region Инициализация даты и времени
+    // region Общие параметры
+    //
+    // Инициализация даты и времени
     private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-    // endregion
     private val gson = Gson()
+
+    // Инициализация extra_db.db
+    private val extraDbHelper: ExtraDatabaseHelper by lazy {
+        ExtraDatabaseHelper(context = context.applicationContext)
+    }
+
+    // endregion
 
     // region Данные общие для всех фрагментов
     private val _currentDate = MutableLiveData<String>(dateFormat.format(Date()))
@@ -71,7 +79,7 @@ class SharedViewModel(
     // endregion
 
     // -------- РАССТАНОВКА - НАЧАЛО - ИНЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ
-    // region методы для ArrangementFragment
+    // region инициализация переменных в ArrangementFragment
 
     // -------- Договор СК --------
     private val _selectedContract = MutableLiveData<String?>()
@@ -134,37 +142,51 @@ class SharedViewModel(
         }
     }
 
+
+
     // endregion методы для ArrangementFragment
 
     // Данные из TransportFragment
     // region TransportFragment
+
+    // чекбокс Транспорт отсутствует
     private val _isTransportAbsent = MutableLiveData(false)
     val isTransportAbsent: LiveData<Boolean> get() = _isTransportAbsent
 
+    // TODO - для чего оно здесь?
     private val _transportContractCustomer = MutableLiveData<String?>()
     val transportContractCustomer: LiveData<String?> get() = _transportContractCustomer
 
+    // исполнитель по транспорту
     private val _transportExecutorName = MutableLiveData<String?>()
     val transportExecutorName: LiveData<String?> get() = _transportExecutorName
 
+
+    // договор по транспорту
     private val _transportContractTransport = MutableLiveData<String?>()
     val transportContractTransport: LiveData<String?> get() = _transportContractTransport
 
+    // госномер транспорта
     private val _transportStateNumber = MutableLiveData<String?>()
     val transportStateNumber: LiveData<String?> get() = _transportStateNumber
 
+    // дата начала поездки
     private val _transportStartDate = MutableLiveData<String?>()
     val transportStartDate: LiveData<String?> get() = _transportStartDate
 
+    // время начала поездки
     private val _transportStartTime = MutableLiveData<String?>()
     val transportStartTime: LiveData<String?> get() = _transportStartTime
 
+    // дата завершения поездки
     private val _transportEndDate = MutableLiveData<String?>()
     val transportEndDate: LiveData<String?> get() = _transportEndDate
 
+    // время завершения поездки
     private val _transportEndTime = MutableLiveData<String?>()
     val transportEndTime: LiveData<String?> get() = _transportEndTime
 
+    // очистка полей экрана Транспорт
     private val _transportInClearing = MutableLiveData(false)
     val transportInClearing: LiveData<Boolean> get() = _transportInClearing
 
@@ -172,24 +194,22 @@ class SharedViewModel(
 
     // Данные из ControlFragment
     // region ControlFragment
+
     private var orderCounter = 1
 
-
+    // номер предписания
     private val _orderNumber = MutableLiveData<String?>("")
     val orderNumber: LiveData<String?> get() = _orderNumber
 
+    // чекбокс нарушение (есть или нет)
     private val _isViolation = MutableLiveData<Boolean>(false)
     val isViolation: LiveData<Boolean> get() = _isViolation
 
+    // строки для recyclerView
     private val _controlRows = MutableLiveData<List<ControlRow>>(emptyList())
     val controlRows: LiveData<List<ControlRow>> get() = _controlRows
 
-    private val _controlStartDate = MutableLiveData<String?>()
-    val controlStartDate: LiveData<String?> get() = _controlStartDate
-
-    private val _controlStartTime = MutableLiveData<String?>()
-    val controlStartTime: LiveData<String?> get() = _controlStartTime
-
+    // список для выпадающего списка "наименование прибора/оборудования"
     val equipmentNames = MutableLiveData<List<String>>(
         listOf(
             "Прибор 1", "Прибор 2", "Прибор 3", "Прибор 4", "Прибор 5", "Прибор 6",
@@ -197,52 +217,75 @@ class SharedViewModel(
         )
     )
 
-    // Old ControlWorkTypes
-//    val controlWorkTypes = MutableLiveData<List<String>>(
-//        listOf(
-//            "Комплекс работ 1", "Комплекс работ 2", "Комплекс работ 3",
-//            "Комплекс работ 4", "Комплекс работ 5", "Комплекс работ 6",
-//            "Комплекс работ 7", "Комплекс работ 7", "Комплекс работ 9",
-//            "Комплекс работ 10", "Комплекс работ 11", "Комплекс работ 12"
-//        )
-//    )
-
-    // New ControlWorkTypes
-//    private val _controlsWorkTypes = MutableLiveData<List<String>>()
-//    val controlsWorkTypes: LiveData<List<String>> get() = _controlsWorkTypes
-
+    // данные из extra_db.db из таблицы ComplexOfWork
     private val _controlsComplexOfWork = MutableLiveData<List<String>>()
     val controlsComplexOfWork: LiveData<List<String>> get() = _controlsComplexOfWork
 
-    private val _controlTypesOfWork = MutableLiveData<List<String>>()
-    val controlTypesOfWork: LiveData<List<String>> get() = _controlTypesOfWork
-
-    // Инициализация extra_db.db
-    private val extraDbHelper: ExtraDatabaseHelper by lazy {
-        ExtraDatabaseHelper(context = context.applicationContext)
-    }
     //endregion
 
-    // Данные из FixVolumesFragment
-    //region
+    //region FixVolumesFragment
+    // -------- FixVolumesFragment --------
+    // строки для recyclerView
     private val _fixRows = MutableLiveData<List<FixVolumesRow>>(emptyList())
     val fixRows: LiveData<List<FixVolumesRow>> get() = _fixRows
 
-//    val fixWorkType = MutableLiveData<List<String>>(
-//        listOf(
-//            "Вид работ 1", "Вид работ 2", "Вид работ 3",
-//            "Вид работ 4", "Вид работ 5", "Вид работ 6",
-//            "Вид работ 7", "Вид работ 8", "Вид работ 9",
-//            "Вид работ 10", "Вид работ 11", "Вид работ 12"
-//        )
-//    )
-
+    // единицы измерения для выпадающего списка
     val fixMeasures = MutableLiveData<List<String>>(
         listOf(
             "м", "м2", "м3", "мм", "см", "т", "кг", "шт.", "п.м.", "л",
             "м/ч", "м/с", "градусы", "%", "МПа", "ч", "сут."
         )
     )
+
+    // данные из extra_db.db из таблицы TypesOfWork (имеют привязку по complexofwork-id)
+    // - не относятся к ControlFragment (часть sharedViewModel)
+    // - перенести в FixVolumesFragment (часть sharedViewModel)
+
+    // TODO - проверить: верное ли расположение в блоке кода
+    private val _controlTypesOfWork = MutableLiveData<List<String>>()
+    val controlTypesOfWork: LiveData<List<String>> get() = _controlTypesOfWork
+
+    // метод загрузки данных из extra_db из таблицы ComplexOfWork для выпадающего списка Комплекс работ
+    fun loadComplexOfWorks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val complexOfWorks = extraDbHelper.getComplexOfWorks()
+                withContext(Dispatchers.Main) {
+                    _controlsComplexOfWork.value = complexOfWorks
+                    Log.d(TAG, "Loaded ComplexOfWorks: $complexOfWorks")
+                    if (complexOfWorks.isNotEmpty()) {
+                        _selectedComplex.value = complexOfWorks[0] // Устанавливаем первый комплекс по умолчанию
+                        loadTypesOfWork(complexOfWorks[0]) // Загружаем виды работ для первого комплекса
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading ComplexOfWorks: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных из ComplexOfWork: ${e.message}")
+                }
+            }
+        }
+    }
+
+    // метод загрузки данных из extra_db из таблицы TypesOfWork для выпадающего списка Вид работ
+    fun loadTypesOfWork(complexOfWorkName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val typesOfWork = extraDbHelper.getTypesOfWork(complexOfWorkName)
+                withContext(Dispatchers.Main) {
+                    _controlTypesOfWork.value = typesOfWork // Обновляем список видов работ
+                    _selectedComplex.value = complexOfWorkName // Синхронизируем выбранный комплекс
+                    Log.d(TAG, "Loaded TypesOfWork for $complexOfWorkName: $typesOfWork")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading TypesOfWork: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка загрузки данных из TypesOfWork: ${e.message}")
+                }
+            }
+        }
+    }
+
     //endregion
 
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
@@ -271,6 +314,7 @@ class SharedViewModel(
         }
     }
 
+    // Функция загрузки Плановых значений
     suspend fun loadPlanValues(objectId: String? = null)  {
         withContext(Dispatchers.IO) {
             val values = if (objectId != null) {
@@ -284,6 +328,7 @@ class SharedViewModel(
         }
     }
 
+    // Функция добавления Плановых значений в таблицу plan_values в Room
     suspend fun addPlanValue(planValue: PlanValue) {
         withContext(Dispatchers.IO) {
             planValueRepository.insert(planValue)
@@ -293,45 +338,6 @@ class SharedViewModel(
 
     private val _selectedComplex = MutableLiveData<String>()
     val selectedComplex: LiveData<String> get() = _selectedComplex
-
-    fun loadComplexOfWorks() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val complexOfWorks = extraDbHelper.getComplexOfWorks()
-                withContext(Dispatchers.Main) {
-                    _controlsComplexOfWork.value = complexOfWorks
-                    Log.d(TAG, "Loaded ComplexOfWorks: $complexOfWorks")
-                    if (complexOfWorks.isNotEmpty()) {
-                        _selectedComplex.value = complexOfWorks[0] // Устанавливаем первый комплекс по умолчанию
-                        loadTypesOfWork(complexOfWorks[0]) // Загружаем виды работ для первого комплекса
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error loading ComplexOfWorks: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка загрузки данных из ComplexOfWork: ${e.message}")
-                }
-            }
-        }
-    }
-
-    fun loadTypesOfWork(complexOfWorkName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val typesOfWork = extraDbHelper.getTypesOfWork(complexOfWorkName)
-                withContext(Dispatchers.Main) {
-                    _controlTypesOfWork.value = typesOfWork // Обновляем список видов работ
-                    _selectedComplex.value = complexOfWorkName // Синхронизируем выбранный комплекс
-                    Log.d(TAG, "Loaded TypesOfWork for $complexOfWorkName: $typesOfWork")
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error loading TypesOfWork: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка загрузки данных из TypesOfWork: ${e.message}")
-                }
-            }
-        }
-    }
 
     // Метод для обновления выбранного комплекса (вызывается при выборе пользователем)
     fun setSelectedComplex(complexName: String) {
@@ -361,7 +367,37 @@ class SharedViewModel(
     fun setRepSubContractorText(value: String?) { _repSubContractorText.value = value }
     fun setRepSSKSubText(value: String?) { _repSSKSubText.value = value }
 
-    // endregion методы для ArrangementFragment
+    fun clearAllData() {
+        _selectedContract.value = null
+        _selectedCustomer.value = null
+        _selectedObject.value = null
+        _plotText.value = null
+        _isManualPlot.value = false
+        _selectedContractor.value = null
+        _selectedRepContractor.value = null
+        _repSSKGpText.value = null
+        _selectedSubContractor.value = null
+        _repSubContractorText.value = null
+        _repSSKSubText.value = null
+        _isManualSubContractor.value = false
+        _transportContractCustomer.value = null
+        _transportExecutorName.value = null
+        _transportContractTransport.value = null
+        _transportStateNumber.value = null
+        _transportStartDate.value = null
+        _transportStartTime.value = null
+        _transportEndDate.value = null
+        _transportEndTime.value = null
+        _orderNumber.value = null
+        _isViolation.value = false
+//        _controlStartDate.value = null
+//        _controlStartTime.value = null
+        _controlRows.value = emptyList()
+        _fixRows.value = emptyList()
+        _isTransportAbsent.value = false
+        updateDateTime()
+        _isReportSaved.postValue(false)
+    }
 
     fun validateArrangementInputs(
         contract: String?,
@@ -456,7 +492,6 @@ class SharedViewModel(
                     repSubContractor = _repSubContractorText.value.orEmpty(),
                     repSSKSub = _repSSKSubText.value.orEmpty(),
                     // Поля Transport, Control и FixVolumes остаются пустыми
-//                    contract = "",
                     executor = "",
                     contractTransport = "",
                     stateNumber = "",
@@ -495,7 +530,68 @@ class SharedViewModel(
         }
     }
 
+    // Функция загрузки предыдущего отчета
+    // бОльшая часть предназначена для ArrangementFragment
+    // (используется еще в TransportFragment)
+    fun loadPreviousReport() {
+        viewModelScope.launch {
+            try {
+                val report = reportRepository.getLastUnsentReport()
+                report?.let {
+                    // ArrangementFragment
+                    _selectedCustomer.value = it.customer
+                    Log.d(TAG, "Предыдущий заказчик: ${it.customer}")
 
+                    _selectedContract.value = it.contract
+                    Log.d(TAG, "Предыдущий Договор СК: ${it.contract}")
+
+                    _selectedObject.value = it.obj
+                    Log.d(TAG, "Предыдущий объект: ${it.obj}")
+
+                    _plotText.value = it.plot
+                    Log.d(TAG, "Предыдущий участок: ${it.plot}")
+
+                    _isManualPlot.value = it.plot == "Объект не делится на участки"
+
+                    _selectedContractor.value = it.genContractor
+                    Log.d(TAG, "Предыдущий генподрядчик: ${it.genContractor}")
+
+                    _selectedRepContractor.value = it.repGenContractor
+                    Log.d(TAG, "Предыдущий представитель генподрядчика: ${it.repGenContractor}")
+
+                    _repSSKGpText.value = it.repSSKGp
+                    Log.d(TAG, "Предыдущий ССК ПО (ГП): ${it.repSSKGp}")
+
+                    _selectedSubContractor.value = it.subContractor
+                    Log.d(TAG, "Предыдущий субподрядчик: ${it.subContractor}")
+
+                    _repSubContractorText.value = it.repSubContractor
+                    Log.d(TAG, "Предыдущий представитель субподрядчика: ${it.repSubContractor}")
+
+                    _repSSKSubText.value = it.repSSKSub
+                    Log.d(TAG, "Предыдущий ССК ПО (Суб): ${it.repSSKSub}")
+                    _isManualSubContractor.value = it.subContractor == "Отсутствует субподрядчик"
+
+                    // TransportFragment
+                    _transportExecutorName.value = it.executor
+                    Log.d(TAG, "Предыдущий исполнитель по транспорту: ${it.executor}")
+
+                    _transportContractTransport.value = it.contractTransport
+
+                    Log.d(TAG, "Предыдущий договор по транспорту: ${it.contractTransport}")
+
+                    _transportStateNumber.value = it.stateNumber
+                    Log.d(TAG, "Предыдущий госномер: ${it.stateNumber}")
+
+                } ?: Log.d(TAG, "Предыдущий неотправленный отчет не найден.")
+            } catch (e: Exception) {
+                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета: ${e.message}")
+                Log.e(TAG, "Error loading previous report: ${e.message}", e)
+            }
+        }
+    }
+
+// endregion методы для ArrangementFragment
 
     // Старое
     // Обновляем saveOrUpdateReport
@@ -624,6 +720,7 @@ class SharedViewModel(
     }
 
     // Методы для TransportFragment
+    // region методы для TransportFragment
     fun setTransportAbsent(value: Boolean) { _isTransportAbsent.value = value }
     fun setTransportContractCustomer(value: String) { _transportContractCustomer.value = value.trim() }
     fun setTransportExecutorName(value: String) { _transportExecutorName.value = value.trim() }
@@ -634,6 +731,7 @@ class SharedViewModel(
     fun setTransportEndDate(value: String) { _transportEndDate.value = value.trim() }
     fun setTransportEndTime(value: String) { _transportEndTime.value = value.trim() }
 
+    // функция для чекбокса Транспорт отсутствует (transportAbsent)
     fun clearTransport() {
         _transportInClearing.value = true
         _transportContractCustomer.value = ""
@@ -648,39 +746,43 @@ class SharedViewModel(
     }
 
     fun validateTransportInputs(
-        isTransportAbsent: Boolean,
-//        contractCustomer: String?,
-        executorName: String?,
-        contractTransport: String?,
-        stateNumber: String?,
-        startDate: String?,
-        startTime: String?,
-        endDate: String?,
-        endTime: String?
+        isTransportAbsent: Boolean, // чекбокс
+        executorName: String?, // исполнитель по транспорту
+        contractTransport: String?, // договор по транспорту
+        stateNumber: String?, // госномер
+        startDate: String?, // дата начала поездки
+        startTime: String?, // время начала поездки
+        endDate: String?, // дата завершения поездки
+        endTime: String? // время завершения поездки
     ): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (isTransportAbsent) return errors
-//        if (contractCustomer.isNullOrBlank()) {
-//            errors["contractCustomer"] = "Укажите договор СК"
-//        }
+
+        // исполнитель по транспорту
         if (executorName.isNullOrBlank()) {
             errors["executorName"] = "Укажите исполнителя по транспорту"
         }
+        // договор по транспорту
         if (contractTransport.isNullOrBlank()) {
             errors["contractTransport"] = "Укажите договор по транспорту"
         }
+        // госномер
         if (stateNumber.isNullOrBlank()) {
             errors["stateNumber"] = "Укажите госномер"
         }
+        // дата начала поездки
         if (startDate.isNullOrBlank()) {
             errors["startDate"] = "Укажите дату начала поездки"
         }
+        // время начала поездки
         if (startTime.isNullOrBlank()) {
             errors["startTime"] = "Укажите время начала поездки"
         }
+        // дата завершения поездки
         if (endDate.isNullOrBlank()) {
             errors["endDate"] = "Укажите дату завершения поездки"
         }
+        // время завершения поездки
         if (endTime.isNullOrBlank()) {
             errors["endTime"] = "Укажите время завершения поездки"
         }
@@ -702,16 +804,17 @@ class SharedViewModel(
         return errors
     }
 
+    // Функция валидации госномера
     fun isValidStateNumber(number: String): Boolean {
         return number.matches(Regex("^[АВЕКМНОРСТУХ]\\s\\d{3}\\s[АВЕКМНОРСТУХ]{2}\\s\\d{2,3}$"))
     }
 
+    // Функция обновления отчета по разделу "Транспорт"
     suspend fun updateTransportReport(): Long {
         return withContext(Dispatchers.IO) {
             try {
                 val errors = validateTransportInputs(
                     isTransportAbsent = _isTransportAbsent.value ?: false,
-//                    contractCustomer = _transportContractCustomer.value,
                     executorName = _transportExecutorName.value,
                     contractTransport = _transportContractTransport.value,
                     stateNumber = _transportStateNumber.value,
@@ -736,7 +839,6 @@ class SharedViewModel(
                     return@withContext 0L
                 }
                 val updatedReport = existingReport.copy(
-//                    contract = if (_isTransportAbsent.value == true) "" else _transportContractCustomer.value.orEmpty(),
                     executor = if (_isTransportAbsent.value == true) "" else _transportExecutorName.value.orEmpty(),
                     contractTransport = if (_isTransportAbsent.value == true) "" else _transportContractTransport.value.orEmpty(),
                     stateNumber = if (_isTransportAbsent.value == true) "" else _transportStateNumber.value.orEmpty(),
@@ -760,25 +862,31 @@ class SharedViewModel(
         }
     }
 
+    // endregion
+
+    // region ControlFragment
     // Методы для ControlFragment
-    fun generateOrderNumber() {
-        try {
-            val dateStr = _controlStartDate.value.takeIf { !it.isNullOrBlank() }
-                ?: dateFormat.format(Date())
-            val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-            val date = LocalDate.parse(dateStr, formatterInputDate)
-            val formattedDate = date.format(DateTimeFormatter.ofPattern("MMdd"))
-
-            val personNumber = "0000"
-            val generatedNumber = "$personNumber.$formattedDate.$orderCounter"
-            orderCounter++
-
-            _orderNumber.value = if (_isViolation.value == true) "Нет нарушения" else generatedNumber
-        } catch (e: Exception) {
-            _orderNumber.value = "Ошибка генерации номера"
-            e.printStackTrace()
-        }
-    }
+    // TODO - изменить логику выдачи номера предписания
+    // TODO - создать отдельную таблицу в Room
+    // TODO - в которой будут храниться номера предписаний для пользователей
+//    fun generateOrderNumber() {
+//        try {
+//            val dateStr = _controlStartDate.value.takeIf { !it.isNullOrBlank() }
+//                ?: dateFormat.format(Date())
+//            val formatterInputDate = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+//            val date = LocalDate.parse(dateStr, formatterInputDate)
+//            val formattedDate = date.format(DateTimeFormatter.ofPattern("MMdd"))
+//
+//            val personNumber = "0000"
+//            val generatedNumber = "$personNumber.$formattedDate.$orderCounter"
+//            orderCounter++
+//
+//            _orderNumber.value = if (_isViolation.value == true) "Нет нарушения" else generatedNumber
+//        } catch (e: Exception) {
+//            _orderNumber.value = "Ошибка генерации номера"
+//            e.printStackTrace()
+//        }
+//    }
 
     fun setViolation(checked: Boolean) {
         _isViolation.value = checked
@@ -872,8 +980,8 @@ class SharedViewModel(
                 val updatedReport = existingReport.copy(
                     orderNumber = if (_isViolation.value == true) "Нет нарушения" else _orderNumber.value.orEmpty(),
                     inViolation = _isViolation.value ?: false,
-                    startDate = _controlStartDate.value.orEmpty(),
-                    startTime = _controlStartTime.value.orEmpty(),
+                    startDate = _currentDate.value.orEmpty(),
+                    startTime = _currentTime.value.orEmpty(),
                     equipment = firstRow?.equipmentName ?: "",
                     complexWork = firstRow?.workType ?: "",
                     report = firstRow?.report ?: "",
@@ -894,19 +1002,26 @@ class SharedViewModel(
         }
     }
 
+    // endregion
+
     // Методы для FixVolumesFragment
+    // region FixVolumesFragment
+
+    // Функция добавления данных в recyclerView
     fun addFixRow(fixRow: FixVolumesRow) {
         val current = _fixRows.value?.toMutableList() ?: mutableListOf()
         current.add(fixRow)
         _fixRows.value = recalculateFixRows(current)
     }
 
+    // Функция удаления данных из recyclerView
     fun removeFixRow(fixRow: FixVolumesRow) {
         val current = _fixRows.value?.toMutableList() ?: return
         current.remove(fixRow)
         _fixRows.value = recalculateFixRows(current)
     }
 
+    // Функция обновления данных в строке в recyclerView
     fun updateFixRow(oldRow: FixVolumesRow, newRow: FixVolumesRow) {
         val current = _fixRows.value?.toMutableList() ?: return
         val index = current.indexOfFirst { it == oldRow }
@@ -918,6 +1033,16 @@ class SharedViewModel(
         }
     }
 
+    // TODO - Общая концепция:
+    // Пользовать в ControlFragment выбирает Комплексы работ
+    // В FixVolumes выбирает...
+    //
+    // В FixVolumes добавляет Комплекс работ как выпадающий список
+    // В RV добавляем новый столбец - КР
+    // Добавляем логику проверки данных:
+    //  Объект -> Комплекс работ -> Вид работ -> План
+    // Если совпадений нет, показываем AlertDialog и переводим на добавление планого значения
+    // TODO - изменить логику функции
     private fun recalculateFixRows(rows: List<FixVolumesRow>): List<FixVolumesRow> {
         Log.d(TAG, "Recalculating rows: $rows")
         val result = rows.groupBy { Triple(it.projectWorkType, it.measure, it.plan) }
@@ -934,6 +1059,7 @@ class SharedViewModel(
         return result
     }
 
+    // TODO - изменить логику функции
     fun validateAndCalculateRemainingVolume(input: FixVolumesRow, excludeRow: FixVolumesRow? = null): RowValidationResult {
         when {
             input.ID_object.isBlank() -> return RowValidationResult.Invalid("ID объекта не указан")
@@ -970,6 +1096,7 @@ class SharedViewModel(
         return RowValidationResult.Valid(remainingVolume)
     }
 
+    // Функция валидации полей ввода
     fun validateFixVolumesInputs(fixRows: List<FixVolumesRow>?): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (fixRows.isNullOrEmpty()) {
@@ -987,6 +1114,7 @@ class SharedViewModel(
         return errors
     }
 
+    // Функция добавления значений в Room из RecyclerView
     suspend fun updateFixVolumesReport(): Long {
         return withContext(Dispatchers.IO) {
             try {
@@ -1023,7 +1151,10 @@ class SharedViewModel(
         }
     }
 
-    // Методы для SendReportFragment
+    // endregion
+
+    // region SendReportFragment
+    // Методы для
     fun exportDatabase(context: Context) {
         val dbName = "app_database"
         val dbPath = context.getDatabasePath(dbName)
@@ -1086,96 +1217,7 @@ class SharedViewModel(
     suspend fun getReportsForExport(startDate: String, endDate: String): List<Report> {
         return reportRepository.getReportsByDateRange(startDate, endDate).first()
     }
-
-    fun loadPreviousReport() {
-        viewModelScope.launch {
-            try {
-                val report = reportRepository.getLastUnsentReport()
-                report?.let {
-                    // ArrangementFragment
-                    _selectedCustomer.value = it.customer
-                    Log.d(TAG, "Предыдущий заказчик: ${it.customer}")
-
-                    _selectedContract.value = it.contract
-                    Log.d(TAG, "Предыдущий Договор СК: ${it.contract}")
-
-                    _selectedObject.value = it.obj
-                    Log.d(TAG, "Предыдущий объект: ${it.obj}")
-
-                    _plotText.value = it.plot
-                    Log.d(TAG, "Предыдущий участок: ${it.plot}")
-
-                    _isManualPlot.value = it.plot == "Объект не делится на участки"
-
-                    _selectedContractor.value = it.genContractor
-                    Log.d(TAG, "Предыдущий генподрядчик: ${it.genContractor}")
-
-                    _selectedRepContractor.value = it.repGenContractor
-                    Log.d(TAG, "Предыдущий представитель генподрядчика: ${it.repGenContractor}")
-
-                    _repSSKGpText.value = it.repSSKGp
-                    Log.d(TAG, "Предыдущий ССК ПО (ГП): ${it.repSSKGp}")
-
-                    _selectedSubContractor.value = it.subContractor
-                    Log.d(TAG, "Предыдущий субподрядчик: ${it.subContractor}")
-
-                    _repSubContractorText.value = it.repSubContractor
-                    Log.d(TAG, "Предыдущий представитель субподрядчика: ${it.repSubContractor}")
-
-                    _repSSKSubText.value = it.repSSKSub
-                    Log.d(TAG, "Предыдущий ССК ПО (Суб): ${it.repSSKSub}")
-                    _isManualSubContractor.value = it.subContractor == "Отсутствует субподрядчик"
-
-                    // TransportFragment
-                    _transportExecutorName.value = it.executor
-                    Log.d(TAG, "Предыдущий исполнитель по транспорту: ${it.executor}")
-
-                    _transportContractTransport.value = it.contractTransport
-
-                    Log.d(TAG, "Предыдущий договор по транспорту: ${it.contractTransport}")
-
-                    _transportStateNumber.value = it.stateNumber
-                    Log.d(TAG, "Предыдущий госномер: ${it.stateNumber}")
-
-                } ?: Log.d(TAG, "Предыдущий неотправленный отчет не найден.")
-            } catch (e: Exception) {
-                _errorEvent.postValue("Ошибка при загрузке предыдущего отчета: ${e.message}")
-                Log.e(TAG, "Error loading previous report: ${e.message}", e)
-            }
-        }
-    }
-
-    fun clearAllData() {
-        _selectedContract.value = null
-        _selectedCustomer.value = null
-        _selectedObject.value = null
-        _plotText.value = null
-        _isManualPlot.value = false
-        _selectedContractor.value = null
-        _selectedRepContractor.value = null
-        _repSSKGpText.value = null
-        _selectedSubContractor.value = null
-        _repSubContractorText.value = null
-        _repSSKSubText.value = null
-        _isManualSubContractor.value = false
-        _transportContractCustomer.value = null
-        _transportExecutorName.value = null
-        _transportContractTransport.value = null
-        _transportStateNumber.value = null
-        _transportStartDate.value = null
-        _transportStartTime.value = null
-        _transportEndDate.value = null
-        _transportEndTime.value = null
-        _orderNumber.value = null
-        _isViolation.value = false
-        _controlStartDate.value = null
-        _controlStartTime.value = null
-        _controlRows.value = emptyList()
-        _fixRows.value = emptyList()
-        _isTransportAbsent.value = false
-        updateDateTime()
-        _isReportSaved.postValue(false)
-    }
+    // endregion
 
     // ------------ Блок Авторизации ------------
     // region Authentification Block

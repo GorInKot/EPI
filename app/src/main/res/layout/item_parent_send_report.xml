@@ -26,7 +26,7 @@
             style="@style/ArrangementText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="20dp"
             android:gravity="center"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
@@ -55,12 +55,13 @@
             android:text="Объект:"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/textView_time"
+            app:layout_constraintEnd_toStartOf="@id/textView_isSend"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="24dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:gravity="center"
-            android:maxLines="1"
+            android:gravity="left"
+            android:maxLines="3"
             />
 
         <com.google.android.material.textview.MaterialTextView
@@ -69,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="Загружено в БД"
             style="@style/ArrangementText"
-            app:layout_constraintStart_toEndOf="@id/textView_object"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="24dp"
             android:layout_marginTop="4dp"

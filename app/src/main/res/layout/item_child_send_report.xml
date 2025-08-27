@@ -20,17 +20,17 @@
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="0dp"
-        android:maxLines="1"
+        android:maxLines="2"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_contract"
         android:text="Договор СК:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_customer"
-        android:layout_marginStart="0dp"
-        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@id/textView_customer"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="36dp"
+        android:maxLines="2"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -38,9 +38,32 @@
         android:text="Генподрядчик:"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_contract"
+        app:layout_constraintTop_toBottomOf="@id/textView_customer"
         android:layout_marginStart="0dp"
-        android:maxLines="1"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_repGenContractor"
+        android:text="Представитель\nГенподрядчика:"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/textView_genContractor"
+        app:layout_constraintTop_toBottomOf="@id/textView_customer"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_repSSKGp"
+        android:text="Представитель\nССК ПО (ГП):"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/textView_repGenContractor"
+        app:layout_constraintTop_toBottomOf="@id/textView_customer"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -50,16 +73,50 @@
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
         android:layout_marginStart="0dp"
-        android:maxLines="1"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
         />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/textView_transportCustomer"
+        android:id="@+id/textView_repSubContractor"
+        android:text="Представитель\nСубподрядчика:"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/textView_subContractor"
+        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_repSSKSub"
+        android:text="Представитель\nССК ПО (ГП):"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/textView_repSubContractor"
+        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_transportContract"
         android:text="Договор по транспорту:"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_subContractor"
         android:layout_marginStart="0dp"
+        android:maxLines="1"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_transportExecutor"
+        android:text="Исполнитель по транспорту:"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/textView_transportContract"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
         android:maxLines="1"
         />
 
