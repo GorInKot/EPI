@@ -242,6 +242,9 @@ class SharedViewModel(
     private val _controlsComplexOfWork = MutableLiveData<List<String>>()
     val controlsComplexOfWork: LiveData<List<String>> get() = _controlsComplexOfWork
 
+    private val _controlTypesOfWork = MutableLiveData<List<String>>()
+    val controlTypesOfWork: LiveData<List<String>> get() = _controlTypesOfWork
+
     //endregion
 
     //region FixVolumesFragment
@@ -263,8 +266,7 @@ class SharedViewModel(
     // - перенести в FixVolumesFragment (часть sharedViewModel)
 
     // TODO - проверить: верное ли расположение в блоке кода
-    private val _controlTypesOfWork = MutableLiveData<List<String>>()
-    val controlTypesOfWork: LiveData<List<String>> get() = _controlTypesOfWork
+
 
     // метод загрузки данных из extra_db из таблицы ComplexOfWork для выпадающего списка Комплекс работ
     fun loadComplexOfWorks() {
@@ -713,7 +715,7 @@ class SharedViewModel(
                     orderNumber = _orderNumber.value.orEmpty(),
                     inViolation = _isViolation.value ?: false,
                     equipment = (_controlRows.value?.firstOrNull()?.equipmentName ?: ""),
-                    complexWork = (_controlRows.value?.firstOrNull()?.workType ?: ""),
+                    complexWork = (_controlRows.value?.firstOrNull()?.typeOfWork ?: ""),
                     report = (_controlRows.value?.firstOrNull()?.report ?: ""),
                     remarks = (_controlRows.value?.firstOrNull()?.remarks ?: ""),
                     controlRows = gson.toJson(_controlRows.value),
@@ -994,7 +996,7 @@ class SharedViewModel(
                 RowValidationResult.Invalid("Оборудование не указано")
             input.equipmentName == "Оборудование отсутствует" && !input.isEquipmentAbsent ->
                 RowValidationResult.Invalid("Оборудование не указано, снимите галочку 'Оборудование отсутствует'")
-            input.workType.isBlank() -> RowValidationResult.Invalid("Вид работ не указан")
+            input.typeOfWork.isBlank() -> RowValidationResult.Invalid("Вид работ не указан")
             input.report.isBlank() -> RowValidationResult.Invalid("Отчет не заполнен")
             input.remarks.isBlank() -> RowValidationResult.Invalid("Примечание не заполнено")
             !input.isViolationChecked && input.orderNumber.isBlank() ->
@@ -1015,7 +1017,8 @@ class SharedViewModel(
             controlRows.forEachIndexed { index, row ->
                 val input = RowInput(
                     equipmentName = row.equipmentName,
-                    workType = row.workType,
+                    complexOfWork = row.complexOfWork,
+                    typeOfWork = row.typeOfWork,
                     report = row.report,
                     remarks = row.remarks,
                     orderNumber = row.orderNumber,
@@ -1061,7 +1064,7 @@ class SharedViewModel(
                     startDate = _currentDate.value.orEmpty(),
                     startTime = _currentTime.value.orEmpty(),
                     equipment = firstRow?.equipmentName ?: "",
-                    complexWork = firstRow?.workType ?: "",
+                    complexWork = firstRow?.typeOfWork ?: "",
                     report = firstRow?.report ?: "",
                     remarks = firstRow?.remarks ?: "",
                     controlRows = controlRowsJson

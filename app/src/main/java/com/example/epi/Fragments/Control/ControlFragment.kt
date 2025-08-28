@@ -123,31 +123,97 @@ class ControlFragment : Fragment() {
             }
         }
 
-        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypesList ->
-            if (!workTypesList.isNullOrEmpty()) {
-                val adapter = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    workTypesList
-                )
-                binding.AutoCompleteTextViewType.setAdapter(adapter)
-                binding.AutoCompleteTextViewType.inputType = InputType.TYPE_NULL
-                binding.AutoCompleteTextViewType.keyListener = null
-                binding.AutoCompleteTextViewType.setOnClickListener {
-                    binding.AutoCompleteTextViewType.showDropDown()
+
+        // Обзервер на Комплекс работ
+        // New Version
+        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { complexOfWorks ->
+            if(complexOfWorks.isNotEmpty()) {
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexOfWorks)
+                binding.AutoCompleteTextViewControlComplexOfWork.setAdapter(adapter)
+                sharedViewModel.selectedComplex.value?.let { selected ->
+                    val position = complexOfWorks.indexOf(selected)
+                    if (position >= 0) {
+                        binding.AutoCompleteTextViewControlComplexOfWork.setText(complexOfWorks[position], false)
+                    }
+                }
+                binding.AutoCompleteTextViewControlComplexOfWork.setOnItemClickListener { parent, view, position, id ->
+                    val selectedComplex = parent.getItemAtPosition(position) as String
+                    sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
+                }
+                binding.AutoCompleteTextViewControlComplexOfWork.setOnClickListener {
+                    binding.AutoCompleteTextViewControlComplexOfWork.showDropDown()
                 }
             }else {
-                Toast.makeText(requireContext(), "Не удалось загрузить список видов работ", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Не удалось загрузить список видов работ")
+                Toast.makeText(requireContext(), "Не удалось загрузить список комплексов работ", Toast.LENGTH_SHORT).show()
             }
-
         }
+
+        // Old Version
+//        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workComplexList ->
+//            if (!workComplexList.isNullOrEmpty()) {
+//                val adapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    workComplexList
+//                )
+//                binding.AutoCompleteTextViewControlComplexOfWork.setAdapter(adapter)
+//                binding.AutoCompleteTextViewControlComplexOfWork.inputType = InputType.TYPE_NULL
+//                binding.AutoCompleteTextViewControlComplexOfWork.keyListener = null
+//                binding.AutoCompleteTextViewControlComplexOfWork.setOnClickListener {
+//                    binding.AutoCompleteTextViewControlComplexOfWork.showDropDown()
+//                }
+//            }else {
+//                Toast.makeText(requireContext(), "Не удалось загрузить список комплексов работ", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Не удалось загрузить список комплексов работ")
+//            }
+//
+//        }
+
+
+
+        // Обзервер на Вид работ
+        // New Version
+        sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { typesOfWork ->
+            if (typesOfWork.isNotEmpty()) {
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
+                binding.AutoCompleteTextViewControlTypeOfWork.setAdapter(adapter)
+                // Сбрасываем текст, если список обновился
+                if (binding.AutoCompleteTextViewControlTypeOfWork.text.isNullOrEmpty()) {
+                    binding.AutoCompleteTextViewControlTypeOfWork.setText("", false)
+                }
+                binding.AutoCompleteTextViewControlTypeOfWork.setOnClickListener { binding.AutoCompleteTextViewControlTypeOfWork.showDropDown() }
+            } else {
+                binding.AutoCompleteTextViewControlTypeOfWork.setText("", false) // Очищаем, если нет видов работ
+            }
+        }
+
+        // Old Version
+//        sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { workTypesList ->
+//            if (!workTypesList.isNullOrEmpty()) {
+//                val adapter = ArrayAdapter(
+//                    requireContext(),
+//                    android.R.layout.simple_spinner_dropdown_item,
+//                    workTypesList
+//                )
+//                binding.AutoCompleteTextViewControlTypeOfWork.setAdapter(adapter)
+//                binding.AutoCompleteTextViewControlTypeOfWork.inputType = InputType.TYPE_NULL
+//                binding.AutoCompleteTextViewControlTypeOfWork.keyListener = null
+//                binding.AutoCompleteTextViewControlTypeOfWork.setOnClickListener {
+//                    binding.AutoCompleteTextViewControlTypeOfWork.showDropDown()
+//                }
+//            }else {
+//                Toast.makeText(requireContext(), "Не удалось загрузить список видов работ", Toast.LENGTH_SHORT).show()
+//                Log.d(TAG, "Не удалось загрузить список видов работ")
+//            }
+//
+//        }
 
         // Добавить строку
         binding.btnAddRow.setOnClickListener {
             val input = RowInput(
                 equipmentName = if (sharedViewModel.isEquipmentAbsent.value == true) "Оборудование отсутствует" else binding.AutoCompleteTextViewEquipmentName.text.toString().trim(),
-                workType = binding.AutoCompleteTextViewType.text.toString().trim(),
+                complexOfWork = binding.AutoCompleteTextViewControlComplexOfWork.text.toString().trim(),
+                typeOfWork = binding.AutoCompleteTextViewControlTypeOfWork.text.toString().trim(),
                 orderNumber = binding.tvOrderNumber.text.toString().trim(),
                 report = binding.InputEditTextReport.text.toString().trim(),
                 remarks = binding.InputEditTextRemarks.text.toString().trim(),
@@ -160,7 +226,8 @@ class ControlFragment : Fragment() {
                     sharedViewModel.addRow(
                         ControlRow(
                             input.equipmentName,
-                            input.workType,
+                            input.complexOfWork,
+                            input.typeOfWork,
                             input.orderNumber,
                             input.report,
                             input.remarks,
@@ -214,15 +281,17 @@ class ControlFragment : Fragment() {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_edit_row, null)
 
-        val editEquipment = dialogView.findViewById<EditText>(R.id.edEquipment)
-        val editType = dialogView.findViewById<EditText>(R.id.textInputType)
+        val editEquipment = dialogView.findViewById<EditText>(R.id.editEquipment)
+        val editComplexOfWork = dialogView.findViewById<EditText>(R.id.editComplex)
+        val editType = dialogView.findViewById<EditText>(R.id.editType)
         val editOrder = dialogView.findViewById<EditText>(R.id.editOrderNumber)
         val editReport = dialogView.findViewById<EditText>(R.id.editReport)
         val editRemarks = dialogView.findViewById<EditText>(R.id.editRemarks)
 
         // Заполняем поля данными из ControlRow
         editEquipment.setText(row.equipmentName)
-        editType.setText(row.workType)
+        editComplexOfWork.setText(row.complexOfWork)
+        editType.setText(row.typeOfWork)
         editOrder.setText(row.orderNumber)
         editReport.setText(row.report)
         editRemarks.setText(row.remarks)
@@ -242,7 +311,8 @@ class ControlFragment : Fragment() {
         dialogView.findViewById<Button>(R.id.btnSave).setOnClickListener {
             val updatedRow = ControlRow(
                 equipmentName = editEquipment.text.toString(),
-                workType = editType.text.toString(),
+                complexOfWork = editComplexOfWork.text.toString(),
+                typeOfWork = editType.text.toString(),
                 orderNumber = editOrder.text.toString(),
                 report = editReport.text.toString(),
                 remarks = editRemarks.text.toString(),
@@ -259,7 +329,7 @@ class ControlFragment : Fragment() {
         if (sharedViewModel.isEquipmentAbsent.value != true) {
             binding.AutoCompleteTextViewEquipmentName.setText("")
             }
-        binding.AutoCompleteTextViewType.setText("")
+        binding.AutoCompleteTextViewControlTypeOfWork.setText("")
         binding.InputEditTextReport.setText("")
         binding.InputEditTextRemarks.setText("")
     }

@@ -29,7 +29,9 @@ class ControlRowAdapter(
 
     inner class ControlRowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvEquipmentName: TextView = itemView.findViewById(R.id.tvEquipmentName)
-        private val tvWorkType: TextView = itemView.findViewById(R.id.tvWorkType)
+
+        private val tvWorkComplex: TextView = itemView.findViewById(R.id.tvComplexOfWork)
+        private val tvWorkType: TextView = itemView.findViewById(R.id.tvTypeOfWork)
         private val tvOrderNumber: TextView = itemView.findViewById(R.id.tvOrderNumber)
         private val tvReport: TextView = itemView.findViewById(R.id.tvReport)
         private val tvRemarks: TextView = itemView.findViewById(R.id.tvRemarks)
@@ -38,7 +40,8 @@ class ControlRowAdapter(
 
         fun bind(row: ControlRow, position: Int) {
             tvEquipmentName.text = row.equipmentName
-            tvWorkType.text = row.workType
+            tvWorkComplex.text = row.complexOfWork
+            tvWorkType.text = row.typeOfWork
             tvOrderNumber.text = row.orderNumber
             tvReport.text = row.report
             tvRemarks.text = row.remarks

@@ -143,7 +143,7 @@
             />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_Type"
+            android:id="@+id/tv_controlComplexOfWork"
             android:text="Комплекс работ"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualEquipmentName"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
@@ -154,7 +154,7 @@
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_Type"
+            android:id="@+id/textInputLayout_controlComplexOfWork"
             style="@style/TextInputLayout"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/checkBoxManualEquipmentName"
@@ -164,7 +164,44 @@
             >
 
             <AutoCompleteTextView
-                android:id="@+id/AutoCompleteTextView_Type"
+                android:id="@+id/AutoCompleteTextView_controlComplexOfWork"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:textColor="@color/color_black"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_controlTypeOfWork"
+            android:text="Вид работ"
+            app:layout_constraintTop_toBottomOf="@id/tv_controlComplexOfWork"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            style="@style/ArrangementText"
+            android:layout_marginTop="24dp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_controlTypeOfWork"
+            style="@style/TextInputLayout"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_controlComplexOfWork"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:endIconMode="dropdown_menu"
+            android:layout_marginTop="24dp"
+            >
+
+            <AutoCompleteTextView
+                android:id="@+id/AutoCompleteTextView_controlTypeOfWork"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -184,7 +221,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="textInputLayout_Type"
+            app:constraint_referenced_ids="textInputLayout_controlTypeOfWork"
             />
 
         <CheckBox
@@ -346,6 +383,27 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:text="Комплекс\nработ"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="center"
+                style="@style/ArrangementText"
+                android:padding="4dp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeStepGranularity="2sp"
+                android:maxLines="2"
+                android:textSize="14sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:text="Вид\nработ"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

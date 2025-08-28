@@ -21,7 +21,20 @@
         android:padding="4dp" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvWorkType"
+        android:id="@+id/tvComplexOfWork"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeStepGranularity="2sp"
+        style="@style/ArrangementText"
+        android:gravity="center"
+        android:padding="4dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvTypeOfWork"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
