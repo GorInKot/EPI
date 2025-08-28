@@ -64,7 +64,7 @@
             app:layout_constraintTop_toBottomOf="@id/dialogTitle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edIdObject"
+                android:id="@+id/autoComplete_dialog_IdObject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -80,8 +80,8 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_worktype"
-            android:hint="Вид работ из проекта"
+            android:id="@+id/textInputLayout_dialog_complexofwork"
+            android:hint="Комплекс работ из проекта"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
@@ -91,7 +91,34 @@
             >
 
             <AutoCompleteTextView
-                android:id="@+id/textInputWorkProject"
+                android:id="@+id/autoComplete_dialog_ComplexOfWork"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:minHeight="56dp"
+                android:textSize="14sp"
+                android:inputType="none"
+                android:importantForAccessibility="yes"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:textColor="@color/color_black"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_dialog_worktype"
+            android:hint="Вид работ из проекта"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_complexofwork"
+            style="@style/TextInputLayout"
+            app:endIconMode="dropdown_menu"
+            >
+
+            <AutoCompleteTextView
+                android:id="@+id/autoComplete_dialog_WorkProject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -118,7 +145,7 @@
             >
 
             <AutoCompleteTextView
-                android:id="@+id/editMeasures"
+                android:id="@+id/autoComplete_dialog_Measures"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -135,7 +162,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_dialog_volumes"
-            android:hint="Объем работ по проекту"
+            android:hint="Значение 'План' по проекту"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
@@ -144,7 +171,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editPlan"
+                android:id="@+id/autoComplete_dialog_Plan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -161,7 +188,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_dialog_fact"
-            android:hint="Выполненный объем работ"
+            android:hint="Значение 'Факт' по проекту"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
@@ -170,7 +197,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editFact"
+                android:id="@+id/autoComplete_dialog_Fact"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"

@@ -72,20 +72,60 @@ class FixingVolumesFragment : Fragment() {
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
 
-        // Подписка на списки автодополнения
-        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypeList ->
-            val adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                workTypeList
-            )
-            binding.AutoCompleteTextViewWorkType.setAdapter(adapter)
-            binding.AutoCompleteTextViewWorkType.inputType = android.text.InputType.TYPE_NULL
-            binding.AutoCompleteTextViewWorkType.keyListener = null
-            binding.AutoCompleteTextViewWorkType.setOnClickListener {
-                binding.AutoCompleteTextViewWorkType.showDropDown()
+        // Обзервер на Комплекс работ
+        // New Version
+        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { complexOfWorks ->
+            if(complexOfWorks.isNotEmpty()) {
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexOfWorks)
+                binding.AutoCompleteTextViewFixComplexOfWork.setAdapter(adapter)
+                sharedViewModel.selectedComplex.value?.let { selected ->
+                    val position = complexOfWorks.indexOf(selected)
+                    if (position >= 0) {
+                        binding.AutoCompleteTextViewFixComplexOfWork.setText(complexOfWorks[position], false)
+                    }
+                }
+                binding.AutoCompleteTextViewFixComplexOfWork.setOnItemClickListener { parent, view, position, id ->
+                    val selectedComplex = parent.getItemAtPosition(position) as String
+                    sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
+                }
+                binding.AutoCompleteTextViewFixComplexOfWork.setOnClickListener {
+                    binding.AutoCompleteTextViewFixComplexOfWork.showDropDown()
+                }
+            }else {
+                Toast.makeText(requireContext(), "Не удалось загрузить список комплексов работ", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Обзервер на Вид работ
+        // New Version
+        sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { typesOfWork ->
+            if (typesOfWork.isNotEmpty()) {
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
+                binding.AutoCompleteTextViewFixTypeOfWork.setAdapter(adapter)
+                // Сбрасываем текст, если список обновился
+                if (binding.AutoCompleteTextViewFixTypeOfWork.text.isNullOrEmpty()) {
+                    binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
+                }
+                binding.AutoCompleteTextViewFixTypeOfWork.setOnClickListener { binding.AutoCompleteTextViewFixTypeOfWork.showDropDown() }
+            } else {
+                binding.AutoCompleteTextViewFixTypeOfWork.setText("", false) // Очищаем, если нет видов работ
+            }
+        }
+
+        // Подписка на списки автодополнения
+//        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypeList ->
+//            val adapter = ArrayAdapter(
+//                requireContext(),
+//                android.R.layout.simple_list_item_1,
+//                workTypeList
+//            )
+//            binding.AutoCompleteTextViewWorkType.setAdapter(adapter)
+//            binding.AutoCompleteTextViewWorkType.inputType = android.text.InputType.TYPE_NULL
+//            binding.AutoCompleteTextViewWorkType.keyListener = null
+//            binding.AutoCompleteTextViewWorkType.setOnClickListener {
+//                binding.AutoCompleteTextViewWorkType.showDropDown()
+//            }
+//        }
 
         sharedViewModel.fixMeasures.observe(viewLifecycleOwner) { measuresList ->
             val adapter = ArrayAdapter(
@@ -106,7 +146,8 @@ class FixingVolumesFragment : Fragment() {
             val objectId = sharedViewModel.selectedObject.value.orEmpty()
             val newRow = FixVolumesRow(
                 ID_object = objectId,
-                projectWorkType = binding.AutoCompleteTextViewWorkType.text.toString().trim(),
+                complexOfWork = binding.AutoCompleteTextViewFixComplexOfWork.text.toString().trim(),
+                projectWorkType = binding.AutoCompleteTextViewFixTypeOfWork.text.toString().trim(),
                 measure = binding.AutoCompleteTextViewMeasureUnits.text.toString().trim(),
                 plan = binding.TextInputEditTextPlan.text.toString().trim(),
                 fact = binding.TextInputEditTextFact.text.toString().trim(),
@@ -179,14 +220,16 @@ class FixingVolumesFragment : Fragment() {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_fixvolumes_row, null)
 
-        val editIdObject = dialogView.findViewById<TextInputEditText>(R.id.edIdObject)
-        val editWorkProject = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputWorkProject)
-        val editMeasures = dialogView.findViewById<AutoCompleteTextView>(R.id.editMeasures)
-        val editPlan = dialogView.findViewById<TextInputEditText>(R.id.editPlan)
-        val editFact = dialogView.findViewById<TextInputEditText>(R.id.editFact)
+        val editIdObject = dialogView.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_id)
+        val editComplexOfWork = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_complexofwork)
+        val editWorkProject = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_worktype)
+        val editMeasures = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_measures)
+        val editPlan = dialogView.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_volumes)
+        val editFact = dialogView.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_fact)
 
         editIdObject.setText(row.ID_object)
         editIdObject.isEnabled = false // ID_object не редактируется
+        editComplexOfWork.setText(row.complexOfWork)
         editWorkProject.setText(row.projectWorkType)
         editMeasures.setText(row.measure)
         editPlan.setText(row.plan)
@@ -218,6 +261,7 @@ class FixingVolumesFragment : Fragment() {
         dialogView.findViewById<Button>(R.id.btnFixSave).setOnClickListener {
             val newRow = FixVolumesRow(
                 ID_object = row.ID_object,
+                complexOfWork = row.complexOfWork,
                 projectWorkType = editWorkProject.text.toString().trim(),
                 measure = editMeasures.text.toString().trim(),
                 plan = editPlan.text.toString().trim(),
@@ -250,27 +294,33 @@ class FixingVolumesFragment : Fragment() {
 //                (context.findViewById<TextInputEditText>(R.id.edIdObject)
 //                    ?: binding.TextInputEditTextIdObject)?.error = reason
 //            }
+            // TODO - Комплекс работ
+            reason.contains("Комплекс работ") -> {
+                (context.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_complexofwork)
+                    ?: binding.AutoCompleteTextViewFixComplexOfWork)?.error = reason
+            }
             reason.contains("Вид работ") -> {
-                (context.findViewById<AutoCompleteTextView>(R.id.textInputWorkProject)
-                    ?: binding.AutoCompleteTextViewWorkType)?.error = reason
+                (context.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_worktype)
+                    ?: binding.AutoCompleteTextViewFixTypeOfWork)?.error = reason
             }
             reason.contains("Единица измерения") -> {
-                (context.findViewById<AutoCompleteTextView>(R.id.editMeasures)
+                (context.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_measures)
                     ?: binding.AutoCompleteTextViewMeasureUnits)?.error = reason
             }
             reason.contains("План") -> {
-                (context.findViewById<TextInputEditText>(R.id.editPlan)
+                (context.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_volumes)
                     ?: binding.TextInputEditTextPlan)?.error = reason
             }
             reason.contains("Факт") -> {
-                (context.findViewById<TextInputEditText>(R.id.editFact)
+                (context.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_fact)
                     ?: binding.TextInputEditTextFact)?.error = reason
             }
         }
     }
 
     private fun clearInputFields() {
-        binding.AutoCompleteTextViewWorkType.setText("")
+        binding.AutoCompleteTextViewFixComplexOfWork.setText("")
+        binding.AutoCompleteTextViewFixTypeOfWork.setText("")
         binding.AutoCompleteTextViewMeasureUnits.setText("")
         binding.TextInputEditTextPlan.setText("")
         binding.TextInputEditTextFact.setText("")

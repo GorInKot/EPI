@@ -31,6 +31,7 @@ class FixVolumesRowAdapter(
 
     inner class FixVolumesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvIdObject: TextView = itemView.findViewById(R.id.tvIdObject)
+        private val tvProjectComplexOfWork: TextView = itemView.findViewById(R.id.tvProjectComplexOfWork)
         private val tvProjectWorkType: TextView = itemView.findViewById(R.id.tvProjectWorkType)
         private val tvMeasure: TextView = itemView.findViewById(R.id.tvMeasure)
         private val tvPlan: TextView = itemView.findViewById(R.id.tvPlan)
@@ -41,6 +42,7 @@ class FixVolumesRowAdapter(
 
         fun bind(row: FixVolumesRow, position: Int) {
             tvIdObject.text = row.ID_object
+            tvProjectComplexOfWork.text = row.complexOfWork
             tvProjectWorkType.text = row.projectWorkType
             tvMeasure.text = row.measure
             tvPlan.text = row.plan
