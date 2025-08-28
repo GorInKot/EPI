@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Dao
 import com.example.epi.DataBase.ExtraDatabase.ExtraDatabaseHelper
+import com.example.epi.DataBase.FactValue.FactValueRepository
 import com.example.epi.DataBase.OrderNumber.OrderNumber
 import com.example.epi.DataBase.OrderNumber.OrderNumberRepository
 import com.example.epi.DataBase.PlanValue.PlanValue
@@ -44,7 +45,8 @@ class SharedViewModel(
     private val userRepository: UserRepository,
     private val context: Context,
     private val planValueRepository: PlanValueRepository,
-    private val orderNumberRepository: OrderNumberRepository
+    private val orderNumberRepository: OrderNumberRepository,
+    private val factValueRepository: FactValueRepository
 ) : ViewModel() {
     
     companion object {

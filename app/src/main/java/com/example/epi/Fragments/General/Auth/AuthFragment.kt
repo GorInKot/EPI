@@ -31,7 +31,8 @@ class AuthFragment : Fragment() {
             (requireActivity().application as App).userRepository,
             requireActivity().applicationContext,
             (requireActivity().application as App).planValueRepository,
-            (requireActivity().application as App).orderNumberRepository
+            (requireActivity().application as App).orderNumberRepository,
+            (requireActivity().application as App).factValueRepository
         )
     }
 

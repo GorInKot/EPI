@@ -6,6 +6,8 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import android.util.Log
+import com.example.epi.DataBase.FactValue.FactValue
+import com.example.epi.DataBase.FactValue.FactValueDao
 import com.example.epi.DataBase.OrderNumber.OrderNumber
 import com.example.epi.DataBase.OrderNumber.OrderNumberDao
 import com.example.epi.DataBase.PlanValue.PlanValue
@@ -15,12 +17,14 @@ import com.example.epi.DataBase.Report.ReportDao
 import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class, User::class, PlanValue::class, OrderNumber::class], version = 8, exportSchema = true)
+@Database(entities = [Report::class, User::class, PlanValue::class, OrderNumber::class, FactValue::class], version = 9, exportSchema = true)
 abstract class NewAppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao
     abstract fun planValueDao(): PlanValueDao
     abstract fun orderNumberDao(): OrderNumberDao
+
+    abstract fun factValueDao(): FactValueDao
 
     companion object {
         @Volatile
