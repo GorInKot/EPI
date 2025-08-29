@@ -359,6 +359,24 @@ class SharedViewModel(
         }
     }
 
+    // -------- ChangePlanValuesFragment --------
+    // --- Редактирование существующего PlanValue ---
+    suspend fun updatePlanValue(updated: PlanValue) {
+        withContext(Dispatchers.IO) {
+            planValueRepository.update(updated)
+            loadPlanValues(updated.objectId)
+        }
+    }
+
+    // --- Удаление PlanValue ---
+    suspend fun deletePlanValue(planValue: PlanValue) {
+        withContext(Dispatchers.IO) {
+            planValueRepository.delete(planValue)
+            loadPlanValues(planValue.objectId)
+        }
+    }
+
+
     private val _selectedComplex = MutableLiveData<String>()
     val selectedComplex: LiveData<String> get() = _selectedComplex
 
@@ -1515,6 +1533,11 @@ class SharedViewModel(
         _authResult.value = AuthResult.Idle
         clearAllData()
     }
+
+    // -------- ChangePlanValuesFragment --------
+    // region ChangePlanValuesFragment
+
+    // endregion
 }
 
 sealed class RowValidationResult {

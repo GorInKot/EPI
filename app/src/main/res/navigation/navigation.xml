@@ -90,6 +90,12 @@
             app:destination="@id/StartFragment"
             />
 
+        <!-- Навигация к фрагменту "Изменить плановые значения -->
+        <action
+            android:id="@+id/action_SettingFragment_to_ChangePlanValuesFragment"
+            app:destination="@id/ChangePlanValuesFragment"
+            />
+
     </fragment>
 
     <!-- Фрагмент Расстановка: ArrangementFragment -->
@@ -229,6 +235,48 @@
         <action
             android:id="@+id/action_ReportsFragment_to_StartFragment"
             app:destination="@id/StartFragment"
+            />
+    </fragment>
+
+    <!-- Фрагмент Изменить плановые значения: ChangePlanValuesFragment -->
+    <fragment
+        android:id="@+id/ChangePlanValuesFragment"
+        android:name="com.example.epi.Fragments.General.ChangePlanValues.ChangePlanValuesFragment"
+        android:label="ChangePlanValues"
+        tools:layout="@layout/fragment_change_plan_values"
+        >
+        <!-- Навигация к фрагменту "Настройки" -->
+        <action
+            android:id="@+id/action_ChangePlanValuesFragment_to_SettingFragment"
+            app:destination="@id/SettingFragment"
+            />
+
+        <!-- Навигация к фрагменту "Редактирование Плановых значений" -->
+        <action
+            android:id="@+id/action_ChangePlanValuesFragment_to_EditPlanValuesFragment"
+            app:destination="@id/EditPlanValuesFragment">
+            <argument
+                android:name="planValue"
+                app:argType="com.example.epi.DataBase.PlanValue.PlanValue"
+                />
+        </action>
+    </fragment>
+
+    <!-- Фрагмент Изменить плановые значения: ChangePlanValuesFragment -->
+    <fragment
+        android:id="@+id/EditPlanValuesFragment"
+        android:name="com.example.epi.Fragments.General.ChangePlanValues.EditPlanValues.EditPlanValueFragment"
+        android:label="EditPlanValue"
+        tools:layout="@layout/fragment_edit_plan_value"
+        >
+        <argument
+            android:name="planValue"
+            app:argType="com.example.epi.DataBase.PlanValue.PlanValue"
+            />
+        <!-- Навигация к фрагменту "Меню" -->
+        <action
+            android:id="@+id/action_ChangePlanValuesFragment_to_ChangePlanValuesFragment"
+            app:destination="@id/ChangePlanValuesFragment"
             />
     </fragment>
 </navigation>

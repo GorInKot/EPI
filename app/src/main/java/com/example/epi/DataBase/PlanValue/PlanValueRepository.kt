@@ -16,4 +16,8 @@ class PlanValueRepository(private val planValueDao: PlanValueDao) {
     suspend fun getPlanValuesByObjectId(objectId: String): List<PlanValue> {
         return planValueDao.getByObjectId(objectId)
     }
+
+    suspend fun update(planValue: PlanValue) = planValueDao.update(planValue)
+
+    suspend fun delete(planValue: PlanValue) = planValueDao.delete(planValue)
 }

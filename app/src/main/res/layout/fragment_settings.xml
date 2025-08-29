@@ -34,14 +34,27 @@
         app:layout_constraintGuide_percent="0.9"
         />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_Theme"
+        style="@style/ArrangementText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Настройки темы приложения"
+        android:gravity="start|center_vertical"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        />
+
     <RadioGroup
         android:id="@+id/themeRadioGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/tv_Theme"
         >
 
         <RadioButton
@@ -49,33 +62,59 @@
             style="@style/checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Системная тема" />
+            android:text="Системная тема"
+            />
 
         <RadioButton
             android:id="@+id/radioLight"
             style="@style/checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Светлая тема" />
+            android:text="Светлая тема"
+            />
 
         <RadioButton
             android:id="@+id/radioDark"
             style="@style/checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Темная тема" />
+            android:text="Темная тема"
+            />
     </RadioGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_radiogroup"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/themeRadioGroup"
+        android:layout_marginTop="8dp"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_changePlanValues"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/SimpleButton"
+        android:text="Изменить плановые значения"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/divider_radiogroup"
+        android:layout_marginTop="8dp"
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonBack"
         style="@style/ExtraButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
         android:text="Назад"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintTop_toBottomOf="@id/themeRadioGroup"
+        app:layout_constraintBottom_toBottomOf="parent"
 
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,7 +29,6 @@ class ControlRowAdapter(
 
     inner class ControlRowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvEquipmentName: TextView = itemView.findViewById(R.id.tvEquipmentName)
-
         private val tvWorkComplex: TextView = itemView.findViewById(R.id.tvComplexOfWork)
         private val tvWorkType: TextView = itemView.findViewById(R.id.tvTypeOfWork)
         private val tvOrderNumber: TextView = itemView.findViewById(R.id.tvOrderNumber)

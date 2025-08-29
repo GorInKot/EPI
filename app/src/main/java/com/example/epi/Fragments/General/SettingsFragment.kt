@@ -58,6 +58,11 @@ class SettingsFragment : Fragment() {
         binding.buttonBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.btnChangePlanValues.setOnClickListener {
+            val action = SettingsFragmentDirections.actionSettingFragmentToChangePlanValuesFragment()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {
