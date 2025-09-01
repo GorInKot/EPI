@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.epi.Fragments.General.ChangePlanValues.ChangePlanValuesFragmentDirections
 import com.example.epi.R
 import com.example.epi.databinding.FragmentSettingsBinding
 
@@ -56,7 +57,8 @@ class SettingsFragment : Fragment() {
 
         // Кнопка возврата
         binding.buttonBack.setOnClickListener {
-            findNavController().navigateUp()
+            val action = SettingsFragmentDirections.actionSettingFragmentToStartFragment()
+            findNavController().navigate(action)
         }
 
         binding.btnChangePlanValues.setOnClickListener {

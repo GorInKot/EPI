@@ -1545,6 +1545,16 @@ class SharedViewModel(
     // region ChangePlanValuesFragment
 
     // endregion
+
+    suspend fun getPlanValuesByObjectIdAndComplexAndType(
+        objectId: String,
+        complexWork: String,
+        typeOfWork: String
+    ): List<PlanValue> { // Или PlanValue? в зависимости от DAO
+        return withContext(Dispatchers.IO) {
+            planValueRepository.getPlanValuesByObjectIdAndComplexAndType(objectId, complexWork, typeOfWork)
+        }
+    }
 }
 
 sealed class RowValidationResult {

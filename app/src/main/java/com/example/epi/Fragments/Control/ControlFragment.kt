@@ -60,8 +60,9 @@ class ControlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedViewModel.setSelectedComplex("")
+        binding.AutoCompleteTextViewControlComplexOfWork.setText("", false)
 
-        sharedViewModel.loadPreviousReport()
 
         // Настройка RecyclerView
         setupRecyclerView()
@@ -130,6 +131,8 @@ class ControlFragment : Fragment() {
             if(complexOfWorks.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexOfWorks)
                 binding.AutoCompleteTextViewControlComplexOfWork.setAdapter(adapter)
+                binding.AutoCompleteTextViewControlComplexOfWork.inputType = InputType.TYPE_NULL
+                binding.AutoCompleteTextViewControlComplexOfWork.keyListener = null
                 sharedViewModel.selectedComplex.value?.let { selected ->
                     val position = complexOfWorks.indexOf(selected)
                     if (position >= 0) {
@@ -148,35 +151,14 @@ class ControlFragment : Fragment() {
             }
         }
 
-        // Old Version
-//        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workComplexList ->
-//            if (!workComplexList.isNullOrEmpty()) {
-//                val adapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    workComplexList
-//                )
-//                binding.AutoCompleteTextViewControlComplexOfWork.setAdapter(adapter)
-//                binding.AutoCompleteTextViewControlComplexOfWork.inputType = InputType.TYPE_NULL
-//                binding.AutoCompleteTextViewControlComplexOfWork.keyListener = null
-//                binding.AutoCompleteTextViewControlComplexOfWork.setOnClickListener {
-//                    binding.AutoCompleteTextViewControlComplexOfWork.showDropDown()
-//                }
-//            }else {
-//                Toast.makeText(requireContext(), "Не удалось загрузить список комплексов работ", Toast.LENGTH_SHORT).show()
-//                Log.d(TAG, "Не удалось загрузить список комплексов работ")
-//            }
-//
-//        }
-
-
-
         // Обзервер на Вид работ
         // New Version
         sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { typesOfWork ->
             if (typesOfWork.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
                 binding.AutoCompleteTextViewControlTypeOfWork.setAdapter(adapter)
+                binding.AutoCompleteTextViewControlTypeOfWork.inputType = InputType.TYPE_NULL
+                binding.AutoCompleteTextViewControlTypeOfWork.keyListener = null
                 // Сбрасываем текст, если список обновился
                 if (binding.AutoCompleteTextViewControlTypeOfWork.text.isNullOrEmpty()) {
                     binding.AutoCompleteTextViewControlTypeOfWork.setText("", false)
@@ -186,27 +168,6 @@ class ControlFragment : Fragment() {
                 binding.AutoCompleteTextViewControlTypeOfWork.setText("", false) // Очищаем, если нет видов работ
             }
         }
-
-        // Old Version
-//        sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { workTypesList ->
-//            if (!workTypesList.isNullOrEmpty()) {
-//                val adapter = ArrayAdapter(
-//                    requireContext(),
-//                    android.R.layout.simple_spinner_dropdown_item,
-//                    workTypesList
-//                )
-//                binding.AutoCompleteTextViewControlTypeOfWork.setAdapter(adapter)
-//                binding.AutoCompleteTextViewControlTypeOfWork.inputType = InputType.TYPE_NULL
-//                binding.AutoCompleteTextViewControlTypeOfWork.keyListener = null
-//                binding.AutoCompleteTextViewControlTypeOfWork.setOnClickListener {
-//                    binding.AutoCompleteTextViewControlTypeOfWork.showDropDown()
-//                }
-//            }else {
-//                Toast.makeText(requireContext(), "Не удалось загрузить список видов работ", Toast.LENGTH_SHORT).show()
-//                Log.d(TAG, "Не удалось загрузить список видов работ")
-//            }
-//
-//        }
 
         // Добавить строку
         binding.btnAddRow.setOnClickListener {

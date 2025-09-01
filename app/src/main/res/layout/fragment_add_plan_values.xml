@@ -64,8 +64,10 @@
                 android:text="Добавить Плановые значения"
                 app:layout_constraintStart_toEndOf="@id/guideline_start"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline_end"
                 android:maxLines="1"
                 android:layout_marginStart="8dp"
+                android:gravity="center"
                 />
 
             <!-- Комплекс работ: Заголовок   -->

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.epi.App
+import com.example.epi.DataBase.PlanValue.PlanValue
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
 import com.example.epi.R
 import com.example.epi.RowValidationResult
@@ -25,6 +27,8 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.PI
 
 class FixingVolumesFragment : Fragment() {
 
@@ -41,6 +45,10 @@ class FixingVolumesFragment : Fragment() {
             (requireActivity().application as App).factValueRepository
         )
     }
+
+    companion object {
+        private val TAG = "Tagg-FixingVolumesFragment"
+    }
     private lateinit var adapter: FixVolumesRowAdapter
 
     override fun onCreateView(
@@ -54,8 +62,8 @@ class FixingVolumesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Загрузка данных из последнего незавершенного отчета
-        sharedViewModel.loadPreviousReport()
+        sharedViewModel.setSelectedComplex("")
+        binding.AutoCompleteTextViewFixComplexOfWork.setText("", false)
 
         // Настройка RecyclerView
         setupRecyclerView()
@@ -64,7 +72,7 @@ class FixingVolumesFragment : Fragment() {
         sharedViewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
             // Лог для отладки
-            android.util.Log.d("FixingVolumesFragment", "Submitting list to adapter: $rows")
+            android.util.Log.d(TAG, "Submitting list to adapter: $rows")
         }
 
         // Подписка на ошибки
@@ -87,6 +95,7 @@ class FixingVolumesFragment : Fragment() {
                 binding.AutoCompleteTextViewFixComplexOfWork.setOnItemClickListener { parent, view, position, id ->
                     val selectedComplex = parent.getItemAtPosition(position) as String
                     sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
+                    checkComplexAndTypeOfWork(selectedComplex)
                 }
                 binding.AutoCompleteTextViewFixComplexOfWork.setOnClickListener {
                     binding.AutoCompleteTextViewFixComplexOfWork.showDropDown()
@@ -97,7 +106,6 @@ class FixingVolumesFragment : Fragment() {
         }
 
         // Обзервер на Вид работ
-        // New Version
         sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { typesOfWork ->
             if (typesOfWork.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
@@ -106,12 +114,22 @@ class FixingVolumesFragment : Fragment() {
                 if (binding.AutoCompleteTextViewFixTypeOfWork.text.isNullOrEmpty()) {
                     binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
                 }
-                binding.AutoCompleteTextViewFixTypeOfWork.setOnClickListener { binding.AutoCompleteTextViewFixTypeOfWork.showDropDown() }
+                binding.AutoCompleteTextViewFixTypeOfWork.setOnItemClickListener { parent, view, position, id ->
+                    val selectedType = parent.getItemAtPosition(position) as String
+                    checkTypeOfWork(selectedType) // Проверяем наличие вида работ
+                }
+                binding.AutoCompleteTextViewFixTypeOfWork.setOnClickListener {
+                    binding.AutoCompleteTextViewFixTypeOfWork.showDropDown()
+                }
             } else {
                 binding.AutoCompleteTextViewFixTypeOfWork.setText("", false) // Очищаем, если нет видов работ
+                binding.AutoCompleteTextViewFixTypeOfWork.isEnabled = false // Дезактивируем, если список пуст
             }
         }
+        binding.TextInputEditTextPlan.inputType = InputType.TYPE_NULL
+        binding.TextInputEditTextPlan.keyListener = null
 
+//        TextInputEditText_Plan
         // Подписка на списки автодополнения
 //        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypeList ->
 //            val adapter = ArrayAdapter(
@@ -324,6 +342,59 @@ class FixingVolumesFragment : Fragment() {
         binding.AutoCompleteTextViewMeasureUnits.setText("")
         binding.TextInputEditTextPlan.setText("")
         binding.TextInputEditTextFact.setText("")
+    }
+
+    private suspend fun checkPlanValueExistence(complexOfWork: String, typeOfWork: String, objectId: String): PlanValue? {
+        return withContext(Dispatchers.IO) {
+            sharedViewModel.getPlanValuesByObjectIdAndComplexAndType(objectId, complexOfWork, typeOfWork).firstOrNull()
+        }
+    }
+
+    private fun checkComplexAndTypeOfWork(selectedComplex: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val objectId = sharedViewModel.selectedObject.value ?: run {
+                Toast.makeText(requireContext(), "Объект не указан", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            val planValue = checkPlanValueExistence(selectedComplex, "", objectId)
+            if (planValue == null) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Ошибка")
+                    .setMessage("Комплекс работ отсутствует для выбранного объекта, добавьте плановое значение")
+                    .setPositiveButton("Ок") {dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            } else {
+                // Очистка и активация поля Вид работ
+                binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
+                binding.AutoCompleteTextViewFixTypeOfWork.isEnabled = true
+            }
+        }
+    }
+
+    private fun checkTypeOfWork(selectedType: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val objectId = sharedViewModel.selectedObject.value ?: run {
+                Toast.makeText(requireContext(), "Не выбран объект", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            val selectedComplex = sharedViewModel.selectedComplex.value ?: ""
+
+            val planValue = checkPlanValueExistence(selectedComplex, selectedType, objectId)
+            if (planValue == null) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Ошибка")
+                    .setMessage("Вид работ отсутствует, пожалуйста, добавьте плановое значение")
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .show()
+            } else {
+                // Загрузка единиц измерения и плана
+                binding.TextInputEditTextPlan.setText(planValue.planValue.toString())
+                binding.AutoCompleteTextViewMeasureUnits.setText(planValue.measures, false)
+                binding.TextInputEditTextFact.requestFocus() // Фокус на поле Факт
+            }
+        }
     }
 
     override fun onDestroyView() {

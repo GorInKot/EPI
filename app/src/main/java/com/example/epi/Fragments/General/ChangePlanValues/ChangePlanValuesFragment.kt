@@ -68,12 +68,6 @@ class ChangePlanValuesFragment : Fragment() {
         sharedViewModel.clearPlanValues()
     }
 
-    override fun onResume() {
-        super.onResume()
-//        binding.autoCompleteObjects.setText("", false)
-//        sharedViewModel.clearPlanValues()
-    }
-
     private fun setupObjectDropdown() {
         lifecycleScope.launch {
             val dbHelper = ExtraDatabaseHelper(requireContext())
