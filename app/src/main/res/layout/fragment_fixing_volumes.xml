@@ -172,7 +172,6 @@
             android:gravity="center"
             android:layout_gravity="center"
             style="@style/TextInputLayout"
-            app:endIconMode="dropdown_menu"
             >
             <AutoCompleteTextView
                 android:id="@+id/AutoCompleteTextView_MeasureUnits"

@@ -363,16 +363,17 @@ class FixingVolumesFragment : Fragment() {
             val planValue = checkComplexExistence(selectedComplex, objectId)
             Log.d(TAG, "PlanValue в checkComplexAndTypeOfWork:\nselectedComplex: ${selectedComplex}\nobjectId: ${objectId}")
             if (planValue == null) {
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Ошибка")
-                    .setMessage("Комплекс работ '$selectedComplex' отсутствует для выбранного объекта, добавьте плановое значение")
-                    .setPositiveButton("Ок") { dialog, _ ->
-                        dialog.dismiss()
+                showStyledAlertDialog(
+                    title = "Ошибка",
+                    message = "Комплекс работ '$selectedComplex' отсутствует для выбранного объекта, добавьте плановое значение",
+                    positiveButtonText = "OK",
+                    positiveAction = {
                         val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
                         findNavController().navigate(action)
-                    }
-                    .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
-                    .show()
+                    },
+                    negativeButtonText = "Отмена",
+                    negativeAction = { }
+                )
             } else {
                 // Активируем поле Вид работ и сбрасываем его значение
                 binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
@@ -396,18 +397,6 @@ class FixingVolumesFragment : Fragment() {
             val planValue = checkTypeOfWorkExistence(selectedComplex, selectedType, objectId)
             Log.d(TAG, "PlanValue в checkTypeOfWork: selectedComplex=$selectedComplex, selectedType=$selectedType, objectId=$objectId, planValue=$planValue")
             if (planValue == null) {
-//                AlertDialog.Builder(requireContext())
-//                    .setTitle("Ошибка")
-//                    .setMessage("Вид работ '$selectedType' отсутствует для комплекса '$selectedComplex', добавьте плановое значение")
-//                    .setPositiveButton("OK") { dialog, _ ->
-//                        dialog.dismiss()
-//                        val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
-//                        findNavController().navigate(action)
-//                    }
-//                    .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
-//                    .show()
-//            } else {
-
                 showStyledAlertDialog(
                     title = "Ошибка",
                     message = "Вид работ '$selectedType' отсутствует для комплекса '$selectedComplex', добавьте плановое значение",
