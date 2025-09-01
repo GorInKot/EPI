@@ -25,6 +25,12 @@ interface PlanValueDao {
         typeOfWork: String
     ): List<PlanValue>
 
+    @Query("SELECT * FROM plan_values WHERE objectId = :objectId AND complexWork = :complexWork ")
+    suspend fun getByObjectIdAndComplex(
+        objectId: String,
+        complexWork: String,
+    ): List<PlanValue>
+
     @Update
     suspend fun update(planValue: PlanValue)
 

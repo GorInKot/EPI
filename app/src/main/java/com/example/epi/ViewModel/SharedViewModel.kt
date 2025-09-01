@@ -1555,6 +1555,15 @@ class SharedViewModel(
             planValueRepository.getPlanValuesByObjectIdAndComplexAndType(objectId, complexWork, typeOfWork)
         }
     }
+
+    suspend fun getPlanValuesByObjectIdAndComplex(
+        objectId: String,
+        complexWork: String,
+    ): List<PlanValue> { // Или PlanValue? в зависимости от DAO
+        return withContext(Dispatchers.IO) {
+            planValueRepository.getPlanValuesByObjectIdAndComplex(objectId, complexWork)
+        }
+    }
 }
 
 sealed class RowValidationResult {

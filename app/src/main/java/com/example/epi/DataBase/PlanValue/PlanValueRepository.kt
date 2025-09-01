@@ -26,6 +26,13 @@ class PlanValueRepository(private val planValueDao: PlanValueDao) {
         return planValueDao.getByObjectIdAndComplexAndType(objectId, complexWork, typeOfWork)
     }
 
+    suspend fun getPlanValuesByObjectIdAndComplex(
+        objectId: String,
+        complexWork: String,
+    ): List<PlanValue> {
+        return planValueDao.getByObjectIdAndComplex(objectId, complexWork)
+    }
+
     suspend fun update(planValue: PlanValue) = planValueDao.update(planValue)
 
     suspend fun delete(planValue: PlanValue) = planValueDao.delete(planValue)

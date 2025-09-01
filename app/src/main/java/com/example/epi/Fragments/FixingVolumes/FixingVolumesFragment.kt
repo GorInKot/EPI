@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -129,22 +130,6 @@ class FixingVolumesFragment : Fragment() {
         binding.TextInputEditTextPlan.inputType = InputType.TYPE_NULL
         binding.TextInputEditTextPlan.keyListener = null
 
-//        TextInputEditText_Plan
-        // Подписка на списки автодополнения
-//        sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { workTypeList ->
-//            val adapter = ArrayAdapter(
-//                requireContext(),
-//                android.R.layout.simple_list_item_1,
-//                workTypeList
-//            )
-//            binding.AutoCompleteTextViewWorkType.setAdapter(adapter)
-//            binding.AutoCompleteTextViewWorkType.inputType = android.text.InputType.TYPE_NULL
-//            binding.AutoCompleteTextViewWorkType.keyListener = null
-//            binding.AutoCompleteTextViewWorkType.setOnClickListener {
-//                binding.AutoCompleteTextViewWorkType.showDropDown()
-//            }
-//        }
-
         sharedViewModel.fixMeasures.observe(viewLifecycleOwner) { measuresList ->
             val adapter = ArrayAdapter(
                 requireContext(),
@@ -176,8 +161,8 @@ class FixingVolumesFragment : Fragment() {
                 is RowValidationResult.Valid -> {
                     sharedViewModel.addFixRow(newRow)
                     clearInputFields()
-//                    Toast.makeText(requireContext(), "Строка добавлена", Toast.LENGTH_SHORT).show()
                 }
+
                 is RowValidationResult.Invalid -> {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_LONG).show()
                     highlightErrorField(result.reason)
@@ -217,7 +202,6 @@ class FixingVolumesFragment : Fragment() {
             }
             val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
             findNavController().navigate(action)
-//            findNavController().navigate(R.id.action_FixVolumesFragment_to_AddPlanValue)
         }
     }
 
@@ -344,9 +328,24 @@ class FixingVolumesFragment : Fragment() {
         binding.TextInputEditTextFact.setText("")
     }
 
-    private suspend fun checkPlanValueExistence(complexOfWork: String, typeOfWork: String, objectId: String): PlanValue? {
+    // Проверяем Объем и комплекс работ
+    private suspend fun checkComplexExistence(complexOfWork: String, objectId: String): PlanValue? {
         return withContext(Dispatchers.IO) {
-            sharedViewModel.getPlanValuesByObjectIdAndComplexAndType(objectId, complexOfWork, typeOfWork).firstOrNull()
+            val planValues = sharedViewModel.getPlanValuesByObjectIdAndComplex(objectId, complexOfWork)
+                .filter { it.objectId == objectId && it.complexWork == complexOfWork }
+            val result = planValues.firstOrNull()
+            Log.d(TAG, "Checking Complex: objectId=$objectId, complexWork=$complexOfWork, result=$result")
+            result
+        }
+    }
+
+    // Проверяем полную комбинация: Объект, Комплекс, вид работ
+    private suspend fun checkTypeOfWorkExistence(complexOfWork: String, typeOfWork: String, objectId: String): PlanValue? {
+        return withContext(Dispatchers.IO) {
+            val planValues = sharedViewModel.getPlanValuesByObjectIdAndComplexAndType(objectId, complexOfWork, typeOfWork)
+            val result = planValues.firstOrNull()
+            Log.d(TAG, "Checking TypeOfWork: objectId=$objectId, complexWork=$complexOfWork, typeOfWork=$typeOfWork, result=$result")
+            result
         }
     }
 
@@ -356,42 +355,57 @@ class FixingVolumesFragment : Fragment() {
                 Toast.makeText(requireContext(), "Объект не указан", Toast.LENGTH_SHORT).show()
                 return@launch
             }
-            val planValue = checkPlanValueExistence(selectedComplex, "", objectId)
+            Log.d(TAG, "Checking complex:\nobjectId=$objectId,\ncomplexWork=$selectedComplex")
+            val planValue = checkComplexExistence(selectedComplex, objectId)
+            Log.d(TAG, "PlanValue в checkComplexAndTypeOfWork:\nselectedComplex: ${selectedComplex}\nobjectId: ${objectId}")
             if (planValue == null) {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Ошибка")
-                    .setMessage("Комплекс работ отсутствует для выбранного объекта, добавьте плановое значение")
-                    .setPositiveButton("Ок") {dialog, _ ->
+                    .setMessage("Комплекс работ '$selectedComplex' отсутствует для выбранного объекта, добавьте плановое значение")
+                    .setPositiveButton("Ок") { dialog, _ ->
                         dialog.dismiss()
+                        val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
+                        findNavController().navigate(action)
                     }
+                    .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
                     .show()
             } else {
-                // Очистка и активация поля Вид работ
+                // Активируем поле Вид работ и сбрасываем его значение
                 binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
                 binding.AutoCompleteTextViewFixTypeOfWork.isEnabled = true
             }
         }
     }
 
+    // Проверяем Вид работ
     private fun checkTypeOfWork(selectedType: String) {
         CoroutineScope(Dispatchers.Main).launch {
             val objectId = sharedViewModel.selectedObject.value ?: run {
                 Toast.makeText(requireContext(), "Не выбран объект", Toast.LENGTH_SHORT).show()
                 return@launch
             }
-            val selectedComplex = sharedViewModel.selectedComplex.value ?: ""
-
-            val planValue = checkPlanValueExistence(selectedComplex, selectedType, objectId)
+            val selectedComplex = sharedViewModel.selectedComplex.value ?: run {
+                Toast.makeText(requireContext(), "Комплекс работ не выбран", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            Log.d(TAG, "Checking TypeOfWork: objectId=$objectId, selectedComplex=$selectedComplex, selectedType=$selectedType")
+            val planValue = checkTypeOfWorkExistence(selectedComplex, selectedType, objectId)
+            Log.d(TAG, "PlanValue в checkTypeOfWork: selectedComplex=$selectedComplex, selectedType=$selectedType, objectId=$objectId, planValue=$planValue")
             if (planValue == null) {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Ошибка")
-                    .setMessage("Вид работ отсутствует, пожалуйста, добавьте плановое значение")
-                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .setMessage("Вид работ '$selectedType' отсутствует для комплекса '$selectedComplex', добавьте плановое значение")
+                    .setPositiveButton("OK") { dialog, _ ->
+                        dialog.dismiss()
+                        val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
+                        findNavController().navigate(action)
+                    }
+                    .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
                     .show()
             } else {
                 // Загрузка единиц измерения и плана
                 binding.TextInputEditTextPlan.setText(planValue.planValue.toString())
-                binding.AutoCompleteTextViewMeasureUnits.setText(planValue.measures, false)
+                binding.AutoCompleteTextViewMeasureUnits.setText(planValue.measures)
                 binding.TextInputEditTextFact.requestFocus() // Фокус на поле Факт
             }
         }
