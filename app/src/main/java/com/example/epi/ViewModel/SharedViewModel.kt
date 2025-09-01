@@ -345,6 +345,7 @@ class SharedViewModel(
             } else {
                 planValueRepository.getAllPlanValues().first() // Берем первое значение из потока
             }
+            Log.d("DEBUG-VM", "Загружено ${values.size} записей для objectId=$objectId")
             withContext(Dispatchers.Main) {
                 _planValues.value = values
             }
