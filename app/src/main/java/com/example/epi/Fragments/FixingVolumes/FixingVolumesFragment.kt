@@ -2,6 +2,7 @@ package com.example.epi.Fragments.FixingVolumes
 
 import android.app.AlertDialog
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
@@ -9,10 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -392,16 +396,29 @@ class FixingVolumesFragment : Fragment() {
             val planValue = checkTypeOfWorkExistence(selectedComplex, selectedType, objectId)
             Log.d(TAG, "PlanValue в checkTypeOfWork: selectedComplex=$selectedComplex, selectedType=$selectedType, objectId=$objectId, planValue=$planValue")
             if (planValue == null) {
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Ошибка")
-                    .setMessage("Вид работ '$selectedType' отсутствует для комплекса '$selectedComplex', добавьте плановое значение")
-                    .setPositiveButton("OK") { dialog, _ ->
-                        dialog.dismiss()
+//                AlertDialog.Builder(requireContext())
+//                    .setTitle("Ошибка")
+//                    .setMessage("Вид работ '$selectedType' отсутствует для комплекса '$selectedComplex', добавьте плановое значение")
+//                    .setPositiveButton("OK") { dialog, _ ->
+//                        dialog.dismiss()
+//                        val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
+//                        findNavController().navigate(action)
+//                    }
+//                    .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
+//                    .show()
+//            } else {
+
+                showStyledAlertDialog(
+                    title = "Ошибка",
+                    message = "Вид работ '$selectedType' отсутствует для комплекса '$selectedComplex', добавьте плановое значение",
+                    positiveButtonText = "OK",
+                    positiveAction = {
                         val action = FixingVolumesFragmentDirections.actionFixVolumesFragmentToAddPlanValue(objectId)
                         findNavController().navigate(action)
-                    }
-                    .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
-                    .show()
+                    },
+                    negativeButtonText = "Отмена",
+                    negativeAction = { }
+                )
             } else {
                 // Загрузка единиц измерения и плана
                 binding.TextInputEditTextPlan.setText(planValue.planValue.toString())
@@ -409,6 +426,57 @@ class FixingVolumesFragment : Fragment() {
                 binding.TextInputEditTextFact.requestFocus() // Фокус на поле Факт
             }
         }
+    }
+
+    private fun showStyledAlertDialog(
+        title: String,
+        message: String,
+        positiveButtonText: String,
+        positiveAction: () -> Unit,
+        negativeButtonText: String? = null,
+        negativeAction: () -> Unit = {}
+    ) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null)
+        val dialogBuilder = AlertDialog.Builder(requireContext(), R.style.Theme_EPI)
+            .setView(dialogView)
+            .setCancelable(false)
+
+        val alertDialog = dialogBuilder.create()
+
+        // Настройка элементов
+        dialogView.findViewById<TextView>(R.id.alertTitle)?.text = title
+        dialogView.findViewById<TextView>(R.id.alertMessage)?.text = message
+
+        // Настройка кнопок
+        dialogView.findViewById<Button>(R.id.positiveButton)?.apply {
+            text = positiveButtonText // Устанавливаем переданный текст
+            setOnClickListener {
+                positiveAction()
+                alertDialog.dismiss()
+            }
+        }
+        negativeButtonText?.let { buttonText ->
+            dialogView.findViewById<Button>(R.id.negativeButton)?.apply {
+                visibility = View.VISIBLE
+                text = buttonText // Устанавливаем переданный текст
+                setOnClickListener {
+                    negativeAction()
+                    alertDialog.dismiss()
+                }
+            }
+        } ?: run {
+            dialogView.findViewById<Button>(R.id.negativeButton)?.visibility = View.GONE
+        }
+
+        // Настройка фона и размера
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.85).toInt(),
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        // Показываем диалог
+        alertDialog.show()
     }
 
     override fun onDestroyView() {
