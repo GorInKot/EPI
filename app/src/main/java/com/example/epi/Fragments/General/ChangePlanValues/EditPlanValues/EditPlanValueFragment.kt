@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.room.util.copy
 import com.example.epi.App
+import com.example.epi.Fragments.General.ChangePlanValues.ChangePlanValuesFragmentDirections
 // import com.example.epi.R // R is usually automatically imported if package is correct
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
@@ -71,13 +72,15 @@ class EditPlanValueFragment : Fragment() {
 
             lifecycleScope.launch {
                 sharedViewModel.updatePlanValue(updated)
-                findNavController().navigateUp() // возвращаемся назад
+                val action = EditPlanValueFragmentDirections.actionEditPlanValuesFragmentToChangePlanValuesFragment(planValue)
+                findNavController().navigate(action)
             }
         }
 
         // Кнопка "Отмена"
         binding.btnEPVCancel.setOnClickListener {
             findNavController().navigateUp()
+            //action_ChangePlanValuesFragment_to_SettingFragment
         }
 
 

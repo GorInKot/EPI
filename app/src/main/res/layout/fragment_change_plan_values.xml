@@ -152,6 +152,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="План"
+            android:textStyle="bold"
+            android:gravity="center"
+            style="@style/ArrangementText"
+            android:textSize="16dp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="14sp"
+            android:autoSizeMaxTextSize="22sp"
+            android:autoSizeStepGranularity="2sp"
+            android:maxLines="2"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="4dp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Единицы\nизмерения"
             android:textStyle="bold"
             android:gravity="center"
@@ -169,25 +189,6 @@
             android:layout_marginBottom="4dp"
             />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Значения по Плану"
-            android:textStyle="bold"
-            android:gravity="center"
-            style="@style/ArrangementText"
-            android:textSize="16dp"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="14sp"
-            android:autoSizeMaxTextSize="22sp"
-            android:autoSizeStepGranularity="2sp"
-            android:maxLines="2"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="4dp"
-            />
 
         <TextView
             android:layout_width="0dp"

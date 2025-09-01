@@ -352,6 +352,12 @@ class SharedViewModel(
         }
     }
 
+    // Функция очистки Плановых значений на экране
+    fun clearPlanValues() {
+        _planValues.value = emptyList()
+        setSelectedObject(null)
+    }
+
     // Функция добавления Плановых значений в таблицу plan_values в Room
     suspend fun addPlanValue(planValue: PlanValue) {
         withContext(Dispatchers.IO) {

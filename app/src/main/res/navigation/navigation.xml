@@ -275,8 +275,8 @@
             />
         <!-- Навигация к фрагменту "Меню" -->
         <action
-            android:id="@+id/action_ChangePlanValuesFragment_to_ChangePlanValuesFragment"
-            app:destination="@id/ChangePlanValuesFragment"
+            android:id="@+id/action_EditPlanValuesFragment_to_ChangePlanValuesFragment"
+            app:destination="@id/EditPlanValuesFragment"
             />
     </fragment>
 </navigation>

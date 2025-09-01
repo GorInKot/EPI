@@ -63,6 +63,15 @@ class ChangePlanValuesFragment : Fragment() {
         setupRecyclerView()
         observePlanValues()
         setupBackButton()
+
+        binding.autoCompleteObjects.setText("", false)
+        sharedViewModel.clearPlanValues()
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        binding.autoCompleteObjects.setText("", false)
+//        sharedViewModel.clearPlanValues()
     }
 
     private fun setupObjectDropdown() {
