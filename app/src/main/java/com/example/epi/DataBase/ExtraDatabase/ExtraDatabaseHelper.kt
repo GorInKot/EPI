@@ -24,21 +24,23 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     private fun copyDatabaseFromAssets() {
         val dbPath = context.getDatabasePath(DATABASE_NAME)
+        Log.d(TAG, "Попытка скопировать базу данных в: $dbPath")
         if (!dbPath.exists()) {
             try {
                 // Проверяем, существует ли файл в assets
                 val assetFiles = context.assets.list("")?.toList() ?: emptyList()
+                Log.d(TAG, "Файлы в assets: $assetFiles")
                 if (DATABASE_NAME !in assetFiles) {
                     throw FileNotFoundException("Файл $DATABASE_NAME не найден в папке assets")
                 }
 
-                dbPath.parentFile?.mkdirs()
+                dbPath.parentFile?.mkdirs() ?: throw IOException("Не удалось создать директорию: ${dbPath.parentFile}")
                 context.assets.open(DATABASE_NAME).use { inputStream ->
                     FileOutputStream(dbPath).use { outputStream ->
                         inputStream.copyTo(outputStream)
                     }
                 }
-                Log.d(TAG, "База данных успешно скопирована из assets")
+                Log.d(TAG, "База данных успешно скопирована из assets в $dbPath")
             } catch (e: IOException) {
                 Log.e(TAG, "Ошибка при копировании базы данных: ${e.message}")
                 throw RuntimeException("Ошибка при копировании базы данных из assets", e)
@@ -60,22 +62,23 @@ class ExtraDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         copyDatabaseFromAssets()
     }
 
-    // Customer (Заказчик)
-    fun getCustomers(): List<String> {
-        val db = readableDatabase
-        val customers = mutableListOf<String>()
-        val cursor = db.rawQuery("SELECT name FROM Customer", null)
-        try {
-            while (cursor.moveToNext()) {
-                val customer = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                customers.add(customer)
-            }
-        } finally {
-            cursor.close()
-            db.close()
-        }
-        return customers
-    }
+    // Заказчик (не используется)
+//    // Customer (Заказчик)
+//    fun getCustomers(): List<String> {
+//        val db = readableDatabase
+//        val customers = mutableListOf<String>()
+//        val cursor = db.rawQuery("SELECT name FROM Customer", null)
+//        try {
+//            while (cursor.moveToNext()) {
+//                val customer = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+//                customers.add(customer)
+//            }
+//        } finally {
+//            cursor.close()
+//            db.close()
+//        }
+//        return customers
+//    }
     // Contractor (Генподрядчик)
     fun getContractors(): List<String> {
         val db = readableDatabase

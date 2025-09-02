@@ -1,8 +1,12 @@
 package com.example.epi
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Environment
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,6 +44,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.jar.Manifest
 import kotlin.contracts.contract
 
 class SharedViewModel(
@@ -1254,11 +1259,56 @@ class SharedViewModel(
 
     // region SendReportFragment
     // Методы для
+//    fun exportDatabase(context: Context) {
+//        val dbName = "app_database"
+//        val dbPath = context.getDatabasePath(dbName)
+//        val exportDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "")
+//        if (!exportDir.exists()) exportDir.mkdirs()
+//        val outFile = File(exportDir, "$dbName${dateFormat.format(Date())}.db")
+//        try {
+//            FileInputStream(dbPath).use { input ->
+//                FileOutputStream(outFile).use { output ->
+//                    input.copyTo(output)
+//                }
+//            }
+//        } catch (e: Exception) {
+//            _errorEvent.postValue("Ошибка экспорта базы данных: ${e.message}")
+//            Log.e(TAG, "Ошибка экспорта базы данных: ${e.message}", e)
+//        }
+//    }
+
     fun exportDatabase(context: Context) {
-        val dbName = "app_database"
+        Log.d(TAG, "Начало экспорта базы данных")
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                100
+            )
+            return
+        }
+
+        val dbName = "extra_db.db" // Изменено с "app_database" на "extra_db.db"
         val dbPath = context.getDatabasePath(dbName)
-        val exportDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "")
-        if (!exportDir.exists()) exportDir.mkdirs()
+        Log.d(TAG, "Путь к базе данных: $dbPath, существует: ${dbPath.exists()}")
+        if (!dbPath.exists()) {
+            _errorEvent.postValue("База данных $dbName не найдена")
+            Log.e(TAG, "База данных $dbName не найдена по пути: $dbPath")
+            return
+        }
+
+        val exportDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        if (exportDir == null || !exportDir.exists()) {
+            exportDir?.mkdirs()
+            if (exportDir == null) {
+                _errorEvent.postValue("Ошибка: не удалось создать директорию для экспорта")
+                Log.e(TAG, "Не удалось создать директорию для экспорта")
+                return
+            }
+        }
+
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
         val outFile = File(exportDir, "$dbName${dateFormat.format(Date())}.db")
         try {
             FileInputStream(dbPath).use { input ->
@@ -1266,6 +1316,8 @@ class SharedViewModel(
                     input.copyTo(output)
                 }
             }
+            _errorEvent.postValue("База данных экспортирована в ${outFile.absolutePath}")
+            Log.d(TAG, "База данных экспортирована в ${outFile.absolutePath}")
         } catch (e: Exception) {
             _errorEvent.postValue("Ошибка экспорта базы данных: ${e.message}")
             Log.e(TAG, "Ошибка экспорта базы данных: ${e.message}", e)
