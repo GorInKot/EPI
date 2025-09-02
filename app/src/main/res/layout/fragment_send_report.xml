@@ -41,6 +41,21 @@
         app:layout_constraintTop_toTopOf="parent"
         style="@style/mainLabel"
         android:maxLines="1"
+        android:gravity="center"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/infoRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
+        app:layout_constraintBottom_toTopOf="@id/SeRFr_btn_Next"
+        android:paddingBottom="8dp"
+
         />
 
     <com.google.android.material.button.MaterialButton
@@ -51,17 +66,6 @@
         style="@style/SimpleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/SeRFr_btn_Next"
-        android:layout_marginEnd="8dp"
-        />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/SeRFr_btn_Info"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:text="Info"
-        style="@style/SimpleButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/SeRFr_btn_Back"
         android:layout_marginEnd="8dp"
         />
 

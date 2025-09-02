@@ -21,7 +21,9 @@ import com.example.epi.DataBase.User.UserRepository
 import com.example.epi.Fragments.Control.Model.ControlRow
 import com.example.epi.Fragments.Control.Model.RowInput
 import com.example.epi.Fragments.FixingVolumes.Model.FixVolumesRow
+import com.example.epi.Fragments.Reports.SendReport.Model.InfoItem
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -1275,41 +1277,76 @@ class SharedViewModel(
             }
         } catch (e: Exception) {
             _errorEvent.postValue("Ошибка экспорта базы данных: ${e.message}")
+            Log.e(TAG, "Ошибка экспорта базы данных: ${e.message}", e)
         }
     }
 
-    fun showAllEnteredData(): String {
-        return """
-        Дата: ${_currentDate.value}
-        Время: ${_currentTime.value}
-        Сотрудник: ${_currentUser.value!!.firstName} ${_currentUser.value!!.secondName} ${_currentUser.value!!.thirdName}
-        Режим работы: ${_selectedTypeOfWork.value}
-        
-        Заказчик: ${_selectedCustomer.value}
-        Договор СК: ${_selectedContract.value}
-        Объект: ${_selectedObject.value}
-        Участок: ${_plotText.value}
-        Генподрядчик: ${_selectedContractor.value}
-        Представитель Генподрядчика: ${_selectedSubContractor.value}
-        Представитель ССК ГП: ${_repSSKGpText.value}
-        Субподрядчик: ${_selectedSubContractor.value}
-        Представитель субподрядчика: ${_repSubContractorText.value}
-        Представитель ССК субподрядчика: ${_repSSKSubText.value}
+    fun showAllEnteredDataAsList(): List<InfoItem> {
+//        val gson = Gson()
+//        val controlRowsType = object : TypeToken<List<ControlRow>>() {}.type
+//        val fixVolumesRowsType = object : TypeToken<List<FixVolumesRow>>() {}.type
+//
+//        val controlRowsJson = _controlRows.value?.let {gson.toJson(it)} ?: "[]"
+//        val fixVolumesRowsJson = _fixRows.value?.let {gson.toJson(it)} ?: "[]"
+//
+//        val controlRows = gson.fromJson<List<ControlRow>>(controlRowsJson, controlRowsType) ?: emptyList()
+//        val fixVolumesRows = gson.fromJson<List<FixVolumesRow>>(fixVolumesRowsJson, fixVolumesRowsType) ?: emptyList()
 
-        Исполнитель по транспорту: ${_transportExecutorName.value}
-        Договор по транспорту: ${_transportContractTransport.value}        
-        Госномер: ${_transportStateNumber.value}
-        Дата начала поездки: ${_transportStartDate.value}
-        Время начала поездки: ${_transportStartTime.value}
-        Дата окончания поездки: ${_transportEndDate.value}
-        Время окончания поездки: ${_transportEndTime.value}
-        
-        Номер предписания: ${_orderNumber.value}
-        
-        Полевой контроль: ${gson.toJson(_controlRows.value)}
-        
-        Фиксация объема: ${gson.toJson(_fixRows.value)}
-    """.trimIndent()
+        val controlRows = _controlRows.value ?: emptyList()
+        val fixVolumesRows = _fixRows.value ?: emptyList()
+
+        Log.d("SharedViewModel", "ControlRows: $controlRows")
+        Log.d("SharedViewModel", "FixVolumesRows: $fixVolumesRows")
+
+//        val controlRows = _controlRows.value?.map {
+//            ControlRow(
+//                equipmentName = it.equipmentName,
+//                complexOfWork = it.complexOfWork,
+//                orderNumber = it.orderNumber,
+//                report = it.report,
+//                remarks = it.remarks,
+//                typeOfWork = it.typeOfWork
+//            )
+//        } ?: emptyList()
+
+//        val fixRows = _fixRows.value?.map {
+//            FixVolumesRow(
+//                ID_object = it.ID_object,
+//                complexOfWork = it.complexOfWork,
+//                projectWorkType = it.projectWorkType,
+//                measure = it.measure,
+//                plan = it.plan,
+//                fact = it.fact,
+//                result = it.result
+//            )
+//        } ?: emptyList()
+
+        return listOf(
+            InfoItem("Дата", _currentDate.value ?: ""),
+            InfoItem("Время", _currentTime.value ?: ""),
+            InfoItem("Сотрудник", "${_currentUser.value?.firstName ?: ""} ${_currentUser.value?.secondName ?: ""} ${_currentUser.value?.thirdName ?: ""}"),
+            InfoItem("Режим работы", _selectedTypeOfWork.value ?: ""),
+            InfoItem("Заказчик", _selectedCustomer.value ?: ""),
+            InfoItem("Договор СК", _selectedContract.value ?: ""),
+            InfoItem("Объект", _selectedObject.value ?: ""),
+            InfoItem("Участок", _plotText.value ?: ""),
+            InfoItem("Генподрядчик", _selectedContractor.value ?: ""),
+            InfoItem("Представитель Генподрядчика", _selectedSubContractor.value ?: ""),
+            InfoItem("Представитель ССК ГП", _repSSKGpText.value ?: ""),
+            InfoItem("Субподрядчик", _selectedSubContractor.value ?: ""),
+            InfoItem("Представитель субподрядчика", _repSubContractorText.value ?: ""),
+            InfoItem("Представитель ССК субподрядчика", _repSSKSubText.value ?: ""),
+            InfoItem("Исполнитель по транспорту", _transportExecutorName.value ?: ""),
+            InfoItem("Договор по транспорту", _transportContractTransport.value ?: ""),
+            InfoItem("Госномер", _transportStateNumber.value ?: ""),
+            InfoItem("Дата начала поездки", _transportStartDate.value ?: ""),
+            InfoItem("Время начала поездки", _transportStartTime.value ?: ""),
+            InfoItem("Дата окончания поездки", _transportEndDate.value ?: ""),
+            InfoItem("Время окончания поездки", _transportEndTime.value ?: ""),
+//            InfoItem("Номер предписания", _orderNumber.value ?: ""),
+            InfoItem("Полевой контроль", controlRows),
+            InfoItem("Фиксация объема", fixVolumesRows)
+        ).filter { it.value != null && (it.value !is List<*> || it.value.isNotEmpty()) }
     }
 
     fun filterReportsByDateRange(startDate: String, endDate: String) {

@@ -142,8 +142,8 @@
     </style>
 
     <style name="TextInputLayout">
-        <item name="android:textColor">?android:background</item>
-        <item name="android:textColorHint">@color/color_orange</item>
+        <item name="android:textColor">?android:background</item>  <!-- цвет текста -->
+        <item name="android:textColorHint">@color/color_one</item> <!-- цвет подсказки -->
         <item name="boxBackgroundMode">filled</item>
         <item name="boxBackgroundColor">@color/color_grey</item>
         <item name="boxCornerRadiusTopStart">12dp</item>

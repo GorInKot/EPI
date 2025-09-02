@@ -31,8 +31,8 @@ class SettingsFragment : Fragment() {
         val currentTheme = sharedPreferences.getString("theme", "system") ?: "system"
         when (currentTheme) {
             "light" -> binding.radioLight.isChecked = true
-            "dark" -> binding.radioDark.isChecked = true
-            else -> binding.radioSystem.isChecked = true
+//            "dark" -> binding.radioDark.isChecked = true
+//            else -> binding.radioSystem.isChecked = true
         }
 
         // Обработка выбора темы
@@ -43,14 +43,14 @@ class SettingsFragment : Fragment() {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     editor.putString("theme", "light")
                 }
-                R.id.radioDark -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    editor.putString("theme", "dark")
-                }
-                R.id.radioSystem -> {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    editor.putString("theme", "system")
-                }
+//                R.id.radioDark -> {
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                    editor.putString("theme", "dark")
+//                }
+//                R.id.radioSystem -> {
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+//                    editor.putString("theme", "system")
+//                }
             }
             editor.apply()
         }

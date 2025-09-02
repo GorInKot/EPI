@@ -77,7 +77,7 @@ class FixingVolumesFragment : Fragment() {
         sharedViewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
             // Лог для отладки
-            android.util.Log.d(TAG, "Submitting list to adapter: $rows")
+            Log.d(TAG, "Submitting list to adapter: $rows")
         }
 
         // Подписка на ошибки
@@ -223,6 +223,7 @@ class FixingVolumesFragment : Fragment() {
     }
 
     private fun showEditDialog(row: FixVolumesRow, position: Int) {
+        Log.d(TAG, "Нажали кнопку редактировать строку")
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_fixvolumes_row, null)
 

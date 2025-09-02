@@ -7,6 +7,23 @@
     tools:context=".Fragments.General.ChangePlanValues.ChangePlanValuesFragment"
     >
 
+    <!-- Направляющие -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"
+        />
+
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_changePlanValues_Title"
@@ -240,8 +257,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="Назад"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="36dp"

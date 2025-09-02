@@ -17,7 +17,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.epi.App
+import com.example.epi.Fragments.Reports.SendReport.Model.InfoItem
 import com.example.epi.R
 import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
@@ -44,6 +47,8 @@ class SendReportFragment : Fragment() {
         )
     }
 
+    private val infoAdapter = InfoAdapter()
+
     companion object {
         private const val TAG = "Tagg-SendReport"
     }
@@ -55,20 +60,18 @@ class SendReportFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSendReportBinding.inflate(inflater, container, false)
 
-        binding.SeRFrBtnInfo.setOnClickListener {
-            Log.d(TAG, "Info-кнопка нажата")
-            val data = sharedViewModel.showAllEnteredData()
-            Log.d(TAG, "Data for dialog: $data")
-            showInfoDialog(data)
-            sharedViewModel.exportDatabase(requireContext())
-            Log.d(TAG, "Показали AlertDialog с информацией")
-        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Настройка RecyclerView
+        binding.infoRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.infoRecyclerView.adapter = infoAdapter
+
+        // Обновление данных
+        updateData()
 
         binding.SeRFrBtnNext.setOnClickListener {
             Log.d(TAG, "Next-кнопка нажата")
@@ -94,31 +97,18 @@ class SendReportFragment : Fragment() {
         }
     }
 
-    private fun showInfoDialog(data: String) {
-        // Создаем TextView для отображения данных
-        val textView = TextView(requireContext()).apply {
-            text = data
-            setPadding(32) // padding в 16dp (примерно 32px в зависимости от плотности)
-            textSize = 16f
-            setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+    private fun updateData() {
+        val data = sharedViewModel.showAllEnteredDataAsList()
+        Log.d(TAG, "Данные для RecyclerView: $data") // Проверяем, какие данные возвращаются
+        if (data.isEmpty()) {
+            Log.w(TAG, "Список данных пуст")
+        } else {
+            infoAdapter.submitList(data)
+            Log.d(TAG, "Данные отражены в RecyclerView, размер списка: ${data.size}")
         }
-
-        // Создаем ScrollView для прокрутки длинного текста
-        val scrollView = ScrollView(requireContext()).apply {
-            addView(textView)
-        }
-
-        // Создаем AlertDialog
-        AlertDialog.Builder(requireContext())
-            .setTitle("Информация об отчете")
-            .setView(scrollView)
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setCancelable(true)
-            .create()
-            .show()
+        sharedViewModel.exportDatabase(requireContext())
     }
+
 
 
     override fun onDestroyView() {

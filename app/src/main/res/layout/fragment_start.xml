@@ -127,7 +127,7 @@
         android:layout_width="wrap_content"
         android:minWidth="50dp"
         android:maxWidth="90dp"
-        android:src="@drawable/baseline_all_inclusive_24"
+        android:src="@drawable/settings_32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="24dp"

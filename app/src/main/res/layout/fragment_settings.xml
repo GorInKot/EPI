@@ -57,13 +57,13 @@
         app:layout_constraintTop_toBottomOf="@id/tv_Theme"
         >
 
-        <RadioButton
-            android:id="@+id/radioSystem"
-            style="@style/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Системная тема"
-            />
+<!--        <RadioButton-->
+<!--            android:id="@+id/radioSystem"-->
+<!--            style="@style/checkBox"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Системная тема"-->
+<!--            />-->
 
         <RadioButton
             android:id="@+id/radioLight"
@@ -73,13 +73,13 @@
             android:text="Светлая тема"
             />
 
-        <RadioButton
-            android:id="@+id/radioDark"
-            style="@style/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Темная тема"
-            />
+<!--        <RadioButton-->
+<!--            android:id="@+id/radioDark"-->
+<!--            style="@style/checkBox"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Темная тема"-->
+<!--            />-->
     </RadioGroup>
 
     <com.google.android.material.divider.MaterialDivider
@@ -90,6 +90,7 @@
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@id/themeRadioGroup"
         android:layout_marginTop="8dp"
+        app:dividerColor="@color/color_orange"
         />
 
 

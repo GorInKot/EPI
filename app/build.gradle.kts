@@ -67,6 +67,7 @@ dependencies {
     implementation ("org.apache.poi:poi:5.2.3")
 
     implementation("androidx.room:room-ktx:2.7.2")
+    implementation(libs.androidx.recyclerview)
     kapt("androidx.room:room-compiler:2.7.2")
     implementation("androidx.room:room-compiler:2.7.2")
 
