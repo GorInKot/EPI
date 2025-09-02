@@ -1,5 +1,6 @@
 package com.example.epi.Fragments.Reports.SendReport
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,6 +19,7 @@ class NestedInfoAdapter : ListAdapter<NestedInfoAdapter.Item, NestedInfoAdapter.
 
     class ViewHolder(private val binding: NestedInfoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
+            Log.d("NestedInfoAdapter", "Binding item: ${item.javaClass.simpleName}, data: $item")
             when (item) {
                 is Item.ControlItem -> {
                     binding.titleTextView.text = "- Наименование оборудования: ${item.controlRow.equipmentName}"
@@ -63,14 +65,20 @@ class NestedInfoAdapter : ListAdapter<NestedInfoAdapter.Item, NestedInfoAdapter.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        Log.d("NestedInfoAdapter", "Binding position: $position, item: $item")
+        holder.bind(item)
     }
 
     fun submitControlRows(rows: List<ControlRow>) {
-        submitList(rows.map { Item.ControlItem(it) })
+        val newList = rows.map { Item.ControlItem(it) }
+        Log.d("NestedInfoAdapter", "Submitting ControlRows: $newList")
+        submitList(newList)
     }
 
     fun submitFixVolumesRows(rows: List<FixVolumesRow>) {
-        submitList(rows.map { Item.FixVolumesItem(it) })
+        val newList = rows.map { Item.FixVolumesItem(it) }
+        Log.d("NestedInfoAdapter", "Submitting FixVolumesRows: $newList")
+        submitList(newList)
     }
 }

@@ -15,8 +15,6 @@ import com.example.epi.databinding.InfoItemBinding
 
 class InfoAdapter : ListAdapter<InfoItem, InfoAdapter.ViewHolder>(DiffCallback()) {
 
-    private val nestedAdapter = NestedInfoAdapter()
-
     class ViewHolder(private val binding: InfoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: InfoItem, nestedAdapter: NestedInfoAdapter) {
             binding.keyTextView.text = item.key
@@ -28,35 +26,40 @@ class InfoAdapter : ListAdapter<InfoItem, InfoAdapter.ViewHolder>(DiffCallback()
                     binding.valueTextView.text = value
                 }
                 is List<*> -> {
+                    Log.d("InfoAdapter", "Processing key: ${item.key}, value size: ${value.size}, first item type: ${value.firstOrNull()?.javaClass}")
                     binding.valueTextView.visibility = View.GONE
                     val nestedRecycler = binding.nestedRecyclerView
                     if (nestedRecycler != null) {
-                        nestedRecycler.layoutManager = LinearLayoutManager(nestedRecycler.context)
-                        // Очищаем адаптер перед привязкой
-                        nestedRecycler.adapter = null
+                        if (nestedRecycler.layoutManager == null) {
+                            nestedRecycler.layoutManager = LinearLayoutManager(nestedRecycler.context)
+                        }
                         nestedRecycler.adapter = nestedAdapter
-                        Log.d("InfoAdapter", "Processing key: ${item.key}, value size: ${value.size}, first item type: ${value.firstOrNull()?.javaClass}")
                         when (item.key) {
                             "Полевой контроль" -> {
                                 if (value.isNotEmpty() && value.all { it is ControlRow }) {
+                                    Log.d("InfoAdapter", "Submitting ControlRows: $value")
                                     nestedAdapter.submitControlRows(value as List<ControlRow>)
                                     nestedRecycler.visibility = View.VISIBLE
                                 } else {
                                     Log.e("InfoAdapter", "Invalid type for Полевой контроль: ${value.firstOrNull()?.javaClass}")
+                                    nestedRecycler.visibility = View.GONE
                                 }
                             }
                             "Фиксация объема" -> {
                                 if (value.isNotEmpty() && value.all { it is FixVolumesRow }) {
+                                    Log.d("InfoAdapter", "Submitting FixVolumesRows: $value")
                                     nestedAdapter.submitFixVolumesRows(value as List<FixVolumesRow>)
                                     nestedRecycler.visibility = View.VISIBLE
                                 } else {
                                     Log.e("InfoAdapter", "Invalid type for Фиксация объема: ${value.firstOrNull()?.javaClass}")
+                                    nestedRecycler.visibility = View.GONE
                                 }
                             }
-                            else -> nestedRecycler.visibility = View.GONE
+                            else -> {
+                                Log.d("InfoAdapter", "Skipping unknown key: ${item.key}")
+                                nestedRecycler.visibility = View.GONE
+                            }
                         }
-                        // Принудительное обновление после привязки данных
-                        nestedRecycler.adapter?.notifyDataSetChanged()
                     } else {
                         Log.e("InfoAdapter", "nestedRecyclerView not found!")
                     }
@@ -85,7 +88,10 @@ class InfoAdapter : ListAdapter<InfoItem, InfoAdapter.ViewHolder>(DiffCallback()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), nestedAdapter)
-
+        val item = getItem(position)
+        // Создаем новый экземпляр NestedInfoAdapter для каждого ViewHolder
+        val nestedAdapter = NestedInfoAdapter()
+        Log.d("InfoAdapter", "Binding item: key=${item.key}, value=${item.value}, value type=${item.value?.javaClass}")
+        holder.bind(item, nestedAdapter)
     }
 }
