@@ -160,10 +160,6 @@ class SharedViewModel(
     private val _isTransportAbsent = MutableLiveData(false)
     val isTransportAbsent: LiveData<Boolean> get() = _isTransportAbsent
 
-    // TODO - для чего оно здесь?
-    private val _transportContractCustomer = MutableLiveData<String?>()
-    val transportContractCustomer: LiveData<String?> get() = _transportContractCustomer
-
     // исполнитель по транспорту
     private val _transportExecutorName = MutableLiveData<String?>()
     val transportExecutorName: LiveData<String?> get() = _transportExecutorName
@@ -430,7 +426,6 @@ class SharedViewModel(
         _repSubContractorText.value = null
         _repSSKSubText.value = null
         _isManualSubContractor.value = false
-        _transportContractCustomer.value = null
         _transportExecutorName.value = null
         _transportContractTransport.value = null
         _transportStateNumber.value = null
@@ -440,8 +435,6 @@ class SharedViewModel(
         _transportEndTime.value = null
         _orderNumber.value = null
         _isViolation.value = false
-//        _controlStartDate.value = null
-//        _controlStartTime.value = null
         _controlRows.value = emptyList()
         _fixRows.value = emptyList()
         _isTransportAbsent.value = false
@@ -772,7 +765,6 @@ class SharedViewModel(
     // Методы для TransportFragment
     // region методы для TransportFragment
     fun setTransportAbsent(value: Boolean) { _isTransportAbsent.value = value }
-    fun setTransportContractCustomer(value: String) { _transportContractCustomer.value = value.trim() }
     fun setTransportExecutorName(value: String) { _transportExecutorName.value = value.trim() }
     fun setTransportContractTransport(value: String) { _transportContractTransport.value = value.trim() }
     fun setTransportStateNumber(value: String) { _transportStateNumber.value = value.trim() }
@@ -784,7 +776,6 @@ class SharedViewModel(
     // функция для чекбокса Транспорт отсутствует (transportAbsent)
     fun clearTransport() {
         _transportInClearing.value = true
-        _transportContractCustomer.value = ""
         _transportExecutorName.value = ""
         _transportContractTransport.value = ""
         _transportStateNumber.value = ""
@@ -1282,71 +1273,49 @@ class SharedViewModel(
     }
 
     fun showAllEnteredDataAsList(): List<InfoItem> {
-//        val gson = Gson()
-//        val controlRowsType = object : TypeToken<List<ControlRow>>() {}.type
-//        val fixVolumesRowsType = object : TypeToken<List<FixVolumesRow>>() {}.type
-//
-//        val controlRowsJson = _controlRows.value?.let {gson.toJson(it)} ?: "[]"
-//        val fixVolumesRowsJson = _fixRows.value?.let {gson.toJson(it)} ?: "[]"
-//
-//        val controlRows = gson.fromJson<List<ControlRow>>(controlRowsJson, controlRowsType) ?: emptyList()
-//        val fixVolumesRows = gson.fromJson<List<FixVolumesRow>>(fixVolumesRowsJson, fixVolumesRowsType) ?: emptyList()
-
         val controlRows = _controlRows.value ?: emptyList()
         val fixVolumesRows = _fixRows.value ?: emptyList()
 
-        Log.d("SharedViewModel", "ControlRows: $controlRows")
-        Log.d("SharedViewModel", "FixVolumesRows: $fixVolumesRows")
+        Log.d(TAG, "ControlRows: $controlRows")
+        Log.d(TAG, "FixVolumesRows: $fixVolumesRows")
+        Log.d(TAG, "IsTransportAbsent: ${_isTransportAbsent.value}")
 
-//        val controlRows = _controlRows.value?.map {
-//            ControlRow(
-//                equipmentName = it.equipmentName,
-//                complexOfWork = it.complexOfWork,
-//                orderNumber = it.orderNumber,
-//                report = it.report,
-//                remarks = it.remarks,
-//                typeOfWork = it.typeOfWork
-//            )
-//        } ?: emptyList()
+        val items = mutableListOf<InfoItem>().apply {
+            add(InfoItem("Дата", _currentDate.value ?: ""))
+            add(InfoItem("Время", _currentTime.value ?: ""))
+            add(InfoItem("Сотрудник", "${_currentUser.value?.firstName ?: ""} ${_currentUser.value?.secondName ?: ""} ${_currentUser.value?.thirdName ?: ""}"))
+            add(InfoItem("Режим работы", _selectedTypeOfWork.value ?: ""))
+            add(InfoItem("Заказчик", _selectedCustomer.value ?: ""))
+            add(InfoItem("Договор СК", _selectedContract.value ?: ""))
+            add(InfoItem("Объект", _selectedObject.value ?: ""))
+            add(InfoItem("Участок", _plotText.value ?: ""))
+            add(InfoItem("Генподрядчик", _selectedContractor.value ?: ""))
+            add(InfoItem("Представитель Генподрядчика", _selectedRepContractor.value ?: ""))
+            add(InfoItem("Представитель ССК ГП", _repSSKGpText.value ?: ""))
+            add(InfoItem("Субподрядчик", _selectedSubContractor.value ?: ""))
+            add(InfoItem("Представитель субподрядчика", _repSubContractorText.value ?: ""))
+            add(InfoItem("Представитель ССК субподрядчика", _repSSKSubText.value ?: ""))
 
-//        val fixRows = _fixRows.value?.map {
-//            FixVolumesRow(
-//                ID_object = it.ID_object,
-//                complexOfWork = it.complexOfWork,
-//                projectWorkType = it.projectWorkType,
-//                measure = it.measure,
-//                plan = it.plan,
-//                fact = it.fact,
-//                result = it.result
-//            )
-//        } ?: emptyList()
+            // Проверяем состояние чекбокса "Транспорт отсутствует"
+            if (_isTransportAbsent.value == true) {
+                add(InfoItem("Транспорт", "Транспорт отсутствует"))
+            } else {
+                // Добавляем транспортные поля только если чекбокс не выбран
+                add(InfoItem("Исполнитель по транспорту", _transportExecutorName.value ?: ""))
+                add(InfoItem("Договор по транспорту", _transportContractTransport.value ?: ""))
+                add(InfoItem("Госномер", _transportStateNumber.value ?: ""))
+                add(InfoItem("Дата начала поездки", _transportStartDate.value ?: ""))
+                add(InfoItem("Время начала поездки", _transportStartTime.value ?: ""))
+                add(InfoItem("Дата окончания поездки", _transportEndDate.value ?: ""))
+                add(InfoItem("Время окончания поездки", _transportEndTime.value ?: ""))
+            }
 
-        return listOf(
-            InfoItem("Дата", _currentDate.value ?: ""),
-            InfoItem("Время", _currentTime.value ?: ""),
-            InfoItem("Сотрудник", "${_currentUser.value?.firstName ?: ""} ${_currentUser.value?.secondName ?: ""} ${_currentUser.value?.thirdName ?: ""}"),
-            InfoItem("Режим работы", _selectedTypeOfWork.value ?: ""),
-            InfoItem("Заказчик", _selectedCustomer.value ?: ""),
-            InfoItem("Договор СК", _selectedContract.value ?: ""),
-            InfoItem("Объект", _selectedObject.value ?: ""),
-            InfoItem("Участок", _plotText.value ?: ""),
-            InfoItem("Генподрядчик", _selectedContractor.value ?: ""),
-            InfoItem("Представитель Генподрядчика", _selectedSubContractor.value ?: ""),
-            InfoItem("Представитель ССК ГП", _repSSKGpText.value ?: ""),
-            InfoItem("Субподрядчик", _selectedSubContractor.value ?: ""),
-            InfoItem("Представитель субподрядчика", _repSubContractorText.value ?: ""),
-            InfoItem("Представитель ССК субподрядчика", _repSSKSubText.value ?: ""),
-            InfoItem("Исполнитель по транспорту", _transportExecutorName.value ?: ""),
-            InfoItem("Договор по транспорту", _transportContractTransport.value ?: ""),
-            InfoItem("Госномер", _transportStateNumber.value ?: ""),
-            InfoItem("Дата начала поездки", _transportStartDate.value ?: ""),
-            InfoItem("Время начала поездки", _transportStartTime.value ?: ""),
-            InfoItem("Дата окончания поездки", _transportEndDate.value ?: ""),
-            InfoItem("Время окончания поездки", _transportEndTime.value ?: ""),
-//            InfoItem("Номер предписания", _orderNumber.value ?: ""),
-            InfoItem("Полевой контроль", controlRows),
-            InfoItem("Фиксация объема", fixVolumesRows)
-        ).filter { it.value != null && (it.value !is List<*> || it.value.isNotEmpty()) }
+            add(InfoItem("Полевой контроль", controlRows))
+            add(InfoItem("Фиксация объема", fixVolumesRows))
+        }
+
+        Log.d(TAG, "Items before filtering: $items")
+        return items.filter { it.value != null && (it.value !is List<*> || it.value.isNotEmpty()) }
     }
 
     fun filterReportsByDateRange(startDate: String, endDate: String) {

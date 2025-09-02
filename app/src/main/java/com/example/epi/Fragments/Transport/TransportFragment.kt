@@ -55,15 +55,13 @@ class TransportFragment : Fragment() {
     companion object {
         private const val TAG = "Tagg-TransportFragment"
     }
-
-    private lateinit var contractCustomerTextWatcher: TextWatcher
     private lateinit var executorNameTextWatcher: TextWatcher
     private lateinit var contractTransportTextWatcher: TextWatcher
     private lateinit var stateNumberTextWatcher: TextWatcher
-    private lateinit var startDateTextWatcher: TextWatcher
-    private lateinit var startTimeTextWatcher: TextWatcher
-    private lateinit var endDateTextWatcher: TextWatcher
-    private lateinit var endTimeTextWatcher: TextWatcher
+//    private lateinit var startDateTextWatcher: TextWatcher
+//    private lateinit var startTimeTextWatcher: TextWatcher
+//    private lateinit var endDateTextWatcher: TextWatcher
+//    private lateinit var endTimeTextWatcher: TextWatcher
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,13 +114,8 @@ class TransportFragment : Fragment() {
         setupStateNumberInput(binding.textInputEditTextStateNumber, binding.textInputLayoutStateNumber)
 
         // Прочие текстовые поля
-        contractCustomerTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setTransportContractCustomer(s.toString())
-            }
-        }
+        binding.autoCompleteExecutor.doAfterTextChanged { sharedViewModel.setTransportExecutorName(it.toString()) }
+        binding.autoCompleteContractTransport.doAfterTextChanged { sharedViewModel.setTransportContractTransport(it.toString()) }
 
         executorNameTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -131,7 +124,6 @@ class TransportFragment : Fragment() {
                 sharedViewModel.setTransportExecutorName(s.toString())
             }
         }
-        binding.autoCompleteExecutor.doAfterTextChanged { sharedViewModel.setTransportExecutorName(it.toString()) }
 
         contractTransportTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -140,7 +132,6 @@ class TransportFragment : Fragment() {
                 sharedViewModel.setTransportContractTransport(s.toString())
             }
         }
-        binding.autoCompleteContractTransport.doAfterTextChanged { sharedViewModel.setTransportContractTransport(it.toString()) }
 
         stateNumberTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -150,42 +141,42 @@ class TransportFragment : Fragment() {
             }
         }
         binding.textInputEditTextStateNumber.doAfterTextChanged { sharedViewModel.setTransportStateNumber(it.toString()) }
-
-        startDateTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setTransportStartDate(s.toString())
-            }
-        }
         binding.textInputEditTextStartDate.doAfterTextChanged { sharedViewModel.setTransportStartDate(it.toString()) }
-
-        startTimeTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setTransportStartTime(s.toString())
-            }
-        }
         binding.textInputEditTextStartDateHours.doAfterTextChanged { sharedViewModel.setTransportStartTime(it.toString()) }
-
-        endDateTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setTransportEndDate(s.toString())
-            }
-        }
         binding.textInputEditTextEndDate.doAfterTextChanged { sharedViewModel.setTransportEndDate(it.toString()) }
-
-        endTimeTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                sharedViewModel.setTransportEndTime(s.toString())
-            }
-        }
         binding.textInputEditTextEndDateHours.doAfterTextChanged { sharedViewModel.setTransportEndTime(it.toString()) }
+
+//        startDateTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setTransportStartDate(s.toString())
+//            }
+//        }
+//
+//        startTimeTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setTransportStartTime(s.toString())
+//            }
+//        }
+//
+//        endDateTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setTransportEndDate(s.toString())
+//            }
+//        }
+//
+//        endTimeTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//            override fun afterTextChanged(s: Editable?) {
+//                sharedViewModel.setTransportEndTime(s.toString())
+//            }
+//        }
     }
 
     private fun setupButtons() {
@@ -758,10 +749,10 @@ class TransportFragment : Fragment() {
         binding.autoCompleteExecutor.removeTextChangedListener(executorNameTextWatcher)
         binding.autoCompleteContractTransport.removeTextChangedListener(contractTransportTextWatcher)
         binding.textInputEditTextStateNumber.removeTextChangedListener(stateNumberTextWatcher)
-        binding.textInputEditTextStartDate.removeTextChangedListener(startDateTextWatcher)
-        binding.textInputEditTextStartDateHours.removeTextChangedListener(startTimeTextWatcher)
-        binding.textInputEditTextEndDate.removeTextChangedListener(endDateTextWatcher)
-        binding.textInputEditTextEndDateHours.removeTextChangedListener(endTimeTextWatcher)
+//        binding.textInputEditTextStartDate.removeTextChangedListener(startDateTextWatcher)
+//        binding.textInputEditTextStartDateHours.removeTextChangedListener(startTimeTextWatcher)
+//        binding.textInputEditTextEndDate.removeTextChangedListener(endDateTextWatcher)
+//        binding.textInputEditTextEndDateHours.removeTextChangedListener(endTimeTextWatcher)
         _binding = null
     }
 }
