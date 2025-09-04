@@ -17,7 +17,7 @@ import com.example.epi.DataBase.Report.ReportDao
 import com.example.epi.DataBase.User.User
 import com.example.epi.DataBase.User.UserDao
 
-@Database(entities = [Report::class, User::class, PlanValue::class, OrderNumber::class, FactValue::class], version = 9, exportSchema = true)
+@Database(entities = [Report::class, User::class, PlanValue::class, OrderNumber::class, FactValue::class], version = 10, exportSchema = true)
 abstract class NewAppDatabase : RoomDatabase() {
     abstract fun reportDao(): ReportDao
     abstract fun userDao(): UserDao

@@ -25,4 +25,14 @@ interface ReportDao {
 
     @Query("SELECT * FROM reports WHERE date BETWEEN :startDate AND :endDate ORDER BY date")
     fun getReportsByDateRange(startDate: String, endDate: String): Flow<List<Report>>
+
+    @Query("DELETE FROM reports WHERE isCompleted = 0")
+    suspend fun deleteIncompleteReports()
+
+    @Query("SELECT * FROM reports WHERE id = :reportId")
+    suspend fun getReportById(reportId: Long): Report?
+
+    @Query("SELECT * FROM reports WHERE isCompleted = 1")
+    suspend fun getCompletedReports(): List<Report>
+
 }

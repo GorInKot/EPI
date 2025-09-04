@@ -75,6 +75,13 @@ class SharedViewModel(
     // endregion
 
     // region Данные общие для всех фрагментов
+
+    // Поле для гарантии создания отчета и его обновления на каждом этапе заполнения
+    // Это поле хранит ID отчета, созданного на экране ArrangementFragment
+    private val _currentReportId = MutableLiveData<Long?>()
+    val currentReportId: LiveData<Long?> get() = _currentReportId
+
+
     private val _currentDate = MutableLiveData<String>(dateFormat.format(Date()))
     val currentDate: LiveData<String> get() = _currentDate
 
@@ -443,6 +450,7 @@ class SharedViewModel(
         _controlRows.value = emptyList()
         _fixRows.value = emptyList()
         _isTransportAbsent.value = false
+        _currentReportId.value = null // Сбрасываем значение _currentReportId
         updateDateTime()
         _isReportSaved.postValue(false)
     }
@@ -482,101 +490,9 @@ class SharedViewModel(
         return errors
     }
 
+
     // Новое
-    suspend fun saveArrangementData(): Long {
-        return withContext(Dispatchers.IO) {
-            Log.d(TAG, "Saving report on thread: ${Thread.currentThread().name}")
-            try {
-                val arrangementErrors = validateArrangementInputs(
-                    contract = _selectedContract.value,
-                    customers = _selectedCustomer.value,
-                    objects = _selectedObject.value,
-                    plotText = if (_isManualPlot.value == true) "Объект не делится на участки" else _plotText.value,
-                    contractors = _selectedContractor.value,
-                    subContractors = _selectedSubContractor.value,
-                    repSSKGpText = _repSSKGpText.value,
-                    repContractor = _selectedRepContractor.value,
-                    repSubContractorText = _repSubContractorText.value,
-                    repSSKSubText = _repSSKSubText.value,
-                    isManualPlot = _isManualPlot.value ?: false
-                )
-                if (arrangementErrors.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
-                        Log.d(TAG, "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
-                    }
-                    return@withContext 0L
-                }
 
-                val employeeNumber = _currentEmployeeNumber.value ?: run {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e(TAG, "No employeeNumber available")
-                    }
-                    return@withContext 0L
-                }
-
-                if (_selectedTypeOfWork.value.isNullOrBlank()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Режим работы не выбран")
-                        Log.e(TAG, "typeOfWork is not set")
-                    }
-                    return@withContext 0L
-                }
-
-                val report = Report(
-                    userName = employeeNumber, // Сохраняем уникальный номер сотрудника
-                    typeOfWork = _selectedTypeOfWork.value.orEmpty(), // Добавляем Режим работы
-                    date = _currentDate.value.orEmpty(),
-                    time = _currentTime.value.orEmpty(),
-                    contract = _selectedContract.value.orEmpty(),
-                    customer = _selectedCustomer.value.orEmpty(),
-                    obj =  _selectedObject.value.orEmpty(),
-                    plot = _plotText.value.orEmpty(),
-                    genContractor = _selectedContractor.value.orEmpty(),
-                    repGenContractor =_selectedRepContractor.value.orEmpty(),
-                    repSSKGp = _repSSKGpText.value.orEmpty(),
-                    subContractor = _selectedSubContractor.value.orEmpty(),
-                    repSubContractor = _repSubContractorText.value.orEmpty(),
-                    repSSKSub = _repSSKSubText.value.orEmpty(),
-                    // Поля Transport, Control и FixVolumes остаются пустыми
-                    executor = "",
-                    contractTransport = "",
-                    stateNumber = "",
-                    startDate = "",
-                    startTime = "",
-                    endDate = "",
-                    endTime = "",
-                    orderNumber = "",
-                    inViolation = false,
-                    equipment = "",
-                    complexWork = "",
-                    report = "",
-                    remarks = "",
-                    controlRows = "",
-                    fixVolumesRows = "",
-                    isEmpty = false
-                )
-//                Log.d(TAG, "UserName: ${report.userName}")
-                Log.d(TAG, "Сохранение полного отчета: $report")
-                val reportId = reportRepository.saveReport(report)
-                Log.d(TAG, "Сохранение отчета с ID: $reportId")
-                if (reportId > 0) {
-                    withContext(Dispatchers.Main) {
-                        _isReportSaved.postValue(true)
-                        Log.d(TAG, "Отчет успешно сохранен, isReportSaved изменен на true")
-                    }
-                }
-                reportId
-            } catch (e: Exception) {
-                Log.e(TAG, "Ошибка сохранения отчета: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
-                }
-                0L
-            }
-        }
-    }
 
     // Функция загрузки предыдущего отчета
     // бОльшая часть предназначена для ArrangementFragment
@@ -643,129 +559,7 @@ class SharedViewModel(
 
     // Старое
     // Обновляем saveOrUpdateReport
-    suspend fun saveOrUpdateReport(): Long {
-        return withContext(Dispatchers.IO) {
-            Log.d(TAG, "Saving report on thread: ${Thread.currentThread().name}")
-            try {
-                val arrangementErrors = validateArrangementInputs(
-                    contract = _selectedContract.value,
-                    customers = _selectedCustomer.value,
-                    objects = _selectedObject.value,
-                    plotText = if (_isManualPlot.value == true) "Объект не делится на участки" else _plotText.value,
-                    contractors = _selectedContractor.value,
-                    subContractors = _selectedSubContractor.value,
-                    repSSKGpText = _repSSKGpText.value,
-                    repContractor = _selectedRepContractor.value,
-                    repSubContractorText = _repSubContractorText.value,
-                    repSSKSubText = _repSSKSubText.value,
-                    isManualPlot = _isManualPlot.value ?: false
-                )
-                if (arrangementErrors.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
-                        Log.d(TAG, "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
-                    }
-                    return@withContext 0L
-                }
 
-                val transportErrors = validateTransportInputs(
-                    isTransportAbsent = _isTransportAbsent.value ?: false,
-                    executorName = _transportExecutorName.value,
-                    contractTransport = _transportContractTransport.value,
-                    stateNumber = _transportStateNumber.value,
-                    startDate = _transportStartDate.value,
-                    startTime = _transportStartTime.value,
-                    endDate = _transportEndDate.value,
-                    endTime = _transportEndTime.value
-                )
-                if (transportErrors.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${transportErrors.values.joinToString()}")
-                        Log.d(TAG, "Transport validation errors: ${transportErrors.values.joinToString()}")
-                    }
-                    return@withContext 0L
-                }
-
-                val controlErrors = validateControlInputs(
-                    isViolation = _isViolation.value ?: false,
-                    orderNumber = _orderNumber.value,
-                    controlRows = _controlRows.value
-                )
-                if (controlErrors.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Не все поля контроля заполнены корректно: ${controlErrors.values.joinToString()}")
-                        Log.d(TAG, "Control validation errors: ${controlErrors.values.joinToString()}")
-                    }
-                    return@withContext 0L
-                }
-
-                val employeeNumber = _currentEmployeeNumber.value ?: run {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Пользователь не авторизован")
-                        Log.e(TAG, "No employeeNumber available")
-                    }
-                    return@withContext 0L
-                }
-
-                if (_selectedTypeOfWork.value.isNullOrBlank()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Режим работы не выбран")
-                        Log.e(TAG, "typeOfWork is not set")
-                    }
-                    return@withContext 0L
-                }
-
-                val report = Report(
-                    userName = employeeNumber, // Сохраняем employeeNumber
-                    typeOfWork = _selectedTypeOfWork.value.orEmpty(), // Добавляем typeOfWork
-                    date = _currentDate.value.orEmpty(),
-                    time = _currentTime.value.orEmpty(),
-                    contract = _selectedContract.value.orEmpty(),
-                    customer = _selectedCustomer.value.orEmpty(),
-                    obj = _selectedObject.value.orEmpty(),
-                    plot = _plotText.value.orEmpty(),
-                    genContractor = _selectedContractor.value.orEmpty(),
-                    repGenContractor = _selectedRepContractor.value.orEmpty(),
-                    repSSKGp = _repSSKGpText.value.orEmpty(),
-                    subContractor = _selectedSubContractor.value.orEmpty(),
-                    repSubContractor = _repSubContractorText.value.orEmpty(),
-                    repSSKSub = _repSSKSubText.value.orEmpty(),
-                    executor = _transportExecutorName.value.orEmpty(),
-                    contractTransport = _transportContractTransport.value.orEmpty(),
-                    stateNumber = _transportStateNumber.value.orEmpty(),
-                    startDate = _transportStartDate.value.orEmpty(),
-                    startTime = _transportStartTime.value.orEmpty(),
-                    endDate = _transportEndDate.value.orEmpty(),
-                    endTime = _transportEndTime.value.orEmpty(),
-                    orderNumber = _orderNumber.value.orEmpty(),
-                    inViolation = _isViolation.value ?: false,
-                    equipment = (_controlRows.value?.firstOrNull()?.equipmentName ?: ""),
-                    complexWork = (_controlRows.value?.firstOrNull()?.typeOfWork ?: ""),
-                    report = (_controlRows.value?.firstOrNull()?.report ?: ""),
-                    remarks = (_controlRows.value?.firstOrNull()?.remarks ?: ""),
-                    controlRows = gson.toJson(_controlRows.value),
-                    fixVolumesRows = gson.toJson(_fixRows.value),
-                    isEmpty = _isTransportAbsent.value ?: false
-                )
-                Log.d(TAG, "Saving full report: $report")
-                val reportId = reportRepository.saveReport(report)
-                Log.d(TAG, "Saved report ID: $reportId")
-                if (reportId > 0) {
-                    withContext(Dispatchers.Main) {
-                        _isReportSaved.postValue(true)
-                        Log.d(TAG, "Report saved successfully, isReportSaved set to true")
-                    }
-                }
-                reportId
-            } catch (e: Exception) {
-                Log.e(TAG, "Error saving report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
-                }
-                0L
-            }
-        }
-    }
 
     // Методы для TransportFragment
     // region методы для TransportFragment
@@ -856,57 +650,7 @@ class SharedViewModel(
     }
 
     // Функция обновления отчета по разделу "Транспорт"
-    suspend fun updateTransportReport(): Long {
-        return withContext(Dispatchers.IO) {
-            try {
-                val errors = validateTransportInputs(
-                    isTransportAbsent = _isTransportAbsent.value ?: false,
-                    executorName = _transportExecutorName.value,
-                    contractTransport = _transportContractTransport.value,
-                    stateNumber = _transportStateNumber.value,
-                    startDate = _transportStartDate.value,
-                    startTime = _transportStartTime.value,
-                    endDate = _transportEndDate.value,
-                    endTime = _transportEndTime.value
-                )
-                if (errors.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${errors.values.joinToString()}")
-                        Log.e(TAG, "Transport: Validation failed in updateTransportReport: $errors")
-                    }
-                    return@withContext 0L
-                }
-                val existingReport = reportRepository.getLastUnsentReport()
-                if (existingReport == null) {
-                    Log.e(TAG, "Transport: No unsent report found to update")
-                    withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Ошибка: нет незавершенного отчета для обновления")
-                    }
-                    return@withContext 0L
-                }
-                val updatedReport = existingReport.copy(
-                    executor = if (_isTransportAbsent.value == true) "" else _transportExecutorName.value.orEmpty(),
-                    contractTransport = if (_isTransportAbsent.value == true) "" else _transportContractTransport.value.orEmpty(),
-                    stateNumber = if (_isTransportAbsent.value == true) "" else _transportStateNumber.value.orEmpty(),
-                    startDate = if (_isTransportAbsent.value == true) "" else _transportStartDate.value.orEmpty(),
-                    startTime = if (_isTransportAbsent.value == true) "" else _transportStartTime.value.orEmpty(),
-                    endDate = if (_isTransportAbsent.value == true) "" else _transportEndDate.value.orEmpty(),
-                    endTime = if (_isTransportAbsent.value == true) "" else _transportEndTime.value.orEmpty(),
-                    isEmpty = _isTransportAbsent.value ?: false
-                )
-                Log.d(TAG, "Transport: Updating Report: $updatedReport")
-                reportRepository.updateReport(updatedReport)
-                Log.d(TAG, "Transport: Report updated successfully with ID: ${updatedReport.id}")
-                updatedReport.id
-            } catch (e: Exception) {
-                Log.e(TAG, "Transport: Error in updateTransportReport: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
-                }
-                0L
-            }
-        }
-    }
+
 
     // endregion
 
@@ -1057,54 +801,7 @@ class SharedViewModel(
         return errors
     }
 
-    suspend fun updateControlReport(): Long {
-        return withContext(Dispatchers.IO) {
-            try {
-                val errors = validateControlInputs(
-                    isViolation = _isViolation.value ?: false,
-                    orderNumber = _orderNumber.value,
-                    controlRows = _controlRows.value
-                )
-                if (errors.isNotEmpty()) {
-                    Log.e(TAG, "Control: Validation failed: $errors")
-                    _errorEvent.postValue("Не все поля заполнены корректно")
-                    return@withContext 0L
-                }
 
-                val existingReport = reportRepository.getLastUnsentReport()
-                if (existingReport == null) {
-                    Log.e(TAG, "Control: No unsent report found")
-                    _errorEvent.postValue("Ошибка: нет незавершенного отчета")
-                    return@withContext 0L
-                }
-
-                val controlRowsJson = gson.toJson(_controlRows.value)
-                val firstRow = _controlRows.value?.firstOrNull()
-
-                val updatedReport = existingReport.copy(
-                    orderNumber = if (_isViolation.value == true) "Нет нарушения" else _orderNumber.value.orEmpty(),
-                    inViolation = _isViolation.value ?: false,
-                    startDate = _currentDate.value.orEmpty(),
-                    startTime = _currentTime.value.orEmpty(),
-                    equipment = firstRow?.equipmentName ?: "",
-                    complexWork = firstRow?.typeOfWork ?: "",
-                    report = firstRow?.report ?: "",
-                    remarks = firstRow?.remarks ?: "",
-                    controlRows = controlRowsJson
-                )
-                Log.d(TAG, "Control: Updating Report: $updatedReport")
-                reportRepository.updateReport(updatedReport)
-                Log.d(TAG, "Control: Report updated successfully with ID: ${updatedReport.id}")
-                updatedReport.id
-            } catch (e: Exception) {
-                Log.e(TAG, "Control: Error in updateControlReport: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
-                }
-                0L
-            }
-        }
-    }
 
     // endregion
 
@@ -1219,63 +916,13 @@ class SharedViewModel(
     }
 
     // Функция добавления значений в Room из RecyclerView
-    suspend fun updateFixVolumesReport(): Long {
-        return withContext(Dispatchers.IO) {
-            try {
-                val errors = validateFixVolumesInputs(fixRows = _fixRows.value)
-                if (errors.isNotEmpty()) {
-                    Log.e(TAG, "FixVolumes: Validation failed: $errors")
-                    _errorEvent.postValue("Не все поля заполнены корректно")
-                    return@withContext 0L
-                }
-                val existingReport = reportRepository.getLastUnsentReport()
-                if (existingReport == null) {
-                    Log.e(TAG, "FixVolumes: No unsent report found")
-                    _errorEvent.postValue("Ошибка: нет незавершенного отчета")
-                    return@withContext 0L
-                }
-                val fixRowsJson = gson.toJson(_fixRows.value)
-                val updatedReport = existingReport.copy(
-                    fixVolumesRows = fixRowsJson
-                )
-                Log.d(TAG, "FixVolumes: Updating Report: $updatedReport")
-                reportRepository.updateReport(updatedReport)
-                Log.d(
-                    TAG,
-                    "FixVolumes: Report updated successfully with ID: ${updatedReport.id}"
-                )
-                updatedReport.id
-            } catch (e: Exception) {
-                Log.e(TAG, "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
-                }
-                0L
-            }
-        }
-    }
+
 
     // endregion
 
     // region SendReportFragment
     // Методы для
-//    fun exportDatabase(context: Context) {
-//        val dbName = "app_database"
-//        val dbPath = context.getDatabasePath(dbName)
-//        val exportDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "")
-//        if (!exportDir.exists()) exportDir.mkdirs()
-//        val outFile = File(exportDir, "$dbName${dateFormat.format(Date())}.db")
-//        try {
-//            FileInputStream(dbPath).use { input ->
-//                FileOutputStream(outFile).use { output ->
-//                    input.copyTo(output)
-//                }
-//            }
-//        } catch (e: Exception) {
-//            _errorEvent.postValue("Ошибка экспорта базы данных: ${e.message}")
-//            Log.e(TAG, "Ошибка экспорта базы данных: ${e.message}", e)
-//        }
-//    }
+
 
     fun exportDatabase(context: Context) {
         Log.d(TAG, "Начало экспорта базы данных")
@@ -1620,6 +1267,439 @@ class SharedViewModel(
     ): List<PlanValue> { // Или PlanValue? в зависимости от DAO
         return withContext(Dispatchers.IO) {
             planValueRepository.getPlanValuesByObjectIdAndComplex(objectId, complexWork)
+        }
+    }
+
+
+
+
+    ///////////////////////////////
+    // Методы сохранения данных с экранов в Report
+
+    // Метод, используемый в ArrangementFragment
+    suspend fun saveArrangementData(): Long {
+        return withContext(Dispatchers.IO) {
+            Log.d(TAG, "Saving report on thread: ${Thread.currentThread().name}")
+            try {
+
+                val arrangementErrors = validateArrangementInputs(
+                    contract = _selectedContract.value,
+                    customers = _selectedCustomer.value,
+                    objects = _selectedObject.value,
+                    plotText = if (_isManualPlot.value == true) "Объект не делится на участки" else _plotText.value ,
+                    contractors = _selectedContractor.value,
+                    subContractors = _selectedSubContractor.value,
+                    repSSKGpText = _repSSKGpText.value,
+                    repContractor = _selectedRepContractor.value,
+                    repSubContractorText = _repSubContractorText.value,
+                    repSSKSubText = _repSSKSubText.value,
+                    isManualPlot = _isManualPlot.value ?: false
+                )
+                if (arrangementErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()} ")
+                        Log.d(TAG, "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val employeeNumber = _currentEmployeeNumber.value ?: run {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e(TAG, "No employeeNumber available")
+                    }
+                    return@withContext 0L
+                }
+
+                if (_selectedTypeOfWork.value.isNullOrBlank()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Режим работы не выбран")
+                        Log.e(TAG, "typeOfWork is not set")
+                    }
+                    return@withContext 0L
+                }
+
+                val report = Report(
+                    userName = employeeNumber, // Сохраняем уникальный номер сотрудника
+                    typeOfWork = _selectedTypeOfWork.value.orEmpty(), // Добавляем Режим работы
+                    date = _currentDate.value.orEmpty(),
+                    time = _currentTime.value.orEmpty(),
+                    contract = _selectedContract.value.orEmpty(),
+                    customer = _selectedCustomer.value.orEmpty(),
+                    obj =  _selectedObject.value.orEmpty(),
+                    plot = _plotText.value.orEmpty(),
+                    genContractor = _selectedContractor.value.orEmpty(),
+                    repGenContractor =_selectedRepContractor.value.orEmpty(),
+                    repSSKGp = _repSSKGpText.value.orEmpty(),
+                    subContractor = _selectedSubContractor.value.orEmpty(),
+                    repSubContractor = _repSubContractorText.value.orEmpty(),
+                    repSSKSub = _repSSKSubText.value.orEmpty(),
+                    // Поля Transport, Control и FixVolumes остаются пустыми
+                    executor = "",
+                    contractTransport = "",
+                    stateNumber = "",
+                    startDate = "",
+                    startTime = "",
+                    endDate = "",
+                    endTime = "",
+                    orderNumber = "",
+                    inViolation = false,
+                    equipment = "",
+                    complexWork = "",
+                    report = "",
+                    remarks = "",
+                    controlRows = "",
+                    fixVolumesRows = "",
+                    isEmpty = false,
+                    isSend = false,
+                    isCompleted = false // Отчет незавершен
+                )
+//                Log.d(TAG, "UserName: ${report.userName}")
+                Log.d(TAG, "Сохранение полного отчета: $report")
+                val reportId = reportRepository.saveReport(report)
+                Log.d(TAG, "Сохранение отчета с ID: $reportId")
+                if (reportId > 0) {
+                    withContext(Dispatchers.Main) {
+                        _isReportSaved.postValue(true)
+                        _currentReportId.postValue(reportId)
+                        Log.d(TAG, "Отчет успешно сохранен, isReportSaved изменен на true")
+                    }
+                }
+                reportId
+            } catch (e: Exception) {
+                Log.e(TAG, "Ошибка сохранения отчета: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
+                }
+                0L
+            }
+        }
+    }
+
+    // Метод, используемый в TransportFragment
+    suspend fun updateTransportReport(): Long {
+        return withContext(Dispatchers.IO) {
+            try {
+                val errors = validateTransportInputs(
+                    isTransportAbsent = _isTransportAbsent.value ?: false,
+                    executorName = _transportExecutorName.value,
+                    contractTransport = _transportContractTransport.value,
+                    stateNumber = _transportStateNumber.value,
+                    startDate = _transportStartDate.value,
+                    startTime = _transportStartTime.value,
+                    endDate = _transportEndDate.value,
+                    endTime = _transportEndTime.value
+                )
+                if (errors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${errors.values.joinToString()}")
+                        Log.e(TAG, "Transport: Validation failed in updateTransportReport: $errors")
+                    }
+                    return@withContext 0L
+                }
+                val reportId = _currentReportId.value ?: run {
+                    Log.e(TAG, "Transport: No report ID available")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: нет текущего отчета для обновления")
+                    }
+                    return@withContext 0L
+                }
+                val existingReport = reportRepository.getReportById(reportId)
+                if (existingReport == null) {
+                    Log.e(TAG, "Transport: No report found with ID: $reportId")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: отчет не найден")
+                    }
+                    return@withContext 0L
+                }
+                val updatedReport = existingReport.copy(
+                    executor = if (_isTransportAbsent.value == true) "" else _transportExecutorName.value.orEmpty(),
+                    contractTransport = if (_isTransportAbsent.value == true) "" else _transportContractTransport.value.orEmpty(),
+                    stateNumber = if (_isTransportAbsent.value == true) "" else _transportStateNumber.value.orEmpty(),
+                    startDate = if (_isTransportAbsent.value == true) "" else _transportStartDate.value.orEmpty(),
+                    startTime = if (_isTransportAbsent.value == true) "" else _transportStartTime.value.orEmpty(),
+                    endDate = if (_isTransportAbsent.value == true) "" else _transportEndDate.value.orEmpty(),
+                    endTime = if (_isTransportAbsent.value == true) "" else _transportEndTime.value.orEmpty(),
+                    isEmpty = _isTransportAbsent.value ?: false,
+                    isCompleted = false // Отчет остается незавершенным
+                )
+                Log.d(TAG, "Transport: Updating Report: $updatedReport")
+                reportRepository.updateReport(updatedReport)
+                Log.d(TAG, "Transport: Report updated successfully with ID: ${updatedReport.id}")
+                updatedReport.id
+            } catch (e: Exception) {
+                Log.e(TAG, "Transport: Error in updateTransportReport: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+                }
+                0L
+            }
+        }
+    }
+
+    // Метод, используемый в ControlFragment
+    suspend fun updateControlReport(): Long {
+        return withContext(Dispatchers.IO) {
+            try {
+                val errors = validateControlInputs(
+                    isViolation = _isViolation.value ?: false,
+                    orderNumber = _orderNumber.value,
+                    controlRows = _controlRows.value
+                )
+                if (errors.isNotEmpty()) {
+                    Log.e(TAG, "Control: Validation failed: $errors")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля заполнены корректно: ${errors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val reportId = _currentReportId.value ?: run {
+                    Log.e(TAG, "Control: No report ID available")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: нет текущего отчета для обновления")
+                    }
+                    return@withContext 0L
+                }
+
+                val existingReport = reportRepository.getReportById(reportId)
+                if (existingReport == null) {
+                    Log.e(TAG, "Control: No report found with ID: $reportId")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: отчет не найден")
+                    }
+                    return@withContext 0L
+                }
+
+                val controlRowsJson = gson.toJson(_controlRows.value)
+                val firstRow = _controlRows.value?.firstOrNull()
+
+                val updatedReport = existingReport.copy(
+                    orderNumber = if (_isViolation.value == true) "Нет нарушения" else _orderNumber.value.orEmpty(),
+                    inViolation = _isViolation.value ?: false,
+                    noEquipmentName = _isEquipmentAbsent.value ?: false,
+                    equipment = firstRow?.equipmentName ?: "",
+                    complexWork = firstRow?.typeOfWork ?: "",
+                    report = firstRow?.report ?: "",
+                    remarks = firstRow?.remarks ?: "",
+                    controlRows = controlRowsJson,
+                    isCompleted = false // Отчет остается незавершенным
+                )
+                Log.d(TAG, "Control: Updating Report: $updatedReport")
+                reportRepository.updateReport(updatedReport)
+                Log.d(TAG, "Control: Report updated successfully with ID: ${updatedReport.id}")
+                updatedReport.id
+            } catch (e: Exception) {
+                Log.e(TAG, "Control: Error in updateControlReport: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+                }
+                0L
+            }
+        }
+    }
+
+    // Метод, используемый в FixVolumesFragment
+    suspend fun updateFixVolumesReport(): Long {
+        return withContext(Dispatchers.IO) {
+            try {
+                val errors = validateFixVolumesInputs(fixRows = _fixRows.value)
+                if (errors.isNotEmpty()) {
+                    Log.e(TAG, "FixVolumes: Validation failed: $errors")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля заполнены корректно: ${errors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val reportId = _currentReportId.value ?: run {
+                    Log.e(TAG, "FixVolumes: No report ID available")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: нет текущего отчета для обновления")
+                    }
+                    return@withContext 0L
+                }
+
+                val existingReport = reportRepository.getReportById(reportId)
+                if (existingReport == null) {
+                    Log.e(TAG, "FixVolumes: No report found with ID: $reportId")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: отчет не найден")
+                    }
+                    return@withContext 0L
+                }
+
+                val fixRowsJson = gson.toJson(_fixRows.value)
+                val updatedReport = existingReport.copy(
+                    fixVolumesRows = fixRowsJson,
+                    isCompleted = false // Отчет остается незавершенным
+                )
+                Log.d(TAG, "FixVolumes: Updating Report: $updatedReport")
+                reportRepository.updateReport(updatedReport)
+                Log.d(TAG, "FixVolumes: Report updated successfully with ID: ${updatedReport.id}")
+                updatedReport.id
+            } catch (e: Exception) {
+                Log.e(TAG, "FixVolumes: Error in updateFixVolumesReport: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при обновлении отчета: ${e.message}")
+                }
+                0L
+            }
+        }
+    }
+
+    // Метод, используемый в SendReportFragment
+    suspend fun saveOrUpdateReport(): Long {
+        return withContext(Dispatchers.IO) {
+            Log.d(TAG, "Saving or updating report on thread: ${Thread.currentThread().name}")
+            try {
+                val employeeNumber = _currentEmployeeNumber.value ?: run {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Пользователь не авторизован")
+                        Log.e(TAG, "No employeeNumber available")
+                    }
+                    return@withContext 0L
+                }
+
+                if (_selectedTypeOfWork.value.isNullOrBlank()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Режим работы не выбран")
+                        Log.e(TAG, "typeOfWork is not set")
+                    }
+                    return@withContext 0L
+                }
+
+                val arrangementErrors = validateArrangementInputs(
+                    contract = _selectedContract.value,
+                    customers = _selectedCustomer.value,
+                    objects = _selectedObject.value,
+                    plotText = if (_isManualPlot.value == true) "Объект не делится на участки" else _plotText.value,
+                    contractors = _selectedContractor.value,
+                    subContractors = _selectedSubContractor.value,
+                    repSSKGpText = _repSSKGpText.value,
+                    repContractor = _selectedRepContractor.value,
+                    repSubContractorText = _repSubContractorText.value,
+                    repSSKSubText = _repSSKSubText.value,
+                    isManualPlot = _isManualPlot.value ?: false
+                )
+                if (arrangementErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля заполнены корректно: ${arrangementErrors.values.joinToString()}")
+                        Log.d(TAG, "Arrangement validation errors: ${arrangementErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val transportErrors = validateTransportInputs(
+                    isTransportAbsent = _isTransportAbsent.value ?: false,
+                    executorName = _transportExecutorName.value,
+                    contractTransport = _transportContractTransport.value,
+                    stateNumber = _transportStateNumber.value,
+                    startDate = _transportStartDate.value,
+                    startTime = _transportStartTime.value,
+                    endDate = _transportEndDate.value,
+                    endTime = _transportEndTime.value
+                )
+                if (transportErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля транспорта заполнены корректно: ${transportErrors.values.joinToString()}")
+                        Log.d(TAG, "Transport validation errors: ${transportErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val controlErrors = validateControlInputs(
+                    isViolation = _isViolation.value ?: false,
+                    orderNumber = _orderNumber.value,
+                    controlRows = _controlRows.value
+                )
+                if (controlErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля контроля заполнены корректно: ${controlErrors.values.joinToString()}")
+                        Log.d(TAG, "Control validation errors: ${controlErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val fixVolumesErrors = validateFixVolumesInputs(fixRows = _fixRows.value)
+                if (fixVolumesErrors.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Не все поля объемов заполнены корректно: ${fixVolumesErrors.values.joinToString()}")
+                        Log.d(TAG, "FixVolumes validation errors: ${fixVolumesErrors.values.joinToString()}")
+                    }
+                    return@withContext 0L
+                }
+
+                val reportId = _currentReportId.value ?: run {
+                    Log.e(TAG, "No report ID available for update")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: нет текущего отчета для обновления")
+                    }
+                    return@withContext 0L
+                }
+
+                val existingReport = reportRepository.getReportById(reportId)
+                if (existingReport == null) {
+                    Log.e(TAG, "No report found with ID: $reportId")
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Ошибка: отчет не найден")
+                    }
+                    return@withContext 0L
+                }
+
+                val updatedReport = existingReport.copy(
+                    userName = employeeNumber,
+                    typeOfWork = _selectedTypeOfWork.value.orEmpty(),
+                    date = _currentDate.value.orEmpty(),
+                    time = _currentTime.value.orEmpty(),
+                    contract = _selectedContract.value.orEmpty(),
+                    customer = _selectedCustomer.value.orEmpty(),
+                    obj = _selectedObject.value.orEmpty(),
+                    plot = _plotText.value.orEmpty(),
+                    genContractor = _selectedContractor.value.orEmpty(),
+                    repGenContractor = _selectedRepContractor.value.orEmpty(),
+                    repSSKGp = _repSSKGpText.value.orEmpty(),
+                    subContractor = _selectedSubContractor.value.orEmpty(),
+                    repSubContractor = _repSubContractorText.value.orEmpty(),
+                    repSSKSub = _repSSKSubText.value.orEmpty(),
+                    executor = _transportExecutorName.value.orEmpty(),
+                    contractTransport = _transportContractTransport.value.orEmpty(),
+                    stateNumber = _transportStateNumber.value.orEmpty(),
+                    startDate = _transportStartDate.value.orEmpty(),
+                    startTime = _transportStartTime.value.orEmpty(),
+                    endDate = _transportEndDate.value.orEmpty(),
+                    endTime = _transportEndTime.value.orEmpty(),
+                    orderNumber = _orderNumber.value.orEmpty(),
+                    inViolation = _isViolation.value ?: false,
+                    noEquipmentName = _isEquipmentAbsent.value ?: false,
+                    equipment = (_controlRows.value?.firstOrNull()?.equipmentName ?: ""),
+                    complexWork = (_controlRows.value?.firstOrNull()?.typeOfWork ?: ""),
+                    report = (_controlRows.value?.firstOrNull()?.report ?: ""),
+                    remarks = (_controlRows.value?.firstOrNull()?.remarks ?: ""),
+                    controlRows = gson.toJson(_controlRows.value),
+                    fixVolumesRows = gson.toJson(_fixRows.value),
+                    isEmpty = _isTransportAbsent.value ?: false,
+                    isSend = false,
+                    isCompleted = true // Финализируем отчет
+                )
+                Log.d(TAG, "Updating full report: $updatedReport")
+                reportRepository.updateReport(updatedReport)
+                Log.d(TAG, "Report updated successfully with ID: $reportId")
+                withContext(Dispatchers.Main) {
+                    _isReportSaved.postValue(true)
+                    Log.d(TAG, "Before resetting _currentReportId: ${_currentReportId.value}")
+                    _currentReportId.postValue(null)
+                    Log.d(TAG, "After resetting _currentReportId: ${_currentReportId.value}")
+                    Log.d(TAG, "Report saved successfully, isReportSaved set to true")
+                }
+                reportId
+            } catch (e: Exception) {
+                Log.e(TAG, "Error updating report: ${e.message}, Thread: ${Thread.currentThread().name}, StackTrace: ${e.stackTraceToString()}")
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при сохранении отчета: ${e.message}")
+                }
+                0L
+            }
         }
     }
 }

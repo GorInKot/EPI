@@ -52,7 +52,9 @@ data class Report(
     // -------- Фиксация объемов --------
     val fixVolumesRows: String = "", // Поле для хранения JSON списка FixVolumesRow
 
-    val isSend: Boolean = false
+    val isSend: Boolean = false,
+
+    val isCompleted: Boolean = false // Новое поле для проверки завершения отчета
 
 
 )
