@@ -43,7 +43,7 @@
             />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/dialogTitle"
+            android:id="@+id/dialog_FV_row_Title"
             android:text="Редактирование строки"
             android:gravity="center"
             android:paddingTop="16dp"
@@ -55,16 +55,17 @@
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_id"
+            android:id="@+id/dialog_FV_row_textInputLayout_Id"
             android:hint="ID Объекта"
             style="@style/TextInputLayout"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/dialogTitle">
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_Title"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/autoComplete_dialog_IdObject"
+                android:id="@+id/dialog_FV_row_autoComplete_Id"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -80,18 +81,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_complexofwork"
+            android:id="@+id/dialog_FV_row_textInputLayout_complexofwork"
             android:hint="Комплекс работ из проекта"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_id"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_Id"
             style="@style/TextInputLayout"
             app:endIconMode="dropdown_menu"
             >
 
             <AutoCompleteTextView
-                android:id="@+id/autoComplete_dialog_ComplexOfWork"
+                android:id="@+id/dialog_FV_row_autoComplete_ComplexOfWork"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -107,18 +108,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_worktype"
+            android:id="@+id/dialog_FV_row_textInputLayout_worktype"
             android:hint="Вид работ из проекта"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_complexofwork"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_complexofwork"
             style="@style/TextInputLayout"
             app:endIconMode="dropdown_menu"
             >
 
             <AutoCompleteTextView
-                android:id="@+id/autoComplete_dialog_WorkProject"
+                android:id="@+id/dialog_FV_row_autoComplete_WorkProject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -134,18 +135,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_measures"
+            android:id="@+id/dialog_FV_row_textInputLayout_measures"
             android:hint="Единицы измерения"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_worktype"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_worktype"
             style="@style/TextInputLayout"
             app:endIconMode="dropdown_menu"
             >
 
             <AutoCompleteTextView
-                android:id="@+id/autoComplete_dialog_Measures"
+                android:id="@+id/dialog_FV_row_autoComplete_Measures"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -161,17 +162,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_volumes"
+            android:id="@+id/dialog_FV_row_textInputLayout_volumes"
             android:hint="Значение 'План' по проекту"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_measures"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_measures"
             style="@style/TextInputLayout"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/autoComplete_dialog_Plan"
+                android:id="@+id/dialog_FV_row_textInputEditText_Plan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -187,17 +188,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_dialog_fact"
+            android:id="@+id/dialog_FV_row_textInputLayout_fact"
             android:hint="Значение 'Факт' по проекту"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_volumes"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_volumes"
             style="@style/TextInputLayout"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/autoComplete_dialog_Fact"
+                android:id="@+id/dialog_FV_row_textInputEditText_Fact"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="10dp"
@@ -213,29 +214,29 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFixCancel"
+            android:id="@+id/dialog_FV_row_btnFixCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Отмена"
             style="@style/SimpleButton"
             android:layout_marginTop="12dp"
-            app:layout_constraintStart_toEndOf="@id/guideline_middle"
-            app:layout_constraintEnd_toStartOf="@id/btnFixSave"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_fact"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/dialog_FV_row_btnFixSave"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_fact"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:layout_marginEnd="8dp"
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFixSave"
+            android:id="@+id/dialog_FV_row_btnFixSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Сохранить"
             android:layout_marginTop="12dp"
             style="@style/ExtraButton"
-            app:layout_constraintStart_toEndOf="@id/btnFixCancel"
+            app:layout_constraintStart_toEndOf="@id/dialog_FV_row_btnFixCancel"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_fact"
+            app:layout_constraintTop_toBottomOf="@id/dialog_FV_row_textInputLayout_fact"
             android:layout_marginStart="8dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

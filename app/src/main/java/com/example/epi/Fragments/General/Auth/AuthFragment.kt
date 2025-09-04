@@ -61,6 +61,34 @@ class AuthFragment : Fragment() {
             binding.textInputEditTextPassword.setAutofillHints(View.AUTOFILL_HINT_PASSWORD)
         }
 
+        // Прокрутка к активному полю при получении фокуса
+        binding.textInputEditTextNumber.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.root.smoothScrollTo(0, binding.textInputLayoutPassword.top)
+                Log.d(TAG, "Scroll to textInputEditTextNumber at ${binding.textInputLayoutPassword.top}")
+            }
+        }
+
+        binding.textInputEditTextPassword.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.root.smoothScrollTo(0, binding.textInputLayoutPassword.top)
+                Log.d(TAG, "Scroll to textInputLayout_Password at ${binding.textInputLayoutPassword.top}")
+            }
+        }
+        binding.autoCompleteWorkType.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.root.smoothScrollTo(0, binding.textInputLayoutWorkType.top)
+                Log.d(TAG, "Scroll to textInputLayout_workType at ${binding.textInputLayoutWorkType.top}")
+            }
+        }
+
+        // Прокрутка к autoComplete_WorkType при открытии выпадающего списка
+        binding.autoCompleteWorkType.setOnClickListener {
+            binding.autoCompleteWorkType.showDropDown()
+            binding.root.smoothScrollTo(0, binding.textInputLayoutWorkType.top)
+            Log.d(TAG, "Dropdown opened, scroll to textInputLayout_workType at ${binding.textInputLayoutWorkType.top}")
+        }
+
     }
 
     private fun setupTypeOfWorkDropdown() {
@@ -126,6 +154,18 @@ class AuthFragment : Fragment() {
                     binding.textInputEditTextPassword.text?.toString()?.trim(),
                     binding.autoCompleteWorkType.text?.toString()?.trim()
                 )}")
+
+                // Прокрутка к первому полю с ошибкой
+                val errors = viewModel.validateAuthInputs(
+                    binding.textInputEditTextNumber.text?.toString()?.trim(),
+                    binding.textInputEditTextPassword.text?.toString()?.trim(),
+                    binding.autoCompleteWorkType.text?.toString()?.trim()
+                )
+                when {
+                    !errors["number"].isNullOrBlank() -> binding.root.smoothScrollTo(0, binding.textInputLayoutNumber.top)
+                    !errors["password"].isNullOrBlank() -> binding.root.smoothScrollTo(0, binding.textInputLayoutPassword.top)
+                    !errors["typeOfWork"].isNullOrBlank() -> binding.root.smoothScrollTo(0, binding.textInputLayoutWorkType.top)
+                }
             }
         }
 

@@ -324,7 +324,7 @@
                 />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_autoSubContractor"
+                android:id="@+id/textInputLayout_autoRepContractor"
                 style="@style/TextInputLayout"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -356,7 +356,7 @@
                 android:layout_marginStart="0dp"
                 app:layout_constraintStart_toEndOf="@id/guideline_middle"
                 app:layout_constraintEnd_toStartOf="@id/guideline_right"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoSubContractor"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoRepContractor"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
 
                 />
@@ -364,7 +364,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_RepSSK_Gp"
                 style="@style/TextInputLayout"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoSubContractor"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_autoRepContractor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline_right"
                 android:layout_marginTop="24dp"

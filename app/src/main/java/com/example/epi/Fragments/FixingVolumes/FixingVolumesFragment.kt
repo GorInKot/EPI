@@ -2,7 +2,6 @@ package com.example.epi.Fragments.FixingVolumes
 
 import android.app.AlertDialog
 import android.graphics.Color
-import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputType
@@ -16,7 +15,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -29,11 +27,11 @@ import com.example.epi.SharedViewModel
 import com.example.epi.ViewModel.SharedViewModelFactory
 import com.example.epi.databinding.FragmentFixingVolumesBinding
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.PI
 
 class FixingVolumesFragment : Fragment() {
 
@@ -52,7 +50,7 @@ class FixingVolumesFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = "Tagg-FixingVolumesFragment"
+        private const val TAG = "Tagg-FixingVolumesFragment"
     }
     private lateinit var adapter: FixVolumesRowAdapter
 
@@ -76,7 +74,6 @@ class FixingVolumesFragment : Fragment() {
         // Подписка на строки
         sharedViewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)
-            // Лог для отладки
             Log.d(TAG, "Submitting list to adapter: $rows")
         }
 
@@ -86,26 +83,27 @@ class FixingVolumesFragment : Fragment() {
         }
 
         // Обзервер на Комплекс работ
-        // New Version
         sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { complexOfWorks ->
-            if(complexOfWorks.isNotEmpty()) {
+            if (complexOfWorks.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexOfWorks)
                 binding.AutoCompleteTextViewFixComplexOfWork.setAdapter(adapter)
+                binding.AutoCompleteTextViewFixComplexOfWork.inputType = InputType.TYPE_NULL
+                binding.AutoCompleteTextViewFixComplexOfWork.keyListener = null
                 sharedViewModel.selectedComplex.value?.let { selected ->
                     val position = complexOfWorks.indexOf(selected)
                     if (position >= 0) {
                         binding.AutoCompleteTextViewFixComplexOfWork.setText(complexOfWorks[position], false)
                     }
                 }
-                binding.AutoCompleteTextViewFixComplexOfWork.setOnItemClickListener { parent, view, position, id ->
+                binding.AutoCompleteTextViewFixComplexOfWork.setOnItemClickListener { parent, _, position, _ ->
                     val selectedComplex = parent.getItemAtPosition(position) as String
-                    sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
+                    sharedViewModel.setSelectedComplex(selectedComplex)
                     checkComplexAndTypeOfWork(selectedComplex)
                 }
                 binding.AutoCompleteTextViewFixComplexOfWork.setOnClickListener {
                     binding.AutoCompleteTextViewFixComplexOfWork.showDropDown()
                 }
-            }else {
+            } else {
                 Toast.makeText(requireContext(), "Не удалось загрузить список комплексов работ", Toast.LENGTH_SHORT).show()
             }
         }
@@ -115,20 +113,21 @@ class FixingVolumesFragment : Fragment() {
             if (typesOfWork.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
                 binding.AutoCompleteTextViewFixTypeOfWork.setAdapter(adapter)
-                // Сбрасываем текст, если список обновился
+                binding.AutoCompleteTextViewFixTypeOfWork.inputType = InputType.TYPE_NULL
+                binding.AutoCompleteTextViewFixTypeOfWork.keyListener = null
                 if (binding.AutoCompleteTextViewFixTypeOfWork.text.isNullOrEmpty()) {
                     binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
                 }
-                binding.AutoCompleteTextViewFixTypeOfWork.setOnItemClickListener { parent, view, position, id ->
+                binding.AutoCompleteTextViewFixTypeOfWork.setOnItemClickListener { parent, _, position, _ ->
                     val selectedType = parent.getItemAtPosition(position) as String
-                    checkTypeOfWork(selectedType) // Проверяем наличие вида работ
+                    checkTypeOfWork(selectedType)
                 }
                 binding.AutoCompleteTextViewFixTypeOfWork.setOnClickListener {
                     binding.AutoCompleteTextViewFixTypeOfWork.showDropDown()
                 }
             } else {
-                binding.AutoCompleteTextViewFixTypeOfWork.setText("", false) // Очищаем, если нет видов работ
-                binding.AutoCompleteTextViewFixTypeOfWork.isEnabled = false // Дезактивируем, если список пуст
+                binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
+                binding.AutoCompleteTextViewFixTypeOfWork.isEnabled = false
             }
         }
         binding.TextInputEditTextPlan.inputType = InputType.TYPE_NULL
@@ -141,7 +140,7 @@ class FixingVolumesFragment : Fragment() {
                 measuresList
             )
             binding.AutoCompleteTextViewMeasureUnits.setAdapter(adapter)
-            binding.AutoCompleteTextViewMeasureUnits.inputType = android.text.InputType.TYPE_NULL
+            binding.AutoCompleteTextViewMeasureUnits.inputType = InputType.TYPE_NULL
             binding.AutoCompleteTextViewMeasureUnits.keyListener = null
             binding.AutoCompleteTextViewMeasureUnits.setOnClickListener {
                 binding.AutoCompleteTextViewMeasureUnits.showDropDown()
@@ -158,7 +157,7 @@ class FixingVolumesFragment : Fragment() {
                 measure = binding.AutoCompleteTextViewMeasureUnits.text.toString().trim(),
                 plan = binding.TextInputEditTextPlan.text.toString().trim(),
                 fact = binding.TextInputEditTextFact.text.toString().trim(),
-                result = "" // result будет установлен в recalculateFixRows
+                result = ""
             )
 
             when (val result = sharedViewModel.validateAndCalculateRemainingVolume(newRow)) {
@@ -166,12 +165,10 @@ class FixingVolumesFragment : Fragment() {
                     sharedViewModel.addFixRow(newRow)
                     clearInputFields()
                 }
-
                 is RowValidationResult.Invalid -> {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_LONG).show()
                     highlightErrorField(result.reason)
                 }
-
                 else -> {}
             }
         }
@@ -198,7 +195,7 @@ class FixingVolumesFragment : Fragment() {
             findNavController().navigate(R.id.action_FixVolumesFragment_to_ControlFragment)
         }
 
-        // Кнопка "Добавить плановые значения
+        // Кнопка "Добавить плановые значения"
         binding.btnAddPlanValues.setOnClickListener {
             val objectId = sharedViewModel.selectedObject.value ?: run {
                 Toast.makeText(requireContext(), "Не выбран объект", Toast.LENGTH_SHORT).show()
@@ -227,13 +224,23 @@ class FixingVolumesFragment : Fragment() {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_fixvolumes_row, null)
 
-        val editIdObject = dialogView.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_id)
-        val editComplexOfWork = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_complexofwork)
-        val editWorkProject = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_worktype)
-        val editMeasures = dialogView.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_measures)
-        val editPlan = dialogView.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_volumes)
-        val editFact = dialogView.findViewById<TextInputEditText>(R.id.textInputLayout_dialog_fact)
+        // Используем правильные ID из dialog_fixvolumes_row.xml
+        val editIdObject = dialogView.findViewById<TextInputEditText>(R.id.dialog_FV_row_autoComplete_Id)
+        val editComplexOfWork = dialogView.findViewById<AutoCompleteTextView>(R.id.dialog_FV_row_autoComplete_ComplexOfWork)
+        val editWorkProject = dialogView.findViewById<AutoCompleteTextView>(R.id.dialog_FV_row_autoComplete_WorkProject)
+        val editMeasures = dialogView.findViewById<AutoCompleteTextView>(R.id.dialog_FV_row_autoComplete_Measures)
+        val editPlan = dialogView.findViewById<TextInputEditText>(R.id.dialog_FV_row_textInputEditText_Plan)
+        val editFact = dialogView.findViewById<TextInputEditText>(R.id.dialog_FV_row_textInputEditText_Fact)
 
+        // Логирование для отладки
+        Log.d(TAG, "editIdObject: $editIdObject")
+        Log.d(TAG, "editComplexOfWork: $editComplexOfWork")
+        Log.d(TAG, "editWorkProject: $editWorkProject")
+        Log.d(TAG, "editMeasures: $editMeasures")
+        Log.d(TAG, "editPlan: $editPlan")
+        Log.d(TAG, "editFact: $editFact")
+
+        // Устанавливаем текущие значения
         editIdObject.setText(row.ID_object)
         editIdObject.isEnabled = false // ID_object не редактируется
         editComplexOfWork.setText(row.complexOfWork)
@@ -245,6 +252,13 @@ class FixingVolumesFragment : Fragment() {
         // Настройка автодополнения
         sharedViewModel.controlsComplexOfWork.value?.let { workTypeList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeList)
+            editComplexOfWork.setAdapter(adapter)
+            editComplexOfWork.setOnClickListener {
+                editComplexOfWork.showDropDown()
+            }
+        }
+        sharedViewModel.controlTypesOfWork.value?.let { workTypeList ->
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, workTypeList)
             editWorkProject.setAdapter(adapter)
             editWorkProject.setOnClickListener {
                 editWorkProject.showDropDown()
@@ -253,7 +267,9 @@ class FixingVolumesFragment : Fragment() {
         sharedViewModel.fixMeasures.value?.let { measuresList ->
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, measuresList)
             editMeasures.setAdapter(adapter)
-            editMeasures.setOnClickListener { editMeasures.showDropDown() }
+            editMeasures.setOnClickListener {
+                editMeasures.showDropDown()
+            }
         }
 
         val dialog = AlertDialog.Builder(requireContext())
@@ -261,19 +277,19 @@ class FixingVolumesFragment : Fragment() {
             .create()
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialogView.findViewById<Button>(R.id.btnFixCancel).setOnClickListener {
+        dialogView.findViewById<Button>(R.id.dialog_FV_row_btnFixCancel).setOnClickListener {
             dialog.dismiss()
         }
 
-        dialogView.findViewById<Button>(R.id.btnFixSave).setOnClickListener {
+        dialogView.findViewById<Button>(R.id.dialog_FV_row_btnFixSave).setOnClickListener {
             val newRow = FixVolumesRow(
                 ID_object = row.ID_object,
-                complexOfWork = row.complexOfWork,
+                complexOfWork = editComplexOfWork.text.toString().trim(),
                 projectWorkType = editWorkProject.text.toString().trim(),
                 measure = editMeasures.text.toString().trim(),
                 plan = editPlan.text.toString().trim(),
                 fact = editFact.text.toString().trim(),
-                result = "" // result будет установлен в recalculateFixRows
+                result = ""
             )
 
             when (val result = sharedViewModel.validateAndCalculateRemainingVolume(newRow, excludeRow = row)) {
@@ -286,7 +302,6 @@ class FixingVolumesFragment : Fragment() {
                     Toast.makeText(requireContext(), result.reason, Toast.LENGTH_LONG).show()
                     highlightErrorField(result.reason, dialogView)
                 }
-
                 else -> {}
             }
         }
@@ -297,11 +312,6 @@ class FixingVolumesFragment : Fragment() {
     private fun highlightErrorField(reason: String, dialogView: View? = null) {
         val context = dialogView ?: binding.root
         when {
-//            reason.contains("ID объекта") -> {
-//                (context.findViewById<TextInputEditText>(R.id.edIdObject)
-//                    ?: binding.TextInputEditTextIdObject)?.error = reason
-//            }
-            // TODO - Комплекс работ
             reason.contains("Комплекс работ") -> {
                 (context.findViewById<AutoCompleteTextView>(R.id.textInputLayout_dialog_complexofwork)
                     ?: binding.AutoCompleteTextViewFixComplexOfWork)?.error = reason
@@ -333,7 +343,6 @@ class FixingVolumesFragment : Fragment() {
         binding.TextInputEditTextFact.setText("")
     }
 
-    // Проверяем Объем и комплекс работ
     private suspend fun checkComplexExistence(complexOfWork: String, objectId: String): PlanValue? {
         return withContext(Dispatchers.IO) {
             val planValues = sharedViewModel.getPlanValuesByObjectIdAndComplex(objectId, complexOfWork)
@@ -344,7 +353,6 @@ class FixingVolumesFragment : Fragment() {
         }
     }
 
-    // Проверяем полную комбинация: Объект, Комплекс, вид работ
     private suspend fun checkTypeOfWorkExistence(complexOfWork: String, typeOfWork: String, objectId: String): PlanValue? {
         return withContext(Dispatchers.IO) {
             val planValues = sharedViewModel.getPlanValuesByObjectIdAndComplexAndType(objectId, complexOfWork, typeOfWork)
@@ -376,14 +384,12 @@ class FixingVolumesFragment : Fragment() {
                     negativeAction = { }
                 )
             } else {
-                // Активируем поле Вид работ и сбрасываем его значение
                 binding.AutoCompleteTextViewFixTypeOfWork.setText("", false)
                 binding.AutoCompleteTextViewFixTypeOfWork.isEnabled = true
             }
         }
     }
 
-    // Проверяем Вид работ
     private fun checkTypeOfWork(selectedType: String) {
         CoroutineScope(Dispatchers.Main).launch {
             val objectId = sharedViewModel.selectedObject.value ?: run {
@@ -410,10 +416,9 @@ class FixingVolumesFragment : Fragment() {
                     negativeAction = { }
                 )
             } else {
-                // Загрузка единиц измерения и плана
                 binding.TextInputEditTextPlan.setText(planValue.planValue.toString())
                 binding.AutoCompleteTextViewMeasureUnits.setText(planValue.measures)
-                binding.TextInputEditTextFact.requestFocus() // Фокус на поле Факт
+                binding.TextInputEditTextFact.requestFocus()
             }
         }
     }
@@ -433,13 +438,11 @@ class FixingVolumesFragment : Fragment() {
 
         val alertDialog = dialogBuilder.create()
 
-        // Настройка элементов
         dialogView.findViewById<TextView>(R.id.alertTitle)?.text = title
         dialogView.findViewById<TextView>(R.id.alertMessage)?.text = message
 
-        // Настройка кнопок
         dialogView.findViewById<Button>(R.id.positiveButton)?.apply {
-            text = positiveButtonText // Устанавливаем переданный текст
+            text = positiveButtonText
             setOnClickListener {
                 positiveAction()
                 alertDialog.dismiss()
@@ -448,7 +451,7 @@ class FixingVolumesFragment : Fragment() {
         negativeButtonText?.let { buttonText ->
             dialogView.findViewById<Button>(R.id.negativeButton)?.apply {
                 visibility = View.VISIBLE
-                text = buttonText // Устанавливаем переданный текст
+                text = buttonText
                 setOnClickListener {
                     negativeAction()
                     alertDialog.dismiss()
@@ -458,14 +461,12 @@ class FixingVolumesFragment : Fragment() {
             dialogView.findViewById<Button>(R.id.negativeButton)?.visibility = View.GONE
         }
 
-        // Настройка фона и размера
         alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         alertDialog.window?.setLayout(
             (resources.displayMetrics.widthPixels * 0.85).toInt(),
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-        // Показываем диалог
         alertDialog.show()
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,284 +7,303 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.FixingVolumes.AddPlanValues.AddPlanValuesFragment"
     android:id="@+id/addPlanValuesRoot"
+    android:orientation="vertical"
+    android:paddingBottom="36dp"
     >
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/dialogAddPlanValuesRoot"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
-        android:padding="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_min="300dp"
-        app:layout_constraintWidth_max="600dp"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_width="match_parent"
+        android:paddingBottom="36dp"
         >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/dialogAddPlanValuesRoot"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingBottom="36dp"
+            android:layout_margin="24dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            android:padding="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_min="300dp"
+            app:layout_constraintWidth_max="600dp"
+            app:layout_constraintHorizontal_bias="0.5"
             >
 
-            <!-- Направляющие -->
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_start"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="16dp"
-                />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5"
-                />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="16dp"
-                />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_addPlanMainLabel"
-                android:layout_width="0dp"
-                style="@style/mainLabel"
-                android:text="Добавить Плановые значения"
-                app:layout_constraintStart_toEndOf="@id/guideline_start"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guideline_end"
-                android:maxLines="1"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                />
-
-            <!-- Комплекс работ: Заголовок   -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_addPlanComplexOfWorks"
-                android:layout_width="0dp"
-                style="@style/ArrangementText"
-                android:text="Комплекс работ"
-                app:layout_constraintStart_toEndOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/tv_addPlanMainLabel"
-                android:maxLines="1"
-                android:layout_marginStart="8dp"
-                />
-
-            <!-- Комплекс работ: Тексовое поле   -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_ComplexOfWorks"
-                android:layout_width="0dp"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_addPlanComplexOfWorks"
-                app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                app:endIconMode="dropdown_menu"
+                android:paddingBottom="36dp"
                 >
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteComplexOfWorks"
-                    android:layout_width="match_parent"
+                <!-- Направляющие -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_start"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:minHeight="56dp"
-                    android:paddingBottom="12dp"
-                    android:textSize="14sp"
-                    android:inputType="text"
-                    android:textColor="@color/color_black"
-                    android:importantForAccessibility="yes"
-                    android:gravity="center_vertical"
-                    android:padding="10dp"
-                    android:hint="Выберите Комплекс работ"
-                    android:textColorHint="@color/background"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp"
                     />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Вид работ: Заголовок   -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_addPlanTypeOfWork"
-                android:layout_width="0dp"
-                style="@style/ArrangementText"
-                android:text="Вид работ"
-                app:layout_constraintStart_toEndOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_ComplexOfWorks"
-                android:maxLines="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                />
-
-            <!-- Вид работ: Тексовое поле   -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_TypeOfWork"
-                android:layout_width="0dp"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_addPlanTypeOfWork"
-                app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                app:endIconMode="dropdown_menu"
-                >
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTypeOfWork"
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:minHeight="56dp"
-                    android:paddingBottom="12dp"
-                    android:textSize="14sp"
-                    android:inputType="text"
-                    android:textColor="@color/color_black"
-                    android:importantForAccessibility="yes"
-                    android:gravity="center_vertical"
-                    android:padding="10dp"
-                    android:hint="Выберите Вид работ"
-                    android:textColorHint="@color/background"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5"
                     />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Единицы измерения: Заголовок   -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_addPlanMeasures"
-                android:layout_width="0dp"
-                style="@style/ArrangementText"
-                android:text="Единицы измерения"
-                app:layout_constraintStart_toEndOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_TypeOfWork"
-                android:maxLines="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                />
-
-            <!-- Единицы измерения: Тексовое поле   -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_Measures"
-                android:layout_width="0dp"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_addPlanMeasures"
-                app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                app:endIconMode="dropdown_menu"
-                >
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteMeasures"
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_end"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:minHeight="56dp"
-                    android:paddingBottom="12dp"
-                    android:textSize="14sp"
-                    android:inputType="text"
-                    android:textColor="@color/color_black"
-                    android:importantForAccessibility="yes"
-                    android:gravity="center_vertical"
-                    android:padding="10dp"
-                    android:hint="Выберите Единицы измерения"
-                    android:textColorHint="@color/background"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="16dp"
                     />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Единицы измерения: Заголовок   -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_addPlanPlanValues"
-                android:layout_width="0dp"
-                style="@style/ArrangementText"
-                android:text="Единицы измерения"
-                app:layout_constraintStart_toEndOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_Measures"
-                android:maxLines="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                />
-
-            <!-- Единицы измерения: Тексовое поле   -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_PlanValues"
-                android:layout_width="0dp"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_addPlanPlanValues"
-                app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TextInputEditTextPlanValues"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:minHeight="56dp"
-                    android:paddingBottom="12dp"
-                    android:textSize="14sp"
-                    android:textColor="@color/color_black"
-                    android:importantForAccessibility="yes"
-                    android:gravity="center_vertical"
-                    android:padding="10dp"
-                    android:hint="Укажите Плановое значение"
-                    android:textColorHint="@color/background"
-                    android:inputType="numberDecimal"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_addPlanMainLabel"
+                    android:layout_width="0dp"
+                    style="@style/mainLabel"
+                    android:text="Добавить Плановые значения"
+                    app:layout_constraintStart_toEndOf="@id/guideline_start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_end"
+                    android:maxLines="1"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
                     />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <!-- Комплекс работ: Заголовок   -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_addPlanComplexOfWorks"
+                    android:layout_width="0dp"
+                    style="@style/ArrangementText"
+                    android:text="Комплекс работ"
+                    app:layout_constraintStart_toEndOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/tv_addPlanMainLabel"
+                    android:maxLines="1"
+                    android:layout_marginStart="8dp"
+                    />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_CloseDialogAppPlan"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                style="@style/SimpleButton"
-                android:text="Закрыть окно"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_PlanValues"
-                app:layout_constraintStart_toStartOf="@id/guideline_start"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="8dp"
-                />
+                <!-- Комплекс работ: Тексовое поле   -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_ComplexOfWorks"
+                    android:layout_width="0dp"
+                    style="@style/TextInputLayout"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_addPlanComplexOfWorks"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:endIconMode="dropdown_menu"
+                    >
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_SaveAppPlan"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                style="@style/ExtraButton"
-                app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_PlanValues"
-                android:text="Сохранить"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteComplexOfWorks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:minHeight="56dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:textColor="@color/color_black"
+                        android:importantForAccessibility="yes"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:hint="Выберите Комплекс работ"
+                        android:textColorHint="@color/background"
+                        />
 
-                />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Вид работ: Заголовок   -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_addPlanTypeOfWork"
+                    android:layout_width="0dp"
+                    style="@style/ArrangementText"
+                    android:text="Вид работ"
+                    app:layout_constraintStart_toEndOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_ComplexOfWorks"
+                    android:maxLines="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    />
+
+                <!-- Вид работ: Тексовое поле   -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_TypeOfWork"
+                    android:layout_width="0dp"
+                    style="@style/TextInputLayout"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_addPlanTypeOfWork"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:endIconMode="dropdown_menu"
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTypeOfWork"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:minHeight="56dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:textColor="@color/color_black"
+                        android:importantForAccessibility="yes"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:hint="Выберите Вид работ"
+                        android:textColorHint="@color/background"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Единицы измерения: Заголовок   -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_addPlanMeasures"
+                    android:layout_width="0dp"
+                    style="@style/ArrangementText"
+                    android:text="Единицы измерения"
+                    app:layout_constraintStart_toEndOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_TypeOfWork"
+                    android:maxLines="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    />
+
+                <!-- Единицы измерения: Тексовое поле   -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_Measures"
+                    android:layout_width="0dp"
+                    style="@style/TextInputLayout"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_addPlanMeasures"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:endIconMode="dropdown_menu"
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteMeasures"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:minHeight="56dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="14sp"
+                        android:inputType="text"
+                        android:textColor="@color/color_black"
+                        android:importantForAccessibility="yes"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:hint="Выберите Единицы измерения"
+                        android:textColorHint="@color/background"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Единицы измерения: Заголовок   -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_addPlanPlanValues"
+                    android:layout_width="0dp"
+                    style="@style/ArrangementText"
+                    android:text="Единицы измерения"
+                    app:layout_constraintStart_toEndOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_Measures"
+                    android:maxLines="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    />
+
+                <!-- Единицы измерения: Тексовое поле   -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_PlanValues"
+                    android:layout_width="0dp"
+                    style="@style/TextInputLayout"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_addPlanPlanValues"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/TextInputEditTextPlanValues"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:minHeight="56dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/color_black"
+                        android:importantForAccessibility="yes"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:hint="Укажите Плановое значение"
+                        android:textColorHint="@color/background"
+                        android:inputType="numberDecimal"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_CloseDialogAppPlan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/SimpleButton"
+                    android:text="Закрыть окно"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_PlanValues"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_SaveAppPlan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/ExtraButton"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayout_PlanValues"
+                    android:text="Сохранить"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Добавляем дополнительный отступ внизу для прокрутки -->
+        <View
+            android:id="@+id/bottomSpacer"
+            android:layout_width="match_parent"
+            android:layout_height="00dp"
+            app:layout_constraintTop_toBottomOf="@id/dialogAddPlanValuesRoot" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+
+

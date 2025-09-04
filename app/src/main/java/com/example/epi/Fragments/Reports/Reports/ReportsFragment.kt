@@ -142,7 +142,7 @@ class ReportsFragment : Fragment() {
 
     private fun showDateRangePicker() {
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTheme(R.style.CustomPickerTheme)
+//            .setTheme(R.style.CustomPickerTheme)
             .setTitleText("Выберите диапазон дат")
             .build()
         dateRangePicker.addOnPositiveButtonClickListener { dateRange ->
@@ -285,13 +285,15 @@ class ReportsFragment : Fragment() {
                     outputStream.write(csvHeader.toByteArray(Charsets.UTF_8))
                     reports.forEach { report ->
                         val line = listOf(
+                            // -- General Info --
                             report.id.toString(),
                             report.date,
                             report.time,
-                            report.userName ?: "Неизвестный сотрудник",
+                            report.userName,
                             report.typeOfWork,
-                            report.customer,
+                            // -- ArrangementFragment Info --
                             report.contract,
+                            report.customer,
                             report.obj,
                             report.plot,
                             report.genContractor,
@@ -300,6 +302,7 @@ class ReportsFragment : Fragment() {
                             report.subContractor,
                             report.repSubContractor,
                             report.repSSKSub,
+                            // -- TransportFragment Info --
                             report.isEmpty.toString(),
                             report.executor,
                             report.startDate,
@@ -308,12 +311,15 @@ class ReportsFragment : Fragment() {
                             report.contractTransport,
                             report.endDate,
                             report.endTime,
+                            // -- ControlFragment Info --
                             report.inViolation.toString(),
                             report.equipment,
                             report.complexWork,
                             report.orderNumber,
                             report.report,
                             report.remarks,
+                            // -- TODO: --
+                            report.isSend.toString()
                             // TODO - фиксация объемов
                         ).joinToString(separator) { it.escapeCsv() } + "\n"
                         outputStream.write(line.toByteArray(Charsets.UTF_8))
@@ -340,13 +346,15 @@ class ReportsFragment : Fragment() {
                     writer.append(csvHeader)
                     reports.forEach { report ->
                         val line = listOf(
+                            // -- General Info --
                             report.id.toString(),
                             report.date,
                             report.time,
-                            report.userName ?: "Неизвестный сотрудник",
+                            report.userName,
                             report.typeOfWork,
-                            report.customer,
+                            // -- ArrangementFragment Info --
                             report.contract,
+                            report.customer,
                             report.obj,
                             report.plot,
                             report.genContractor,
@@ -355,6 +363,7 @@ class ReportsFragment : Fragment() {
                             report.subContractor,
                             report.repSubContractor,
                             report.repSSKSub,
+                            // -- TransportFragment Info --
                             report.isEmpty.toString(),
                             report.executor,
                             report.startDate,
@@ -363,12 +372,15 @@ class ReportsFragment : Fragment() {
                             report.contractTransport,
                             report.endDate,
                             report.endTime,
+                            // -- ControlFragment Info --
                             report.inViolation.toString(),
                             report.equipment,
                             report.complexWork,
                             report.orderNumber,
                             report.report,
                             report.remarks,
+                            // -- TODO: --
+                            report.isSend.toString()
                             // TODO - фиксация объемов
                         ).joinToString(separator) { it.escapeCsv() } + "\n"
                         writer.append(line)
@@ -393,7 +405,7 @@ class ReportsFragment : Fragment() {
 
         // Заголовки
         val headers = listOf(
-            "№ п/п", "Дата", "Время", "Сотрудник", "Режим работы",
+            "№ п/п", "Дата", "Время", "Уникальный номер сотрудника", "Режим работы",
 
             "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 
@@ -418,10 +430,13 @@ class ReportsFragment : Fragment() {
         reports.forEachIndexed { rowIndex, report ->
             val row = sheet.createRow(rowIndex + 1)
             val values = listOf(
+                // -- General Info --
                 report.id.toString(),
                 report.date,
                 report.time,
-                report.userName ?: "Неизвестный сотрудник",
+                report.userName,
+                report.typeOfWork,
+                // -- ArrangementFragment Info --
                 report.contract,
                 report.customer,
                 report.obj,
@@ -432,21 +447,23 @@ class ReportsFragment : Fragment() {
                 report.subContractor,
                 report.repSubContractor,
                 report.repSSKSub,
+                // -- TransportFragment Info --
                 report.isEmpty.toString(),
                 report.executor,
                 report.startDate,
                 report.startTime,
                 report.stateNumber,
-//                report.contract,
                 report.contractTransport,
                 report.endDate,
                 report.endTime,
+                // -- ControlFragment Info --
                 report.inViolation.toString(),
                 report.equipment,
                 report.complexWork,
                 report.orderNumber,
                 report.report,
                 report.remarks,
+                // -- TODO: --
                 report.isSend.toString()
             )
             values.forEachIndexed { colIndex, value ->

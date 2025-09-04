@@ -88,7 +88,6 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_equipmentName"
-
             android:text="Название прибора /\nоборудования"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
@@ -274,7 +273,6 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
             app:layout_constraintStart_toEndOf="@id/tv_Report"
-
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -302,7 +300,6 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             style="@style/ArrangementText"
-
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -330,8 +327,6 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_addRow"
             android:text="Добавить вид работ"
@@ -357,7 +352,6 @@
             android:layout_marginTop="24dp"
             android:padding="4dp"
             style="@style/TableHeader"
-
             >
 
             <com.google.android.material.textview.MaterialTextView

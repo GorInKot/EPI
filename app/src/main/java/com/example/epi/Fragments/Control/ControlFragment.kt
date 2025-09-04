@@ -93,7 +93,6 @@ class ControlFragment : Fragment() {
         }
 
         // Чекбокс Оборудование отсутствует
-        // Обработчик чекбокса "Оборудование отсутствует"
         binding.checkBoxManualEquipmentName.setOnCheckedChangeListener { _, isChecked ->
             sharedViewModel.setEquipmentAbsent(isChecked)
         }
@@ -110,7 +109,6 @@ class ControlFragment : Fragment() {
 
         binding.btnOrderNumber.setOnClickListener {
             sharedViewModel.generateOrderNumber()
-            Toast.makeText(requireContext(), "Номер предписания сгенерирован", Toast.LENGTH_SHORT).show()
         }
 
         // Подписка на списки для AutoCompleteTextView

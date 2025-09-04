@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/color_black"
     android:scrollbars="vertical"
     android:fillViewport="true"
@@ -124,11 +124,6 @@
             app:endIconMode="dropdown_menu"
             >
 
-            <!--
-            Добавим отключение клавиатуры при выборе элемента
-            из выпадающего списка через атрибут
-            android:focusable="false"
-            -->
             <AutoCompleteTextView
                 android:id="@+id/autoComplete_WorkType"
                 android:layout_width="match_parent"
@@ -140,6 +135,9 @@
                 android:gravity="center_vertical"
                 android:padding="10dp"
                 android:focusable="false"
+                android:dropDownAnchor="@id/textInputLayout_workType"
+                android:dropDownVerticalOffset="0dp"
+                android:dropDownHeight="wrap_content"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,6 +177,13 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/btn_Login"
             />
+
+        <!-- Добавляем дополнительный отступ внизу для прокрутки -->
+        <View
+            android:id="@+id/bottomSpacer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_Register" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
