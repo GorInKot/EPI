@@ -1,6 +1,5 @@
 package com.example.epi.Fragments.Transport
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
@@ -36,7 +35,6 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.contracts.contract
 
 class TransportFragment : Fragment() {
     private var _binding: FragmentTransportBinding? = null
@@ -58,10 +56,6 @@ class TransportFragment : Fragment() {
     private lateinit var executorNameTextWatcher: TextWatcher
     private lateinit var contractTransportTextWatcher: TextWatcher
     private lateinit var stateNumberTextWatcher: TextWatcher
-//    private lateinit var startDateTextWatcher: TextWatcher
-//    private lateinit var startTimeTextWatcher: TextWatcher
-//    private lateinit var endDateTextWatcher: TextWatcher
-//    private lateinit var endTimeTextWatcher: TextWatcher
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -146,37 +140,6 @@ class TransportFragment : Fragment() {
         binding.textInputEditTextEndDate.doAfterTextChanged { sharedViewModel.setTransportEndDate(it.toString()) }
         binding.textInputEditTextEndDateHours.doAfterTextChanged { sharedViewModel.setTransportEndTime(it.toString()) }
 
-//        startDateTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setTransportStartDate(s.toString())
-//            }
-//        }
-//
-//        startTimeTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setTransportStartTime(s.toString())
-//            }
-//        }
-//
-//        endDateTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setTransportEndDate(s.toString())
-//            }
-//        }
-//
-//        endTimeTextWatcher = object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//            override fun afterTextChanged(s: Editable?) {
-//                sharedViewModel.setTransportEndTime(s.toString())
-//            }
-//        }
     }
 
     private fun setupButtons() {
@@ -264,7 +227,9 @@ class TransportFragment : Fragment() {
             }
         }
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTheme(R.style.CustomPickerTheme)
+            // TODO - времененное отключение Кастомной темы
+            //  На будущее - изменить на актуальную тему
+//            .setTheme(R.style.CustomPickerTheme)
             .setTitleText("Выберите дату")
             .setSelection(calendar.timeInMillis)
             .build()
@@ -302,9 +267,12 @@ class TransportFragment : Fragment() {
                 Log.e(TAG, "TimePickerError: Ошибка парсинга времени: ${e.message}")
             }
         }
-        Log.d("TimePicker", "Creating TimePicker with hour=$hour, minute=$minute")
+        Log.d("TimePicker", "TimePicker создан с параметрами: часы=$hour, минуты=$minute")
         val timePicker = MaterialTimePicker.Builder()
-            .setTheme(R.style.CustomTimePicker)
+
+            // TODO - времененное отключение Кастомной темы
+            //  На будущее - изменить на актуальную тему
+//            .setTheme(R.style.CustomTimePicker)
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(hour)
             .setMinute(minute)
@@ -318,11 +286,11 @@ class TransportFragment : Fragment() {
                 timePicker.minute
             )
             onTimeSelected(formattedTime)
-            Log.d(TAG,"TimePicker: Selected time: $formattedTime")
+            Log.d(TAG,"TimePicker: Выбранное время: $formattedTime")
         }
         try {
             timePicker.show(parentFragmentManager, "CustomPickerTheme")
-            Log.d(TAG, "TimePicker shown successfully")
+            Log.d(TAG, "TimePicker успешно показан")
         } catch (e: Exception) {
             Log.e(TAG, "Ошибка при отображении TimePicker: ${e.message}")
         }
@@ -551,21 +519,6 @@ class TransportFragment : Fragment() {
         layout.error = errorMessage
     }
 
-    // Старая версия
-//    private fun setFieldsEnabled(enabled: Boolean) {
-//        binding.autoCompleteExecutor.isEnabled = enabled // Исполнитель по транспорту
-//        binding.autoCompleteContractTransport.isEnabled = enabled // Договор по транспорту
-//        binding.textInputEditTextStateNumber.isEnabled = enabled // Госномер
-//        binding.btnStartDate.isEnabled = enabled // Кнопка - Дата начала поездкт
-//        binding.btnStartTime.isEnabled = enabled // Кнопка - Время начала поездки
-//        binding.btnEndDate.isEnabled = enabled // Кнопка - Дата завершения поездки
-//        binding.btnEndTime.isEnabled = enabled // Кнопка - Время завершения поездки
-//        binding.textInputEditTextStartDate.isEnabled = false
-//        binding.textInputEditTextEndDate.isEnabled = false
-//        binding.textInputEditTextStartDateHours.isEnabled = false
-//        binding.textInputEditTextEndDateHours.isEnabled = false
-//    }
-
     // Новая версия
     private fun setFieldsEnabled(enabled: Boolean) {
         binding.autoCompleteExecutor.isEnabled = enabled
@@ -592,84 +545,10 @@ class TransportFragment : Fragment() {
         binding.textInputEditTextEndDateHours.setTextColor(textColor)
     }
 
-    // Старый код
-//    private fun loadTransportData() {
-//        sharedViewModel.selectedContract.observe(viewLifecycleOwner) { contract ->
-//            Log.d("Tagg-Transport", "Selected contract: $contract")
-//            if (contract != null) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    val dbHelper = ExtraDatabaseHelper(requireContext())
-//                    val contractId = dbHelper.getContractIdByName(contract) ?: contract // Fallback if mapping fails
-//                    Log.d("Tagg-Transport", "Mapped contract ID: $contractId")
-//                    val executors = withContext(Dispatchers.IO) {
-//                        dbHelper.getTransportContractExecutorsByContract(contractId)
-//                    }
-//                    val names = withContext(Dispatchers.IO) {
-//                        dbHelper.getTransportContractNamesByContract(contractId)
-//                    }
-//                    Log.d("Tagg-Transport", "Executors loaded: $executors")
-//                    Log.d("Tagg-Transport", "Names loaded: $names")
-//
-//                    if (executors.isEmpty()) {
-//                        Toast.makeText(requireContext(), "Список исполнителей пуст", Toast.LENGTH_SHORT).show()
-//                        Log.d("Tagg-Transport", "Список исполнителей пуст для контракта: $contract")
-//                    }
-//                    val executorAdapter = ArrayAdapter(
-//                        requireContext(),
-//                        android.R.layout.simple_spinner_dropdown_item,
-//                        executors
-//                    )
-//                    binding.autoCompleteExecutor.setAdapter(executorAdapter)
-//                    binding.autoCompleteExecutor.inputType = InputType.TYPE_NULL
-//                    binding.autoCompleteExecutor.keyListener = null
-//                    binding.autoCompleteExecutor.setOnTouchListener { _, _ ->
-//                        if (binding.autoCompleteExecutor.isEnabled) {
-//                            binding.autoCompleteExecutor.showDropDown()
-//                        }
-//                        false
-//                    }
-//                    binding.autoCompleteExecutor.setOnItemClickListener { parent, _, position, _ ->
-//                        val selectedExecutor = parent.getItemAtPosition(position).toString()
-//                        sharedViewModel.setTransportExecutorName(selectedExecutor)
-//                        Log.d("Tagg-Transport", "Selected executor: $selectedExecutor")
-//                    }
-//
-//                    if (names.isEmpty()) {
-//                        Toast.makeText(requireContext(), "Список контрактов пуст", Toast.LENGTH_SHORT).show()
-//                        Log.d("Tagg-Transport", "Список контрактов пуст для контракта: $contract")
-//                    }
-//                    val nameAdapter = ArrayAdapter(
-//                        requireContext(),
-//                        android.R.layout.simple_spinner_dropdown_item,
-//                        names
-//                    )
-//                    binding.autoCompleteContractTransport.setAdapter(nameAdapter)
-//                    binding.autoCompleteContractTransport.inputType = InputType.TYPE_NULL
-//                    binding.autoCompleteContractTransport.keyListener = null
-//                    binding.autoCompleteContractTransport.setOnTouchListener { _, _ ->
-//                        if (binding.autoCompleteContractTransport.isEnabled) {
-//                            binding.autoCompleteContractTransport.showDropDown()
-//                        }
-//                        false
-//                    }
-//                    binding.autoCompleteContractTransport.setOnItemClickListener { parent, _, position, _ ->
-//                        val selectedName = parent.getItemAtPosition(position).toString()
-//                        sharedViewModel.setTransportContractTransport(selectedName)
-//                        Log.d("Tagg-Transport", "Selected contract transport: $selectedName")
-//                    }
-//                }
-//            } else {
-//                Log.d("Tagg-Transport", "Нет выбранного контракта")
-//                binding.autoCompleteExecutor.setAdapter(null)
-//                binding.autoCompleteContractTransport.setAdapter(null)
-//            }
-//        }
-//    }
-
-    // Новый код
+    // Загрузка данных для TransportFragment
     private fun loadTransportData() {
         sharedViewModel.selectedContract.observe(viewLifecycleOwner) { contract ->
-            Log.d("Tagg-Transport", "Selected contract: $contract")
+            Log.d("Tagg-Transport", "Выбран договор: $contract")
             if (contract != null) {
                 CoroutineScope(Dispatchers.Main).launch {
                     val dbHelper = ExtraDatabaseHelper(requireContext())
@@ -681,8 +560,8 @@ class TransportFragment : Fragment() {
                     val names = withContext(Dispatchers.IO) {
                         dbHelper.getTransportContractNamesByContract(contractId)
                     }
-                    Log.d("Tagg-Transport", "Executors loaded: $executors")
-                    Log.d("Tagg-Transport", "Names loaded: $names")
+                    Log.d("Tagg-Transport", "Исполнитель загружен: $executors")
+                    Log.d("Tagg-Transport", "Договор по транспорту загружен: $names")
 
                     if (executors.isEmpty()) {
                         Toast.makeText(requireContext(), "Список исполнителей пуст", Toast.LENGTH_SHORT).show()
@@ -711,8 +590,8 @@ class TransportFragment : Fragment() {
                     }
 
                     if (names.isEmpty()) {
-                        Toast.makeText(requireContext(), "Список контрактов пуст", Toast.LENGTH_SHORT).show()
-                        Log.d("Tagg-Transport", "Список контрактов пуст для контракта: $contract")
+                        Toast.makeText(requireContext(), "Список договоров по транспорту пуст", Toast.LENGTH_SHORT).show()
+                        Log.d("Tagg-Transport", "Список договоров по транспорту пуст для договора: $contract")
                     }
                     val nameAdapter = ArrayAdapter(
                         requireContext(),
@@ -732,7 +611,7 @@ class TransportFragment : Fragment() {
                         if (binding.autoCompleteContractTransport.isEnabled) {
                             val selectedName = parent.getItemAtPosition(position).toString()
                             sharedViewModel.setTransportContractTransport(selectedName)
-                            Log.d("Tagg-Transport", "Selected contract transport: $selectedName")
+                            Log.d("Tagg-Transport", "Выбран договор по транспорту: $selectedName")
                         }
                     }
                 }
@@ -749,10 +628,6 @@ class TransportFragment : Fragment() {
         binding.autoCompleteExecutor.removeTextChangedListener(executorNameTextWatcher)
         binding.autoCompleteContractTransport.removeTextChangedListener(contractTransportTextWatcher)
         binding.textInputEditTextStateNumber.removeTextChangedListener(stateNumberTextWatcher)
-//        binding.textInputEditTextStartDate.removeTextChangedListener(startDateTextWatcher)
-//        binding.textInputEditTextStartDateHours.removeTextChangedListener(startTimeTextWatcher)
-//        binding.textInputEditTextEndDate.removeTextChangedListener(endDateTextWatcher)
-//        binding.textInputEditTextEndDateHours.removeTextChangedListener(endTimeTextWatcher)
         _binding = null
     }
 }

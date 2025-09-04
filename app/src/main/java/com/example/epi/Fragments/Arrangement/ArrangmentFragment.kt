@@ -637,7 +637,6 @@ class ArrangementFragment : Fragment() {
                         }
                         Log.d("Tagg-Arrangement", "Номер отчета (ID): $reportId")
                         if (reportId > 0) {
-//
                             // Переход с передачей reportId и objectID
                             val action = ArrangementFragmentDirections
                                 .actionArrangementFragmentToTransportFragment()
