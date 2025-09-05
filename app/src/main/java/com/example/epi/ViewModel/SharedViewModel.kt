@@ -980,9 +980,9 @@ class SharedViewModel(
         Log.d(TAG, "IsTransportAbsent: ${_isTransportAbsent.value}")
 
         val items = mutableListOf<InfoItem>().apply {
-            add(InfoItem("Дата", _currentDate.value ?: ""))
-            add(InfoItem("Время", _currentTime.value ?: ""))
-            add(InfoItem("Сотрудник", "${_currentUser.value?.firstName ?: ""} ${_currentUser.value?.secondName ?: ""} ${_currentUser.value?.thirdName ?: ""}"))
+            add(InfoItem("Дата заполнения", _currentDate.value ?: ""))
+            add(InfoItem("Начало заполнения", _currentTime.value ?: ""))
+            add(InfoItem("Сотрудник", "${_currentUser.value?.secondName ?: ""} ${_currentUser.value?.firstName ?: ""} ${_currentUser.value?.thirdName ?: ""}"))
             add(InfoItem("Режим работы", _selectedTypeOfWork.value ?: ""))
             add(InfoItem("Заказчик", _selectedCustomer.value ?: ""))
             add(InfoItem("Договор СК", _selectedContract.value ?: ""))
