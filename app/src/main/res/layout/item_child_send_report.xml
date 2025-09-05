@@ -10,7 +10,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="6dp"
+        app:layout_constraintGuide_percent="0.01"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.99"
         />
 
     <com.google.android.material.textview.MaterialTextView
@@ -19,7 +51,9 @@
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_left"
         android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
         android:maxLines="2"
         />
 
@@ -27,9 +61,11 @@
         android:id="@+id/textView_contract"
         android:text="Договор СК:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/textView_customer"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="36dp"
+        app:layout_constraintEnd_toStartOf="@id/guideline_center"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:maxLines="2"
         />
 
@@ -39,8 +75,10 @@
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_customer"
+        app:layout_constraintEnd_toStartOf="@id/guideline_left"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
         android:maxLines="2"
         />
 
@@ -48,10 +86,12 @@
         android:id="@+id/textView_repGenContractor"
         android:text="Представитель\nГенподрядчика:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/textView_genContractor"
-        app:layout_constraintTop_toBottomOf="@id/textView_customer"
-        android:layout_marginStart="36dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
+        app:layout_constraintEnd_toStartOf="@id/guideline_left"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
         android:maxLines="2"
         />
 
@@ -59,10 +99,12 @@
         android:id="@+id/textView_repSSKGp"
         android:text="Представитель\nССК ПО (ГП):"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/textView_repGenContractor"
-        app:layout_constraintTop_toBottomOf="@id/textView_customer"
-        android:layout_marginStart="36dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/textView_repGenContractor"
+        app:layout_constraintEnd_toStartOf="@id/guideline_left"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
         android:maxLines="2"
         />
 
@@ -70,8 +112,10 @@
         android:id="@+id/textView_subContractor"
         android:text="Субподрядчик:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/textView_contract"
+        app:layout_constraintEnd_toStartOf="@id/guideline_center"
+        android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:maxLines="2"
@@ -81,9 +125,11 @@
         android:id="@+id/textView_repSubContractor"
         android:text="Представитель\nСубподрядчика:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/textView_subContractor"
-        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
-        android:layout_marginStart="36dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/textView_subContractor"
+        app:layout_constraintEnd_toStartOf="@id/guideline_center"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:maxLines="2"
         />
@@ -92,9 +138,11 @@
         android:id="@+id/textView_repSSKSub"
         android:text="Представитель\nССК ПО (ГП):"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/textView_repSubContractor"
-        app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
-        android:layout_marginStart="36dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_left"
+        app:layout_constraintTop_toBottomOf="@id/textView_repSubContractor"
+        app:layout_constraintEnd_toStartOf="@id/guideline_center"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:maxLines="2"
         />
@@ -103,21 +151,92 @@
         android:id="@+id/textView_transportContract"
         android:text="Договор по транспорту:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_subContractor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_center"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
-        android:maxLines="1"
+        android:maxLines="2"
         />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_transportExecutor"
         android:text="Исполнитель по транспорту:"
         style="@style/ArrangementText"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/textView_transportContract"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_right"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
-        android:maxLines="1"
+        android:maxLines="2"
         />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_stateNumber"
+        android:text="Госномер:"
+        style="@style/ArrangementText"
+        app:layout_constraintStart_toEndOf="@id/guideline_center"
+        app:layout_constraintTop_toBottomOf="@id/textView_transportExecutor"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_startDate"
+        android:text="Дата начала поездки:"
+        style="@style/ArrangementText"
+        app:layout_constraintTop_toBottomOf="@id/textView_stateNumber"
+        app:layout_constraintStart_toEndOf="@id/guideline_center"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_startTime"
+        android:text="Время начала поездки:"
+        style="@style/ArrangementText"
+        app:layout_constraintTop_toBottomOf="@id/textView_endDate"
+        app:layout_constraintStart_toEndOf="@id/guideline_center"
+        app:layout_constraintEnd_toStartOf="@id/guideline_right"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_endDate"
+        android:text="Дата завершения поездки:"
+        style="@style/ArrangementText"
+        app:layout_constraintTop_toBottomOf="@id/textView_stateNumber"
+        app:layout_constraintStart_toEndOf="@id/guideline_right"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textView_endTime"
+        android:text="Время завершения поездки:"
+        style="@style/ArrangementText"
+        app:layout_constraintTop_toBottomOf="@id/textView_endDate"
+        app:layout_constraintStart_toEndOf="@id/guideline_right"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="2"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

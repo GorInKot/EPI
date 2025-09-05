@@ -103,8 +103,13 @@ class ReportsFragment : Fragment() {
                                     subContractor = report.subContractor, // субподрядчик
                                     repSubContractor = report.repSubContractor, // представитель субподрядчика
                                     repSSKSub= report.repSSKSub, // представитель ССК ПО (Суб)
-                                    transportCustomer = report.contractTransport, // договор по транспорту
-                                    transportExecutor= report.executor, // исполнитель по транспорту
+                                    transportCustomer = if (report.isEmpty == true) "Транспорт отсутствует" else report.contractTransport, // договор по транспорту
+                                    transportExecutor= if (report.isEmpty == true) "Транспорт отсутствует" else report.executor, // исполнитель по транспорту
+                                    stateNumber = if (report.isEmpty == true) "Транспорт отсутствует" else report.stateNumber, // госномер
+                                    startDate = if (report.isEmpty == true) "Транспорт отсутствует" else report.startDate, // дата начала поездки
+                                    startTime = if (report.isEmpty == true) "Транспорт отсутствует" else report.startTime, // время начала поездки
+                                    endDate = if (report.isEmpty == true) "Транспорт отсутствует" else report.endDate, // дата завершения поездки
+                                    endTime = if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime, // время завершения поездки
                                 )
                             ),
                             isExpanded = false

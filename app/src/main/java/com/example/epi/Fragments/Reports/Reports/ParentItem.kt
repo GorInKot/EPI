@@ -19,4 +19,9 @@ data class ChildItem(
     val repSSKSub: String, // представитель ССК ПО (Суб)
     val transportCustomer: String, // договор по транспорту
     val transportExecutor: String, // исполнитель по транспорту
+    val stateNumber: String, // госномер
+    val startDate: String, // Дата начала поездки
+    val startTime: String, // Время начала поездки
+    val endDate: String, // Дата завершения поездки
+    val endTime: String // Время завершения поездки
 )

@@ -76,6 +76,11 @@ class ExpandableAdapter(private val data: MutableList<Any>) : RecyclerView.Adapt
         private val repSSKSub: TextView = itemView.findViewById(R.id.textView_repSSKSub)
         private val transportContract: TextView = itemView.findViewById(R.id.textView_transportContract)
         private val transportExecutor: TextView = itemView.findViewById(R.id.textView_transportExecutor)
+        private val stateNumber: TextView = itemView.findViewById(R.id.textView_stateNumber)
+        private val startDate: TextView = itemView.findViewById(R.id.textView_startDate)
+        private val startTime: TextView = itemView.findViewById(R.id.textView_startTime)
+        private val endDate: TextView = itemView.findViewById(R.id.textView_endDate)
+        private val endTime: TextView = itemView.findViewById(R.id.textView_endTime)
 
         fun bind(item: ChildItem) {
             customer.text = "Заказчик:\n${item.customer}"
@@ -88,6 +93,11 @@ class ExpandableAdapter(private val data: MutableList<Any>) : RecyclerView.Adapt
             repSSKSub.text = "Представитель ССК ПО (Суб):\n${item.repSSKSub}"
             transportContract.text = "Договор по транспорту:\n${item.transportCustomer}"
             transportExecutor.text = "Исполнитель по транспорту:\n${item.transportExecutor}"
+            stateNumber.text = "Госномер:\n${item.stateNumber}"
+            startDate.text = "Дата начала поездки:\n${item.startDate}"
+            startTime.text = "Время начала поездки:\n${item.startTime}"
+            endDate.text = "Дата завершения поездки:\n${item.endDate}"
+            endTime.text = "Время завершения поездки:\n${item.endTime}"
 
         }
     }
