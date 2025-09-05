@@ -255,19 +255,25 @@ class ReportsFragment : Fragment() {
     private suspend fun exportToCsv(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
         val separator = ";"
         val csvHeader = listOf(
-            "№ п/п", "Дата", "Время", "Сотрудник", "Режим работы",
-
-            "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+            "№ п/п", "Дата оформления", "Время оформления", "Уникальный номер сотрудника", "Режим работы сотрудника",
+            "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик",
+            "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик",
+            "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 
             "Транспорт отсутствует",
+
             "Исполнитель по транспорту", "Договор по транспорту", "Госномер",
             "Дата начала поездки", "Время начала поездки",
             "Дата окончания поездки", "Время окончания поездки",
 
-            "Название прибора /\nоборудования", "Комплекс работ", "Нарушение", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
+            "Нарушение",
+            "Название прибора /\nоборудования", "Комплекс работ",
+            "Номер предписания",
+            "Отчет о проделанной работе", "Замечания к документации",
 
             // TODO - "Фиксация объемов"
-            "Вид работ", "Единицы измерения", "Значение по плану", "Значение по факту"
+            "Комплекс работ (Фиксация объемов)","Вид работ (Фиксация объемов)",
+            "Единицы измерения", "Значение по плану", "Значение по факту"
         ).joinToString(separator) { it.escapeCsv() } + "\n"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -295,32 +301,63 @@ class ReportsFragment : Fragment() {
                             report.contract,
                             report.customer,
                             report.obj,
-                            report.plot,
+                            if (report.isManualPlot == true) { // Участок
+                                "Объект не делится на участок"
+                            } else {
+                                report.plot
+                            },
                             report.genContractor,
                             report.repGenContractor,
                             report.repSSKGp,
                             report.subContractor,
                             report.repSubContractor,
                             report.repSSKSub,
+
                             // -- TransportFragment Info --
-                            report.isEmpty.toString(),
-                            report.executor,
-                            report.startDate,
-                            report.startTime,
-                            report.stateNumber,
-                            report.contractTransport,
-                            report.endDate,
-                            report.endTime,
+                            if (report.isEmpty == true) { // Исполнитель по транспорту
+                                "Транспорт отсутствует"
+                            } else {
+                                report.executor
+                            },
+                            if (report.isEmpty == true) { // Договор по транспорту
+                                "Транспорт отсутствует"
+                            } else {
+                                report.contractTransport
+                            },
+                            if (report.isEmpty == true) { // Госномер
+                                "Транспорт отсутствует"
+                            } else {
+                                report.stateNumber
+                            },
+                            if (report.isEmpty == true) { // Дата начала поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.startDate
+                            },
+                            if (report.isEmpty == true) { // Время начала поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.startTime
+                            },
+                            if (report.isEmpty == true) { // Дата завершения поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.endDate
+                            },
+                            if (report.isEmpty == true) { // Время завершения поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.endTime
+                            },
                             // -- ControlFragment Info --
-                            report.inViolation.toString(),
-                            report.equipment,
-                            report.complexWork,
-                            report.orderNumber,
-                            report.report,
-                            report.remarks,
-                            // -- TODO: --
-                            report.isSend.toString()
-                            // TODO - фиксация объемов
+                            if (report.inViolation == true) {
+                                report.orderNumber
+                            } else {
+                                "Нет нарушения"
+                            },
+                            report.controlRows, // JSON-формат строки Комплекс работ
+
+                            report.fixVolumesRows // JSON-формат строки Фиксация объемов
                         ).joinToString(separator) { it.escapeCsv() } + "\n"
                         outputStream.write(line.toByteArray(Charsets.UTF_8))
                     }
@@ -356,32 +393,63 @@ class ReportsFragment : Fragment() {
                             report.contract,
                             report.customer,
                             report.obj,
-                            report.plot,
+                            if (report.isManualPlot == true) { // Участок
+                                "Объект не делится на участок"
+                            } else {
+                                report.plot
+                            },
                             report.genContractor,
                             report.repGenContractor,
                             report.repSSKGp,
                             report.subContractor,
                             report.repSubContractor,
                             report.repSSKSub,
+
                             // -- TransportFragment Info --
-                            report.isEmpty.toString(),
-                            report.executor,
-                            report.startDate,
-                            report.startTime,
-                            report.stateNumber,
-                            report.contractTransport,
-                            report.endDate,
-                            report.endTime,
+                            if (report.isEmpty == true) { // Исполнитель по транспорту
+                                "Транспорт отсутствует"
+                            } else {
+                                report.executor
+                            },
+                            if (report.isEmpty == true) { // Договор по транспорту
+                                "Транспорт отсутствует"
+                            } else {
+                                report.contractTransport
+                            },
+                            if (report.isEmpty == true) { // Госномер
+                                "Транспорт отсутствует"
+                            } else {
+                                report.stateNumber
+                            },
+                            if (report.isEmpty == true) { // Дата начала поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.startDate
+                            },
+                            if (report.isEmpty == true) { // Время начала поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.startTime
+                            },
+                            if (report.isEmpty == true) { // Дата завершения поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.endDate
+                            },
+                            if (report.isEmpty == true) { // Время завершения поездки
+                                "Транспорт отсутствует"
+                            } else {
+                                report.endTime
+                            },
                             // -- ControlFragment Info --
-                            report.inViolation.toString(),
-                            report.equipment,
-                            report.complexWork,
-                            report.orderNumber,
-                            report.report,
-                            report.remarks,
-                            // -- TODO: --
-                            report.isSend.toString()
-                            // TODO - фиксация объемов
+                            if (report.inViolation == true) {
+                                report.orderNumber
+                            } else {
+                                "Нет нарушения"
+                            },
+                            report.controlRows, // JSON-формат строки Комплекс работ
+
+                            report.fixVolumesRows // JSON-формат строки Фиксация объемов
                         ).joinToString(separator) { it.escapeCsv() } + "\n"
                         writer.append(line)
                     }
@@ -405,19 +473,25 @@ class ReportsFragment : Fragment() {
 
         // Заголовки
         val headers = listOf(
-            "№ п/п", "Дата", "Время", "Уникальный номер сотрудника", "Режим работы",
-
-            "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик", "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик", "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
+            "№ п/п", "Дата оформления", "Время оформления", "Уникальный номер сотрудника", "Режим работы сотрудника",
+            "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик",
+            "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик",
+            "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
 
             "Транспорт отсутствует",
+
             "Исполнитель по транспорту", "Договор по транспорту", "Госномер",
             "Дата начала поездки", "Время начала поездки",
             "Дата окончания поездки", "Время окончания поездки",
 
-            "Название прибора /\nоборудования", "Комплекс работ", "Нарушение", "Номер предписания", "Отчет о проделанной работе", "Замечания к документации",
+            "Нарушение",
+            "Название прибора /\nоборудования", "Комплекс работ",
+            "Номер предписания",
+            "Отчет о проделанной работе", "Замечания к документации",
 
             // TODO - "Фиксация объемов"
-            "Вид работ", "Единицы измерения", "Значение по плану", "Значение по факту"
+            "Комплекс работ (Фиксация объемов)","Вид работ (Фиксация объемов)",
+            "Единицы измерения", "Значение по плану", "Значение по факту"
         )
         val headerRow = sheet.createRow(0)
         headers.forEachIndexed { index, header ->
@@ -440,31 +514,63 @@ class ReportsFragment : Fragment() {
                 report.contract,
                 report.customer,
                 report.obj,
-                report.plot,
+                if (report.isManualPlot == true) { // Участок
+                    "Объект не делится на участок"
+                } else {
+                    report.plot
+                },
                 report.genContractor,
                 report.repGenContractor,
                 report.repSSKGp,
                 report.subContractor,
                 report.repSubContractor,
                 report.repSSKSub,
+
                 // -- TransportFragment Info --
-                report.isEmpty.toString(),
-                report.executor,
-                report.startDate,
-                report.startTime,
-                report.stateNumber,
-                report.contractTransport,
-                report.endDate,
-                report.endTime,
+                if (report.isEmpty == true) { // Исполнитель по транспорту
+                    "Транспорт отсутствует"
+                } else {
+                    report.executor
+                },
+                if (report.isEmpty == true) { // Договор по транспорту
+                    "Транспорт отсутствует"
+                } else {
+                    report.contractTransport
+                },
+                if (report.isEmpty == true) { // Госномер
+                    "Транспорт отсутствует"
+                } else {
+                    report.stateNumber
+                },
+                if (report.isEmpty == true) { // Дата начала поездки
+                    "Транспорт отсутствует"
+                } else {
+                    report.startDate
+                },
+                if (report.isEmpty == true) { // Время начала поездки
+                    "Транспорт отсутствует"
+                } else {
+                    report.startTime
+                },
+                if (report.isEmpty == true) { // Дата завершения поездки
+                    "Транспорт отсутствует"
+                } else {
+                    report.endDate
+                },
+                if (report.isEmpty == true) { // Время завершения поездки
+                    "Транспорт отсутствует"
+                } else {
+                    report.endTime
+                },
                 // -- ControlFragment Info --
-                report.inViolation.toString(),
-                report.equipment,
-                report.complexWork,
-                report.orderNumber,
-                report.report,
-                report.remarks,
-                // -- TODO: --
-                report.isSend.toString()
+                if (report.inViolation == true) {
+                    report.orderNumber
+                } else {
+                    "Нет нарушения"
+                },
+                report.controlRows, // JSON-формат строки Комплекс работ
+
+                report.fixVolumesRows // JSON-формат строки Фиксация объемов
             )
             values.forEachIndexed { colIndex, value ->
                 row.createCell(colIndex).setCellValue(value)

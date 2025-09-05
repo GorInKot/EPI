@@ -20,6 +20,7 @@ data class Report(
     val customer: String = "", // Заказчик
     val contract: String = "", // Договор СК
     val obj: String = "", // Объект
+    val isManualPlot: Boolean = false, // Флаг для чекбокса "Объект не делится на участок"
     val plot: String = "", // Участок
     val genContractor: String = "", // Генподрядчик
     val repGenContractor: String = "", // Представитель генподрядчика
