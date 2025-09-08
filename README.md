@@ -24,11 +24,14 @@
   - Control  
   - FixingVolumes  
   - SendReport  
-  - Reports  
+  - Reports
+ - Вспомогательные фрагменты:
+  - AddPlanValue
+  - ChangePlanValue
+  - EditPlanValue
     
 - Отдельные фрагменты для регистрации и авторизации  
-- Общая ViewModel для фрагментов: Arrangement, Control, FixingVolumes, SendReport, Reports, Transport  
-- Отдельная ViewModel для регистрации и авторизации  
+- Общая ViewModel для фрагментов: Arrangement, Control, FixingVolumes, SendReport, Reports, Transport, Auth & Registration
 - Использование `RecyclerView` с адаптерами и моделями данных для:  
   - `FixVolumesFragment` (+ Adapter и Model)  
   - `ReportsFragment` (+ Adapter и Model)  
@@ -60,9 +63,10 @@
 - Создавать новый отчет
 - Редактировать поля
 - Выбирать дату и время через Material DatePicker / TimePicker
+- Добавлять Плановые значения и изменять их
 - Сохранять данные локально в Room
-- Экспортировать данные из базы в CSV-файл
-- Сохранять CSV-файл на устройство (например, в Downloads/ или Documents/)
+- Экспортировать данные из базы в CSV или Excel-файлы
+- Сохранять CSV или Excel-файлы на устройство (например, в Downloads/ или Documents/)
 
 
 
