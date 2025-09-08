@@ -35,4 +35,15 @@ interface ReportDao {
     @Query("SELECT * FROM reports WHERE isCompleted = 1")
     suspend fun getCompletedReports(): List<Report>
 
+    // Новые методы для фильтрации по userName
+    @Query("SELECT * FROM reports WHERE userName = :userName ORDER BY date DESC, time DESC")
+    fun getReportsByUserName(userName: String): Flow<List<Report>>
+
+    @Query("SELECT * FROM reports WHERE userName = :userName AND date BETWEEN :startDate AND :endDate ORDER BY date DESC, time DESC")
+    fun getReportsByUserAndDateRange(userName: String, startDate: String, endDate: String): Flow<List<Report>>
+
+    // Если нужно для экспорта (не-Flow версия для suspend)
+    @Query("SELECT * FROM reports WHERE userName = :userName AND date BETWEEN :startDate AND :endDate ORDER BY date DESC, time DESC")
+    suspend fun getReportsByUserAndDateRangeSync(userName: String, startDate: String, endDate: String): List<Report>
+
 }

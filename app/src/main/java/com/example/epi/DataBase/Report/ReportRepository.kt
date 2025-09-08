@@ -50,4 +50,18 @@ class ReportRepository(private val reportDao: ReportDao) {
         reportDao.deleteIncompleteReports()
     }
 
+    // Новые методы для отчётов пользователя
+    fun getReportsByUser(userName: String): Flow<List<Report>> {
+        return reportDao.getReportsByUserName(userName)
+    }
+
+    fun getReportsByUserAndDateRange(userName: String, startDate: String, endDate: String): Flow<List<Report>> {
+        return reportDao.getReportsByUserAndDateRange(userName, startDate, endDate)
+    }
+
+    // Для экспорта (suspend, возвращает List сразу)
+    suspend fun getUserReportsForExport(userName: String, startDate: String, endDate: String): List<Report> {
+        return reportDao.getReportsByUserAndDateRangeSync(userName, startDate, endDate)
+    }
+
 }

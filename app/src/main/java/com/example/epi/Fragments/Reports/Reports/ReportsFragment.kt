@@ -90,9 +90,16 @@ class ReportsFragment : Fragment() {
         // Настройка RecyclerView
         setupRecyclerView()
 
-        // Подписка на данные из ViewModel
+        // Загрузка отчётов авторизованного пользователя (новое!)
+        sharedViewModel.loadUserReports()
+
+        // Подписка на данные из ViewModel (изменено на userReports)
         viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.reports.collectLatest { reports ->
+            sharedViewModel.userReports.collectLatest { reports ->  // Изменено!
+                if (reports.isEmpty()) {
+                    // Опционально: обработка пустого списка
+                    Toast.makeText(requireContext(), "Нет отчётов для просмотра. Авторизуйтесь или создайте новый.", Toast.LENGTH_SHORT).show()
+                }
                 adapter = ExpandableAdapter(mutableListOf<Any>().apply {
                     addAll(reports.map { report ->
                         ParentItem(
@@ -158,7 +165,7 @@ class ReportsFragment : Fragment() {
         dateRangePicker.addOnPositiveButtonClickListener { dateRange ->
             selectedStartDate = dateFormat.format(Date(dateRange.first))
             selectedEndDate = dateFormat.format(Date(dateRange.second))
-            sharedViewModel.filterReportsByDateRange(selectedStartDate!!, selectedEndDate!!)
+            sharedViewModel.filterUserReportsByDateRange(selectedStartDate!!, selectedEndDate!!)  // Изменено!
             Toast.makeText(
                 context,
                 "Выбрано: $selectedStartDate - $selectedEndDate",
@@ -230,7 +237,7 @@ class ReportsFragment : Fragment() {
                 delay(2000)
 
                 val reports = withContext(Dispatchers.IO) {
-                    sharedViewModel.getReportsForExport(startDate, endDate)
+                    sharedViewModel.getUserReportsForExport(startDate, endDate)  // Изменено!
                 }
 
                 if (reports.isEmpty()) {

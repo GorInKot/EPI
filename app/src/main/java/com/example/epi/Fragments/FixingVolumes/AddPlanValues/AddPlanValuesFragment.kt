@@ -1,6 +1,7 @@
 package com.example.epi.Fragments.FixingVolumes.AddPlanValues
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +60,8 @@ class AddPlanValuesFragment : Fragment() {
             if (complexOfWorks.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexOfWorks)
                 binding.autoCompleteComplexOfWorks.setAdapter(adapter)
+                binding.autoCompleteComplexOfWorks.inputType = InputType.TYPE_NULL
+                binding.autoCompleteComplexOfWorks.keyListener = null
                 // Обновляем выбранный элемент, если есть значение
                 sharedViewModel.selectedComplex.value?.let { selected ->
                     val position = complexOfWorks.indexOf(selected)
@@ -70,6 +73,7 @@ class AddPlanValuesFragment : Fragment() {
                     val selectedComplex = parent.getItemAtPosition(position) as String
                     sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
                 }
+
                 binding.autoCompleteComplexOfWorks.setOnClickListener {
                     binding.autoCompleteComplexOfWorks.showDropDown()
                 }
@@ -81,6 +85,8 @@ class AddPlanValuesFragment : Fragment() {
             if (typesOfWork.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
                 binding.autoCompleteTypeOfWork.setAdapter(adapter)
+                binding.autoCompleteTypeOfWork.inputType = InputType.TYPE_NULL
+                binding.autoCompleteTypeOfWork.keyListener = null
                 // Сбрасываем текст, если список обновился
                 if (binding.autoCompleteTypeOfWork.text.isNullOrEmpty()) {
                     binding.autoCompleteTypeOfWork.setText("", false)
@@ -95,6 +101,8 @@ class AddPlanValuesFragment : Fragment() {
             if (measures.isNotEmpty()) {
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, measures)
                 binding.autoCompleteMeasures.setAdapter(adapter)
+                binding.autoCompleteMeasures.inputType = InputType.TYPE_NULL
+                binding.autoCompleteMeasures.keyListener = null
                 binding.autoCompleteMeasures.setOnClickListener { binding.autoCompleteMeasures.showDropDown() }
             }
         }

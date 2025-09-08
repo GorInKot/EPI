@@ -324,6 +324,10 @@ class SharedViewModel(
     private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports
 
+    // Замените _reports на _userReports (новый для пользователя)
+    private val _userReports = MutableStateFlow<List<Report>>(emptyList())
+    val userReports: StateFlow<List<Report>> = _userReports.asStateFlow()
+
     // region Инициализация значений План
     private val _planValues = MutableLiveData<List<PlanValue>>(emptyList())
     val planValues: LiveData<List<PlanValue>> get() = _planValues
@@ -339,12 +343,52 @@ class SharedViewModel(
                 _planValues.value = values}
         }
 
-        // загрузка всех отчетов
+//        // загрузка всех отчетов
+//        viewModelScope.launch {
+//            reportRepository.getAllReports().collectLatest { reports ->
+//                _reports.value = reports
+//            }
+//        }
+    }
+
+    //
+    // Новые методы для загрузки отчётов пользователя
+    fun loadUserReports() {
+        val employeeNumber = _currentEmployeeNumber.value ?: run {
+            Log.e(TAG, "No employeeNumber available for loading user reports")
+            _userReports.value = emptyList() // Пустой список, если не авторизован
+            return
+        }
         viewModelScope.launch {
-            reportRepository.getAllReports().collectLatest { reports ->
-                _reports.value = reports
+            reportRepository.getReportsByUser(employeeNumber).collectLatest { reports ->
+                _userReports.value = reports
+                Log.d(TAG, "Loaded ${reports.size} reports for user: $employeeNumber")
             }
         }
+    }
+
+    // Фильтр по датам для пользователя (замените существующий filterReportsByDateRange)
+    fun filterUserReportsByDateRange(startDate: String, endDate: String) {
+        val employeeNumber = _currentEmployeeNumber.value ?: run {
+            Log.e(TAG, "No employeeNumber available for filtering")
+            _userReports.value = emptyList()
+            return
+        }
+        viewModelScope.launch {
+            reportRepository.getReportsByUserAndDateRange(employeeNumber, startDate, endDate).collectLatest { reports ->
+                _userReports.value = reports
+                Log.d(TAG, "Filtered ${reports.size} reports for date range $startDate - $endDate")
+            }
+        }
+    }
+
+    // Для экспорта (замените getReportsForExport)
+    suspend fun getUserReportsForExport(startDate: String, endDate: String): List<Report> {
+        val employeeNumber = _currentEmployeeNumber.value ?: run {
+            Log.e(TAG, "No employeeNumber available for export")
+            return emptyList()
+        }
+        return reportRepository.getUserReportsForExport(employeeNumber, startDate, endDate)
     }
 
     // Функция загрузки Плановых значений
@@ -1017,13 +1061,13 @@ class SharedViewModel(
         return items.filter { it.value != null && (it.value !is List<*> || it.value.isNotEmpty()) }
     }
 
-    fun filterReportsByDateRange(startDate: String, endDate: String) {
-        viewModelScope.launch {
-            reportRepository.getReportsByDateRange(startDate, endDate).collectLatest { reports ->
-                _reports.value = reports
-            }
-        }
-    }
+//    fun filterReportsByDateRange(startDate: String, endDate: String) {
+//        viewModelScope.launch {
+//            reportRepository.getReportsByDateRange(startDate, endDate).collectLatest { reports ->
+//                _reports.value = reports
+//            }
+//        }
+//    }
 
     suspend fun getReportsForExport(startDate: String, endDate: String): List<Report> {
         return reportRepository.getReportsByDateRange(startDate, endDate).first()

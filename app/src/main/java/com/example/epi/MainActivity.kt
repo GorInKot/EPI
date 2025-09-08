@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Отключить поворот: заблокировать на текущей ориентации
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
+
+        // Альтернатива: заблокировать только на портрет
+        // requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         // Инициализация темы до setContentView
         val sharedPreferences = getSharedPreferences("theme_prefs", MODE_PRIVATE)
         val theme = sharedPreferences.getString("theme", "system") ?: "system"
