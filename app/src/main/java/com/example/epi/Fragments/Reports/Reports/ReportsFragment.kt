@@ -270,7 +270,7 @@ class ReportsFragment : Fragment() {
             "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
             "Исполнитель по транспорту", "Договор по транспорту", "Госномер",
             "Дата начала поездки", "Время начала поездки", "Дата окончания поездки", "Время окончания поездки",
-            "Нарушение", "Название прибора/оборудования", "Комплекс работ", "Тип работы", "Номер предписания",
+            "Название прибора/оборудования", "Комплекс работ", "Тип работы", "Номер предписания",
             "Отчет о проделанной работе", "Замечания к документации",
             "ID объекта", "Комплекс работ (Фиксация)", "Тип работы (Фиксация)", "Единицы измерения",
             "Значение по плану", "Значение по факту", "Результат"
@@ -287,11 +287,17 @@ class ReportsFragment : Fragment() {
             )
             uri?.let { outputUri ->
                 requireContext().contentResolver.openOutputStream(outputUri)?.use { outputStream ->
-                    outputStream.write(byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte()))
+                    outputStream.write(
+                        byteArrayOf(
+                            0xEF.toByte(),
+                            0xBB.toByte(),
+                            0xBF.toByte()
+                        )
+                    ) // BOM для UTF-8
                     outputStream.write(csvHeader.toByteArray(Charsets.UTF_8))
 
                     reports.forEach { report ->
-                        // Базовые данные
+                        // Базовые данные (0-21)
                         val baseValues = listOf(
                             report.id.toString(),
                             report.date ?: "",
@@ -301,175 +307,248 @@ class ReportsFragment : Fragment() {
                             report.customer ?: "",
                             report.contract ?: "",
                             report.obj ?: "",
-                            if (report.isManualPlot == true) "Объект не делится на участок" else report.plot ?: "",
+                            if (report.isManualPlot == true) "Объект не делится на участок" else report.plot
+                                ?: "",
                             report.genContractor ?: "",
                             report.repGenContractor ?: "",
                             report.repSSKGp ?: "",
                             report.subContractor ?: "",
                             report.repSubContractor ?: "",
                             report.repSSKSub ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.executor ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.contractTransport ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.stateNumber ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.startDate ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.startTime ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.endDate ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime ?: "",
-                            if (report.inViolation == true) report.orderNumber ?: "" else "Нет нарушения",
-                            "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-                        ).joinToString(separator)
-                        outputStream.write((baseValues + "\n").toByteArray(Charsets.UTF_8))
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.executor
+                                ?: "",
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.contractTransport
+                                ?: "",
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.stateNumber
+                                ?: "",
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.startDate
+                                ?: "",
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.startTime
+                                ?: "",
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.endDate
+                                ?: "",
+                            if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime
+                                ?: ""
+                        )
 
-                        // Парсинг и обработка controlRows
+                        // Парсинг JSON
                         val controlRowsJson = jsonParser.parse(report.controlRows).asJsonArray
-                        controlRowsJson.forEach { jsonElement ->
-                            val jsonObject = jsonElement.asJsonObject
-                            val controlValues = listOf(
-                                "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Пустые базовые поля
-                                "", "", "", "", "", "", "", "", // Пустые транспортные поля
-                                "", // Пустое нарушение
-                                getJsonValue(jsonObject, "equipmentName") ?: "",
-                                getJsonValue(jsonObject, "complexOfWork") ?: "",
-                                getJsonValue(jsonObject, "typeOfWork") ?: "",
-                                getJsonValue(jsonObject, "orderNumber") ?: "",
-                                getJsonValue(jsonObject, "report") ?: "",
-                                getJsonValue(jsonObject, "remarks") ?: "",
-                                "", "", "", "", "", "", "", "" // Пустые поля для fixVolumesRows
-                            ).joinToString(separator)
-                            outputStream.write((controlValues + "\n").toByteArray(Charsets.UTF_8))
+                        val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
+
+                        // Главная строка: базовые + первые записи control/fix
+                        val mainValues = mutableListOf<String>().apply {
+                            addAll(baseValues) // 0-21
+                            addAll(List(13) { "" }) // 22-34 пустые
                         }
 
-                        // Парсинг и обработка fixVolumesRows
-                        val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
-                        fixVolumesRowsJson.forEach { jsonElement ->
-                            val jsonObject = jsonElement.asJsonObject
-                            val fixVolumeValues = listOf(
-                                "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Пустые базовые поля
-                                "", "", "", "", "", "", "", "", // Пустые транспортные поля
-                                "", // Пустое нарушение
-                                "", "", "", "", "", "", "", "", // Пустые поля для controlRows
-                                getJsonValue(jsonObject, "ID_object") ?: "",
-                                getJsonValue(jsonObject, "complexOfWork") ?: "",
-                                getJsonValue(jsonObject, "projectWorkType") ?: "",
-                                getJsonValue(jsonObject, "measure") ?: "",
-                                getJsonValue(jsonObject, "plan") ?: "",
-                                getJsonValue(jsonObject, "fact") ?: "",
-                                getJsonValue(jsonObject, "result") ?: ""
-                            ).joinToString(separator)
-                            outputStream.write((fixVolumeValues + "\n").toByteArray(Charsets.UTF_8))
+                        // Первая запись controlRows (если есть) — в той же строке, 22-27
+                        if (controlRowsJson.size() > 0) {
+                            val jsonObject = controlRowsJson[0].asJsonObject
+                            mainValues[22] = getJsonValue(jsonObject, "equipmentName") ?: ""
+                            mainValues[23] = getJsonValue(jsonObject, "complexOfWork") ?: ""
+                            mainValues[24] = getJsonValue(jsonObject, "typeOfWork") ?: ""
+                            mainValues[25] = getJsonValue(jsonObject, "orderNumber") ?: ""
+                            mainValues[26] = getJsonValue(jsonObject, "report") ?: ""
+                            mainValues[27] = getJsonValue(jsonObject, "remarks") ?: ""
+                        }
+
+                        // Первая запись fixVolumesRows (если есть) — в той же строке, 28-34
+                        if (fixVolumesRowsJson.size() > 0) {
+                            val jsonObject = fixVolumesRowsJson[0].asJsonObject
+                            mainValues[28] = getJsonValue(jsonObject, "ID_object") ?: ""
+                            mainValues[29] = getJsonValue(jsonObject, "complexOfWork") ?: ""
+                            mainValues[30] = getJsonValue(jsonObject, "projectWorkType") ?: ""
+                            mainValues[31] = getJsonValue(jsonObject, "measure") ?: ""
+                            mainValues[32] = getJsonValue(jsonObject, "plan") ?: ""
+                            mainValues[33] = getJsonValue(jsonObject, "fact") ?: ""
+                            mainValues[34] = getJsonValue(jsonObject, "result") ?: ""
+                        }
+
+                        // Записываем главную строку
+                        outputStream.write((mainValues.joinToString(separator) { it.escapeCsv() } + "\n").toByteArray(
+                            Charsets.UTF_8
+                        ))
+
+                        // Дополнительные controlRows (2-я и далее, если есть) — новые строки, только 22-27
+                        for (i in 1 until controlRowsJson.size()) {
+                            val jsonObject = controlRowsJson[i].asJsonObject
+                            val controlValues = List(22) { "" } + listOf( // 0-21 пустые
+                                getJsonValue(jsonObject, "equipmentName") ?: "", // 22
+                                getJsonValue(jsonObject, "complexOfWork") ?: "", // 23
+                                getJsonValue(jsonObject, "typeOfWork") ?: "", // 24
+                                getJsonValue(jsonObject, "orderNumber") ?: "", // 25
+                                getJsonValue(jsonObject, "report") ?: "", // 26
+                                getJsonValue(jsonObject, "remarks") ?: "", // 27
+                                "", "", "", "", "", "", "" // 28-34 пустые
+                            )
+                            outputStream.write((controlValues.joinToString(separator) { it.escapeCsv() } + "\n").toByteArray(
+                                Charsets.UTF_8
+                            ))
+                        }
+
+                        // Дополнительные fixVolumesRows (2-я и далее, если есть) — новые строки, только 28-34
+                        for (i in 1 until fixVolumesRowsJson.size()) {
+                            val jsonObject = fixVolumesRowsJson[i].asJsonObject
+                            val fixVolumeValues = List(28) { "" } + listOf( // 0-27 пустые
+                                getJsonValue(jsonObject, "ID_object") ?: "", // 28
+                                getJsonValue(jsonObject, "complexOfWork") ?: "", // 29
+                                getJsonValue(jsonObject, "projectWorkType") ?: "", // 30
+                                getJsonValue(jsonObject, "measure") ?: "", // 31
+                                getJsonValue(jsonObject, "plan") ?: "", // 32
+                                getJsonValue(jsonObject, "fact") ?: "", // 33
+                                getJsonValue(jsonObject, "result") ?: "" // 34
+                            )
+                            outputStream.write((fixVolumeValues.joinToString(separator) { it.escapeCsv() } + "\n").toByteArray(
+                                Charsets.UTF_8
+                            ))
+                        }
+                    }
+                    delay(1000)
+                    Toast.makeText(
+                        requireContext(),
+                        "Файл сохранен в папке Загрузки: $fileName",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } ?: run {
+                    Toast.makeText(
+                        requireContext(),
+                        "Ошибка при создании файла",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else {
+                if (!isExternalStorageWritable()) {
+                    Toast.makeText(requireContext(), "Хранилище недоступно", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (!directory.exists()) {
+                    directory.mkdirs()
+                }
+                val file = File(directory, fileName)
+                withContext(Dispatchers.IO) {
+                    FileWriter(file, Charsets.UTF_8).use { writer ->
+                        writer.write("\uFEFF") // BOM для UTF-8
+                        writer.append(csvHeader)
+                        reports.forEach { report ->
+                            // Базовые данные (0-21)
+                            val baseValues = listOf(
+                                report.id.toString(),
+                                report.date ?: "",
+                                report.time ?: "",
+                                report.userName ?: "",
+                                report.typeOfWork ?: "",
+                                report.customer ?: "",
+                                report.contract ?: "",
+                                report.obj ?: "",
+                                if (report.isManualPlot == true) "Объект не делится на участок" else report.plot ?: "",
+                                report.genContractor ?: "",
+                                report.repGenContractor ?: "",
+                                report.repSSKGp ?: "",
+                                report.subContractor ?: "",
+                                report.repSubContractor ?: "",
+                                report.repSSKSub ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.executor ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.contractTransport ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.stateNumber ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.startDate ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.startTime ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.endDate ?: "",
+                                if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime ?: ""
+                            )
+
+                            // Парсинг JSON
+                            val controlRowsJson = jsonParser.parse(report.controlRows).asJsonArray
+                            val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
+
+                            // Главная строка: базовые + первые записи control/fix
+                            val mainValues = mutableListOf<String>().apply {
+                                addAll(baseValues) // 0-21
+                                addAll(List(13) { "" }) // 22-34 пустые
+                            }
+
+                            // Первая запись controlRows (если есть) — в той же строке, 22-27
+                            if (controlRowsJson.size() > 0) {
+                                val jsonObject = controlRowsJson[0].asJsonObject
+                                mainValues[22] = getJsonValue(jsonObject, "equipmentName") ?: ""
+                                mainValues[23] = getJsonValue(jsonObject, "complexOfWork") ?: ""
+                                mainValues[24] = getJsonValue(jsonObject, "typeOfWork") ?: ""
+                                mainValues[25] = getJsonValue(jsonObject, "orderNumber") ?: ""
+                                mainValues[26] = getJsonValue(jsonObject, "report") ?: ""
+                                mainValues[27] = getJsonValue(jsonObject, "remarks") ?: ""
+                            }
+
+                            // Первая запись fixVolumesRows (если есть) — в той же строке, 28-34
+                            if (fixVolumesRowsJson.size() > 0) {
+                                val jsonObject = fixVolumesRowsJson[0].asJsonObject
+                                mainValues[28] = getJsonValue(jsonObject, "ID_object") ?: ""
+                                mainValues[29] = getJsonValue(jsonObject, "complexOfWork") ?: ""
+                                mainValues[30] = getJsonValue(jsonObject, "projectWorkType") ?: ""
+                                mainValues[31] = getJsonValue(jsonObject, "measure") ?: ""
+                                mainValues[32] = getJsonValue(jsonObject, "plan") ?: ""
+                                mainValues[33] = getJsonValue(jsonObject, "fact") ?: ""
+                                mainValues[34] = getJsonValue(jsonObject, "result") ?: ""
+                            }
+
+                            // Записываем главную строку
+                            writer.append(mainValues.joinToString(separator) { it.escapeCsv() } + "\n")
+
+                            // Дополнительные controlRows (2-я и далее, если есть) — новые строки, только 22-27
+                            for (i in 1 until controlRowsJson.size()) {
+                                val jsonObject = controlRowsJson[i].asJsonObject
+                                val controlValues = List(22) { "" } + listOf( // 0-21 пустые
+                                    getJsonValue(jsonObject, "equipmentName") ?: "", // 22
+                                    getJsonValue(jsonObject, "complexOfWork") ?: "", // 23
+                                    getJsonValue(jsonObject, "typeOfWork") ?: "", // 24
+                                    getJsonValue(jsonObject, "orderNumber") ?: "", // 25
+                                    getJsonValue(jsonObject, "report") ?: "", // 26
+                                    getJsonValue(jsonObject, "remarks") ?: "", // 27
+                                    "", "", "", "", "", "", "" // 28-34 пустые
+                                )
+                                writer.append(controlValues.joinToString(separator) { it.escapeCsv() } + "\n")
+                            }
+
+                            // Дополнительные fixVolumesRows (2-я и далее, если есть) — новые строки, только 28-34
+                            for (i in 1 until fixVolumesRowsJson.size()) {
+                                val jsonObject = fixVolumesRowsJson[i].asJsonObject
+                                val fixVolumeValues = List(28) { "" } + listOf( // 0-27 пустые
+                                    getJsonValue(jsonObject, "ID_object") ?: "", // 28
+                                    getJsonValue(jsonObject, "complexOfWork") ?: "", // 29
+                                    getJsonValue(jsonObject, "projectWorkType") ?: "", // 30
+                                    getJsonValue(jsonObject, "measure") ?: "", // 31
+                                    getJsonValue(jsonObject, "plan") ?: "", // 32
+                                    getJsonValue(jsonObject, "fact") ?: "", // 33
+                                    getJsonValue(jsonObject, "result") ?: "" // 34
+                                )
+                                writer.append(fixVolumeValues.joinToString(separator) { it.escapeCsv() } + "\n")
+                            }
                         }
                     }
                 }
                 delay(1000)
-                Toast.makeText(requireContext(), "Файл сохранен в папке Загрузки: $fileName", Toast.LENGTH_LONG).show()
-            } ?: run {
-                Toast.makeText(requireContext(), "Ошибка при создании файла", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
             }
-        } else {
-            if (!isExternalStorageWritable()) {
-                Toast.makeText(requireContext(), "Хранилище недоступно", Toast.LENGTH_SHORT).show()
-                return
-            }
-            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            if (!directory.exists()) {
-                directory.mkdirs()
-            }
-            val file = File(directory, fileName)
-            withContext(Dispatchers.IO) {
-                FileWriter(file, Charsets.UTF_8).use { writer ->
-                    writer.write("\uFEFF")
-                    writer.append(csvHeader)
-                    reports.forEach { report ->
-                        val baseValues = listOf(
-                            report.id.toString(),
-                            report.date ?: "",
-                            report.time ?: "",
-                            report.userName ?: "",
-                            report.typeOfWork ?: "",
-                            report.customer ?: "",
-                            report.contract ?: "",
-                            report.obj ?: "",
-                            if (report.isManualPlot == true) "Объект не делится на участок" else report.plot ?: "",
-                            report.genContractor ?: "",
-                            report.repGenContractor ?: "",
-                            report.repSSKGp ?: "",
-                            report.subContractor ?: "",
-                            report.repSubContractor ?: "",
-                            report.repSSKSub ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.executor ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.contractTransport ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.stateNumber ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.startDate ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.startTime ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.endDate ?: "",
-                            if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime ?: "",
-                            if (report.inViolation == true) report.orderNumber ?: "" else "Нет нарушения",
-                            "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-                        ).joinToString(separator)
-                        writer.append(baseValues + "\n")
-
-                        val controlRowsJson = jsonParser.parse(report.controlRows).asJsonArray
-                        controlRowsJson.forEach { jsonElement ->
-                            val jsonObject = jsonElement.asJsonObject
-                            val controlValues = listOf(
-                                "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Пустые базовые поля
-                                "", "", "", "", "", "", "", "", // Пустые транспортные поля
-                                "", // Пустое нарушение
-                                getJsonValue(jsonObject, "equipmentName") ?: "",
-                                getJsonValue(jsonObject, "complexOfWork") ?: "",
-                                getJsonValue(jsonObject, "typeOfWork") ?: "",
-                                getJsonValue(jsonObject, "orderNumber") ?: "",
-                                getJsonValue(jsonObject, "report") ?: "",
-                                getJsonValue(jsonObject, "remarks") ?: "",
-                                "", "", "", "", "", "", "", "" // Пустые поля для fixVolumesRows
-                            ).joinToString(separator)
-                            writer.append(controlValues + "\n")
-                        }
-
-                        val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
-                        fixVolumesRowsJson.forEach { jsonElement ->
-                            val jsonObject = jsonElement.asJsonObject
-                            val fixVolumeValues = listOf(
-                                "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Пустые базовые поля
-                                "", "", "", "", "", "", "", "", // Пустые транспортные поля
-                                "", // Пустое нарушение
-                                "", "", "", "", "", "", "", "", // Пустые поля для controlRows
-                                getJsonValue(jsonObject, "ID_object") ?: "",
-                                getJsonValue(jsonObject, "complexOfWork") ?: "",
-                                getJsonValue(jsonObject, "projectWorkType") ?: "",
-                                getJsonValue(jsonObject, "measure") ?: "",
-                                getJsonValue(jsonObject, "plan") ?: "",
-                                getJsonValue(jsonObject, "fact") ?: "",
-                                getJsonValue(jsonObject, "result") ?: ""
-                            ).joinToString(separator)
-                            writer.append(fixVolumeValues + "\n")
-                        }
-                    }
-                }
-            }
-            delay(1000)
-            Toast.makeText(requireContext(), "Файл сохранен: ${file.absolutePath}", Toast.LENGTH_LONG).show()
         }
-    }
+
 
     private suspend fun exportToExcel(startDate: String, endDate: String, reports: List<Report>, fileName: String) {
         val workbook = XSSFWorkbook()
         val sheet = workbook.createSheet("Отчеты")
         val headerStyle = workbook.createCellStyle().apply {
             setFont(workbook.createFont().apply { bold = true })
-            setFillForegroundColor(IndexedColors.LIGHT_BLUE.index)
+            setFillForegroundColor(IndexedColors.LIGHT_YELLOW.index)
             setFillPattern(FillPatternType.SOLID_FOREGROUND)
         }
 
         val headers = listOf(
             "№ п/п", "Дата оформления", "Время оформления", "Уникальный номер сотрудника", "Режим работы сотрудника",
-
             "Заказчик", "Договор СК", "Объект", "Участок", "Генподрядчик",
             "Представитель генподрядчика", "Представитель ССК ПО (ГП)", "Субподрядчик",
             "Представитель субподрядчика", "Представитель ССК ПО (Суб)",
             "Исполнитель по транспорту", "Договор по транспорту", "Госномер",
             "Дата начала поездки", "Время начала поездки", "Дата окончания поездки", "Время окончания поездки",
-            "Нарушение", "Название прибора/оборудования", "Комплекс работ", "Тип работы", "Номер предписания",
+            "Название прибора/оборудования", "Комплекс работ", "Тип работы", "Номер предписания",
             "Отчет о проделанной работе", "Замечания к документации",
             "ID объекта", "Комплекс работ (Фиксация)", "Тип работы (Фиксация)", "Единицы измерения",
             "Значение по плану", "Значение по факту", "Результат"
@@ -483,15 +562,14 @@ class ReportsFragment : Fragment() {
 
         var rowIndex = 1
         reports.forEach { report ->
-            // Базовая строка
-            val baseRow = sheet.createRow(rowIndex++)
+            println("Processing report ID: ${report.id}, rowIndex start: $rowIndex") // ЛОГ: начало отчёта
+            // Базовые значения для столбцов 0-21
             val baseValues = listOf(
                 report.id.toString(),
                 report.date ?: "",
                 report.time ?: "",
                 report.userName ?: "",
                 report.typeOfWork ?: "",
-
                 report.customer ?: "",
                 report.contract ?: "",
                 report.obj ?: "",
@@ -502,62 +580,95 @@ class ReportsFragment : Fragment() {
                 report.subContractor ?: "",
                 report.repSubContractor ?: "",
                 report.repSSKSub ?: "",
-
                 if (report.isEmpty == true) "Транспорт отсутствует" else report.executor ?: "",
                 if (report.isEmpty == true) "Транспорт отсутствует" else report.contractTransport ?: "",
                 if (report.isEmpty == true) "Транспорт отсутствует" else report.stateNumber ?: "",
                 if (report.isEmpty == true) "Транспорт отсутствует" else report.startDate ?: "",
                 if (report.isEmpty == true) "Транспорт отсутствует" else report.startTime ?: "",
                 if (report.isEmpty == true) "Транспорт отсутствует" else report.endDate ?: "",
-                if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime ?: "",
+                if (report.isEmpty == true) "Транспорт отсутствует" else report.endTime ?: ""
+            ) // 22 элемента (0-21)
 
-                if (report.inViolation == true) report.orderNumber ?: "" else "Нет нарушения",
-                "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-            )
-            baseValues.forEachIndexed { colIndex, value ->
-                baseRow.createCell(colIndex).setCellValue(value)
+            // Парсинг JSON
+            val controlRowsJson = jsonParser.parse(report.controlRows).asJsonArray
+            val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
+            println("controlRows size: ${controlRowsJson.size()}, fixVolumesRows size: ${fixVolumesRowsJson.size()}") // ЛОГ: размеры
+
+            // Создаём главную строку: базовые + первые записи control/fix
+            val mainRow = sheet.createRow(rowIndex++)
+
+            println("Created main row at: ${rowIndex - 1}, next rowIndex: $rowIndex") // ЛОГ: главная строка
+
+            // Инициализируем значения для главной строки (35 столбцов) как MutableList
+            val mainValues = mutableListOf<String>().apply {
+                addAll(baseValues) // 0-21
+                addAll(List(13) { "" }) // 22-34 пустые
+            } // Теперь 35 элементов, можно менять по индексу
+
+            // Первая запись controlRows (если есть) — в той же строке, 22-27
+            if (controlRowsJson.size() > 0) {
+                val jsonObject = controlRowsJson[0].asJsonObject
+                mainValues[22] = getJsonValue(jsonObject, "equipmentName") ?: ""
+                mainValues[23] = getJsonValue(jsonObject, "complexOfWork") ?: ""
+                mainValues[24] = getJsonValue(jsonObject, "typeOfWork") ?: ""
+                mainValues[25] = getJsonValue(jsonObject, "orderNumber") ?: ""
+                mainValues[26] = getJsonValue(jsonObject, "report") ?: ""
+                mainValues[27] = getJsonValue(jsonObject, "remarks") ?: ""
             }
 
-            // Парсинг и обработка controlRows
-            val controlRowsJson = jsonParser.parse(report.controlRows).asJsonArray
-            controlRowsJson.forEach { jsonElement ->
-                val jsonObject = jsonElement.asJsonObject
+            // Первая запись fixVolumesRows (если есть) — в той же строке, 28-34
+            if (fixVolumesRowsJson.size() > 0) {
+                val jsonObject = fixVolumesRowsJson[0].asJsonObject
+                mainValues[28] = getJsonValue(jsonObject, "ID_object") ?: ""
+                mainValues[29] = getJsonValue(jsonObject, "complexOfWork") ?: ""
+                mainValues[30] = getJsonValue(jsonObject, "projectWorkType") ?: ""
+                mainValues[31] = getJsonValue(jsonObject, "measure") ?: ""
+                mainValues[32] = getJsonValue(jsonObject, "plan") ?: ""
+                mainValues[33] = getJsonValue(jsonObject, "fact") ?: ""
+                mainValues[34] = getJsonValue(jsonObject, "result") ?: ""
+            }
+
+            // Записываем главную строку
+            mainValues.forEachIndexed { colIndex, value ->
+                mainRow.createCell(colIndex).setCellValue(value)
+            }
+
+            // Дополнительные controlRows (2-я и далее, если есть) — новые строки, только 22-27
+            for (i in 1 until controlRowsJson.size()) {
+                println("Creating additional control row #$i at rowIndex: $rowIndex") // ЛОГ: перед control
+                val jsonObject = controlRowsJson[i].asJsonObject
                 val controlRowData = sheet.createRow(rowIndex++)
-                val controlValues = listOf(
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Пустые базовые поля
-                    "", "", "", "", "", "", "", "", // Пустые транспортные поля
-                    "", // Пустое нарушение
-                    getJsonValue(jsonObject, "equipmentName") ?: "",
-                    getJsonValue(jsonObject, "complexOfWork") ?: "",
-                    getJsonValue(jsonObject, "typeOfWork") ?: "",
-                    getJsonValue(jsonObject, "orderNumber") ?: "",
-                    getJsonValue(jsonObject, "report") ?: "",
-                    getJsonValue(jsonObject, "remarks") ?: "",
-                    "", "", "", "", "", "", "", "" // Пустые поля для fixVolumesRows
+                println("Created additional control row #$i, next rowIndex: $rowIndex") // ЛОГ: после
+                val controlValues = List(22) { "" } + listOf( // 0-21 пустые
+                    getJsonValue(jsonObject, "equipmentName") ?: "", // 22
+                    getJsonValue(jsonObject, "complexOfWork") ?: "", // 23
+                    getJsonValue(jsonObject, "typeOfWork") ?: "", // 24
+                    getJsonValue(jsonObject, "orderNumber") ?: "", // 25
+                    getJsonValue(jsonObject, "report") ?: "", // 26
+                    getJsonValue(jsonObject, "remarks") ?: "", // 27
+                    "", "", "", "", "", "", "" // 28-34 пустые
                 )
                 controlValues.forEachIndexed { colIndex, value ->
                     controlRowData.createCell(colIndex).setCellValue(value)
                 }
             }
 
-            // Парсинг и обработка fixVolumesRows
-            val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
-            fixVolumesRowsJson.forEach { jsonElement ->
-                val jsonObject = jsonElement.asJsonObject
+            // Дополнительные fixVolumesRows (2-я и далее, если есть) — новые строки, только 28-34
+            for (i in 1 until fixVolumesRowsJson.size()) {
+                println("Creating additional fix row #$i at rowIndex: $rowIndex") // ЛОГ: перед fix
+                val jsonObject = fixVolumesRowsJson[i].asJsonObject
                 val fixVolumeRowData = sheet.createRow(rowIndex++)
-                val fixVolumeValues = listOf(
-                    "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Пустые базовые поля
-                    "", "", "", "", "", "", "", "", // Пустые транспортные поля
-                    "", // Пустое нарушение
-                    "", "", "", "", "", "", "", "", // Пустые поля для controlRows
-                    getJsonValue(jsonObject, "ID_object") ?: "",
-                    getJsonValue(jsonObject, "complexOfWork") ?: "",
-                    getJsonValue(jsonObject, "projectWorkType") ?: "",
-                    getJsonValue(jsonObject, "measure") ?: "",
-                    getJsonValue(jsonObject, "plan") ?: "",
-                    getJsonValue(jsonObject, "fact") ?: "",
-                    getJsonValue(jsonObject, "result") ?: ""
+                println("Created additional fix row #$i, next rowIndex: $rowIndex") // ЛОГ: после
+                val fixVolumeValues = List(28) { "" } + listOf( // 0-27 пустые
+                    getJsonValue(jsonObject, "ID_object") ?: "", // 28
+                    getJsonValue(jsonObject, "complexOfWork") ?: "", // 29
+                    getJsonValue(jsonObject, "projectWorkType") ?: "", // 30
+                    getJsonValue(jsonObject, "measure") ?: "", // 31
+                    getJsonValue(jsonObject, "plan") ?: "", // 32
+                    getJsonValue(jsonObject, "fact") ?: "", // 33
+                    getJsonValue(jsonObject, "result") ?: "" // 34
                 )
+                println("Finished report ID: ${report.id}, final rowIndex for next: $rowIndex") // ЛОГ: конец отчёта
                 fixVolumeValues.forEachIndexed { colIndex, value ->
                     fixVolumeRowData.createCell(colIndex).setCellValue(value)
                 }
