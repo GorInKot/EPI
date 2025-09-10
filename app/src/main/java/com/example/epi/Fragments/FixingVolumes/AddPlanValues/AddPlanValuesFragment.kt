@@ -55,6 +55,11 @@ class AddPlanValuesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceFix: Bundle?) {
         super.onViewCreated(view, savedInstanceFix)
 
+        // Подписка на ошибки из SharedViewModel
+        sharedViewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+        }
+
         // Настройка выпадающего списка для ComplexOfWork
         sharedViewModel.controlsComplexOfWork.observe(viewLifecycleOwner) { complexOfWorks ->
             if (complexOfWorks.isNotEmpty()) {
@@ -119,27 +124,51 @@ class AddPlanValuesFragment : Fragment() {
             val measures = binding.autoCompleteMeasures.text.toString().trim()
             val objectId = args.objectId
 
-            if (complexWork.isNotEmpty() && workType.isNotEmpty() && planValueStr.isNotEmpty()) {
-                val planValue = planValueStr.toDoubleOrNull()
-                if (planValue != null) {
-                    val newPlanValue = PlanValue(
-                        objectId = objectId,
-                        complexWork = complexWork,
-                        typeOfWork = workType,
-                        planValue = planValue,
-                        measures = measures ?: "Не указано"
-                    )
-                    Log.d(TAG, "Added parameters:\nObjectId: ${objectId}\nComplexOfWork:${complexWork}\nTypeOfWork:${workType}\nPlanValue:${planValue}\nMeasures:${measures}")
-                    CoroutineScope(Dispatchers.Main).launch {
-                        sharedViewModel.addPlanValue(newPlanValue)
+            // Локальная валидация полей
+            if (complexWork.isEmpty()) {
+                Toast.makeText(requireContext(), "Выберите комплекс работ", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (workType.isEmpty()) {
+                Toast.makeText(requireContext(), "Выберите вид работ", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (planValueStr.isEmpty()) {
+                Toast.makeText(requireContext(), "Введите плановое значение", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (measures.isEmpty()) {
+                Toast.makeText(requireContext(), "Выберите единицу измерения", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val planValue = planValueStr.toDoubleOrNull()
+            if (planValue == null) {
+                Toast.makeText(requireContext(), "Плановое значение должно быть числом", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val newPlanValue = PlanValue(
+                objectId = objectId,
+                complexWork = complexWork,
+                typeOfWork = workType,
+                planValue = planValue, // Исправлено поле с planValue на plan
+                measures = measures // Исправлено поле с measures на measure
+            )
+            Log.d(TAG, "Added parameters:\nObjectId: $objectId\nComplexOfWork: $complexWork\nTypeOfWork: $workType\nPlanValue: $planValue\nMeasures: $measures")
+
+            // Сохранение планового значения
+            CoroutineScope(Dispatchers.Main).launch {
+                when (val result = sharedViewModel.addPlanValue(newPlanValue)) {
+                    is SharedViewModel.PlanValueResult.Success -> {
                         Toast.makeText(requireContext(), "Плановое значение добавлено", Toast.LENGTH_SHORT).show()
                         findNavController().navigateUp()
                     }
-                } else {
-                    Toast.makeText(requireContext(), "Плановое значение должно быть числом", Toast.LENGTH_SHORT).show()
+                    is SharedViewModel.PlanValueResult.Error -> {
+                        // Ошибка уже отображается через _errorEvent, но можно добавить дополнительное логирование
+                        Log.d(TAG, "Ошибка при добавлении планового значения: ${result.message}")
+                    }
                 }
-            } else {
-                Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
             }
         }
     }
