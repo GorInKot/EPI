@@ -25,7 +25,7 @@
     <!--  Заголовок -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_mainLabel"
-        android:text="Расстановка"
+        android:text="@string/arrangement_label_main"
         android:layout_width="0dp"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,7 @@
     <!--  Дата -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_Date"
-        android:text="Дата: "
+        android:text="@string/arrangement_date_text"
         android:layout_width="0dp"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
@@ -47,7 +47,7 @@
     <!--  Время -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_Time"
-        android:text="Время: "
+        android:text="@string/arrangement_time_text"
         android:layout_width="0dp"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/tv_Date"
@@ -99,7 +99,7 @@
             <!-- Заказчик | Договор СК -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_Customer"
-                android:text="Заказчик:"
+                android:text="@string/arrangement_customer_text"
                 android:layout_width="0dp"
                 style="@style/ArrangementText"
                 app:layout_constraintStart_toStartOf="parent"
@@ -141,7 +141,7 @@
             <!--  Договор СК -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_Contract"
-                android:text="Договор СК"
+                android:text="@string/arrangement_contract_text"
                 android:layout_width="0dp"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
@@ -183,7 +183,7 @@
             <!-- Объект -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_Object"
-                android:text="Объект:"
+                android:text="@string/arrangement_object_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -222,7 +222,7 @@
             <!-- Участок -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_Plot"
-                android:text="Участок:"
+                android:text="@string/arrangement_plot_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -261,7 +261,7 @@
             <CheckBox
                 android:id="@+id/checkBoxManualPlot"
                 android:layout_width="wrap_content"
-                android:text="Объект не делится на участки"
+                android:text="@string/arrangement_checkbox_notdivided_text"
                 style="@style/checkBox"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout_Plot"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -269,7 +269,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_Contractor"
-                android:text="Генподрядчик:"
+                android:text="@string/arrangement_contractor_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -312,7 +312,7 @@
             <!-- Представитель Генподрядчика -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_RepContractor"
-                android:text="Представитель\nГенподрядчика:"
+                android:text="@string/arrangement_repcontractor_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -350,7 +350,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_RepSSK_Gp"
-                android:text="Представитель\nССК ПО (ГП):"
+                android:text="@string/arrangement_repsskgp_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -389,7 +389,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_SubContractor"
-                android:text="Субподрядчик:"
+                android:text="@string/arrangement_subcontractor_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -429,7 +429,7 @@
             <CheckBox
                 android:id="@+id/checkBoxManualSubContractor"
                 android:layout_width="wrap_content"
-                android:text="Субподрядчик отсутствует"
+                android:text="@string/arrangement_checkbox_contractorisempty_text"
                 style="@style/checkBox"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout_SubContractor"
                 app:layout_constraintStart_toEndOf="@id/guideline_right"
@@ -437,7 +437,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_RepSubContractor"
-                android:text="Представитель\nСубподрядчика:"
+                android:text="@string/arrangement_repsubcontractor_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -473,7 +473,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_RepSSK_Sub"
-                android:text="Представитель\nССК ПО (Суб):"
+                android:text="@string/arrangement_repssksub_text"
                 style="@style/ArrangementText"
                 android:layout_marginTop="24dp"
                 android:layout_marginStart="0dp"
@@ -523,7 +523,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_Copy"
-        android:text="Предыдущий отчет"
+        android:text="@string/arrangement_btn_previousreport_text"
         style="@style/SimpleButton"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -536,7 +536,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_Clear"
-        android:text="Очистить все поля"
+        android:text="@string/arrangement_btn_cleardata_text"
         style="@style/SimpleButton"
         app:layout_constraintStart_toEndOf="@id/btn_Copy"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -552,7 +552,7 @@
         android:layout_height="wrap_content"
         android:minHeight="56dp"
         android:maxHeight="70dp"
-        android:text="Назад"
+        android:text="@string/all_fragments_btn_back"
         style="@style/SimpleButton"
         app:layout_constraintEnd_toStartOf="@id/btn_Next"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -567,7 +567,7 @@
         android:layout_height="wrap_content"
         android:minHeight="56dp"
         android:maxHeight="70dp"
-        android:text="Далее"
+        android:text="@string/all_fragments_btn_next"
         style="@style/ExtraButton"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -36,7 +36,7 @@
     <!--  Заголовок -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_mainLabel"
-        android:text="Текущий отчет"
+        android:text="@string/send_report_label_main"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
         style="@style/mainLabel"
@@ -62,7 +62,7 @@
         android:id="@+id/SeRFr_btn_Back"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:text="Назад"
+        android:text="@string/all_fragments_btn_back"
         style="@style/SimpleButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/SeRFr_btn_Next"
@@ -73,7 +73,7 @@
         android:id="@+id/SeRFr_btn_Next"
         android:layout_width="160dp"
         android:layout_height="60dp"
-        android:text="Записать"
+        android:text="@string/all_fragments_btn_next"
         style="@style/ExtraButton"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintBottom_toBottomOf="parent"

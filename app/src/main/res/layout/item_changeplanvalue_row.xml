@@ -81,22 +81,22 @@
         android:padding="4dp"
         >
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cpv_EditRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Редактировать"
+            android:text="@string/editplanvalue_btn_edit"
             style="@style/SimpleButton"
             android:padding="4dp"
             android:maxLines="1"
 
             />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cpv_DeleteRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Удалить"
+            android:text="@string/editchangeplan_btn_delete"
             style="@style/SimpleButton"
             android:padding="4dp"
             android:maxLines="1"

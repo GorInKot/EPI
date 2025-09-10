@@ -47,7 +47,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_customer"
-        android:text="Заказчик:"
+        android:text="@string/arrangement_customer_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +59,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_contract"
-        android:text="Договор СК:"
+        android:text="@string/arrangement_contract_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toTopOf="parent"
@@ -71,7 +71,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_genContractor"
-        android:text="Генподрядчик:"
+        android:text="@string/arrangement_contractor_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_customer"
@@ -84,7 +84,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_repGenContractor"
-        android:text="Представитель\nГенподрядчика:"
+        android:text="@string/arrangement_repcontractor_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_genContractor"
@@ -97,7 +97,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_repSSKGp"
-        android:text="Представитель\nССК ПО (ГП):"
+        android:text="@string/arrangement_repsskgp_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/textView_repGenContractor"
@@ -110,7 +110,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_subContractor"
-        android:text="Субподрядчик:"
+        android:text="@string/arrangement_subcontractor_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/textView_contract"
@@ -123,7 +123,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_repSubContractor"
-        android:text="Представитель\nСубподрядчика:"
+        android:text="@string/arrangement_repsubcontractor_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/textView_subContractor"
@@ -136,7 +136,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_repSSKSub"
-        android:text="Представитель\nССК ПО (ГП):"
+        android:text="@string/arrangement_repssksub_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/textView_repSubContractor"
@@ -149,7 +149,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_transportContract"
-        android:text="Договор по транспорту:"
+        android:text="@string/transport_contract_text"
         style="@style/ArrangementText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline_center"
@@ -161,7 +161,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_transportExecutor"
-        android:text="Исполнитель по транспорту:"
+        android:text="@string/transport_executor_text"
         style="@style/ArrangementText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline_right"
@@ -174,7 +174,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_stateNumber"
-        android:text="Госномер:"
+        android:text="@string/transport_statenumber_text"
         style="@style/ArrangementText"
         app:layout_constraintStart_toEndOf="@id/guideline_center"
         app:layout_constraintTop_toBottomOf="@id/textView_transportExecutor"
@@ -187,7 +187,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_startDate"
-        android:text="Дата начала поездки:"
+        android:text="@string/transport_startdate_text"
         style="@style/ArrangementText"
         app:layout_constraintTop_toBottomOf="@id/textView_stateNumber"
         app:layout_constraintStart_toEndOf="@id/guideline_center"
@@ -200,7 +200,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_startTime"
-        android:text="Время начала поездки:"
+        android:text="@string/transport_starttime_text"
         style="@style/ArrangementText"
         app:layout_constraintTop_toBottomOf="@id/textView_endDate"
         app:layout_constraintStart_toEndOf="@id/guideline_center"
@@ -213,7 +213,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_endDate"
-        android:text="Дата завершения поездки:"
+        android:text="@string/transport_enddate_text"
         style="@style/ArrangementText"
         app:layout_constraintTop_toBottomOf="@id/textView_stateNumber"
         app:layout_constraintStart_toEndOf="@id/guideline_right"
@@ -226,7 +226,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_endTime"
-        android:text="Время завершения поездки:"
+        android:text="@string/transport_endtime_text"
         style="@style/ArrangementText"
         app:layout_constraintTop_toBottomOf="@id/textView_endDate"
         app:layout_constraintStart_toEndOf="@id/guideline_right"

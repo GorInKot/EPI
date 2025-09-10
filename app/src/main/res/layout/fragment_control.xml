@@ -59,7 +59,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_mainLabel"
-            android:text="Полевой контроль"
+            android:text="@string/control_label_main"
             style="@style/mainLabel"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toTopOf="parent"
@@ -68,7 +68,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_secondLabel"
-            android:text="Отчетность"
+            android:text="@string/control_label_second"
             style="@style/secondLabel"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
@@ -77,7 +77,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Date"
-            android:text="Дата: "
+            android:text="@string/arrangement_date_text"
             app:layout_constraintStart_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
@@ -91,7 +91,7 @@
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="0dp"
-            android:text="Название прибора /\nоборудования"
+            android:text="@string/control_equipment_text"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_equipmentName"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -138,7 +138,7 @@
             android:id="@+id/checkBoxManualEquipmentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Прибор / Оборудование отсутствует"
+            android:text="@string/control_checkbox_equipmentisempty"
             style="@style/checkBox"
             app:layout_constraintTop_toBottomOf="@id/barrier_bottom_of_equipmentName"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -149,7 +149,7 @@
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="0dp"
-            android:text="Комплекс работ"
+            android:text="@string/control_complexofwork_text"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_controlComplexOfWork"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -187,7 +187,7 @@
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="0dp"
-            android:text="Вид работ"
+            android:text="@string/control_typeofwork_text"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_controlTypeOfWork"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -225,7 +225,7 @@
             android:id="@+id/tv_Report"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            android:text="Отчет о результатах инспекции"
+            android:text="@string/control_resultsofcontrol_text"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_Report"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -261,7 +261,7 @@
             android:id="@+id/tv_Remarks"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            android:text="Замечания к документации"
+            android:text="@string/control_remarksofcontrol_text"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_Remarks"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -298,7 +298,7 @@
             style="@style/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Нет нарушений"
+            android:text="@string/control_checkbox_noviolations_text"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginTop="24dp"
@@ -309,7 +309,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_orderNumber"
-            android:text="Получить № предписания"
+            android:text="@string/control_btn_ordernumber_text"
             android:layout_marginTop="24dp"
             style="@style/SimpleButton"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -330,7 +330,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_addRow"
-            android:text="Добавить вид работ"
+            android:text="@string/control_btn_addtypeofwork_text"
             android:layout_marginTop="24dp"
             style="@style/SimpleButton"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
@@ -359,7 +359,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Наименование\nприбора"
+                android:text="@string/control_equipment_text"
                 android:textStyle="bold"
                 android:gravity="center"
                 style="@style/ArrangementText"
@@ -377,7 +377,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Комплекс\nработ"
+                android:text="@string/control_complexofwork_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -398,7 +398,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Вид\nработ"
+                android:text="@string/control_typeofwork_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -419,7 +419,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Номер\nпредписания"
+                android:text="@string/control_ordernumber_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -440,7 +440,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Отчет о результатах\nинспекции"
+                android:text="@string/control_resultsofcontrol_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -461,7 +461,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Замечания"
+                android:text="@string/control_remarksofcontrol_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -482,7 +482,7 @@
                 />
 
             <com.google.android.material.textview.MaterialTextView
-                android:text="Действия"
+                android:text="@string/all_fragments_actions_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -523,7 +523,7 @@
             android:layout_height="wrap_content"
             android:minHeight="56dp"
             android:maxHeight="70dp"
-            android:text="Назад"
+            android:text="@string/all_fragments_btn_back"
             style="@style/SimpleButton"
             app:layout_constraintTop_toBottomOf="@id/recyclerViewControl"
             app:layout_constraintEnd_toStartOf="@id/btn_Next"
@@ -539,7 +539,7 @@
             android:layout_height="wrap_content"
             android:minHeight="56dp"
             android:maxHeight="70dp"
-            android:text="Далее"
+            android:text="@string/all_fragments_btn_next"
             style="@style/ExtraButton"
             app:layout_constraintTop_toBottomOf="@id/recyclerViewControl"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"

@@ -43,7 +43,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dialogTitle"
-            android:text="Редактирование строки"
+            android:text="@string/dialog_edit_row_label_main"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toTopOf="parent"
@@ -211,7 +211,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Отмена"
+            android:text="@string/alert_dialog_negative_button"
             style="@style/SimpleButton"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
@@ -225,7 +225,7 @@
             android:id="@+id/btnSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Сохранить"
+            android:text="@string/all_fragments_btn_next"
             android:layout_marginTop="12dp"
             style="@style/ExtraButton"
             app:layout_constraintStart_toEndOf="@id/btnCancel"

@@ -65,7 +65,7 @@
         <!-- Заголовок   -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_mainLabel"
-            android:text="Транспорт"
+            android:text="@string/transport_label_main"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/mainLabel"
@@ -80,7 +80,7 @@
         <CheckBox
             android:id="@+id/chBoxM_Customer"
             android:layout_width="wrap_content"
-            android:text="Транспорт отсутствует"
+            android:text="@string/transport_checkbox_transportisabsent"
             style="@style/checkBox"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tv_mainLabel"
@@ -90,7 +90,7 @@
         <!--  Заголовок: Исполнитель по транспорту  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Executor"
-            android:text="Исполнитель по транспорту"
+            android:text="@string/transport_executor_text"
             style="@style/ArrangementText"
             app:layout_constraintBottom_toTopOf="@id/textInput_Layout_Executor"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -132,7 +132,7 @@
         <!--  Заголовок: Договор по транспорту  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_ContractTransport"
-            android:text="Договор по транспорту"
+            android:text="@string/transport_contract_text"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
@@ -173,7 +173,7 @@
         <!--  Заголовок: Дата начала поездки  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_StartDate"
-            android:text="Дата начала поездки"
+            android:text="@string/transport_startdate_text"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_StateNumber"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -230,7 +230,7 @@
         <!--  Заголовок: Дата начала поездки  -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_StartTime"
-            android:text="Время начала поездки"
+            android:text="@string/transport_starttime_text"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@+id/textInput_Layout_StartDate"
             app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -289,7 +289,7 @@
         <!-- Заголовок: дата завершения поездки   -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_EndDate"
-            android:text="Дата завершения поездки"
+            android:text="@string/transport_enddate_text"
             style="@style/ArrangementText"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
@@ -347,7 +347,7 @@
         <!-- Заголовок: время завершения поездки   -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_EndTime"
-            android:text="Время завершения поездки"
+            android:text="@string/transport_endtime_text"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toEndOf="@id/guideline_middle"
@@ -407,7 +407,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_StateNumber"
-            android:text="Госномер"
+            android:text="@string/transport_statenumber_text"
             style="@style/ArrangementText"
             app:layout_constraintTop_toBottomOf="@id/textInput_Layout_Executor"
             app:layout_constraintStart_toEndOf="@id/guideline_leftmiddle"
@@ -462,7 +462,7 @@
             android:layout_height="wrap_content"
             android:minHeight="56dp"
             android:maxHeight="70dp"
-            android:text="Назад"
+            android:text="@string/all_fragments_btn_back"
             style="@style/SimpleButton"
             app:layout_constraintTop_toBottomOf="@id/barrier_bottom"
             app:layout_constraintEnd_toStartOf="@id/btn_Next"
@@ -476,7 +476,7 @@
             android:layout_height="wrap_content"
             android:minHeight="56dp"
             android:maxHeight="70dp"
-            android:text="Сохранить"
+            android:text="@string/all_fragments_btn_next"
             style="@style/ExtraButton"
             app:layout_constraintTop_toBottomOf="@id/barrier_bottom"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
