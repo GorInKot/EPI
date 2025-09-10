@@ -71,6 +71,11 @@ class FixingVolumesFragment : Fragment() {
         // Настройка RecyclerView
         setupRecyclerView()
 
+        // Подписка на ошибки
+        sharedViewModel.errorEvent.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+        }
+
         // Подписка на строки
         sharedViewModel.fixRows.observe(viewLifecycleOwner) { rows ->
             adapter.submitList(rows)

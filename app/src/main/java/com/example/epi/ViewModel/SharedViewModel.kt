@@ -846,17 +846,10 @@ class SharedViewModel(
     // единицы измерения для выпадающего списка
     val fixMeasures = MutableLiveData<List<String>>(
         listOf(
-            "м", "м2", "м3", "мм", "см", "т", "кг", "шт.", "п.м.", "л",
+            "-","м", "м2", "м3", "мм", "см", "т", "кг", "шт.", "п.м.", "л",
             "м/ч", "м/с", "градусы", "%", "МПа", "ч", "сут."
         )
     )
-
-    // данные из extra_db.db из таблицы TypesOfWork (имеют привязку по complexofwork-id)
-    // - не относятся к ControlFragment (часть sharedViewModel)
-    // - перенести в FixVolumesFragment (часть sharedViewModel)
-
-    // TODO - проверить: верное ли расположение в блоке кода
-
 
     // метод загрузки данных из extra_db из таблицы ComplexOfWork для выпадающего списка Комплекс работ
     fun loadComplexOfWorks() {
@@ -901,9 +894,16 @@ class SharedViewModel(
 
     // Функция добавления данных в recyclerView
     fun addFixRow(fixRow: FixVolumesRow) {
-        val current = _fixRows.value?.toMutableList() ?: mutableListOf()
-        current.add(fixRow)
-        _fixRows.value = recalculateFixRows(current)
+        viewModelScope.launch {
+            val result = validateAndCalculateRemainingVolume(fixRow)
+            if (result is RowValidationResult.Valid) {
+                val current = _fixRows.value?.toMutableList() ?: mutableListOf()
+                current.add(fixRow.copy(result = result.remainingVolume?.toString() ?: "0.0"))
+                _fixRows.value = recalculateFixRows(current)
+            } else if (result is RowValidationResult.Invalid) {
+                _errorEvent.postValue(result.reason)
+            }
+        }
     }
 
     // Функция удаления данных из recyclerView
@@ -915,13 +915,21 @@ class SharedViewModel(
 
     // Функция обновления данных в строке в recyclerView
     fun updateFixRow(oldRow: FixVolumesRow, newRow: FixVolumesRow) {
-        val current = _fixRows.value?.toMutableList() ?: return
-        val index = current.indexOfFirst { it == oldRow }
-        if (index != -1) {
-            current[index] = newRow
-            _fixRows.value = current
-        } else {
-            Log.w(TAG, "FixVolumesFragment:Row not found: $oldRow")
+        viewModelScope.launch {
+            val result = validateAndCalculateRemainingVolume(newRow, oldRow)
+            if (result is RowValidationResult.Valid) {
+                val current = _fixRows.value?.toMutableList() ?: return@launch
+                val index = current.indexOfFirst { it == oldRow }
+                if (index != -1) {
+                    current[index] = newRow.copy(result = result.remainingVolume?.toString() ?: "0.0")
+                    _fixRows.value = recalculateFixRows(current)
+                } else {
+                    Log.w(TAG, "FixVolumesFragment: Row not found: $oldRow")
+                    _errorEvent.postValue("Строка не найдена")
+                }
+            } else if (result is RowValidationResult.Invalid) {
+                _errorEvent.postValue(result.reason)
+            }
         }
     }
 
@@ -944,6 +952,7 @@ class SharedViewModel(
 
     // TODO - изменить логику функции
     fun validateAndCalculateRemainingVolume(input: FixVolumesRow, excludeRow: FixVolumesRow? = null): RowValidationResult {
+        // Базовая валидация полей
         when {
             input.ID_object.isBlank() -> return RowValidationResult.Invalid("ID объекта не указан")
             _fixRows.value?.any { it.ID_object != input.ID_object && it != input && it != excludeRow } == true ->
@@ -956,6 +965,30 @@ class SharedViewModel(
             input.fact.toDoubleOrNull() == null -> return RowValidationResult.Invalid("Факт должен быть числом")
         }
 
+        // Проверка существования планового значения
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val existingPlanValues = planValueRepository.getPlanValuesByObjectIdAndComplexAndType(
+                    objectId = input.ID_object,
+                    complexWork = input.complexOfWork,
+                    typeOfWork = input.projectWorkType
+                )
+                if (existingPlanValues.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        _errorEvent.postValue("Плановое значение для объекта ${input.ID_object}, комплекса ${input.complexOfWork} и вида работ ${input.projectWorkType} уже существует")
+                    }
+                    return@launch // Прерываем выполнение, если значение уже существует
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _errorEvent.postValue("Ошибка при проверке планового значения: ${e.message}")
+                }
+                Log.e(TAG, "Ошибка при проверке планового значения: ${e.message}", e)
+                return@launch
+            }
+        }
+
+        // Продолжаем валидацию и расчет остаточного объема
         val planValue = input.plan.toDouble()
         Log.d(TAG, "План: $planValue")
         val factValue = input.fact.toDouble()
@@ -980,18 +1013,22 @@ class SharedViewModel(
     }
 
     // Функция валидации полей ввода
-    fun validateFixVolumesInputs(fixRows: List<FixVolumesRow>?): Map<String, String?> {
+    suspend fun validateFixVolumesInputs(fixRows: List<FixVolumesRow>?): Map<String, String?> {
         val errors = mutableMapOf<String, String?>()
         if (fixRows.isNullOrEmpty()) {
             errors["fixRows"] = "Добавьте хотя бы одну строку фиксации объемов"
-        } else {
-            fixRows.forEachIndexed { index, row ->
-                when (val result = validateAndCalculateRemainingVolume(row)) {
-                    is RowValidationResult.Invalid -> {
-                        errors["row_$index"] = result.reason
-                    }
-                    else -> {}
+            return errors
+        }
+
+        fixRows.forEachIndexed { index, row ->
+            val result = withContext(Dispatchers.IO) {
+                validateAndCalculateRemainingVolume(row)
+            }
+            when (result) {
+                is RowValidationResult.Invalid -> {
+                    errors["row_$index"] = result.reason
                 }
+                else -> {}
             }
         }
         return errors
@@ -1027,7 +1064,7 @@ class SharedViewModel(
                 if (errors.isNotEmpty()) {
                     Log.e(TAG, "FixVolumes: Validation failed: $errors")
                     withContext(Dispatchers.Main) {
-                        _errorEvent.postValue("Не все поля заполнены корректно: ${errors.values.joinToString()}")
+                        _errorEvent.postValue("Не все поля объемов заполнены корректно: ${errors.values.joinToString()}")
                     }
                     return@withContext 0L
                 }
@@ -1047,6 +1084,18 @@ class SharedViewModel(
                         _errorEvent.postValue("Ошибка: отчет не найден")
                     }
                     return@withContext 0L
+                }
+
+                // Сохранение плановых значений в базу
+                _fixRows.value?.forEach { row ->
+                    val planValue = PlanValue(
+                        objectId = row.ID_object,
+                        complexWork = row.complexOfWork,
+                        typeOfWork = row.projectWorkType,
+                        planValue = row.plan.toDoubleOrNull() ?: 0.0,
+                        measures = row.measure
+                    )
+                    planValueRepository.insert(planValue)
                 }
 
                 val fixRowsJson = gson.toJson(_fixRows.value)
