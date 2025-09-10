@@ -88,13 +88,16 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_equipmentName"
-            android:text="Название прибора /\nоборудования"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintEnd_toStartOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="0dp"
+            android:text="Название прибора /\nоборудования"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_equipmentName"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_secondLabel"
+
             />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -143,14 +146,15 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_controlComplexOfWork"
-            android:text="Комплекс работ"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxManualEquipmentName"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintEnd_toStartOf="@id/guideline_left"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            />
+            android:layout_marginBottom="0dp"
+            android:text="Комплекс работ"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_controlComplexOfWork"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxManualEquipmentName" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_controlComplexOfWork"
@@ -180,14 +184,15 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_controlTypeOfWork"
-            android:text="Вид работ"
-            app:layout_constraintTop_toBottomOf="@id/tv_controlComplexOfWork"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintEnd_toStartOf="@id/guideline_left"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             style="@style/ArrangementText"
             android:layout_marginTop="24dp"
-            />
+            android:layout_marginBottom="0dp"
+            android:text="Вид работ"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_controlTypeOfWork"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_controlComplexOfWork" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_controlTypeOfWork"
@@ -215,64 +220,25 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_bottom_of_Type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="textInputLayout_controlTypeOfWork"
-            />
-
-        <CheckBox
-            android:id="@+id/checkBoxManualType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Нет нарушения"
-            style="@style/checkBox"
-            app:layout_constraintTop_toBottomOf="@id/barrier_bottom_of_Type"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_orderNumber"
-            android:text="Получить № предписания"
-            android:layout_marginTop="16dp"
-            style="@style/SimpleButton"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintEnd_toStartOf="@id/tv_orderNumber"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_orderNumber"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout_Report"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxManualType"
-            app:layout_constraintStart_toEndOf="@id/guideline_left"
-            android:layout_marginTop="16dp"
-            style="@style/ArrangementText"
-            android:gravity="center"
-            android:maxLines="1"
-            />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Report"
             style="@style/ArrangementText"
-            android:text="Отчет о результатах инспекции"
             android:layout_marginTop="24dp"
+            android:text="Отчет о результатах инспекции"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_Report"
             app:layout_constraintEnd_toStartOf="@id/guideline_left"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            />
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_controlTypeOfWork" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Report"
             style="@style/TextInputLayout"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
-            app:layout_constraintTop_toBottomOf="@id/btn_orderNumber"
-            app:layout_constraintStart_toEndOf="@id/tv_Report"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_controlTypeOfWork"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -293,14 +259,14 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_Remarks"
-            android:text="Замечания к документации"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toEndOf="@id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Report"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintEnd_toStartOf="@id/guideline_left"
             style="@style/ArrangementText"
-            />
+            android:layout_marginTop="24dp"
+            android:text="Замечания к документации"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_Remarks"
+            app:layout_constraintEnd_toStartOf="@id/guideline_left"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Report" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_Remarks"
@@ -308,7 +274,7 @@
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_Report"
-            app:layout_constraintStart_toEndOf="@id/tv_Remarks"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -326,6 +292,41 @@
                 android:textColor="@color/color_black"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/checkBoxManualType"
+            style="@style/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Нет нарушений"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_left"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_orderNumber"
+            android:text="Получить № предписания"
+            android:layout_marginTop="24dp"
+            style="@style/SimpleButton"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_orderNumber"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayout_Remarks"
+            app:layout_constraintStart_toEndOf="@id/btn_orderNumber"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            android:layout_marginTop="24dp"
+            style="@style/ArrangementText"
+            android:gravity="center"
+            android:maxLines="1"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_addRow"

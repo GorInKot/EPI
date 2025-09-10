@@ -569,7 +569,8 @@ class ReportsFragment : Fragment() {
 
         var rowIndex = 1
         reports.forEach { report ->
-            println("Processing report ID: ${report.id}, rowIndex start: $rowIndex") // ЛОГ: начало отчёта
+//            println("Processing report ID: ${report.id}, rowIndex start: $rowIndex") // ЛОГ: начало отчёта
+            Log.d("Rep","Processing report ID: ${report.id}, rowIndex start: $rowIndex")
             // Базовые значения для столбцов 0-21
             val baseValues = listOf(
                 report.id.toString(),
@@ -599,12 +600,15 @@ class ReportsFragment : Fragment() {
             // Парсинг JSON
             val controlRowsJson = jsonParser.parse(report.controlRows).asJsonArray
             val fixVolumesRowsJson = jsonParser.parse(report.fixVolumesRows).asJsonArray
-            println("controlRows size: ${controlRowsJson.size()}, fixVolumesRows size: ${fixVolumesRowsJson.size()}") // ЛОГ: размеры
+//            println("controlRows size: ${controlRowsJson.size()}, fixVolumesRows size: ${fixVolumesRowsJson.size()}") // ЛОГ: размеры
+            Log.d("Rep","controlRows size: ${controlRowsJson.size()}, fixVolumesRows size: ${fixVolumesRowsJson.size()}")
 
             // Создаём главную строку: базовые + первые записи control/fix
             val mainRow = sheet.createRow(rowIndex++)
+            Log.d("Rep", "mainRow: $mainRow")
 
-            println("Created main row at: ${rowIndex - 1}, next rowIndex: $rowIndex") // ЛОГ: главная строка
+            Log.d("Rep","Создана главная строка на: ${rowIndex - 1}, следующий rowIndex: $rowIndex")
+//            println("Created main row at: ${rowIndex - 1}, next rowIndex: $rowIndex") // ЛОГ: главная строка
 
             // Инициализируем значения для главной строки (35 столбцов) как MutableList
             val mainValues = mutableListOf<String>().apply {
@@ -642,10 +646,11 @@ class ReportsFragment : Fragment() {
 
             // Дополнительные controlRows (2-я и далее, если есть) — новые строки, только 22-27
             for (i in 1 until controlRowsJson.size()) {
-                println("Creating additional control row #$i at rowIndex: $rowIndex") // ЛОГ: перед control
+                Log.d("Rep","Размер controlRowsJson: ${controlRowsJson.size()}")
+                Log.d("Rep","Создание дополнительной control row #$i на rowIndex: $rowIndex") // Log перед control
                 val jsonObject = controlRowsJson[i].asJsonObject
-                val controlRowData = sheet.createRow(rowIndex++)
-                println("Created additional control row #$i, next rowIndex: $rowIndex") // ЛОГ: после
+                val controlRowData = sheet.createRow(rowIndex)
+                Log.d("Rep","Создание дополнительной control row #$i, следующий rowIndex: $rowIndex") // Log после control
                 val controlValues = List(22) { "" } + listOf( // 0-21 пустые
                     getJsonValue(jsonObject, "equipmentName") ?: "", // 22
                     getJsonValue(jsonObject, "complexOfWork") ?: "", // 23
@@ -662,10 +667,11 @@ class ReportsFragment : Fragment() {
 
             // Дополнительные fixVolumesRows (2-я и далее, если есть) — новые строки, только 28-34
             for (i in 1 until fixVolumesRowsJson.size()) {
-                println("Creating additional fix row #$i at rowIndex: $rowIndex") // ЛОГ: перед fix
+                Log.d("Rep","Размер fixVolumesRowsJson: ${fixVolumesRowsJson.size()}")
+                Log.d("Rep","Создание дополнительной fix row #$i на rowIndex: $rowIndex") // Log перед control
                 val jsonObject = fixVolumesRowsJson[i].asJsonObject
                 val fixVolumeRowData = sheet.createRow(rowIndex++)
-                println("Created additional fix row #$i, next rowIndex: $rowIndex") // ЛОГ: после
+                Log.d("Rep","Создание дополнительной fix row #$i, следующий rowIndex: $rowIndex") // Log после control
                 val fixVolumeValues = List(28) { "" } + listOf( // 0-27 пустые
                     getJsonValue(jsonObject, "ID_object") ?: "", // 28
                     getJsonValue(jsonObject, "complexOfWork") ?: "", // 29
@@ -675,7 +681,7 @@ class ReportsFragment : Fragment() {
                     getJsonValue(jsonObject, "fact") ?: "", // 33
                     getJsonValue(jsonObject, "result") ?: "" // 34
                 )
-                println("Finished report ID: ${report.id}, final rowIndex for next: $rowIndex") // ЛОГ: конец отчёта
+                Log.d("Rep","Finished report ID: ${report.id}, final rowIndex for next: $rowIndex") // Log после control
                 fixVolumeValues.forEachIndexed { colIndex, value ->
                     fixVolumeRowData.createCell(colIndex).setCellValue(value)
                 }

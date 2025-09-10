@@ -261,7 +261,7 @@
             <CheckBox
                 android:id="@+id/checkBoxManualPlot"
                 android:layout_width="wrap_content"
-                android:text="Объект не делится на участок"
+                android:text="Объект не делится на участки"
                 style="@style/checkBox"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout_Plot"
                 app:layout_constraintStart_toEndOf="@id/guideline_left"
@@ -507,6 +507,15 @@
                     android:padding="10dp"
                     />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Добавляем дополнительный отступ внизу для прокрутки -->
+            <View
+                android:id="@+id/bottomSpacer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_RepSSK_Sub"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

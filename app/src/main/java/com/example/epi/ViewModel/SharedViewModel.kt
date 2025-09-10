@@ -1609,7 +1609,6 @@ class SharedViewModel(
 
     // endregion
 
-
     init {
         //
         updateDateTime()
