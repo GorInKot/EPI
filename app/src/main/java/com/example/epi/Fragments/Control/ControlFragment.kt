@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -140,6 +141,7 @@ class ControlFragment : Fragment() {
                 binding.AutoCompleteTextViewControlComplexOfWork.setOnItemClickListener { parent, view, position, id ->
                     val selectedComplex = parent.getItemAtPosition(position) as String
                     sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
+                    binding.AutoCompleteTextViewControlTypeOfWork.setText("", false) // Очищаем поле "Вид работ"
                 }
                 binding.AutoCompleteTextViewControlComplexOfWork.setOnClickListener {
                     binding.AutoCompleteTextViewControlComplexOfWork.showDropDown()
@@ -190,7 +192,9 @@ class ControlFragment : Fragment() {
                             input.orderNumber,
                             input.report,
                             input.remarks,
-                            input.isEquipmentAbsent // Сохраняем состояние
+                            input.isEquipmentAbsent, // Сохраняем состояние
+                            input.isViolationChecked
+
                         )
                     )
                     clearInputFields()
@@ -201,6 +205,7 @@ class ControlFragment : Fragment() {
 
                 else -> {}
             }
+            binding.AutoCompleteTextViewControlComplexOfWork.setText("", false)
         }
 
 
@@ -240,9 +245,9 @@ class ControlFragment : Fragment() {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_edit_row, null)
 
-        val editEquipment = dialogView.findViewById<EditText>(R.id.editEquipment)
-        val editComplexOfWork = dialogView.findViewById<EditText>(R.id.editComplex)
-        val editType = dialogView.findViewById<EditText>(R.id.editType)
+        val editEquipment = dialogView.findViewById<AutoCompleteTextView>(R.id.editEquipment)
+        val editComplexOfWork = dialogView.findViewById<AutoCompleteTextView>(R.id.editComplex)
+        val editType = dialogView.findViewById<AutoCompleteTextView>(R.id.editType)
         val editOrder = dialogView.findViewById<EditText>(R.id.editOrderNumber)
         val editReport = dialogView.findViewById<EditText>(R.id.editReport)
         val editRemarks = dialogView.findViewById<EditText>(R.id.editRemarks)
@@ -258,6 +263,73 @@ class ControlFragment : Fragment() {
         // Отключаем поле оборудования, если isEquipmentAbsent == true
         editEquipment.isEnabled = !row.isEquipmentAbsent
 
+        // Настройка адаптера для оборудования
+        sharedViewModel.equipmentNames.value?.let { equipmentList ->
+            if (equipmentList.isNotEmpty()) {
+                val equipmentAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, equipmentList)
+                editEquipment.setAdapter(equipmentAdapter)
+                editEquipment.inputType = InputType.TYPE_NULL
+                editEquipment.keyListener = null
+                editEquipment.setOnClickListener {
+                    if (editEquipment.isEnabled) {
+                        editEquipment.showDropDown()
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "Список оборудования пуст", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Настройка адаптера для комплекса работ
+        sharedViewModel.controlsComplexOfWork.value?.let { complexOfWorks ->
+            if (complexOfWorks.isNotEmpty()) {
+                val complexAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexOfWorks)
+                editComplexOfWork.setAdapter(complexAdapter)
+                editComplexOfWork.inputType = InputType.TYPE_NULL
+                editComplexOfWork.keyListener = null
+                editComplexOfWork.setOnClickListener {
+                    editComplexOfWork.showDropDown()
+                }
+                editComplexOfWork.setOnItemClickListener { parent, _, position, _ ->
+                    val selectedComplex = parent.getItemAtPosition(position) as String
+                    sharedViewModel.setSelectedComplex(selectedComplex) // Обновляем комплекс и виды работ
+                    editType.setText("", false) // Очищаем поле "Тип работы"
+                }
+            } else {
+                Toast.makeText(requireContext(), "Список комплексов работ пуст", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Настройка адаптера для типа работы
+        sharedViewModel.controlTypesOfWork.value?.let { typesOfWork ->
+            if (typesOfWork.isNotEmpty()) {
+                val typeAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
+                editType.setAdapter(typeAdapter)
+                editType.inputType = InputType.TYPE_NULL
+                editType.keyListener = null
+                editType.setOnClickListener {
+                    editType.showDropDown()
+                }
+            } else {
+                editType.setText("", false) // Очищаем, если нет видов работ
+                Toast.makeText(requireContext(), "Список типов работ пуст", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Подписка на обновление списка типов работ
+        sharedViewModel.controlTypesOfWork.observe(viewLifecycleOwner) { typesOfWork ->
+            if (typesOfWork.isNotEmpty()) {
+                val typeAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, typesOfWork)
+                editType.setAdapter(typeAdapter)
+                if (editType.text.toString().isEmpty()) {
+                    editType.setText("", false)
+                }
+            } else {
+                editType.setText("", false)
+                Toast.makeText(requireContext(), "Список типов работ пуст", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
@@ -269,17 +341,35 @@ class ControlFragment : Fragment() {
 
         dialogView.findViewById<Button>(R.id.btnSave).setOnClickListener {
             val updatedRow = ControlRow(
-                equipmentName = editEquipment.text.toString(),
-                complexOfWork = editComplexOfWork.text.toString(),
-                typeOfWork = editType.text.toString(),
-                orderNumber = editOrder.text.toString(),
-                report = editReport.text.toString(),
-                remarks = editRemarks.text.toString(),
+                equipmentName = editEquipment.text.toString().trim(),
+                complexOfWork = editComplexOfWork.text.toString().trim(),
+                typeOfWork = editType.text.toString().trim(),
+                orderNumber = editOrder.text.toString().trim(),
+                report = editReport.text.toString().trim(),
+                remarks = editRemarks.text.toString().trim(),
                 isEquipmentAbsent = row.isEquipmentAbsent // Сохраняем исходное состояние
             )
-            sharedViewModel.updateRow(oldRow = row, newRow = updatedRow)
-            Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            when (val result = sharedViewModel.validateRowInput(
+                RowInput(
+                    equipmentName = updatedRow.equipmentName,
+                    complexOfWork = updatedRow.complexOfWork,
+                    typeOfWork = updatedRow.typeOfWork,
+                    orderNumber = updatedRow.orderNumber,
+                    report = updatedRow.report,
+                    remarks = updatedRow.remarks,
+                    isViolationChecked = row.isViolation,
+                    isEquipmentAbsent = row.isEquipmentAbsent
+                )
+            )) {
+                is RowValidationResult.Valid -> {
+                    sharedViewModel.updateRow(oldRow = row, newRow = updatedRow)
+                    Toast.makeText(requireContext(), "Изменения сохранены", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+                is RowValidationResult.Invalid -> {
+                    Toast.makeText(requireContext(), result.reason, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
         dialog.show()
     }

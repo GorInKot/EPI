@@ -90,16 +90,44 @@ class ReportsFragment : Fragment() {
         // Настройка RecyclerView
         setupRecyclerView()
 
+        // Подписка на состояние загрузки (Новое)
+        sharedViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                // Показываем оверлей с ProgressBar и текстом
+                binding.parentProgressBar.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.textProgressBar.visibility = View.VISIBLE
+                binding.textProgressBar.text = "Загрузка отчетов"
+                // Отключаем кнопки во время загрузки отчетов
+                binding.btnSelectDates.isEnabled = false
+                binding.btnExportDataToCSV.isEnabled = false
+                binding.RepFrMainMenuBtn.isEnabled = false
+            } else {
+                // Скрываем оверлей
+                binding.parentProgressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+                binding.textProgressBar.visibility = View.GONE
+                // Включаем кнопки
+                binding.btnSelectDates.isEnabled = true
+                binding.btnExportDataToCSV.isEnabled = true
+                binding.RepFrMainMenuBtn.isEnabled = true
+            }
+        }
+
         // Загрузка отчётов авторизованного пользователя (новое!)
         sharedViewModel.loadUserReports()
 
         // Подписка на данные из ViewModel (изменено на userReports)
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.userReports.collectLatest { reports ->  // Изменено!
-                if (reports.isEmpty()) {
-                    // Опционально: обработка пустого списка
-                    Toast.makeText(requireContext(), "Нет отчётов для просмотра. Авторизуйтесь или создайте новый.", Toast.LENGTH_SHORT).show()
-                }
+//                Log.d(TAG, "1.report.isEmpty: $reports")
+//                if (reports.isEmpty() && !sharedViewModel.isLoading.value) {
+//                    Log.d(TAG, "2.report.isEmpty: $reports")
+//                    // Опционально: обработка пустого списка
+//                    Toast.makeText(requireContext(), "Нет отчётов для просмотра. Авторизуйтесь или создайте новый.", Toast.LENGTH_SHORT).show()
+//                    Log.d(TAG, "Нет отчётов для просмотра. Авторизуйтесь или создайте новый")
+//                }
+                Log.d(TAG, "3.report.isEmpty: $reports")
                 adapter = ExpandableAdapter(mutableListOf<Any>().apply {
                     addAll(reports.map { report ->
                         ParentItem(

@@ -1,6 +1,5 @@
 package com.example.epi.Fragments.Arrangement
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
@@ -9,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -112,11 +110,37 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteCustomer.setOnItemClickListener { parent, _, position, _ ->
                 val selectedCustomer = customerList[position]
                 sharedViewModel.setSelectedCustomer(selectedCustomer)
-                updateContractorDropdown(selectedCustomer)
+                // Очистка всех зависимых полей и чекбоксов
+                binding.autoCompleteContract.setText("", false)
+                binding.autoCompleteObject.setText("", false)
+                binding.autoCompletePlot.setText("", false)
+                binding.autoCompleteContractor.setText("", false)
+                binding.autoCompleteRepContractor.setText("", false)
+                binding.textInputEditTextRepSSKGp.setText("")
+                binding.autoCompleteSubContractor.setText("", false)
+                binding.textInputEditTextRepSubContractor.setText("")
+                binding.textInputEditTextRepSSKSub.setText("")
+                binding.checkBoxManualPlot.isChecked = false
+                binding.checkBoxManualSubContractor.isChecked = false
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setSelectedContract(null)
+                sharedViewModel.setSelectedObject(null)
+                sharedViewModel.setPlotText(null)
+                sharedViewModel.setSelectedContractor(null)
+                sharedViewModel.setSelectedRepContractor(null)
+                sharedViewModel.setRepSSKGpText("")
+                sharedViewModel.setSelectedSubContractor(null)
+                sharedViewModel.setRepSubContractorText("")
+                sharedViewModel.setRepSSKSubText("")
+                sharedViewModel.setIsManualPlot(false)
+                sharedViewModel.setIsManualSubContractor(false)
+                // Обновление зависимых списков
                 updateContractDropdown(selectedCustomer)
+                updateContractorDropdown(selectedCustomer)
                 updateSubContractorDropdown(selectedCustomer)
                 binding.textInputLayoutAutoCustomer.isErrorEnabled = false
                 binding.textInputLayoutAutoCustomer.error = null
+                Log.d("Tagg-Arrangement", "Customer changed to: $selectedCustomer, all dependent fields cleared")
             }
         }
 
@@ -146,6 +170,14 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteContract.setOnItemClickListener { parent, _, position, _ ->
                 val selectedContract = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedContract(selectedContract)
+                // Очистка зависимых полей
+                binding.autoCompleteObject.setText("", false)
+                binding.autoCompletePlot.setText("", false)
+                binding.checkBoxManualPlot.isChecked = false
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setSelectedObject(null)
+                sharedViewModel.setPlotText(null)
+                sharedViewModel.setIsManualPlot(false)
                 updateObjectDropdown(selectedContract)
                 binding.textInputLayoutContract.isErrorEnabled = false
                 binding.textInputLayoutContract.error = null
@@ -178,6 +210,12 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
                 val selectedObject = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedObject(selectedObject)
+                // Очистка зависимых полей
+                binding.autoCompletePlot.setText("", false)
+                binding.checkBoxManualPlot.isChecked = false
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setPlotText(null)
+                sharedViewModel.setIsManualPlot(false)
                 updatePlotDropdown(selectedObject)
                 binding.textInputLayoutAutoObject.isErrorEnabled = false
                 binding.textInputLayoutAutoObject.error = null
@@ -244,6 +282,10 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteContractor.setOnItemClickListener { parent, _, position, _ ->
                 val selectedContractor = parent.getItemAtPosition(position).toString()
                 sharedViewModel.setSelectedContractor(selectedContractor)
+                // Очистка зависимого поля
+                binding.autoCompleteRepContractor.setText("", false)
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setSelectedRepContractor(null)
                 updateRepSSKGpDropdown(selectedContractor)
                 binding.textInputLayoutAutoContractor.isErrorEnabled = false
                 binding.textInputLayoutAutoContractor.error = null
@@ -275,6 +317,10 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteContractor.setOnItemClickListener { parent, _, position, _ ->
                 val selectedContractor = contractorsForCustomer[position]
                 sharedViewModel.setSelectedContractor(selectedContractor)
+                // Очистка зависимого поля
+                binding.autoCompleteRepContractor.setText("", false)
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setSelectedRepContractor(null)
                 updateRepSSKGpDropdown(selectedContractor)
                 binding.textInputLayoutAutoContractor.isErrorEnabled = false
                 binding.textInputLayoutAutoContractor.error = null
@@ -305,6 +351,14 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteContract.setOnItemClickListener { parent, _, position, _ ->
                 val selectedContract = contractsForCustomer[position]
                 sharedViewModel.setSelectedContract(selectedContract)
+                // Очистка зависимых полей
+                binding.autoCompleteObject.setText("", false)
+                binding.autoCompletePlot.setText("", false)
+                binding.checkBoxManualPlot.isChecked = false
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setSelectedObject(null)
+                sharedViewModel.setPlotText(null)
+                sharedViewModel.setIsManualPlot(false)
                 updateObjectDropdown(selectedContract)
                 binding.textInputLayoutContract.isErrorEnabled = false
                 binding.textInputLayoutContract.error = null
@@ -335,6 +389,12 @@ class ArrangementFragment : Fragment() {
             binding.autoCompleteObject.setOnItemClickListener { parent, _, position, _ ->
                 val selectedObject = objectsForContract[position]
                 sharedViewModel.setSelectedObject(selectedObject)
+                // Очистка зависимых полей
+                binding.autoCompletePlot.setText("", false)
+                binding.checkBoxManualPlot.isChecked = false
+                // Очистка данных в SharedViewModel
+                sharedViewModel.setPlotText(null)
+                sharedViewModel.setIsManualPlot(false)
                 updatePlotDropdown(selectedObject)
                 binding.textInputLayoutAutoObject.isErrorEnabled = false
                 binding.textInputLayoutAutoObject.error = null

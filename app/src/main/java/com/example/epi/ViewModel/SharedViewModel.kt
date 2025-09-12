@@ -1448,15 +1448,22 @@ class SharedViewModel(
     private val _userReports = MutableStateFlow<List<Report>>(emptyList())
     val userReports: StateFlow<List<Report>> = _userReports.asStateFlow()
 
+    private val _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    // Обновленный метод loadUserReports()
     fun loadUserReports() {
         val employeeNumber = _currentEmployeeNumber.value ?: run {
             Log.e(TAG, "No employeeNumber available for loading user reports")
             _userReports.value = emptyList() // Пустой список, если не авторизован
+            _isLoading.value = false  // Явно сбрасываем
             return
         }
+        _isLoading.value = true  // Начинаем загрузку
         viewModelScope.launch {
             reportRepository.getReportsByUser(employeeNumber).collectLatest { reports ->
                 _userReports.value = reports
+                _isLoading.value = false  // Завершаем загрузку
                 Log.d(TAG, "Loaded ${reports.size} reports for user: $employeeNumber")
             }
         }
@@ -1485,6 +1492,7 @@ class SharedViewModel(
         }
         return reportRepository.getUserReportsForExport(employeeNumber, startDate, endDate)
     }
+
 
     // endregion
 

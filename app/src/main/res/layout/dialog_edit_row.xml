@@ -59,9 +59,9 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/dialogTitle"
             android:layout_marginTop="12dp"
+            app:endIconMode="dropdown_menu"
             >
-
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/editEquipment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -85,9 +85,9 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_equipment"
             android:layout_marginTop="24dp"
+            app:endIconMode="dropdown_menu"
             >
-
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/editComplex"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -111,9 +111,9 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@id/textInputLayout_dialog_complex"
             android:layout_marginTop="24dp"
+            app:endIconMode="dropdown_menu"
             >
-
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/editType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
